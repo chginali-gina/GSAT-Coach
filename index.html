@@ -38,17 +38,20 @@ a{text-decoration:none;color:inherit}
 .tool-card.c1::before{background:var(--amber)}
 .tool-card.c2::before{background:var(--teal)}
 .tool-card.c3::before{background:#7C3AED}
+.tool-card.c4::before{background:#2F86D6}
 .tool-head{display:flex;align-items:center;gap:14px;margin-bottom:10px}
 .tool-icon{flex-shrink:0;width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.6rem}
 .c1 .tool-icon{background:#fef3c7}
 .c2 .tool-icon{background:#ccfbf1}
 .c3 .tool-icon{background:#ede9fe}
+.c4 .tool-icon{background:#DCEBFA}
 .tool-title{flex:1}
 .tool-title h3{font-size:1.15rem;font-weight:700;line-height:1.3}
 .tool-title .tag{display:inline-block;font-size:.7rem;font-weight:700;padding:2px 9px;border-radius:999px;margin-top:4px}
 .c1 .tag{background:#fef3c7;color:var(--amber-dark)}
 .c2 .tag{background:#ccfbf1;color:#065f46}
 .c3 .tag{background:#ede9fe;color:#5b21b6}
+.c4 .tag{background:#DCEBFA;color:#155A96}
 .tool-card p{color:var(--ink-soft);font-size:.88rem;line-height:1.75;margin-bottom:12px}
 .tool-feats{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
 .feat{font-size:.72rem;background:var(--bg-warm);border:1px solid var(--line);border-radius:999px;padding:3px 10px;color:var(--ink-soft)}
@@ -57,6 +60,7 @@ a{text-decoration:none;color:inherit}
 .c1 .cta-text{color:var(--amber)}
 .c2 .cta-text{color:var(--teal)}
 .c3 .cta-text{color:#7C3AED}
+.c4 .cta-text{color:#2F86D6}
 .cta-arrow{font-size:1.1rem;transition:transform .2s}
 .tool-card:hover .cta-arrow{transform:translateX(5px)}
 
@@ -146,6 +150,27 @@ a{text-decoration:none;color:inherit}
       </div>
       <div class="tool-cta">
         <span class="cta-text">看申請教學</span>
+        <span class="cta-arrow">→</span>
+      </div>
+    </a>
+
+    <a href="argument-gym.html" class="tool-card c4 reveal">
+      <div class="tool-head">
+        <div class="tool-icon">🎤</div>
+        <div class="tool-title">
+          <h3>論述練功房 3:00</h3>
+          <span class="tag">口語表達 · 中英雙語</span>
+        </div>
+      </div>
+      <p>學 8 種說服技巧、套 4 種講稿架構，請 AI 幫你找正反觀點，寫出一篇 3 分鐘講稿，最後計時大聲講一次。面試、備審口試、英文口說都用得上。</p>
+      <div class="tool-feats">
+        <span class="feat">💬 8 種論述技巧</span>
+        <span class="feat">🧱 4 種講稿架構</span>
+        <span class="feat">⏱️ 3 分鐘計時</span>
+        <span class="feat">🌐 中文 / 雙語 / English</span>
+      </div>
+      <div class="tool-cta">
+        <span class="cta-text">開始練論述</span>
         <span class="cta-arrow">→</span>
       </div>
     </a>
