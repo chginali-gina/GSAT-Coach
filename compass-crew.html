@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>心航小隊 API 金鑰版</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Layout: phone-first one-step-at-a-time app; sticky brand bar, four tabs fixed at the bottom */
+:root{
+  --bg:#F5F9FD; --bg-2:#EAF3FB; --card:#FFFFFF;
+  --accent:#2F86D6; --accent-deep:#1F6FB8; --accent-ink:#155A96; --tint:#DCEBFA;
+  --second:#0E9A9A; --second-tint:#D7F2F0;
+  --ink:#17324D; --ink-soft:#557089; --line:#D3E2EF; --on-accent:#FFFFFF;
+  --good:#3F7A3A; --good-tint:#E3EFDD; --bad:#A63D2A; --bad-tint:#F8E1DA;
+  --shadow:0 6px 22px rgba(31,111,184,.10);
+  --radius:16px;
+  --b-mood:#C4701D; --b-mood-t:#FBEBD8;
+  --b-time:#2F86D6; --b-time-t:#DCEBFA;
+  --b-explore:#0E8C8C; --b-explore-t:#D7F2F0;
+  --b-path:#6A4FBF; --b-path-t:#ECE5FA;
+  --font:'Nunito','Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1A26; --bg-2:#132233; --card:#182A3D;
+  --accent:#6CB4F0; --accent-deep:#4A9BE0; --accent-ink:#A6D2F8; --tint:#1C3550;
+  --second:#4FD1C5; --second-tint:#173A3A;
+  --ink:#E6EFF8; --ink-soft:#9FB3C8; --line:#26394D; --on-accent:#0F1A26;
+  --good:#8CC983; --good-tint:#22321F; --bad:#F09A84; --bad-tint:#3B231C;
+  --shadow:0 6px 22px rgba(0,0,0,.35);
+  --b-mood:#F2B066; --b-mood-t:#3A2A17;
+  --b-time:#6CB4F0; --b-time-t:#1C3550;
+  --b-explore:#4FD1C5; --b-explore-t:#173A3A;
+  --b-path:#B9A2F2; --b-path-t:#2C2547;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0F1A26; --bg-2:#132233; --card:#182A3D;
+  --accent:#6CB4F0; --accent-deep:#4A9BE0; --accent-ink:#A6D2F8; --tint:#1C3550;
+  --second:#4FD1C5; --second-tint:#173A3A;
+  --ink:#E6EFF8; --ink-soft:#9FB3C8; --line:#26394D; --on-accent:#0F1A26;
+  --good:#8CC983; --good-tint:#22321F; --bad:#F09A84; --bad-tint:#3B231C;
+  --shadow:0 6px 22px rgba(0,0,0,.35);
+  --b-mood:#F2B066; --b-mood-t:#3A2A17;
+  --b-time:#6CB4F0; --b-time-t:#1C3550;
+  --b-explore:#4FD1C5; --b-explore-t:#173A3A;
+  --b-path:#B9A2F2; --b-path-t:#2C2547;
+  color-scheme:dark;
+}
+html{font-size:106.25%}
+html.big{font-size:118.75%}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.8;font-size:1rem;-webkit-text-size-adjust:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--card)}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:10px}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.en{display:block;font-size:.86em;line-height:1.6;color:var(--ink-soft);margin-top:2px}
+.en.in{display:inline;margin-left:.45em;font-size:.82em}
+.btn .en,.on .en,.tab .en{color:inherit;opacity:.82}
+.num{font-variant-numeric:lining-nums tabular-nums}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--card);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:12px;min-height:58px}
+.brand{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.brand svg{flex:none}
+.brand b{font-weight:800;font-size:1.05rem;line-height:1.3}
+.brand small{display:block;font-size:.72rem;color:var(--ink-soft);line-height:1.3}
+.pill-btn{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--bg-2);cursor:pointer;font-weight:700;font-size:.85rem}
+
+main{padding-block:18px calc(96px + env(safe-area-inset-bottom,0px))}
+.phead{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:center;margin-bottom:14px}
+.phead .big-n{grid-row:span 2;font-size:2.6rem;font-weight:800;color:var(--accent);line-height:1}
+.phead .meta{display:flex;gap:8px;align-items:center;font-size:.8rem;color:var(--ink-soft);font-weight:700}
+.tag{display:inline-block;padding:1px 10px;border-radius:999px;background:var(--second-tint);color:var(--second);font-size:.75rem;font-weight:800}
+h1{font-size:clamp(1.45rem,5.6vw,1.95rem);font-weight:800;line-height:1.35;margin:0;text-wrap:balance}
+.gain{margin:0 0 18px;padding:10px 14px;border-radius:12px;background:var(--tint);color:var(--accent-ink);font-weight:700;font-size:.95rem}
+.gain .en{color:var(--accent-ink);opacity:.85}
+h2{font-size:1.1rem;font-weight:800;margin:26px 0 10px;text-wrap:balance}
+p{margin:0}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px}
+.stack{display:grid;gap:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:6px 20px;border-radius:999px;border:0;background:var(--accent);color:var(--on-accent);font-weight:800;cursor:pointer;text-align:center;line-height:1.3}
+.btn:hover{background:var(--accent-deep)}
+.btn.ghost{background:var(--card);color:var(--accent-ink);border:1.5px solid var(--accent)}
+.btn.ghost:hover{background:var(--tint)}
+.btn.sm{min-height:40px;padding:4px 14px;font-size:.88rem}
+.btn.full{width:100%}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.btn.warn{background:var(--bad);color:var(--card)}
+
+.tip{background:var(--second-tint);border-radius:var(--radius);padding:14px 16px;display:grid;gap:8px}
+.tip b{color:var(--second)}
+
+/* feature grid */
+.feats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.feat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;gap:4px;align-content:start}
+.feat svg{color:var(--accent)}
+.feat b{font-size:.92rem;line-height:1.4}
+.feat p{font-size:.82rem;color:var(--ink-soft);line-height:1.6}
+
+/* bots */
+.bot{display:grid;gap:10px;border-left:5px solid var(--bc)}
+.bot.off{opacity:.62}
+.bot-h{display:flex;gap:12px;align-items:center}
+.ava{flex:none;width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:var(--bt);color:var(--bc)}
+.ava.s{width:34px;height:34px;border-radius:10px}
+.bot-h .nm{flex:1;min-width:0}
+.bot-h .nm b{font-size:1.08rem;font-weight:800}
+.bot-h .nm small{display:block;font-size:.8rem;color:var(--bc);font-weight:800;line-height:1.4}
+.switch{position:relative;width:52px;height:30px;flex:none;border-radius:999px;border:0;background:var(--line);cursor:pointer}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:var(--card);transition:left .18s}
+.switch[aria-checked="true"]{background:var(--accent)}
+.switch[aria-checked="true"]::after{left:25px}
+.desc{font-size:.92rem;color:var(--ink-soft)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.field{display:grid;gap:4px;font-size:.82rem;font-weight:700;color:var(--ink-soft)}
+.field input,.compose textarea{width:100%;min-height:44px;border:1.5px solid var(--line);border-radius:12px;background:var(--bg);padding:8px 12px;font-size:1rem;font-weight:500;color:var(--ink)}
+.chip-area{font-size:.75rem;font-weight:800;padding:1px 10px;border-radius:999px;background:var(--bg-2);color:var(--ink-soft)}
+
+/* chat */
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin:0 -2px 12px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;display:flex;align-items:center;gap:8px;min-height:46px;padding:4px 14px 4px 6px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);cursor:pointer;font-weight:800}
+.chip.on{border-color:var(--bc);background:var(--bt);color:var(--ink)}
+.log{display:grid;gap:12px;margin-bottom:14px}
+.msg{display:flex;gap:8px;align-items:flex-end;max-width:100%}
+.msg.u{justify-content:flex-end}
+.bub{max-width:min(82%,560px);padding:10px 14px;border-radius:18px;white-space:pre-wrap;word-break:break-word;line-height:1.7;min-width:0}
+.msg.a .bub{background:var(--card);border:1px solid var(--line);border-bottom-left-radius:6px}
+.msg.u .bub{background:var(--accent);color:var(--on-accent);border-bottom-right-radius:6px}
+.bub.wait{color:var(--ink-soft);font-style:italic}
+.note{font-size:.82rem;color:var(--ink-soft);text-align:center;padding:4px 12px}
+.act{margin-left:42px;display:grid;gap:8px;padding:12px 14px;border-radius:14px;background:var(--bg-2);border:1px dashed var(--line);font-size:.9rem}
+.act .q{font-weight:700}
+.sos{border-radius:var(--radius);background:var(--bad-tint);padding:14px 16px;display:grid;gap:8px;border:1.5px solid var(--bad)}
+.sos b{color:var(--bad)}
+.sos ul{margin:0;padding-left:1.2em;display:grid;gap:2px}
+.sos .tel{font-weight:800;font-variant-numeric:tabular-nums;user-select:all}
+.compose{position:sticky;bottom:calc(72px + env(safe-area-inset-bottom,0px));background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:10px;display:grid;gap:8px;z-index:5}
+.compose textarea{resize:none;min-height:48px;max-height:140px;line-height:1.5}
+.quick{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.quick::-webkit-scrollbar{display:none}
+.quick button{flex:none;min-height:36px;padding:2px 12px;border-radius:999px;border:1px solid var(--line);background:var(--bg-2);cursor:pointer;font-size:.82rem;font-weight:700}
+
+/* memory */
+.mem-list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.mem-list li{display:flex;gap:10px;align-items:center;padding:8px 10px;border-radius:12px;background:var(--bg-2)}
+.mem-list li span{flex:1;min-width:0;font-size:.95rem}
+.mem-list small{display:block;font-size:.72rem;color:var(--ink-soft)}
+.x{flex:none;width:40px;height:40px;border-radius:50%;border:0;background:transparent;color:var(--ink-soft);cursor:pointer;display:grid;place-items:center}
+.x:hover{background:var(--bad-tint);color:var(--bad)}
+.empty{font-size:.9rem;color:var(--ink-soft);padding:6px 2px}
+
+/* routines */
+.moods{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.mood{display:grid;justify-items:center;gap:4px;padding:10px 2px;border-radius:14px;border:1.5px solid var(--line);background:var(--card);cursor:pointer;font-size:.78rem;font-weight:800;line-height:1.3;min-height:84px}
+.mood.on{border-color:var(--accent);background:var(--tint)}
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-top:12px;text-align:center;font-size:.72rem;color:var(--ink-soft);font-weight:700}
+.dot{width:26px;height:26px;margin:0 auto 2px;border-radius:50%;background:var(--bg-2);border:1.5px dashed var(--line)}
+.rt{display:flex;gap:12px;align-items:center}
+.rt .body{flex:1;min-width:0}
+.rt b{font-size:.98rem;line-height:1.4}
+.rt small{display:block;font-size:.8rem;color:var(--ink-soft)}
+.check{flex:none;width:44px;height:44px;border-radius:12px;border:2px solid var(--line);background:var(--card);cursor:pointer;display:grid;place-items:center;color:var(--on-accent)}
+.check[aria-pressed="true"]{background:var(--good);border-color:var(--good);color:var(--card)}
+.streak{font-weight:800;color:var(--good)}
+
+/* tabs */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+.tabs .in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+.tab{position:relative;min-height:64px;border:0;background:transparent;cursor:pointer;display:grid;place-content:center;justify-items:center;line-height:1.25;color:var(--ink-soft);font-weight:800;font-size:.88rem;padding:4px 2px}
+.tab .n{font-size:.95rem;font-variant-numeric:tabular-nums}
+.tab .en{font-size:.68rem;margin:0}
+.tab.on{color:var(--accent)}
+.tab.on::before{content:"";position:absolute;top:0;left:18%;right:18%;height:3px;border-radius:0 0 3px 3px;background:var(--accent)}
+
+.nav{display:flex;gap:10px;margin-top:24px}
+.nav .btn{flex:1}
+footer{margin-top:30px;padding-top:16px;border-top:1px solid var(--line);font-size:.78rem;color:var(--ink-soft);text-align:center;line-height:1.7}
+
+/* settings sheet */
+.mask{position:fixed;inset:0;background:rgba(10,25,40,.45);z-index:40}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;background:var(--card);border-radius:22px 22px 0 0;padding:20px max(16px,env(safe-area-inset-left,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-right,0px));max-width:760px;margin:0 auto;display:grid;gap:16px}
+.seg{display:flex;background:var(--bg-2);border-radius:999px;padding:4px;gap:4px}
+.seg button{flex:1;min-height:42px;border:0;border-radius:999px;background:transparent;cursor:pointer;font-weight:800;font-size:.9rem}
+.seg button.on{background:var(--accent);color:var(--on-accent)}
+.lbl{font-weight:800;font-size:.9rem;margin-bottom:6px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+@media (max-width:360px){.feats{grid-template-columns:1fr}}
+body{margin:0}
+.key-ok{color:var(--good);font-weight:800}
+.key-warn{font-size:.85rem;color:var(--ink-soft);margin:0;padding-left:1.2em;display:grid;gap:2px}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="wrap">
+  <div class="brand">
+    <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M16.2 7.8l-2.1 6.3-6.3 2.1 2.1-6.3z"/></svg>
+    <div><b id="brandName"></b><small id="brandSub"></small></div>
+  </div>
+  <button class="pill-btn" id="openSet" aria-haspopup="dialog">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>
+    <span id="setLbl"></span>
+  </button>
+</div></header>
+
+<main><div class="wrap" id="app"></div></main>
+
+<nav class="tabs" aria-label="主要分頁"><div class="in" id="tabs"></div></nav>
+<div id="sheetHost"></div>
+
+<script>
+/* ---------- icons ---------- */
+const I = {
+  sun:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
+  clock:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg>',
+  compass:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16.2 7.8l-2.1 6.3-6.3 2.1 2.1-6.3z"/></svg>',
+  flag:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20l5-14 5 8 3-4 5 10z"/><path d="M8 6V3l3 1.5L8 6"/></svg>',
+  team:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16.5 14.2A5 5 0 0 1 21.5 19"/></svg>',
+  brain:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"/><path d="M8 9h8M8 13h6M8 17h3"/></svg>',
+  repeat:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 2l3 3-3 3"/><path d="M4 11V9a4 4 0 0 1 4-4h12M7 22l-3-3 3-3"/><path d="M20 13v2a4 4 0 0 1-4 4H4"/></svg>',
+  hand:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+  x:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  tick:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  send:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l16-8-6 16-2.5-6.5z"/></svg>'
+};
+function face(level){ // 0 great .. 4 very low
+  const m=['M8 14.5c1.2 1.6 6.8 1.6 8 0','M8.5 14.5c1 1 6 1 7 0','M8.5 15h7','M8.5 16c1-1 6-1 7 0','M8 16.8c1.2-1.8 6.8-1.8 8 0'][level];
+  return '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9 9.5h.01M15 9.5h.01" stroke-width="2.6"/><path d="'+m+'"/></svg>';
+}
+
+/* ---------- teammate templates ---------- */
+const TPL = {
+  mood:{icon:'sun', name:['小晴','Sunny'], role:['心情陪伴','Mood buddy'], area:['生活與情緒','Life & feelings'],
+    desc:['陪你說說今天的心情，一起替情緒取名字，找到一件今晚就能讓自己好一點的小事。','Talks through your day, helps you name feelings, and finds one small thing that helps tonight.'],
+    persona:'你擅長情緒陪伴（社會情緒學習 SEL）：先傾聽並回應對方的感受，幫他替情緒取更精準的名字（例如失望、焦慮、委屈、煩躁），再一起想一個今晚就能做的小行動。不急著給建議，不說「想開一點」這類話。',
+    greet:['嗨，我是小晴。今天過得怎麼樣？用一個詞形容也可以。','Hi, I am Sunny. How was your day? One word is enough.'],
+    rt:{t:['睡前 1 分鐘心情打卡','1-minute mood check-in before bed'], f:'d', p:['開始今天的心情打卡','Start my mood check-in for today']},
+    quick:[['今天有點累','I feel tired today'],['有件事讓我很煩','Something is bugging me'],['今天其實不錯','Today was actually good']]},
+  time:{icon:'clock', name:['阿穩','Steady'], role:['作息管家','Routine keeper'], area:['生活與情緒','Life & feelings'],
+    desc:['幫你把讀書和休息排好、顧好睡眠，事情多到喘不過氣時，陪你把大任務拆成小步驟。','Plans study and rest, protects your sleep, and breaks big tasks into small steps.'],
+    persona:'你擅長時間管理與壓力調適：把大任務拆成 25 分鐘左右的小步驟，排出先後順序，提醒休息、運動與睡眠，不鼓勵熬夜硬撐。給計畫時用簡短條列，最多 3 項。',
+    greet:['我是阿穩。這週最讓你覺得忙不過來的是哪件事？','I am Steady. What is the one thing making this week feel too busy?'],
+    rt:{t:['睡前排好明天最重要的三件事','Plan tomorrow\'s top three before bed'], f:'d', p:['幫我排明天最重要的三件事','Help me plan my top three for tomorrow']},
+    quick:[['考試好多排不完','Too many tests to plan'],['最近都很晚睡','I keep sleeping late'],['我一直拖延','I keep procrastinating']]},
+  explore:{icon:'compass', name:['探探','Scout'], role:['興趣與科系探索','Major explorer'], area:['升學探索','Future paths'],
+    desc:['從你喜歡做的事出發，認識學群和科系實際在學什麼，每週探索一個新的可能。','Starts from what you enjoy, shows what majors really study, one new idea each week.'],
+    persona:'你擅長興趣與科系探索：從學生日常喜歡做的事、擅長的科目和在意的議題出發，連結到台灣大學的 18 學群與可能的科系。一次只介紹一到兩個科系，說明那個科系大一大二實際在學什麼、適合什麼特質的人，再用一個問題引導他自己判斷。',
+    greet:['我是探探。最近有沒有哪件事，你做的時候會忘記時間？','I am Scout. Is there anything you do that makes you lose track of time?'],
+    rt:{t:['每週探索一個科系','Explore one major each week'], f:'w', p:['帶我探索這週的一個科系','Help me explore one major this week']},
+    quick:[['我不知道自己喜歡什麼','I don\'t know what I like'],['我喜歡畫畫也喜歡科學','I like drawing and science'],['什麼是學群？','What is a 學群?']]},
+  path:{icon:'flag', name:['航航','Navi'], role:['升學路線','Admission navigator'], area:['升學探索','Future paths'],
+    desc:['帶你看懂學測、分科、個人申請、繁星等管道，以及學習歷程每個階段該準備什麼。','Explains admission routes and what to prepare for your learning portfolio at each stage.'],
+    persona:'你擅長說明台灣的升學路線：學測、分科測驗、個人申請、繁星推薦、四技二專管道，以及學習歷程檔案的準備。先確認學生的年級與目前方向，再給一個這個月就能做的具體步驟。日期、名額與規定每年會變動，提到時要提醒他向學校輔導室或大學招生網站確認最新公告。',
+    greet:['我是航航。你現在高幾？對升學最想先搞懂哪一塊？','I am Navi. What grade are you in, and which part of college admission do you want to understand first?'],
+    rt:{t:['每週整理一則學習歷程素材','Save one portfolio item each week'], f:'w', p:['幫我整理這週的學習歷程素材','Help me write up this week\'s portfolio item']},
+    quick:[['個人申請怎麼準備？','How do I prepare for 個人申請?'],['學習歷程要寫什麼？','What goes in my portfolio?'],['我高一，現在要做什麼？','I\'m in Grade 10, what now?']]}
+};
+const KEYS = Object.keys(TPL);
+
+/* ---------- state ---------- */
+const SKEY='compassCrew.v1';
+const defaults = ()=>({lang:'bi', big:false, tab:0, nick:'', seenTip:false, active:'mood',
+  squad:{mood:{on:true,name:''},time:{on:true,name:''},explore:{on:true,name:''},path:{on:true,name:''}},
+  chats:{}, mem:{}, rt:{}, moods:{}});
+let state = defaults();
+try{ const raw=localStorage.getItem(SKEY); if(raw){ const s=JSON.parse(raw); state=Object.assign(defaults(), s); state.squad=Object.assign(defaults().squad, s.squad||{}); } }catch(e){}
+function save(){ try{ localStorage.setItem(SKEY, JSON.stringify(state)); }catch(e){} }
+
+/* ---------- language helpers ---------- */
+function L(zh,en,inline){const f=document.createDocumentFragment();
+  if(state.lang==='en'&&en)f.append(en);
+  else if(state.lang==='zh'||!en)f.append(zh);
+  else{f.append(zh);const s=document.createElement('span');s.className=inline?'en in':'en';s.lang='en';s.textContent=en;f.append(s);}
+  return f;}
+function S(zh,en){return state.lang==='en'?(en||zh):state.lang==='zh'?zh:(en?zh+' / '+en:zh);}
+const P = (pair,inline)=>L(pair[0],pair[1],inline);
+function botName(k){ const n=(state.squad[k]&&state.squad[k].name||'').trim(); return n || (state.lang==='en'?TPL[k].name[1]:TPL[k].name[0]); }
+function botNameZh(k){ return (state.squad[k]&&state.squad[k].name||'').trim() || TPL[k].name[0]; }
+
+/* ---------- DOM helper ---------- */
+function h(tag, attrs, ...kids){
+  const e=document.createElement(tag);
+  if(attrs) for(const [k,v] of Object.entries(attrs)){
+    if(v==null||v===false) continue;
+    if(k==='class') e.className=v;
+    else if(k==='html') e.innerHTML=v;
+    else if(k==='style') e.setAttribute('style',v);
+    else if(k.startsWith('on')) e.addEventListener(k.slice(2),v);
+    else e.setAttribute(k, v===true?'':v);
+  }
+  for(const c of kids.flat()){ if(c==null||c===false) continue; e.append(c.nodeType?c:String(c)); }
+  return e;
+}
+function botVars(k){ return `--bc:var(--b-${k});--bt:var(--b-${k}-t)`; }
+function ava(k,small){ return h('span',{class:'ava'+(small?' s':''),style:botVars(k),html:I[TPL[k].icon].replace(/width="26" height="26"/, small?'width="20" height="20"':'width="26" height="26"'),'aria-hidden':'true'}); }
+
+/* ---------- dates ---------- */
+const dkey = (d=new Date())=>d.toLocaleDateString('en-CA');
+function wkey(d=new Date()){ const x=new Date(d); const day=(x.getDay()+6)%7; x.setDate(x.getDate()-day); return dkey(x); }
+function periodKey(f,d){ return f==='d'?dkey(d):wkey(d); }
+function prevPeriod(f){ const d=new Date(); d.setDate(d.getDate()-(f==='d'?1:7)); return periodKey(f,d); }
+
+/* ---------- AI (student's own Anthropic API key, called from this browser) ---------- */
+const KKEY='compassCrew.key', MKEY='compassCrew.model';
+let apiKey='', model='claude-haiku-5-5', busy=false, ctl=null, keyDraft='';
+try{ apiKey=localStorage.getItem(KKEY)||''; model=localStorage.getItem(MKEY)||model; }catch(e){}
+let aiState = apiKey?'ok':'none';
+function setKey(k){ apiKey=(k||'').trim(); aiState=apiKey?'ok':'none'; try{ apiKey?localStorage.setItem(KKEY,apiKey):localStorage.removeItem(KKEY); }catch(e){} }
+function setModel(m){ model=m; try{ localStorage.setItem(MKEY,m); }catch(e){} }
+async function callClaude(system, messages, onText, signal){
+  const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',signal,
+    headers:{'content-type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body:JSON.stringify({model,max_tokens:900,system,messages,stream:true})});
+  if(!res.ok){
+    let code='upstream_error', msg='';
+    try{ const j=await res.json(); msg=(j.error&&j.error.message)||''; }catch(e){}
+    if(res.status===401||res.status===403) code='bad_key';
+    else if(res.status===429) code='rate_limited';
+    else if(res.status===529) code='overloaded';
+    else if(/credit|balance|billing/i.test(msg)) code='no_credit';
+    else if(res.status===404||/model/i.test(msg)) code='bad_model';
+    throw {code};
+  }
+  const reader=res.body.getReader(), dec=new TextDecoder(); let buf='', text='';
+  for(;;){
+    const {done,value}=await reader.read(); if(done) break;
+    buf+=dec.decode(value,{stream:true}); let i;
+    while((i=buf.indexOf('\n'))>=0){
+      const line=buf.slice(0,i).trim(); buf=buf.slice(i+1);
+      if(!line.startsWith('data:')) continue;
+      let ev; try{ ev=JSON.parse(line.slice(5)); }catch(e){ continue; }
+      if(ev.type==='content_block_delta'&&ev.delta&&ev.delta.type==='text_delta'){ text+=ev.delta.text; onText(text); }
+      else if(ev.type==='error') throw {code:(ev.error&&ev.error.type==='overloaded_error')?'overloaded':'upstream_error'};
+    }
+  }
+  if(!text.trim()) throw {code:'empty'};
+  return text;
+}
+
+const CRISIS=/想死|去死|自殺|自殘|割腕|割自己|傷害自己|不想活|活不下去|活著沒意義|消失就好|跳樓|結束生命|kill myself|suicide|self[- ]?harm|end my life|want to die/i;
+
+function rules(k){
+  const t=TPL[k];
+  const others=KEYS.filter(x=>x!==k && state.squad[x].on).map(x=>`${x}（${botNameZh(x)}，${TPL[x].role[0]}）`).join('、')||'無';
+  const mem=(state.mem[k]||[]).map(m=>'- '+m.t).join('\n')||'（目前沒有）';
+  const lang = state.lang==='zh'?'用繁體中文回覆。':state.lang==='en'?'Reply in simple English (CEFR B1), short sentences.':'先用繁體中文回覆；接著空一行，附上同樣內容的簡單英文版本（CEFR B1）。';
+  return `你是「${botNameZh(k)}」，台灣一位高中生的 AI 隊友，角色是「${t.role[0]}」。${t.persona}
+對方希望被叫做：${state.nick.trim()||'同學'}。
+你記得關於他的事（都是他同意你記住的）：
+${mem}
+小隊裡其他隊友（代號：名字，角色）：${others}
+
+說話方式：溫暖、口語、像可靠的學長姐，不說教。每次回覆 3 到 6 句，最多問一個問題。不使用 emoji，不使用 Markdown 標題或粗體。
+${lang}
+安全：你是陪伴型 AI，不是醫師或諮商師，不做診斷。若他提到想傷害自己、想死、被傷害或覺得不安全，先表達關心並認真看待，鼓勵他現在就找信任的大人或學校輔導室，並提供：安心專線 1925（24 小時免付費）、生命線 1995、張老師 1980；有立即危險請撥 119 或 110。這種時候不要轉移話題、不要交接。
+升學相關的日期、名額、規定每年會變，提到時提醒他向學校輔導室或大學招生網站確認。
+
+回覆最後可以加特殊標記，各占一行，沒有就不要寫：
+[[記住:一句 20 字以內的話]]　當他說出值得長期記住的事（興趣、目標、喜好、讓他放鬆的方法）時使用，一次最多一條。不要記住姓名、學校、健康、家庭衝突或任何敏感細節。
+[[交接:代號]]　當話題明顯更適合其他隊友時使用，代號只能是：${KEYS.filter(x=>x!==k && state.squad[x].on).join('、')||'（無）'}。
+標記一律用中文「記住」「交接」。`;
+}
+function strip(t){ return t.replace(/\[\[(記住|交接)[:：][^\]]*\]\]/g,'').replace(/\[\[[^\]]*$/,'').replace(/\n{3,}/g,'\n\n').trim(); }
+function parse(t){
+  const memo=(t.match(/\[\[記住[:：]\s*([^\]]+?)\s*\]\]/)||[])[1]||null;
+  let hand=(t.match(/\[\[交接[:：]\s*([a-z]+)\s*\]\]/i)||[])[1]||null;
+  if(hand && (!TPL[hand] || !state.squad[hand].on)) hand=null;
+  return {memo:memo&&memo.slice(0,40), hand};
+}
+function chatOf(k){ if(!state.chats[k]) state.chats[k]=[{r:'a',t:S(TPL[k].greet[0],TPL[k].greet[1]),g:1}]; return state.chats[k]; }
+
+const ERR={bad_key:['API 金鑰無效或已停用，請到「組隊」頁重新貼上。','Your API key is invalid. Paste it again on the Squad tab.'],
+  no_credit:['這把金鑰的額度用完了，請到 Anthropic Console 儲值或換一把。','This key is out of credit. Top up in the Anthropic Console.'],
+  overloaded:['Claude 現在很忙，等一下再按重送。','Claude is busy right now. Try again shortly.'],
+  bad_model:['這把金鑰不能用目前選的模型，到「組隊」頁換一個試試。','This key cannot use the selected model. Pick another on the Squad tab.'],
+  network:['連不上 Claude，請檢查網路後再按重送。','Cannot reach Claude. Check your connection and resend.'],
+  empty:['隊友沒有回覆內容，換個說法試試。','No reply came back. Try asking another way.'],
+  sampling_disabled:['這個帳號目前不能使用 Claude 回覆。','Claude replies are not available for this account.'],
+  rate_limited:['訊息送太快或今天的用量到上限了，休息一下再試。','Too many messages or usage limit reached. Try again later.'],
+  session_expired:['登入過期了，請重新登入 Claude 再回來。','Your session expired. Sign in to Claude again.'],
+  refused:['這個問題隊友沒辦法回答，換個說法試試看。','Your teammate cannot answer that. Try asking another way.'],
+  upstream_error:['連線中斷了，按「重送」再試一次。','The connection dropped. Tap Resend to try again.']};
+function errText(code){ const e=ERR[code]||ERR.upstream_error; return S(e[0],e[1]); }
+
+async function send(text, hidden){
+  if(busy) return;
+  const k=state.active; const chat=chatOf(k);
+  const msg={r:'u',t:text}; if(hidden) msg.h=1;
+  chat.push(msg);
+  if(!hidden && CRISIS.test(text)) chat.push({r:'sos'});
+  save();
+  if(aiState!=='ok'){ chat.push({r:'note',t:S('先到「組隊」頁貼上你的 API 金鑰，隊友才能回覆你。','Add your API key on the Squad tab so your teammate can reply.')}); save(); render(); return; }
+  busy=true; render();
+  const bub=document.getElementById('pending');
+  const turns=chat.filter(m=>m.r==='u'||m.r==='a').slice(-16).map(m=>({role:m.r==='u'?'user':'assistant',content:m.t}));
+  while(turns.length && turns[0].role!=='user') turns.shift();
+  ctl=new AbortController(); let partial='';
+  try{
+    const text=await callClaude(rules(k), turns, t=>{ partial=t; if(bub){ bub.textContent=strip(t)||'…'; bub.classList.remove('wait'); scrollEnd(); } }, ctl.signal);
+    const {memo,hand}=parse(text);
+    chat.push({r:'a',t:strip(text),memo,hand});
+  }catch(e){
+    const code=(e&&e.name==='AbortError')?'cancelled':((e&&e.code)||'network');
+    if(partial) chat.push({r:'a',t:strip(partial)});
+    if(code!=='cancelled') chat.push({r:'note',t:errText(code),retry:1});
+    if(code==='bad_key'){ setKey(''); }
+  }
+  busy=false; ctl=null; save(); render(); scrollEnd();
+}
+function scrollEnd(){ requestAnimationFrame(()=>{ const c=document.querySelector('.compose'); if(c) c.scrollIntoView({block:'end'}); }); }
+
+function handoff(fromK, toK){
+  const chat=chatOf(fromK);
+  const lastU=[...chat].reverse().find(m=>m.r==='u'&&!m.h);
+  state.active=toK; state.tab=1; save();
+  send(`（交接給你）${botNameZh(fromK)} 說：同學剛剛在聊「${(lastU?lastU.t:'').slice(0,140)}」。請先用一句話自我介紹，再接著這個話題。`, true);
+}
+
+/* ---------- pages ---------- */
+const TABS=[ {zh:'組隊',en:'Squad',lv:['理解','Understand']}, {zh:'對話',en:'Chat',lv:['練習','Practice']}, {zh:'記憶',en:'Memory',lv:['整理','Reflect']}, {zh:'例行',en:'Routines',lv:['應用','Apply']} ];
+
+function head(i, title, gain){
+  return [
+    h('div',{class:'phead'},
+      h('div',{class:'big-n num'},String(i+1)),
+      h('div',{class:'meta'}, h('span',{class:'num'},`Step ${i+1} / 4`), h('span',{class:'tag'},P(TABS[i].lv,true))),
+      h('h1',null,P(title))),
+    h('p',{class:'gain'},P(gain))
+  ];
+}
+function navBtns(i){
+  return h('div',{class:'nav'},
+    i>0?h('button',{class:'btn ghost',onclick:()=>go(i-1)},L('上一步','Back',true)):null,
+    i<3?h('button',{class:'btn',onclick:()=>go(i+1)},L('下一步','Next',true)):null);
+}
+function go(i){ state.tab=i; save(); render(); window.scrollTo({top:0}); }
+
+function pageSquad(){
+  const out=[...head(0,['組一支你的 AI 小隊','Build your AI squad'],['做完會得到：5 分鐘內，一支有名字、有分工、會記得你的 4 人 AI 小隊。','You get: a 4-member AI squad with names and roles, ready in 5 minutes.'])];
+  if(!state.seenTip) out.push(h('div',{class:'tip'},
+    h('b',null,L('這是什麼？','What is this?',true)),
+    h('p',null,P(['靈感來自 Grok Bot 的「AI 隊友」：每位隊友有自己的名字和工作，會記得你同意它記住的事、帶你做例行任務，遇到別人更擅長的話題，還會把你交接給另一位隊友。','Inspired by Grok Bot\'s AI teammates: each one has a name and a job, remembers what you allow, runs routines with you, and hands you to a better-suited teammate.'])),
+    h('div',null,h('button',{class:'btn sm',onclick:()=>{state.seenTip=true;save();render();}},L('知道了','Got it',true)))));
+  out.push(h('div',{class:'feats'},
+    feat(I.team,['有名字、有分工','Named, with roles'],['4 位隊友各管一塊，可以幫它們改名。','Four teammates, each with a job. Rename them.']),
+    feat(I.brain,['記得你','Remembers you'],['想記住什麼由你決定，可以隨時刪。','You decide what it keeps. Delete anytime.']),
+    feat(I.repeat,['例行任務','Routines'],['每天心情打卡、每週探索一個科系。','Daily check-ins, a new major each week.']),
+    feat(I.hand,['隊友交接','Handoffs'],['聊到升學壓力，小晴會請航航接手。','Sunny can pass you to Navi when needed.'])));
+  out.push(h('h2',null,L('隊友怎麼叫你？','What should they call you?',true)));
+  const nick=h('input',{id:'nick',type:'text',maxlength:'12',value:state.nick,placeholder:S('暱稱，例如：小安（不要填真名）','A nickname, not your real name'),'aria-label':S('暱稱','Nickname')});
+  nick.addEventListener('input',()=>{state.nick=nick.value;save();});
+  out.push(h('label',{class:'field'},nick));
+  out.push(keyCard());
+  out.push(h('h2',null,L('你的隊友','Your teammates',true)));
+  const list=h('div',{class:'stack'});
+  for(const k of KEYS){
+    const t=TPL[k], sq=state.squad[k];
+    const sw=h('button',{class:'switch',role:'switch','aria-checked':String(sq.on),'aria-label':S('加入小隊','In squad')+' '+botName(k),onclick:()=>{ const onCount=KEYS.filter(x=>state.squad[x].on).length; if(sq.on&&onCount<=1) return; sq.on=!sq.on; if(!sq.on&&state.active===k) state.active=KEYS.find(x=>state.squad[x].on); save(); render(); }});
+    const nm=h('input',{id:'name-'+k,type:'text',maxlength:'8',value:sq.name,placeholder:S(t.name[0],t.name[1])});
+    nm.addEventListener('change',()=>{sq.name=nm.value.trim();save();render();});
+    list.append(h('div',{class:'card bot'+(sq.on?'':' off'),style:botVars(k)},
+      h('div',{class:'bot-h'}, ava(k), h('div',{class:'nm'}, h('b',null,botName(k)), h('small',null,P(t.role,true))), sw),
+      h('p',{class:'desc'},P(t.desc)),
+      h('div',{class:'row'}, h('span',{class:'chip-area'},P(t.area,true))),
+      h('label',{class:'field'},L('幫它取名字','Give it a name',true), nm),
+      sq.on?h('button',{class:'btn ghost full',onclick:()=>{state.active=k;go(1);}},L('跟 '+botNameZh(k)+' 聊聊','Chat with '+botName(k),true)):null));
+  }
+  out.push(list, navBtns(0));
+  return out;
+}
+function keyCard(){
+  const card=h('div',{class:'card stack',id:'key-card'});
+  card.append(h('h2',{style:'margin:0'},L('Claude API 金鑰','Claude API key',true)));
+  if(apiKey){
+    card.append(h('p',null,h('span',{class:'key-ok'},L('已設定','Key saved',true)),' ',h('span',{class:'num'},'…'+apiKey.slice(-4))));
+    card.append(h('div',null,h('button',{class:'btn sm ghost',onclick:()=>{ setKey(''); render(); }},L('移除這支手機上的金鑰','Remove key from this phone',true))));
+  } else {
+    const inp=h('input',{id:'api-key',type:'password',autocomplete:'off',spellcheck:'false',value:keyDraft,placeholder:'sk-ant-…','aria-label':S('API 金鑰','API key')});
+    inp.addEventListener('input',()=>{ keyDraft=inp.value; });
+    const saveIt=()=>{ const v=inp.value.trim(); if(!/^sk-ant-/.test(v)){ inp.setCustomValidity(S('金鑰應該以 sk-ant- 開頭','Keys start with sk-ant-')); inp.reportValidity(); return; } inp.setCustomValidity(''); keyDraft=''; setKey(v); render(); };
+    inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); saveIt(); }});
+    card.append(h('p',{class:'desc'},P(['隊友的回覆會用你自己的 Anthropic API 金鑰，費用從你的帳號扣。','Replies use your own Anthropic API key and are billed to your account.'])));
+    card.append(h('div',{class:'row',style:'flex-wrap:nowrap'},inp,h('button',{class:'btn sm',style:'flex:none',onclick:saveIt},L('儲存','Save',true))));
+  }
+  const seg=h('div',{class:'seg',role:'group','aria-label':S('模型','Model')},
+    [['claude-haiku-5-5',S('Haiku 省錢快速','Haiku: fast, low cost')],['claude-sonnet-5-5',S('Sonnet 想得更深','Sonnet: deeper')]].map(([v,l])=>h('button',{class:model===v?'on':'','aria-pressed':String(model===v),onclick:()=>{ setModel(v); render(); }},l)));
+  card.append(h('div',null,h('div',{class:'lbl'},L('隊友用的模型','Model',true)),seg));
+  card.append(h('ul',{class:'key-warn'},
+    h('li',null,L('金鑰只存在這支手機的瀏覽器，直接傳給 Anthropic，不經過老師或任何伺服器。','The key stays in this phone’s browser and goes only to Anthropic.')),
+    h('li',null,L('請在 Anthropic Console 設定每月花費上限。','Set a monthly spend limit in the Anthropic Console.')),
+    h('li',null,L('不要把金鑰傳給別人，也不要在共用電腦上儲存。','Never share your key or save it on a shared computer.'))));
+  return card;
+}
+function feat(icon,t,d){ return h('div',{class:'feat'}, h('span',{html:icon,'aria-hidden':'true'}), h('b',null,P(t,true)), h('p',null,P(d))); }
+
+function pageChat(){
+  const k=state.active, t=TPL[k];
+  const out=[...head(1,['和隊友聊聊','Talk with your teammates'],['做完會得到：把心裡的事說出來，帶走一個今晚就能做的小行動。','You get: say what is on your mind and leave with one small action for tonight.'])];
+  const chips=h('div',{class:'chips',role:'tablist'});
+  for(const x of KEYS.filter(x=>state.squad[x].on)) chips.append(h('button',{class:'chip'+(x===k?' on':''),role:'tab','aria-selected':String(x===k),style:botVars(x),onclick:()=>{ if(busy) return; state.active=x; save(); render(); }}, ava(x,true), botName(x)));
+  out.push(chips);
+  if(aiState==='none') out.push(h('div',{class:'tip'},h('b',null,L('還沒設定 API 金鑰','No API key yet',true)),h('p',null,P(['到「組隊」頁貼上你的 Claude API 金鑰，隊友才能真的回覆你。','Add your Claude API key on the Squad tab so your teammates can reply.'])),h('div',null,h('button',{class:'btn sm',onclick:()=>go(0)},L('去設定','Set it up',true)))));
+  const log=h('div',{class:'log','aria-live':'polite'});
+  const chat=chatOf(k);
+  chat.forEach((m,idx)=>{
+    if(m.h) return;
+    if(m.r==='u') log.append(h('div',{class:'msg u'},h('div',{class:'bub'},m.t)));
+    else if(m.r==='a'){
+      log.append(h('div',{class:'msg a'},ava(k,true),h('div',{class:'bub'},m.t)));
+      if(m.memo && !m.memoDone) log.append(h('div',{class:'act'},
+        h('span',{class:'q'},L(botNameZh(k)+' 想記住這件事，可以嗎？',botName(k)+' wants to remember this. OK?')),
+        h('span',null,'「'+m.memo+'」'),
+        h('div',{class:'row'},
+          h('button',{class:'btn sm',onclick:()=>{ (state.mem[k]=state.mem[k]||[]).push({t:m.memo,d:dkey()}); m.memoDone='kept'; save(); render(); }},L('記住','Keep',true)),
+          h('button',{class:'btn sm ghost',onclick:()=>{ m.memoDone='skip'; save(); render(); }},L('不用','No thanks',true)))));
+      if(m.memoDone==='kept') log.append(h('p',{class:'note'},L('已記住，可以在「記憶」頁修改。','Saved. Edit it on the Memory tab.',true)));
+      if(m.hand && !m.handDone && idx===chat.length-1) log.append(h('div',{class:'act'},
+        h('span',{class:'q'},L('這題 '+botNameZh(m.hand)+' 比較擅長，要請它接手嗎？',botName(m.hand)+' knows this better. Hand over?')),
+        h('div',{class:'row'},
+          h('button',{class:'btn sm',style:botVars(m.hand),onclick:()=>{ m.handDone=1; handoff(k,m.hand); }},L('請 '+botNameZh(m.hand)+' 接手','Hand to '+botName(m.hand),true)),
+          h('button',{class:'btn sm ghost',onclick:()=>{ m.handDone=1; save(); render(); }},L('繼續聊','Stay here',true)))));
+    }
+    else if(m.r==='sos') log.append(sosCard());
+    else if(m.r==='note') log.append(h('p',{class:'note'},m.t, m.retry&&idx===chat.length-1?h('span',null,' ',h('button',{class:'btn sm ghost',onclick:resend},L('重送','Resend',true))):null));
+  });
+  if(busy) log.append(h('div',{class:'msg a'},ava(k,true),h('div',{class:'bub wait',id:'pending'},S(botNameZh(k)+' 正在想…',botName(k)+' is thinking…'))));
+  out.push(log);
+  const ta=h('textarea',{id:'composer',rows:'2',maxlength:'600',placeholder:S('想說什麼都可以…','Say anything…'),'aria-label':S('訊息','Message')});
+  ta.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){ e.preventDefault(); doSend(); }});
+  function doSend(){ const v=ta.value.trim(); if(!v||busy) return; ta.value=''; send(v); }
+  const quick=h('div',{class:'quick'}, t.quick.map(q=>h('button',{type:'button',disabled:busy||null,onclick:()=>send(S(q[0],q[1]))},S(q[0],q[1]))));
+  out.push(h('div',{class:'compose'}, quick, h('div',{class:'row',style:'flex-wrap:nowrap;align-items:flex-end'}, ta,
+    busy?h('button',{class:'btn',style:'flex:none',onclick:()=>ctl&&ctl.abort(),'aria-label':S('停止','Stop')},L('停止','Stop',true))
+        :h('button',{class:'btn',style:'flex:none;width:52px;padding:0','aria-label':S('送出','Send'),onclick:doSend,html:I.send}))));
+  out.push(h('div',{class:'row',style:'justify-content:center;margin-top:12px'},
+    h('button',{class:'btn sm ghost',disabled:busy||null,onclick:()=>{ delete state.chats[k]; save(); render(); }},L('重新開始這段對話','Start this chat over',true))));
+  out.push(navBtns(1));
+  return out;
+}
+function resend(){
+  const k=state.active, chat=chatOf(k);
+  while(chat.length && chat[chat.length-1].r==='note') chat.pop();
+  const last=chat[chat.length-1];
+  if(last && last.r==='u'){ chat.pop(); send(last.t, last.h); }
+}
+function sosCard(){
+  return h('div',{class:'sos',role:'note'},
+    h('b',null,L('你說的話很重要，現在就可以找人聊','What you said matters. You can talk to someone now',true)),
+    h('ul',null,
+      h('li',null,L('安心專線（24 小時、免付費）','Mental health hotline, 24h free',true),' ',h('span',{class:'tel'},'1925')),
+      h('li',null,L('生命線','Lifeline',true),' ',h('span',{class:'tel'},'1995')),
+      h('li',null,L('張老師專線','Teacher Chang hotline',true),' ',h('span',{class:'tel'},'1980')),
+      h('li',null,L('學校輔導室、導師或你信任的大人','Your school counselor or a trusted adult',true)),
+      h('li',null,L('有立即危險請撥','In danger right now, call',true),' ',h('span',{class:'tel'},'119 / 110'))),
+    h('p',{style:'font-size:.85rem'},P(['AI 隊友可以陪你說話，但不能代替真人的幫忙。','An AI teammate can listen, but it cannot replace help from a real person.'])));
+}
+
+function pageMemory(){
+  const out=[...head(2,['隊友記得的事','What your teammates remember'],['做完會得到：一份由你決定、隨時能改的「隊友記憶」清單。','You get: a memory list you control and can edit anytime.'])];
+  out.push(h('div',{class:'tip'},h('b',null,L('記憶只存在這支手機','Memory stays on this phone',true)),h('p',null,P(['這些資料只存在你這台裝置的瀏覽器裡，老師和其他人看不到。換手機或清除瀏覽資料就會消失。不要寫真名、學校或密碼。','This data lives only in this device\'s browser. Teachers and others cannot see it. Do not save your real name, school or passwords.']))));
+  for(const k of KEYS.filter(x=>state.squad[x].on)){
+    const items=state.mem[k]||[];
+    const ul=h('ul',{class:'mem-list'});
+    items.forEach((m,i)=>ul.append(h('li',null,h('span',null,m.t,h('small',{class:'num'},m.d)),h('button',{class:'x','aria-label':S('刪除','Delete')+' '+m.t,html:I.x,onclick:()=>{items.splice(i,1);save();render();}}))));
+    const inp=h('input',{id:'mem-'+k,type:'text',maxlength:'40',placeholder:S('自己加一條，例如：喜歡打羽球','Add one, e.g. I like badminton'),'aria-label':S('新增記憶','Add memory')});
+    const add=()=>{ const v=inp.value.trim(); if(!v) return; (state.mem[k]=state.mem[k]||[]).push({t:v,d:dkey()}); save(); render(); };
+    inp.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.isComposing){ e.preventDefault(); add(); }});
+    out.push(h('div',{class:'card bot',style:botVars(k)+';margin-bottom:12px'},
+      h('div',{class:'bot-h'},ava(k),h('div',{class:'nm'},h('b',null,botName(k)),h('small',null,L(items.length+' 件事',items.length+' items',true)))),
+      items.length?ul:h('p',{class:'empty'},P(['還沒有。聊天時隊友想記住什麼，會先問你。','Nothing yet. Your teammate will ask before it remembers anything.'])),
+      h('div',{class:'row',style:'flex-wrap:nowrap'},inp,h('button',{class:'btn sm',style:'flex:none',onclick:add},L('加入','Add',true)))));
+  }
+  out.push(h('h2',null,L('清除全部資料','Erase everything',true)));
+  if(resetAsk) out.push(h('div',{class:'sos'},h('b',null,L('確定要清除？聊天、記憶、例行紀錄都會刪掉。','Erase all chats, memories and routine records?',true)),
+    h('div',{class:'row'},h('button',{class:'btn sm warn',onclick:()=>{ const lang=state.lang,big=state.big; state=defaults(); state.lang=lang; state.big=big; state.seenTip=true; resetAsk=false; save(); render(); }},L('全部清除','Erase all',true)),h('button',{class:'btn sm ghost',onclick:()=>{resetAsk=false;render();}},L('取消','Cancel',true)))));
+  else out.push(h('button',{class:'btn ghost',onclick:()=>{resetAsk=true;render();}},L('清除這支手機上的小隊資料','Erase squad data on this phone',true)));
+  out.push(navBtns(2));
+  return out;
+}
+let resetAsk=false;
+
+const MOODS=[['很好','Great'],['還不錯','Good'],['普通','Okay'],['有點累','Tired'],['很低落','Very low']];
+function pageRoutines(){
+  const out=[...head(3,['今天的例行任務','Today\'s routines'],['做完會得到：一週心情紀錄，加上一張每天 3 分鐘就能完成的任務清單。','You get: a week of mood records and a checklist that takes 3 minutes a day.'])];
+  const today=dkey(), mine=state.moods[today];
+  out.push(h('h2',null,L('今天心情幾分？','How do you feel today?',true)));
+  const moods=h('div',{class:'moods',role:'radiogroup','aria-label':S('今天心情','Today\'s mood')});
+  MOODS.forEach((m,i)=>moods.append(h('button',{class:'mood'+(mine===i?' on':''),role:'radio','aria-checked':String(mine===i),style:'color:var(--ink)',onclick:()=>{state.moods[today]=i;markDone('mood');save();render();}},h('span',{html:face(i),'aria-hidden':'true',style:'color:'+(i<2?'var(--good)':i>3?'var(--bad)':'var(--ink-soft)')}),P(m,false))));
+  const card=h('div',{class:'card'},moods,weekStrip());
+  out.push(card);
+  if(mine>=3) out.push(h('div',{class:'tip',style:'margin-top:12px'},h('b',null,L('辛苦了','That sounds hard',true)),h('p',null,P(['想跟'+botNameZh('mood')+'說說嗎？也可以找輔導室或撥安心專線 1925。','Want to talk with '+botName('mood')+'? You can also visit the counseling office or call 1925.'])),h('div',null,h('button',{class:'btn sm',onclick:()=>{state.active=state.squad.mood.on?'mood':state.active;go(1);}},L('去聊聊','Talk now',true)))));
+  out.push(h('h2',null,L('隊友帶你做的事','Routines with your teammates',true)));
+  const list=h('div',{class:'stack'});
+  for(const k of KEYS.filter(x=>state.squad[x].on)){
+    const r=TPL[k].rt, rec=state.rt[k]||{}, done=rec.last===periodKey(r.f);
+    list.append(h('div',{class:'card bot rt',style:botVars(k)},
+      ava(k),
+      h('div',{class:'body'},h('b',null,P(r.t,false)),h('small',null,botName(k),' · ',r.f==='d'?S('每天','Daily'):S('每週','Weekly'), rec.streak?h('span',null,' · ',h('span',{class:'streak num'},S('連續 '+rec.streak+(r.f==='d'?' 天':' 週'),rec.streak+(r.f==='d'?'-day':'-week')+' streak'))):null),
+        h('div',{style:'margin-top:8px'},h('button',{class:'btn sm ghost',onclick:()=>{ state.active=k; state.tab=1; save(); render(); window.scrollTo({top:0}); send(S(r.p[0],r.p[1])); }},L('開始','Start',true)))),
+      h('button',{class:'check','aria-pressed':String(done),'aria-label':S('完成','Done')+' '+S(r.t[0],r.t[1]),html:done?I.tick:'',onclick:()=>{ if(done){ rec.last=null; rec.streak=Math.max(0,(rec.streak||1)-1); state.rt[k]=rec; } else markDone(k); save(); render(); }})));
+  }
+  out.push(list, navBtns(3));
+  out.push(h('footer',null,h('div',null,'Gina教室的AI奇蹟'),h('div',null,'鳳新高中英文科李姬慧老師 X AI 彙整製作')));
+  return out;
+}
+function markDone(k){
+  if(!TPL[k]) return; const f=TPL[k].rt.f, cur=periodKey(f), rec=state.rt[k]||{};
+  if(rec.last===cur) return;
+  rec.streak = rec.last===prevPeriod(f) ? (rec.streak||0)+1 : 1;
+  rec.last=cur; state.rt[k]=rec;
+}
+function weekStrip(){
+  const w=h('div',{class:'week','aria-label':S('最近 7 天','Last 7 days')});
+  const names=state.lang==='en'?['Sun','Mon','Tue','Wed','Thu','Fri','Sat']:['日','一','二','三','四','五','六'];
+  for(let i=6;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); const v=state.moods[dkey(d)];
+    const col=v==null?null:(v<2?'var(--good)':v>3?'var(--bad)':v===3?'var(--b-mood)':'var(--accent)');
+    w.append(h('div',null,h('div',{class:'dot',style:col?`background:${col};border:0`:null,title:v==null?'':S(MOODS[v][0],MOODS[v][1])}),i===0?S('今天','Today'):names[d.getDay()]));
+  }
+  return w;
+}
+
+/* ---------- shell ---------- */
+function renderTabs(){
+  const t=document.getElementById('tabs'); t.innerHTML='';
+  TABS.forEach((x,i)=>t.append(h('button',{class:'tab'+(state.tab===i?' on':''),'aria-current':state.tab===i?'page':null,onclick:()=>go(i)},
+    h('span',null,h('span',{class:'n'},String(i+1)),' ',state.lang==='en'?x.en:x.zh), state.lang==='bi'?h('span',{class:'en',lang:'en'},x.en):null)));
+}
+function render(){
+  document.documentElement.classList.toggle('big',!!state.big);
+  document.documentElement.lang=state.lang==='en'?'en':'zh-Hant';
+  document.getElementById('brandName').textContent=state.lang==='en'?'Compass Crew':'心航小隊';
+  document.getElementById('brandSub').textContent=state.lang==='bi'?'Compass Crew · 你的 AI 隊友':state.lang==='en'?'Your AI teammates':'你的 AI 隊友';
+  document.getElementById('setLbl').textContent=S('設定','Settings').split(' / ')[0];
+  const app=document.getElementById('app'); app.innerHTML='';
+  const pages=[pageSquad,pageChat,pageMemory,pageRoutines];
+  app.append(...pages[state.tab]());
+  renderTabs();
+}
+
+/* settings sheet */
+function openSheet(){
+  const host=document.getElementById('sheetHost'); host.innerHTML='';
+  const close=()=>{host.innerHTML='';document.removeEventListener('keydown',esc);document.getElementById('openSet').focus();};
+  const esc=e=>{ if(e.key==='Escape') close(); };
+  document.addEventListener('keydown',esc);
+  const seg=(opts,cur,set)=>h('div',{class:'seg'},opts.map(([v,l])=>h('button',{class:cur===v?'on':'','aria-pressed':String(cur===v),onclick:()=>{set(v);save();render();openSheet();}},l)));
+  const sheet=h('div',{class:'sheet',role:'dialog','aria-modal':'true','aria-label':S('設定','Settings')},
+    h('div',null,h('div',{class:'lbl'},L('語言','Language',true)),seg([['zh','中文'],['bi','雙語'],['en','English']],state.lang,v=>state.lang=v)),
+    h('div',null,h('div',{class:'lbl'},L('字級','Text size',true)),seg([[false,S('標準','Normal')],[true,S('放大','Large')]],!!state.big,v=>state.big=v)),
+    h('button',{class:'btn full',onclick:close},L('完成','Done',true)));
+  host.append(h('div',{class:'mask',onclick:close}),sheet);
+  sheet.querySelector('button').focus();
+}
+document.getElementById('openSet').addEventListener('click',openSheet);
+render();
+</script>
+</body>
+</html>
