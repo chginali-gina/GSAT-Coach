@@ -1,0 +1,1391 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Lesson 6 The Country of the Blind v2 — Story Mountain 3D 闖關｜鳳新高中英文科李姬慧老師 X AI 彙整製作">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}*,*::before,*::after{box-sizing:border-box}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Story Mountain Quest</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,500;0,700;0,800;1,500&family=Alegreya+Sans:wght@400;500;700;800&family=Caveat:wght@600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+/* Layout (phone-first): full-screen 3D valley; top HUD = the plot as a mountain (Freytag); bottom panel = mission / caption / challenge.
+   The camera re-centres its subject in whatever space is left above the panel. */
+:root{
+  --ink:#1d2833;
+  --ink-soft:#4b5a68;
+  --mist:#e9eef0;
+  --mist-deep:#d4dde2;
+  --jacket:#c4622b;
+  --glacier:#355f7d;
+  --crystal:#8fd8f5;
+  --crystal-deep:#1f7aa3;
+  --good:#3c7a55;
+  --bad:#ad4637;
+  --gold:#d9a441;
+  --f-display:"Alegreya", "Noto Sans TC", Georgia, serif;
+  --f-body:"Alegreya Sans", "Noto Sans TC", system-ui, sans-serif;
+  --f-hand:"Caveat", "Noto Sans TC", cursive;
+  color-scheme: light;
+}
+html,body{height:100%}
+body{background:#cfd8de;color:var(--ink);font-family:var(--f-body);font-size:16px;overflow:hidden;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+#scene{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+#labels{position:fixed;inset:0;pointer-events:none;z-index:2;overflow:hidden}
+button{font:inherit;color:inherit}
+button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+/* floating 3D labels */
+.wlabel{position:absolute;left:0;top:0;will-change:transform;background:rgba(14,30,44,.8);color:#eaf8ff;border:1.5px solid var(--crystal);border-radius:999px;padding:3px 11px;font-family:var(--f-display);font-weight:800;font-size:15px;white-space:nowrap;box-shadow:0 0 14px rgba(143,216,245,.65)}
+.bubble{position:absolute;left:0;top:0;will-change:transform;max-width:210px;background:#fff;color:var(--ink);font-family:var(--f-display);font-weight:700;font-size:15px;line-height:1.3;padding:7px 12px;border-radius:14px;box-shadow:0 4px 16px rgba(20,30,40,.25)}
+.bubble::after{content:"";position:absolute;left:50%;bottom:-7px;margin-left:-7px;border:7px solid transparent;border-top-color:#fff;border-bottom:0}
+.bubble .who{display:block;font-family:var(--f-body);font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--jacket)}
+.flyer{position:fixed;left:0;top:0;z-index:9;pointer-events:none;transition:transform .75s cubic-bezier(.5,-0.3,.7,1),opacity .75s}
+
+/* HUD */
+.hud{position:fixed;top:0;left:0;right:0;z-index:5;display:flex;align-items:center;gap:8px;
+  padding-top:calc(env(safe-area-inset-top,0px) + 8px);padding-bottom:16px;
+  padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px));
+  background:linear-gradient(rgba(20,32,44,.6),rgba(20,32,44,0));color:#f4f7f8;pointer-events:none}
+.hud > *{pointer-events:auto}
+.mtn{border:0;background:none;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:0;min-width:0}
+.mtn svg{width:118px;height:34px;display:block;overflow:visible;filter:drop-shadow(0 1px 2px rgba(0,0,0,.45))}
+.mtn-label{text-shadow:0 1px 3px rgba(0,0,0,.5);font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;opacity:.92;white-space:nowrap}
+.spacer{flex:1}
+.streak{display:flex;align-items:center;gap:2px;color:#ffd27a;font-weight:800;font-size:15px}
+.score{font-family:var(--f-display);font-weight:800;font-variant-numeric:tabular-nums;font-size:17px;white-space:nowrap}
+.score small{font-family:var(--f-body);font-size:11px;opacity:.8;font-weight:700}
+.icon-btn{position:relative;border:0;background:rgba(255,255,255,.18);color:#fff;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;cursor:pointer;flex:0 0 auto}
+.badge{position:absolute;top:-4px;right:-4px;min-width:19px;height:19px;padding:0 4px;border-radius:10px;background:var(--gold);color:var(--ink);font-size:11px;font-weight:800;display:grid;place-items:center;font-variant-numeric:tabular-nums}
+.badge.pop{animation:bpop .5s}
+@keyframes bpop{40%{transform:scale(1.5)}}
+.svgdot{transform-box:fill-box;transform-origin:center;animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.5);opacity:.55}}
+
+/* bottom panel */
+.panel{position:fixed;left:0;right:0;bottom:0;z-index:4;display:flex;justify-content:center;
+  padding-left:max(10px,env(safe-area-inset-left,0px));padding-right:max(10px,env(safe-area-inset-right,0px));
+  padding-bottom:calc(env(safe-area-inset-bottom,0px) + 10px);pointer-events:none}
+.card{pointer-events:auto;width:100%;max-width:560px;max-height:50vh;overflow-y:auto;background:rgba(236,241,243,.96);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-radius:18px;
+  box-shadow:0 -6px 30px rgba(20,30,40,.22);padding:14px 16px;display:flex;flex-direction:column;gap:10px;animation:rise .4s ease both}
+@keyframes rise{from{transform:translateY(12px);opacity:.4}to{transform:none;opacity:1}}
+.card.collapsed{overflow:hidden;padding-block:6px}
+.card.collapsed > :not(.handle){display:none}
+.handle{font-size:13px;font-weight:800;color:var(--glacier);background:none;border:0;padding:2px 0;cursor:pointer;align-self:center}
+.eyebrow{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--glacier);font-weight:800}
+.eyebrow .zh{letter-spacing:0;text-transform:none;font-weight:500;color:var(--ink-soft)}
+h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;line-height:1.12}
+h2{font-size:24px;font-weight:800}
+h3{font-size:17px;font-weight:800}
+p{margin:0}
+.small{font-size:13px;color:var(--ink-soft);line-height:1.5}
+.hand{font-family:var(--f-hand);font-size:22px;color:var(--glacier);line-height:1.15}
+.tag{align-self:flex-start;font-size:11.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:var(--mist-deep);color:var(--glacier)}
+.tag.vocab{background:#dff1f9;color:var(--crystal-deep)}
+.tag.pattern{background:#f6e3d6;color:#8f3f14}
+.tag.reading{background:#e3ecdf;color:#2f5b3d}
+.tag.story{background:#ece4f3;color:#5b3f7a}
+
+/* caption (cutscene) */
+.caption{cursor:pointer;gap:8px;background:rgba(22,32,42,.82);color:#f2f5f6;box-shadow:none}
+.caption .eyebrow{color:#e9b98f}
+.caption .eyebrow .zh{color:#c9d3d9}
+.caption .line{font-family:var(--f-display);font-size:19px;line-height:1.5;font-weight:500}
+.caption .tap{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#c9d3d9}
+.dots{display:flex;gap:5px}
+.dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.3)}
+.dots i.on{background:#f1a873}
+.gl{border:0;background:none;padding:0;cursor:pointer;font:inherit;color:inherit;border-bottom:1.5px dotted rgba(255,255,255,.55)}
+.gl.tg{color:#9fe3ff;font-weight:700;border-bottom:2px solid #9fe3ff}
+.say{font-family:var(--f-display);font-style:italic;color:#f1c9a8}
+
+/* mission */
+.mini-mtn{width:100%;max-width:300px;height:auto;display:block;margin:2px auto 0}
+.mini-mtn text{font-family:var(--f-body);font-size:7px;fill:var(--ink-soft);font-weight:700}
+.stage-does{font-family:var(--f-display);font-size:18px;font-weight:700;line-height:1.35}
+.goals{display:grid;gap:8px}
+.goal{display:grid;grid-template-columns:86px 1fr;gap:10px;align-items:start;font-size:15px;line-height:1.45}
+.goal .k{font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;padding-top:3px}
+.goal .k.vocab{color:var(--crystal-deep)} .goal .k.pattern{color:#8f3f14} .goal .k.reading{color:#2f5b3d}
+.goal .v b{font-family:var(--f-display);font-weight:800}
+.goal .v .zh{display:block;font-size:13px;color:var(--ink-soft)}
+.wchips{display:flex;flex-wrap:wrap;gap:6px}
+.wchip{border:1.5px dashed var(--crystal-deep);color:var(--crystal-deep);border-radius:999px;padding:2px 10px;font-weight:800;font-size:14px;background:transparent;cursor:pointer}
+.wchip.got{border-style:solid;background:#dff3fb}
+
+/* challenge */
+.q{font-family:var(--f-display);font-size:19px;font-weight:700;line-height:1.38}
+.q .blank{display:inline-block;min-width:3.2em;border-bottom:2px solid var(--ink)}
+.opts{display:grid;gap:8px}
+.opt{font-size:16px;text-align:left;border:1.5px solid #b9c6ce;background:#f7f9fa;color:var(--ink);border-radius:12px;padding:11px 13px;cursor:pointer;display:flex;gap:10px;align-items:flex-start;min-height:46px}
+.opt .k{font-family:var(--f-display);font-weight:800;color:var(--glacier);min-width:1.1em}
+.opt.right{border-color:var(--good);background:#e3efe7}
+.opt.right .k{color:var(--good)}
+.opt.wrong{border-color:var(--bad);background:#f5e4e1;opacity:.75}
+.opt:disabled{cursor:default}
+.feedback{border-radius:12px;padding:10px 12px;font-size:15px;line-height:1.5}
+.feedback.good{background:#e3efe7;color:#20462f}
+.feedback.bad{background:#f5e4e1;color:#5e221a}
+.feedback .zh{display:block;opacity:.85;margin-top:3px}
+.actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;align-items:center}
+.btn{font-weight:800;font-size:16px;border:0;border-radius:999px;padding:12px 22px;cursor:pointer;background:var(--ink);color:#f4f7f8;min-height:46px}
+.btn.warm{background:var(--jacket)}
+.btn.ice{background:var(--crystal-deep)}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+.btn.sm{padding:7px 15px;min-height:36px;font-size:14px}
+.btn:disabled{opacity:.4;cursor:default}
+.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* sentence builder */
+.slots{min-height:54px;border:1.5px dashed #9fb0bb;border-radius:12px;padding:8px;display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;background:#fff}
+.slots.ok{border-color:var(--good);border-style:solid;background:#eef6f0}
+.slots.no{border-color:var(--bad)}
+.slots .ph{color:#9aa8b2;font-size:14px;align-self:center;padding-left:4px}
+.pool{display:flex;flex-wrap:wrap;gap:7px}
+.bchip{border:1.5px solid #b9c6ce;background:#fff;border-radius:10px;padding:8px 12px;font-family:var(--f-display);font-weight:700;font-size:16px;cursor:pointer}
+.slots .bchip{background:#f6e6dc;border-color:#e2b392}
+.bchip.used{visibility:hidden}
+
+/* evidence */
+.lines{display:grid;gap:8px}
+.ln{text-align:left;border:0;border-left:4px solid #b9c6ce;background:#fff;border-radius:4px 10px 10px 4px;padding:10px 12px;font-family:var(--f-display);font-size:16px;line-height:1.45;cursor:pointer;color:var(--ink)}
+.ln.right{border-left-color:var(--good);background:#e3efe7}
+.ln.wrong{border-left-color:var(--bad);background:#f5e4e1;opacity:.75}
+
+/* word card */
+.scrim{position:fixed;inset:0;z-index:8;background:rgba(10,18,26,.45);display:flex;align-items:flex-end;justify-content:center;
+  padding-left:max(10px,env(safe-area-inset-left,0px));padding-right:max(10px,env(safe-area-inset-right,0px));padding-bottom:calc(env(safe-area-inset-bottom,0px) + 10px)}
+.wcard{width:100%;max-width:520px;background:#f7fbfd;border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:10px;box-shadow:0 10px 40px rgba(0,0,0,.3);border-top:5px solid var(--crystal);animation:rise .35s ease both;max-height:80vh;overflow:auto}
+.wtop{display:flex;align-items:center;gap:10px}
+.wword{font-family:var(--f-display);font-size:34px;font-weight:800;line-height:1;color:var(--crystal-deep);flex:1;min-width:0;overflow-wrap:anywhere}
+.wpos{font-style:italic;color:var(--ink-soft);font-size:15px}
+.speak{border:0;background:#dff3fb;color:var(--crystal-deep);width:44px;height:44px;border-radius:50%;display:grid;place-items:center;cursor:pointer;flex:0 0 auto}
+.wzh{font-size:19px;font-weight:700}
+.wdef{font-size:16px;line-height:1.5;color:var(--ink-soft)}
+.wex{font-family:var(--f-display);font-size:17px;line-height:1.45;border-left:3px solid var(--crystal);padding-left:12px}
+.wex b{color:var(--crystal-deep)}
+.wlevel{font-size:12px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--glacier)}
+
+/* overlays */
+.ov{position:fixed;inset:0;z-index:8;background:var(--mist);overflow-y:auto;
+  padding-top:calc(env(safe-area-inset-top,0px) + 14px);padding-bottom:calc(env(safe-area-inset-bottom,0px) + 24px);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.ov-inner{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.ov-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.ov-head h2{font-size:26px}
+.jlevel{display:flex;flex-direction:column;gap:8px}
+.jgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.jword{border:1.5px solid var(--crystal);background:#fff;border-radius:12px;padding:10px 12px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:2px;min-width:0}
+.jword b{font-family:var(--f-display);font-size:17px;color:var(--crystal-deep)}
+.jword span{font-size:13px;color:var(--ink-soft)}
+.jword.locked{border-style:dashed;border-color:#b9c6ce;background:transparent;cursor:default}
+.jword.locked b{color:#9aa8b2;letter-spacing:.2em}
+.stage-list{display:grid;gap:8px}
+.stage-row{display:grid;grid-template-columns:28px 1fr;gap:10px;background:#fff;border-radius:12px;padding:10px 12px;align-items:start}
+.stage-row .n{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:800;background:var(--mist-deep);color:var(--ink-soft);font-size:14px}
+.stage-row.done .n{background:var(--gold);color:var(--ink)}
+.stage-row.now .n{background:var(--jacket);color:#fff}
+.stage-row b{font-family:var(--f-display);font-size:17px}
+.stage-row p{font-size:14px;color:var(--ink-soft);line-height:1.45}
+
+/* start */
+.start{position:fixed;inset:0;z-index:6;display:flex;flex-direction:column;justify-content:flex-end;overflow-y:auto;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-bottom:calc(env(safe-area-inset-bottom,0px) + 20px);
+  background:linear-gradient(rgba(233,238,240,0) 20%,rgba(233,238,240,.88) 50%,rgba(233,238,240,.98))}
+.start-inner{max-width:560px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:12px}
+.start .lesson{font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--jacket)}
+.start h1{font-size:clamp(40px,11vw,62px);font-weight:500;letter-spacing:-.01em}
+.start h1 em{font-style:normal;font-weight:800;display:block}
+.start .promise{font-size:16.5px;line-height:1.55}
+.lgoals{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.lgoal{background:#fff;border-radius:12px;padding:9px 11px;display:flex;flex-direction:column;gap:1px}
+.lgoal b{font-family:var(--f-display);font-size:20px;font-weight:800;line-height:1.1}
+.lgoal span{font-size:12.5px;color:var(--ink-soft);line-height:1.35}
+.lgoal.vocab b{color:var(--crystal-deep)} .lgoal.pattern b{color:#8f3f14} .lgoal.reading b{color:#2f5b3d} .lgoal.story b{color:#5b3f7a}
+.credit{font-size:12px;color:var(--ink-soft)}
+
+/* echo challenge */
+.sense{position:fixed;inset:0;z-index:7;display:grid;grid-template-columns:1fr 1fr;color:#dfe7ec}
+.sense button{background:transparent;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 70px);font-family:var(--f-display);font-size:28px;font-weight:800}
+.sense button:active{background:rgba(143,216,245,.08)}
+.sense button small{font-family:var(--f-body);font-size:14px;font-weight:500;opacity:.75}
+.sense .divider{position:absolute;top:22%;bottom:12%;left:50%;width:1px;background:rgba(255,255,255,.14)}
+.sense .msg{position:absolute;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + 76px);text-align:center;font-family:var(--f-hand);font-size:30px;pointer-events:none;padding:0 16px;color:#cfefff}
+
+/* toasts */
+.toast{position:fixed;z-index:9;left:0;top:0;transform:translate(-50%,-120%);background:var(--ink);color:#fff;border-radius:999px;padding:6px 13px;font-size:14px;font-weight:700;pointer-events:none;white-space:nowrap;animation:pop 1.1s ease forwards}
+.toast.combo{background:var(--gold);color:var(--ink)}
+@keyframes pop{0%{opacity:0;margin-top:6px}15%{opacity:1;margin-top:0}80%{opacity:1}100%{opacity:0}}
+.ripple{position:fixed;z-index:9;width:60px;height:60px;margin:-30px 0 0 -30px;border-radius:50%;border:3px solid #fff;pointer-events:none;animation:rip .6s ease-out forwards}
+@keyframes rip{from{transform:scale(.2);opacity:1}to{transform:scale(1.4);opacity:0}}
+
+/* pyramid + results */
+.pyr{width:100%;height:auto;max-width:100%}
+.pyr text{font-family:var(--f-body);font-size:11px;fill:var(--ink-soft)}
+.pyr .slot{fill:#fff;stroke:#b9c6ce}
+.pyr .slot.filled{fill:var(--jacket);stroke:var(--jacket)}
+.pyr .slot-t{fill:#fff;font-weight:700;font-size:12px}
+.chips{display:grid;gap:7px}
+.chip{font-size:15px;text-align:left;border:1.5px solid #b9c6ce;background:#fff;border-radius:10px;padding:9px 11px;cursor:pointer;line-height:1.4;color:var(--ink)}
+.chip.used{opacity:.35;pointer-events:none}
+.chip.sel{border-color:var(--jacket);background:#f6e6dc}
+.adj{display:flex;flex-wrap:wrap;gap:7px}
+.adj .chip{padding:8px 14px}
+.timer{height:7px;border-radius:4px;background:var(--mist-deep);overflow:hidden}
+.timer i{display:block;height:100%;width:100%;background:var(--gold);transform-origin:left}
+.big{font-family:var(--f-display);font-size:44px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.big small{font-size:18px;color:var(--ink-soft);font-weight:500}
+.rank{font-family:var(--f-display);font-size:22px;font-weight:800;color:var(--jacket)}
+.meters{display:grid;gap:9px}
+.meter-row{display:grid;grid-template-columns:1fr auto;gap:3px 10px;font-size:14px;font-weight:700}
+.meter-row .num{font-variant-numeric:tabular-nums;color:var(--ink-soft)}
+.meter{grid-column:1 / -1;height:9px;border-radius:5px;background:var(--mist-deep);overflow:hidden}
+.meter i{display:block;height:100%;border-radius:5px}
+.extras{display:flex;flex-wrap:wrap;gap:6px}
+.extras span{background:#fff;border-radius:999px;padding:4px 10px;font-size:13px;color:var(--ink-soft)}
+
+@media (prefers-reduced-motion:reduce){.card,.wcard{animation:none}.svgdot{animation:none}.flyer{transition:none}}
+</style>
+</head>
+<body>
+<canvas id="scene" aria-hidden="true"></canvas>
+<div id="labels" aria-hidden="true"></div>
+
+<header class="hud" id="hud" hidden>
+  <button class="mtn" id="mtnBtn" aria-label="Open the Story Mountain">
+    <svg id="mtnSvg" viewBox="0 0 120 34" aria-hidden="true"></svg>
+    <span class="mtn-label" id="mtnLabel">Exposition</span>
+  </button>
+  <div class="spacer"></div>
+  <div class="streak" id="streak" hidden title="Streak">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c1 4 5 6 5 11a5 5 0 0 1-10 0c0-2 1-3.5 2-4.5 0 2 1 3 2 3-1-3 0-7 1-9.5z"/></svg>
+    <span id="streakN">2</span>
+  </div>
+  <div class="score" id="score">0<small> pts</small></div>
+  <button class="icon-btn" id="journalBtn" aria-label="Open the Word Journal">
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg>
+    <span class="badge" id="jBadge">0</span>
+  </button>
+  <button class="icon-btn" id="soundBtn" aria-label="Turn sound off">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path id="waveA" d="M16.5 8.5a5 5 0 0 1 0 7"/><path id="waveB" d="M19 6a8.5 8.5 0 0 1 0 12"/></svg>
+  </button>
+</header>
+
+<section class="start" id="start">
+  <div class="start-inner">
+    <div class="lesson">Lesson 6 · Story Mountain Quest</div>
+    <h1>The Country <em>of the Blind</em></h1>
+    <p class="promise">這個故事是一座山。跟著登山家 Nuñez 從開端爬到高潮、再走到結局：在 3D 山谷裡蒐集單字水晶、拼出句型、從文中找證據。約 20 分鐘。</p>
+    <div class="lgoals">
+      <div class="lgoal vocab"><b>24</b><span>課本單字與片語<br>Words &amp; Phrases</span></div>
+      <div class="lgoal pattern"><b>3</b><span>句型<br>It wasn't until · either/neither · the more</span></div>
+      <div class="lgoal reading"><b>6</b><span>閱讀技巧<br>Hook · Evidence · Inference</span></div>
+      <div class="lgoal story"><b>1</b><span>故事架構<br>Freytag's Pyramid</span></div>
+    </div>
+    <p class="small">建議直拿手機、戴耳機。山谷裡還藏著 5 隻羊駝，看到可以點點看。</p>
+    <div class="actions" style="justify-content:flex-start"><button class="btn warm" id="startBtn">Start the climb</button></div>
+    <div class="credit">鳳新高中英文科李姬慧老師 X AI 彙整製作 · Story adapted from H. G. Wells</div>
+  </div>
+</section>
+
+<div class="panel" id="panel" hidden></div>
+<div class="scrim" id="wordModal" hidden></div>
+<div class="ov" id="journal" hidden></div>
+<div class="ov" id="mtnOv" hidden></div>
+<div class="sense" id="sense" hidden>
+  <div class="divider"></div>
+  <div class="msg" id="senseMsg">Listen…</div>
+  <button id="senseL">LEFT<small>聲音在左邊</small></button>
+  <button id="senseR">RIGHT<small>聲音在右邊</small></button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+"use strict";
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = id => document.getElementById(id);
+const shuffle = a => { const b=[...a]; for(let i=b.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [b[i],b[j]]=[b[j],b[i]]; } return b; };
+
+/* ============================== WORDS ============================== */
+const WORDS = {
+ slope:{w:"slope",pos:"n.",zh:"斜坡；坡地",def:"land that is higher at one end than the other",ex:"He slides down a steep, snowy <b>slope</b>."},
+ tumble:{w:"tumble",pos:"v.",zh:"滾落",def:"to fall quickly while rolling over and over",ex:"He <b>tumbles</b> a long way down."},
+ bruised:{w:"bruised",pos:"adj.",zh:"瘀傷的；碰傷的",def:"having dark marks on the skin after being hurt",ex:"He wakes up <b>bruised</b> and dazed."},
+ setoff:{w:"set off",pos:"phr.",zh:"出發；啟程",def:"to start a journey",ex:"He gets to his feet and <b>sets off</b> to explore."},
+ comeupon:{w:"come upon",pos:"phr.",zh:"偶然遇到；偶然發現",def:"to find or meet something by chance",ex:"Soon he <b>comes upon</b> a strange village."},
+ superior:{w:"superior",pos:"adj.",zh:"優於…的；更好的",def:"better or greater than someone else",ex:"He feels <b>superior</b> to the villagers."},
+ intimately:{w:"intimately",pos:"adv.",zh:"了如指掌地；密切地",def:"in a very close and detailed way",ex:"They know their valley <b>intimately</b>."},
+ skillfully:{w:"skillfully",pos:"adv.",zh:"熟練地",def:"with great skill",ex:"They grow crops <b>skillfully</b>."},
+ navigate:{w:"navigate",pos:"v.",zh:"認路；找到方向",def:"to find your way from one place to another",ex:"Nuñez tries to <b>navigate</b> the paths."},
+ adapt:{w:"adapt",pos:"v.",zh:"適應",def:"to change yourself to fit a new situation",ex:"Slowly, Nuñez <b>adapts</b> to village life."},
+ clingto:{w:"cling to",pos:"phr.",zh:"堅持；堅信（clung）",def:"to refuse to stop believing in something",ex:"He <b>clings to</b> the reality of sight."},
+ pity:{w:"pity",pos:"v.",zh:"憐憫；同情",def:"to feel sorry for someone",ex:"The villagers <b>pity</b> him."},
+ awe:{w:"awe",pos:"n.",zh:"敬畏",def:"a feeling of great respect mixed with a little fear",ex:"The villagers show no <b>awe</b> for his gift of sight."},
+ layeyeson:{w:"lay eyes on",pos:"phr.",zh:"看見；注意到",def:"to see someone or something, often with a strong feeling",ex:"Then he <b>lays eyes on</b> Medina-saroté."},
+ smoothness:{w:"smoothness",pos:"n.",zh:"平滑；細緻",def:"the quality of being completely even and soft",ex:"Her face lacks the <b>smoothness</b> they value."},
+ opposition:{w:"opposition",pos:"n.",zh:"反對；反抗",def:"strong disagreement with a plan or idea",ex:"They face fierce <b>opposition</b>."},
+ worstofall:{w:"worst of all",pos:"phr.",zh:"最糟的是",def:"the worst part of a bad situation",ex:"<b>Worst of all</b>, Medina agrees with the village."},
+ peculiar:{w:"peculiar",pos:"adj.",zh:"奇怪的；不尋常的",def:"strange or unusual",ex:"the two <b>peculiar</b> orbs beside his nose"},
+ inreturnfor:{w:"in return for",pos:"phr.",zh:"作為…的回報、交換",def:"as payment or reward for something",ex:"<b>In return for</b> this sacrifice, she will marry him."},
+ dilemma:{w:"dilemma",pos:"n.",zh:"進退兩難的困境",def:"a hard choice between two things",ex:"Nuñez is confronted with a <b>dilemma</b>."},
+ forsake:{w:"for sb.'s sake",pos:"phr.",zh:"為了某人",def:"in order to help or please someone",ex:"<b>For Medina's sake</b>, Nuñez says yes."},
+ gaze:{w:"gaze",pos:"v.",zh:"凝視；注視",def:"to look at something for a long time",ex:"<b>Gazing</b> at the sunrise, he changes his mind."},
+ envision:{w:"envision",pos:"v.",zh:"想像；嚮往",def:"to imagine something that might happen in the future",ex:"<b>envisioning</b> all he might still see"},
+ flee:{w:"flee",pos:"v.",zh:"逃離（fled）",def:"to run away from danger",ex:"He <b>flees</b> the country of the blind."}
+};
+const GLOSS = {
+ mountaineer:{w:"mountaineer",pos:"n.",zh:"登山家",def:"a person who climbs mountains",ex:"Nuñez, an experienced <b>mountaineer</b>"},
+ footing:{w:"lose one's footing",pos:"phr.",zh:"失足；跌倒",def:"to slip and fall",ex:"One wrong step, and he <b>loses his footing</b>."},
+ cliff:{w:"cliff",pos:"n.",zh:"懸崖",def:"a very high, steep wall of rock",ex:"over the edge of a <b>cliff</b>"},
+ dazed:{w:"dazed",pos:"adj.",zh:"暈眩的",def:"unable to think clearly, often after a hit",ex:"bruised and <b>dazed</b>"},
+ unevenly:{w:"unevenly",pos:"adv.",zh:"不均勻地",def:"not in a smooth or regular way",ex:"The houses are painted <b>unevenly</b>."},
+ path:{w:"path",pos:"n.",zh:"小路；小徑",def:"a narrow way made for walking",ex:"Every <b>path</b> has a low wall."},
+ alongside:{w:"alongside",pos:"prep.",zh:"在…旁邊",def:"next to; beside",ex:"a low wall running <b>alongside</b> it"},
+ crop:{w:"crop",pos:"n.",zh:"作物；莊稼",def:"a plant grown for food",ex:"They grow <b>crops</b> skillfully."},
+ outsider:{w:"outsider",pos:"n.",zh:"外人；外來者",def:"a person who does not belong to a group",ex:"Yacob takes in the <b>outsider</b>."},
+ twinkle:{w:"twinkle",pos:"v.",zh:"閃爍；閃耀",def:"to shine with a light that keeps changing",ex:"<b>twinkling</b> stars"},
+ welldefined:{w:"well-defined",pos:"adj.",zh:"輪廓分明的",def:"with clear, sharp lines",ex:"Her face is <b>well-defined</b>."},
+ delusion:{w:"delusion",pos:"n.",zh:"妄想；幻覺",def:"a false belief that something is real",ex:"His “sight” is a <b>delusion</b>."},
+ orb:{w:"orb",pos:"n.",zh:"球狀物（此指眼球）",def:"a round object; here, an eye",ex:"two peculiar <b>orbs</b> beside his nose"},
+ confront:{w:"confront",pos:"v.",zh:"面臨；面對",def:"(of a problem) to appear and need to be dealt with",ex:"Nuñez is <b>confronted</b> with a dilemma."},
+ nevertheless:{w:"nevertheless",pos:"adv.",zh:"儘管如此；然而",def:"in spite of what was just said",ex:"<b>Nevertheless</b>, on the morning of the surgery…"}
+};
+const info = k => WORDS[k] || GLOSS[k];
+const markup = t => t.replace(/\{(\w+)\|([^}]+)\}/g,(m,k,x)=>`<button class="gl ${WORDS[k]?"tg":""}" data-w="${k}">${x}</button>`);
+
+/* ============================== LEVELS ============================== */
+const LEVELS = [
+ { name:"The Fall", stage:"Exposition", zh:"開端", does:"Meet the hero and the setting.", doesZh:"介紹主角、時間與地點。",
+   takeaway:"The exposition introduces Nuñez, a skilled climber, in the mountains of Ecuador.",
+   words:["slope","tumble","bruised","setoff"],
+   goals:[["pattern","Strategy","<b>Writing hooks</b>","開頭用什麼方法抓住讀者？"],["reading","Reading","<b>Key details</b>: who, where, what happened","找出人物、地點、事件"]],
+   steps:[
+    {t:"story", beats:[
+      {v:"peak", s:"Nuñez, an experienced {mountaineer|mountaineer}, is climbing one of the highest mountains in Ecuador.", say:[["nunez","Almost at the top!"]]},
+      {v:"slide", s:"One wrong step on the ice, and he {footing|loses his footing}. He slides down a steep, snowy {slope|slope} and over the edge of a {cliff|cliff}.", fx:"fall"},
+      {v:"landing", s:"He {tumble|tumbles} a long way down. When he wakes up, he is {bruised|bruised} and {dazed|dazed}, deep in an unknown valley.", say:[["nunez","Where… am I?"]], fx:"thud"}
+    ]},
+    {t:"find", v:"landing", target:"nunez", prompt:"Where did Nuñez land? Tap him.", zh:"找到摔落的 Nuñez（橘色外套），點他一下。", why:"Found him: bruised, but alive."},
+    {t:"story", beats:[
+      {v:"valleyWide", s:"Hurt but determined, he gets to his feet and {setoff|sets off} to explore.", say:[["nunez","I have to find help."]]}
+    ]},
+    {t:"collect", v:"valleyWide"},
+    {t:"q", cat:"vocab", tag:"Vocabulary", q:"Nuñez fell over the cliff and ___ down the mountain, rolling over and over.", o:["gazed","tumbled","clung","navigated"], a:1, why:"tumble = fall quickly and roll over.", zh:"tumble 滾落：邊翻滾邊快速往下掉。"},
+    {t:"q", cat:"vocab", tag:"Vocabulary", q:"The next day, his arms were covered with dark blue marks. He was badly ___.", o:["superior","peculiar","bruised","skillful"], a:2, why:"bruised = having dark marks on the skin after being hurt.", zh:"bruised 瘀傷的。"},
+    {t:"q", cat:"reading", tag:"Writing Hook", q:"The story opens by dropping us straight into Nuñez's dangerous fall. Which kind of writing hook is this?", o:["A definition","Statistics","A description of an event","A question"], a:2, why:"The opening describes an exciting event to grab the reader's attention.", zh:"開頭直接描述一個驚險事件，吸引讀者讀下去。"}
+   ]},
+ { name:"The Valley", stage:"Inciting Incident", zh:"觸發事件", does:"Something happens that changes the hero's world.", doesZh:"發生一件改變主角處境的事。",
+   takeaway:"Finding the village of the blind sets the whole story in motion.",
+   words:["comeupon","superior","intimately","skillfully"],
+   goals:[["pattern","Pattern","<b>It didn't take long for</b> sb. <b>to</b> V","某人沒多久就…"],["reading","Reading","<b>Find the evidence</b> in the text","從文中找出證據句"]],
+   steps:[
+    {t:"story", beats:[
+      {v:"valleyWide", s:"Soon he {comeupon|comes upon} a strange village. The houses are painted {unevenly|unevenly}, in patchy colors."},
+      {v:"houses", s:"Every {path|path} has a low wall running {alongside|alongside} it."}
+    ]},
+    {t:"find", v:"houses", target:"walls", prompt:"What runs along every path? Tap it.", zh:"每條小路旁邊都有一樣東西，找到並點它。", why:"Low walls line every path. They help people who can't see find their way."},
+    {t:"story", beats:[
+      {v:"villagers", s:"It doesn't take long for Nuñez to realize that no one here can see.", say:[["v","Who walks there? A stranger?"]]},
+      {v:"proud", s:"He feels {superior|superior}. “In the country of the blind,” he thinks, “the one-eyed man is king.”", say:[["nunez","I could be their king!"]]},
+      {v:"farm", s:"But the villagers know their valley {intimately|intimately}. They grow {crop|crops} {skillfully|skillfully} and move around with ease, using hearing, touch, and smell."}
+    ]},
+    {t:"collect", v:"farm"},
+    {t:"build", cat:"pattern", zhq:"Nuñez 沒過多久就發現這裡沒有人看得見。", chunks:["It didn't take long","for Nuñez","to realize","that no one here","could see."], extra:["realizing"], why:"It didn't take long for + sb. + to V = sb. soon did something.", zh:"It didn't take long for 人 to V：某人沒多久就…。"},
+    {t:"evidence", cat:"reading", tag:"Find the Evidence", q:"Which sentence proves the villagers live well without sight?", lines:["The houses are painted unevenly, in patchy colors.","He feels superior.","They grow crops skillfully and move around with ease, using hearing, touch, and smell.","Every path has a low wall running alongside it."], a:2, why:"Growing crops skillfully and moving with ease shows they live well.", zh:"熟練種作物、行動自如，證明他們沒有視覺也過得很好。"},
+    {t:"q", cat:"reading", tag:"Inference", q:"“In the country of the blind, the one-eyed man is king.” What does this thought show about Nuñez?", o:["He feels sorry for the villagers","He wants to go home right away","He believes his sight makes him better than them","He is afraid of the villagers"], a:2, why:"He feels superior: he thinks seeing will let him rule them.", zh:"他覺得看得見就高人一等，態度傲慢 (arrogant)。"},
+    {t:"q", cat:"vocab", tag:"Phrase", q:"Walking through the strange land, Nuñez ___ a village by chance.", o:["came upon","cared for","clung to","set off"], a:0, why:"come upon = find something by chance.", zh:"come upon 偶然遇到、偶然發現。"}
+   ]},
+ { name:"Their Ways", stage:"Rising Action", zh:"情節發展", does:"Problems grow and tension builds.", doesZh:"衝突逐漸升高，張力變大。",
+   takeaway:"Nuñez adapts but clings to sight, and the gap between him and the villagers grows.",
+   words:["navigate","adapt","clingto","pity"],
+   goals:[["pattern","Pattern","<b>The more</b> …, <b>the more</b> …","越…就越…"],["reading","Reading","<b>Cause &amp; effect</b>","找出原因與結果"]],
+   steps:[
+    {t:"story", beats:[
+      {v:"yacob", s:"An elder named Yacob takes in the {outsider|outsider} and teaches him the village's ways.", say:[["yacob","Here, we live by sound and touch."]]},
+      {v:"villagers", s:"Nuñez tries to {navigate|navigate} the paths, but he keeps tripping over the walls. The villagers never do.", say:[["v","Mind the wall, newcomer!"]]}
+    ]},
+    {t:"sense"},
+    {t:"story", beats:[
+      {v:"night", s:"Slowly, Nuñez {adapt|adapts} to village life. But he {clingto|clings to} the reality of sight and talks about {twinkle|twinkling} stars.", say:[["nunez","Up there, the stars twinkle!"]]},
+      {v:"night2", s:"The more he talks about the stars, the more the villagers {pity|pity} him.", say:[["v","Poor boy. His mind is sick."]]}
+    ]},
+    {t:"collect", v:"night2"},
+    {t:"build", cat:"pattern", zhq:"他越是談論星星，村民就越同情他。", chunks:["The more","he talked about the stars,","the more","the villagers","pitied him."], extra:["the most"], why:"The more + S + V, the more + S + V: when one thing grows, the other grows too.", zh:"The more…, the more…：越…就越…。"},
+    {t:"q", cat:"vocab", tag:"Phrase", q:"Even after he adapted to village life, Nuñez ___ the reality of sight. He never stopped believing in it.", o:["set off","clung to","came upon","cared for"], a:1, why:"cling to = refuse to stop believing in something.", zh:"cling to 堅持、堅信（clung 為過去式）。"},
+    {t:"q", cat:"reading", tag:"Cause & Effect", q:"Cause: Nuñez keeps talking about stars and mountains. Effect: ___", o:["The villagers make him their king","The villagers think his mind is sick and pity him","The villagers ask him to teach them to see","The villagers send him back up the cliff"], a:1, why:"With no idea of sight, they hear his words as nonsense and feel sorry for him.", zh:"村民沒有「視覺」的概念，以為他神智不清，所以同情他。"}
+   ]},
+ { name:"Medina", stage:"Climax", zh:"高潮", does:"The turning point: the conflict is at its highest.", doesZh:"轉捩點，衝突最激烈的時刻。",
+   takeaway:"Love for Medina and the village's opposition push the conflict to its peak.",
+   words:["awe","layeyeson","smoothness","opposition"],
+   goals:[["pattern","Pattern","<b>It wasn't until</b> … <b>that</b> … · <b>neither</b> … <b>nor</b> …","直到…才… · 既不…也不…"],["reading","Reading","<b>Inference</b>: compare two ideas of beauty","推論：比較兩種審美觀"]],
+   steps:[
+    {t:"story", beats:[
+      {v:"village", s:"Nuñez feels lonely and frustrated. The villagers show no {awe|awe} for his gift of sight."},
+      {v:"medinaMeet", s:"Then he {layeyeson|lays eyes on} Yacob's daughter, Medina-saroté. Her face is {welldefined|well-defined}, without the {smoothness|smoothness} the villagers value.", say:[["medina","Your words are strange… and kind."]]}
+    ]},
+    {t:"find", v:"medinaMeet", target:"medina", prompt:"Only Nuñez sees her beauty. Tap Medina-saroté.", zh:"找到 Medina（紫色衣服），點她一下。", why:"To the villagers she is plain. To Nuñez she is beautiful."},
+    {t:"story", beats:[
+      {v:"medinaMeet", s:"To the villagers, her voice is neither powerful nor pleasing. Only Nuñez finds her beautiful, and the two fall in love.", say:[["nunez","You are beautiful, Medina."]]},
+      {v:"crowd", s:"When they wish to marry, they face fierce {opposition|opposition}. The villagers believe his “sight” is a {delusion|delusion} that must be cured.", say:[["v","His eyes make him mad!"]]}
+    ]},
+    {t:"collect", v:"crowd"},
+    {t:"build", cat:"pattern", zhq:"直到他看見 Medina，他才開始感到快樂。", chunks:["It wasn't until","he laid eyes on Medina","that","he began","to feel happy."], extra:["when"], why:"It wasn't until + time/event + that + S + V.", zh:"It wasn't until…that…：直到…才…，連接詞用 that。"},
+    {t:"q", cat:"pattern", tag:"Sentence Pattern", q:"To the villagers, Medina's voice was ___ powerful ___ pleasing.", o:["either … or","neither … nor","both … and","not only … but also"], a:1, why:"neither A nor B = not A and not B.", zh:"neither…nor：兩者皆非，既不有力也不悅耳。"},
+    {t:"evidence", cat:"reading", tag:"Inference", q:"Which sentence shows how the villagers judge beauty?", lines:["The villagers show no awe for his gift of sight.","Her face is well-defined, without the smoothness the villagers value.","When they wish to marry, they face fierce opposition.","Then he lays eyes on Yacob's daughter, Medina-saroté."], a:1, why:"They judge beauty by touch, so they value smooth faces.", zh:"村民用觸覺判斷美，看重臉的平滑。"},
+    {t:"q", cat:"vocab", tag:"Vocabulary", q:"There was strong ___ to the marriage. Almost everyone in the village was against it.", o:["opposition","smoothness","awe","navigation"], a:0, why:"opposition = strong disagreement.", zh:"opposition 反對。"}
+   ]},
+ { name:"The Price", stage:"Falling Action", zh:"情節收束", does:"The hero faces what the conflict has caused.", doesZh:"主角面對衝突帶來的後果。",
+   takeaway:"Medina's request turns the conflict into a painful choice for Nuñez.",
+   words:["worstofall","peculiar","inreturnfor","dilemma"],
+   goals:[["pattern","Pattern","<b>either</b> … <b>or</b> …","二選一"],["reading","Reading","<b>Identify the conflict</b>","找出主角面對的衝突"]],
+   steps:[
+    {t:"story", beats:[
+      {v:"dusk", s:"{worstofall|Worst of all}, Medina agrees with the village. She begs Nuñez to let them remove the two {peculiar|peculiar} {orb|orbs} beside his nose.", say:[["medina","Then you would stop daydreaming."]]},
+      {v:"dusk2", s:"{inreturnfor|In return for} this sacrifice, she will marry him. Nuñez is {confront|confronted} with a {dilemma|dilemma}.", say:[["nunez","My eyes… or her?"]]}
+    ]},
+    {t:"collect", v:"dusk2"},
+    {t:"q", cat:"reading", tag:"Key Details", q:"Under what condition will Medina marry Nuñez?", o:["He must leave the valley forever","He must have his eyes removed","He must build her a new house","He must stop talking to Yacob"], a:1, why:"The “peculiar orbs” beside his nose are his eyes.", zh:"「鼻子兩側奇怪的球」就是他的眼睛。"},
+    {t:"build", cat:"pattern", zhq:"他必須選擇：失去雙眼，或是結束這段感情。", chunks:["He had to choose","either","to lose his eyes","or","to end the relationship."], extra:["neither"], why:"either A or B = one of two choices.", zh:"either…or…：二選一。"},
+    {t:"q", cat:"vocab", tag:"Vocabulary", q:"A situation where you must make a hard choice between two things is a ___.", o:["delusion","dilemma","crop","opposition"], a:1, why:"dilemma = a hard choice between two things.", zh:"dilemma 進退兩難的困境。"},
+    {t:"q", cat:"vocab", tag:"Vocabulary", q:"To the villagers, Nuñez's eyes were ___ things. They had never known anything like them.", o:["peculiar","skillful","superior","smooth"], a:0, why:"peculiar = strange or unusual.", zh:"peculiar 奇怪的、不尋常的。"}
+   ]},
+ { name:"Sunrise", stage:"Resolution", zh:"結局", does:"The conflict is settled and the story ends.", doesZh:"衝突得到解決，故事收尾。",
+   takeaway:"Nuñez chooses his sight and leaves: being able to see never made him superior.",
+   words:["forsake","gaze","envision","flee"],
+   goals:[["pattern","Pattern","<b>It wasn't until</b> … (review)","複習：直到…才…"],["reading","Reading","<b>Theme</b>: what is the story really about?","主旨：故事真正想說什麼"]],
+   steps:[
+    {t:"story", beats:[
+      {v:"dawn", s:"{forsake|For Medina's sake}, Nuñez says yes. {nevertheless|Nevertheless}, on the morning of the surgery, something rises over the peaks."}
+    ]},
+    {t:"find", v:"sunrise", target:"sun", prompt:"What does Nuñez see that morning? Tap it.", zh:"手術當天早上，他看到了什麼？在畫面中點它。", why:"The splendor of the sunrise."},
+    {t:"story", beats:[
+      {v:"sunrise", s:"{gaze|Gazing} at the sunrise and {envision|envisioning} all he might still see, he knows he cannot do it.", say:[["nunez","I can't give this up."]]},
+      {v:"flee", s:"He {flee|flees} the country of the blind and climbs toward the light."}
+    ]},
+    {t:"collect", v:"sunrise"},
+    {t:"q", cat:"pattern", tag:"Sentence Pattern", q:"“It wasn't until the day of his surgery that he realized he was making a huge mistake.” What does this mean?", o:["He realized his mistake long before the surgery","He only realized his mistake on the day of the surgery","He never realized he was making a mistake","He realized it the day after the surgery"], a:1, why:"It wasn't until X that Y = Y happened only when X came.", zh:"直到手術當天，他才意識到自己犯了大錯。"},
+    {t:"q", cat:"vocab", tag:"Vocabulary", q:"Driven by the wish to keep his sight, Nuñez ___ the village. (flee, past tense)", o:["flew","fleed","fled","flown"], a:2, why:"flee – fled – fled. (fly – flew – flown is a different verb.)", zh:"flee 三態 flee–fled–fled，別和 fly 搞混。"},
+    {t:"q", cat:"reading", tag:"Theme", q:"What does Nuñez finally have to accept about himself?", o:["Seeing is always believing","His sight does not make him better than others","Love always wins in the end","The villagers were right about him"], a:1, why:"He came as a “king,” but learned that seeing did not make him superior.", zh:"他原本以為會「稱王」，最後明白：看得見並不代表比別人優越。"}
+   ]}
+];
+const EVENTS = [
+ {k:"E", txt:"An experienced climber loses his footing in Ecuador and falls."},
+ {k:"F", txt:"He finds a village where everyone is blind, and their knowledge amazes him."},
+ {k:"C", txt:"He tries to make the villagers understand “sight,” but fails."},
+ {k:"B", txt:"He falls in love with Medina, but the villagers oppose them."},
+ {k:"D", txt:"He is asked to give up his eyes so Medina will marry him."},
+ {k:"A", txt:"He agrees, then changes his mind and runs away."}
+];
+const CAT = { vocab:["Vocabulary","單字與片語","#1f7aa3"], pattern:["Sentence Patterns","句型","#c4622b"], reading:["Reading Skills","閱讀理解","#3c7a55"], story:["Story Structure","故事架構","#7a5aa0"] };
+
+/* ============================== STATE ============================== */
+const S = { level:0, step:0, beat:0, score:0, streak:0, best:0, sound:true, modal:false, mode:null,
+  found:new Set(), llamas:new Set(), sense:0, levelPts:[0,0,0,0,0,0], levelMax:[0,0,0,0,0,0],
+  cat:{vocab:[0,0],pattern:[0,0],reading:[0,0],story:[0,0]}, finding:null, collecting:null, gather:null, shot:null };
+const RUSH_N = 8;
+LEVELS.forEach((L,i)=>L.steps.forEach(s=>{
+  if(s.t==="sense"){ S.levelMax[i]+=4; return; }
+  if(["q","build","evidence","find"].includes(s.t)){ S.levelMax[i]+=2; S.cat[s.cat||"reading"][1]+=2; }
+}));
+S.cat.vocab[1]+=RUSH_N*2; S.cat.story[1]+=9;
+S.max = S.levelMax.reduce((a,b)=>a+b,0) + RUSH_N*2 + 9;
+
+/* ============================== AUDIO ============================== */
+let AC=null, master=null, windGain=null, padNodes=[], noiseBuf=null;
+function initAudio(){
+  if(AC) return;
+  try{ AC=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return; }
+  master=AC.createGain(); master.gain.value=.8; master.connect(AC.destination);
+  noiseBuf=AC.createBuffer(1,AC.sampleRate*2,AC.sampleRate);
+  const d=noiseBuf.getChannelData(0); for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+  const n=AC.createBufferSource(); n.buffer=noiseBuf; n.loop=true;
+  const bp=AC.createBiquadFilter(); bp.type="bandpass"; bp.frequency.value=420; bp.Q.value=.7;
+  const lfo=AC.createOscillator(); lfo.frequency.value=.08; const lg=AC.createGain(); lg.gain.value=260; lfo.connect(lg); lg.connect(bp.frequency); lfo.start();
+  windGain=AC.createGain(); windGain.gain.value=.07; n.connect(bp); bp.connect(windGain); windGain.connect(master); n.start();
+}
+const CHORDS={1:[110,164.8,196,261.6],2:[130.8,196,246.9,329.6],3:[146.8,220,293.7,370],4:[130.8,196,261.6,329.6],5:[110,155.6,207.7,261.6],6:[146.8,220,277.2,370,440],7:[130.8,196,261.6,329.6,392]};
+function setPad(k){
+  if(!AC) return;
+  const t=AC.currentTime;
+  padNodes.forEach(p=>{ p.g.gain.cancelScheduledValues(t); p.g.gain.setTargetAtTime(0,t,.8); p.o.stop(t+4); });
+  padNodes=(CHORDS[k]||CHORDS[2]).map((f,i)=>{
+    const o=AC.createOscillator(); o.type=i%2?"triangle":"sine"; o.frequency.value=f; o.detune.value=(Math.random()-.5)*8;
+    const g=AC.createGain(); g.gain.value=0; g.gain.setTargetAtTime(.032/(1+i*.3),t,1.5);
+    const lp=AC.createBiquadFilter(); lp.type="lowpass"; lp.frequency.value=900;
+    o.connect(lp); lp.connect(g); g.connect(master); o.start(); return {o,g};
+  });
+  if(windGain) windGain.gain.setTargetAtTime(k===1?.14:k===6?.03:.06,t,1);
+}
+function tone(f,dur,type,vol,when,pan){
+  if(!AC||!S.sound) return null;
+  const t=AC.currentTime+(when||0);
+  const o=AC.createOscillator(); o.type=type||"sine"; o.frequency.setValueAtTime(f,t);
+  const g=AC.createGain(); g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol||.15,t+.01); g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  let out=g; if(pan!==undefined&&AC.createStereoPanner){ const p=AC.createStereoPanner(); p.pan.value=pan; g.connect(p); out=p; }
+  o.connect(g); out.connect(master); o.start(t); o.stop(t+dur+.05); return o;
+}
+function noiseHit(dur,freq,q,vol,when,pan,sweep){
+  if(!AC||!S.sound) return;
+  const t=AC.currentTime+(when||0);
+  const s=AC.createBufferSource(); s.buffer=noiseBuf;
+  const f=AC.createBiquadFilter(); f.type="bandpass"; f.frequency.setValueAtTime(freq,t); f.Q.value=q;
+  if(sweep) f.frequency.exponentialRampToValueAtTime(sweep,t+dur);
+  const g=AC.createGain(); g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+.02); g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  let out=g; if(pan!==undefined&&AC.createStereoPanner){ const p=AC.createStereoPanner(); p.pan.value=pan; g.connect(p); out=p; }
+  s.connect(f); f.connect(g); out.connect(master); s.start(t,Math.random()); s.stop(t+dur+.05);
+}
+const PENTA=[523.3,587.3,659.3,784,880,1046.5];
+const sfx={
+  right(){ [523.3,659.3,784].forEach((f,i)=>tone(f,.5,"sine",.12,i*.08)); },
+  wrong(){ tone(150,.35,"triangle",.16); tone(110,.4,"sine",.12,.05); },
+  page(){ noiseHit(.18,2400,.8,.05); },
+  level(){ [392,523.3,659.3,784,1046.5].forEach((f,i)=>tone(f,.9,"sine",.09,i*.11)); },
+  thud(){ noiseHit(.5,180,1,.5); tone(70,.6,"sine",.25); },
+  whoosh(){ noiseHit(1.4,300,1.2,.35,0,undefined,2600); },
+  crystal(){ const b=Math.floor(Math.random()*3); [0,1,2].forEach(i=>tone(PENTA[b+i]*2,.7,"sine",.07,i*.06)); },
+  collect(){ [784,988,1175,1568].forEach((f,i)=>tone(f,.45,"triangle",.07,i*.05)); },
+  combo(){ [659.3,880,1318.5].forEach((f,i)=>tone(f,.35,"square",.04,i*.07)); },
+  llama(){ const o=tone(330,.7,"sine",.14); if(o){ o.frequency.linearRampToValueAtTime(392,AC.currentTime+.3); o.frequency.linearRampToValueAtTime(311,AC.currentTime+.65);} const o2=tone(660,.6,"sine",.03); },
+  tick(){ tone(1400,.05,"square",.03); }
+};
+const SENSE_SOUNDS=[
+  {name:"a llama's hum", play:p=>{ const o=tone(330,1,"sine",.18,0,p); if(o){ o.frequency.linearRampToValueAtTime(392,AC.currentTime+.4); o.frequency.linearRampToValueAtTime(300,AC.currentTime+.9);} }},
+  {name:"footsteps on stone", play:p=>{ [0,.35,.7,1.05,1.4].forEach(w=>noiseHit(.09,700,1.2,.5,w,p)); }},
+  {name:"a mountain stream", play:p=>{ for(let i=0;i<24;i++) noiseHit(.12,1500+Math.random()*2500,6,.12,i*.07,p); }},
+  {name:"a bird's song", play:p=>{ [0,.25,.5,.9,1.1].forEach(w=>{ const o=tone(2200,.18,"sine",.12,w,p); if(o) o.frequency.exponentialRampToValueAtTime(3400,AC.currentTime+w+.15); }); }},
+  {name:"a bell at the gate", play:p=>{ [0,.5].forEach(w=>{ tone(1180,.9,"sine",.16,w,p); tone(1180*2.76,.5,"sine",.05,w,p); }); }}
+];
+function speak(text){
+  try{ if(!("speechSynthesis" in window)) return; speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text.replace("sb.'s","somebody's")); u.lang="en-US"; u.rate=.85; speechSynthesis.speak(u); }catch(e){}
+}
+
+/* ============================== 3D WORLD ============================== */
+const canvas=$("scene"), labels=$("labels");
+let renderer=null, scene, camera, tmpCam, sky, sun, shafts, snow, clock, marker, starField, hemi, dirL, glow, echoLight, echoRings=[], burst, clouds=[];
+let villagers=[], llamas=[], crystals=[], nunez, medina, yacob, wallMids=[];
+const cam={ pos:new THREE.Vector3(70,40,-150), look:new THREE.Vector3(0,5,0), tPos:new THREE.Vector3(70,40,-150), tLook:new THREE.Vector3(0,5,0), yaw:0, pitch:0, hv:1, shake:0 };
+const env={ top:new THREE.Color("#7d97b1"), bot:new THREE.Color("#dde5ea"), tTop:new THREE.Color("#7d97b1"), tBot:new THREE.Color("#dde5ea"), near:40, far:300, tNear:40, tFar:300, snow:.5, tSnow:.5, sunY:-60, tSunY:-60, stars:0, tStars:0, light:1, tLight:1, glow:0, tGlow:0 };
+
+function hgt(x,z){
+  const r=Math.sqrt(x*x+z*z);
+  let h=Math.sin(x*.045)*2.2+Math.cos(z*.05)*2+Math.sin((x+z)*.11)*.8+Math.sin(x*.21-z*.17)*.4;
+  h+=Math.min(58,Math.pow(Math.max(0,r-48),1.55)*.09);
+  if(r<40) h*=r/40*.5;
+  const cx=x-38, cz=z+78, cd=Math.sqrt(cx*cx+cz*cz);
+  if(cd<26) h+=(26-cd)*1.4;
+  return h;
+}
+function hash(x,z){ const v=Math.sin(x*12.9898+z*78.233)*43758.5453; return v-Math.floor(v); }
+function colorFor(h,r,rnd){
+  const c=new THREE.Color();
+  if(h>30+rnd*6) c.set("#f2f5f7");
+  else if(h>16+rnd*5) c.set(rnd>.5?"#7d8c9a":"#8e9aa3");
+  else if(h>7) c.set(rnd>.5?"#5b6d58":"#6c7a5c");
+  else c.set(rnd>.6?"#c9a45e":(rnd>.3?"#a9a066":"#8f9a62"));
+  if(r<38&&h<7) c.lerp(new THREE.Color("#e9ece6"),.5);
+  return c;
+}
+function paint(geo,fn){
+  const p=geo.attributes.position, cols=[];
+  for(let i=0;i<p.count;i++){ const c=fn(p.getX(i),p.getY(i),p.getZ(i),i); cols.push(c.r,c.g,c.b); }
+  geo.setAttribute("color",new THREE.Float32BufferAttribute(cols,3));
+}
+const flat=o=>new THREE.MeshPhongMaterial(Object.assign({flatShading:true,shininess:0},o));
+function glowTex(stops){
+  const c=document.createElement("canvas"); c.width=c.height=128; const x=c.getContext("2d");
+  const g=x.createRadialGradient(64,64,0,64,64,64); stops.forEach(s=>g.addColorStop(s[0],s[1])); x.fillStyle=g; x.fillRect(0,0,128,128);
+  return new THREE.CanvasTexture(c);
+}
+
+function initWorld(){
+  renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:"low-power"});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.75));
+  scene=new THREE.Scene(); scene.fog=new THREE.Fog(env.bot.getHex(),env.near,env.far);
+  camera=new THREE.PerspectiveCamera(60,1,.1,900); tmpCam=new THREE.PerspectiveCamera(60,1,.1,900); clock=new THREE.Clock();
+
+  sky=new THREE.Mesh(new THREE.SphereGeometry(600,24,16),new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,fog:false,
+    uniforms:{top:{value:env.top},bot:{value:env.bot}},
+    vertexShader:"varying float vy; void main(){ vy=normalize(position).y; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}",
+    fragmentShader:"uniform vec3 top; uniform vec3 bot; varying float vy; void main(){ gl_FragColor=vec4(mix(bot,top,smoothstep(-0.05,0.55,vy)),1.0);}"}));
+  scene.add(sky);
+  hemi=new THREE.HemisphereLight(0xe8eef5,0x5a5040,.85); scene.add(hemi);
+  dirL=new THREE.DirectionalLight(0xfff1dc,.75); dirL.position.set(80,120,-60); scene.add(dirL);
+
+  // terrain
+  const tg=new THREE.PlaneGeometry(520,520,96,96); tg.rotateX(-Math.PI/2);
+  const tp=tg.attributes.position; for(let i=0;i<tp.count;i++) tp.setY(i,hgt(tp.getX(i),tp.getZ(i)));
+  tg.computeVertexNormals(); paint(tg,(x,y,z)=>colorFor(y,Math.hypot(x,z),hash(x,z)));
+  scene.add(new THREE.Mesh(tg,flat({vertexColors:true})));
+  const vg=new THREE.PlaneGeometry(90,90,45,45); vg.rotateX(-Math.PI/2);
+  const vp=vg.attributes.position; for(let i=0;i<vp.count;i++) vp.setY(i,hgt(vp.getX(i),vp.getZ(i))+.02);
+  vg.computeVertexNormals(); paint(vg,(x,y,z)=>colorFor(y,Math.hypot(x,z),hash(x,z)));
+  scene.add(new THREE.Mesh(vg,flat({vertexColors:true})));
+
+  // far peaks
+  for(let i=0;i<14;i++){
+    const a=i/14*Math.PI*2+Math.sin(i*3)*.15, R=230+Math.sin(i*5)*30, H=90+Math.abs(Math.sin(i*2.3))*90, rad=55+Math.abs(Math.cos(i*1.7))*30;
+    const g=new THREE.ConeGeometry(rad,H,9,4), p=g.attributes.position;
+    for(let j=0;j<p.count;j++){ const y=p.getY(j); if(y>-H/2+.1&&y<H/2-.1){ p.setX(j,p.getX(j)*(1+(hash(i,j)-.5)*.25)); p.setZ(j,p.getZ(j)*(1+(hash(j,i)-.5)*.25)); } }
+    g.computeVertexNormals(); paint(g,(x,y)=>new THREE.Color(y>H*.12?"#f3f6f8":(y>-H*.15?"#7f90a0":"#4f5f6e")));
+    const m=new THREE.Mesh(g,flat({vertexColors:true})); m.position.set(Math.cos(a)*R,H/2-12,Math.sin(a)*R); m.rotation.y=i; scene.add(m);
+  }
+  // clouds
+  const cloudMat=new THREE.MeshLambertMaterial({color:0xffffff,emissive:0x8a97a5,transparent:true,opacity:.92});
+  for(let i=0;i<9;i++){
+    const g=new THREE.Group();
+    for(let j=0;j<5;j++){ const s=new THREE.Mesh(new THREE.IcosahedronGeometry(5+hash(i,j)*5,0),cloudMat); s.position.set((j-2)*6+hash(j,i)*3,hash(i+3,j)*3,hash(j+5,i)*5); s.scale.y=.55; g.add(s); }
+    g.userData={a:i/9*Math.PI*2, r:110+hash(i,7)*90, y:58+hash(i,8)*25, sp:.004+hash(i,9)*.004};
+    scene.add(g); clouds.push(g);
+  }
+  // pines
+  const pineG=new THREE.ConeGeometry(1.6,6,6); pineG.translate(0,3,0);
+  const N=240, pines=new THREE.InstancedMesh(pineG,flat({color:0x2e4a4c}),N), dm=new THREE.Object3D(); let placed=0, guard=0;
+  while(placed<N&&guard<4000){ guard++;
+    const a=Math.random()*Math.PI*2, r=40+Math.random()*100, x=Math.cos(a)*r, z=Math.sin(a)*r, y=hgt(x,z);
+    if(y>24) continue;
+    const s=.7+Math.random()*1.1; dm.position.set(x,y-.3,z); dm.scale.set(s,s*(1+Math.random()*.5),s); dm.rotation.y=Math.random()*6; dm.updateMatrix(); pines.setMatrixAt(placed++,dm.matrix);
+  }
+  pines.count=placed; scene.add(pines);
+
+  // houses
+  const wallCols=["#e7dcc6","#c9b27f","#d9c7a6","#b88a5a","#9fb0b6","#e2d3b5","#c7a083"].map(c=>new THREE.Color(c));
+  const roofMat=flat({color:0xc4622b});
+  for(let i=0;i<22;i++){
+    const a=i/22*Math.PI*2+Math.sin(i)*.2, r=9+(i%3)*7+hash(i,1)*3, x=Math.cos(a)*r, z=Math.sin(a)*r;
+    if(Math.abs(x)<3.2||Math.abs(z)<3.2) continue;
+    if(Math.abs(Math.hypot(x,z)-17)<2.6) continue;
+    const w=2.6+hash(i,2)*1.4, d=2.4+hash(i,3)*1.2, h=2+hash(i,4)*.6, g=new THREE.BoxGeometry(w,h,d);
+    paint(g,(px,py,pz,k)=>wallCols[(Math.floor(k/4)*3+i+(hash(k,i)>.5?1:0))%wallCols.length]);
+    const y=hgt(x,z), house=new THREE.Mesh(g,new THREE.MeshLambertMaterial({vertexColors:true}));
+    house.position.set(x,y+h/2,z); house.rotation.y=Math.atan2(x,z); scene.add(house);
+    const roof=new THREE.Mesh(new THREE.ConeGeometry(Math.max(w,d)*.78,1.6,4),roofMat); roof.position.set(x,y+h+.8,z); roof.rotation.y=house.rotation.y+Math.PI/4; scene.add(roof);
+  }
+  const cropMat=flat({color:0x7f9150});
+  for(let r=0;r<7;r++){ const row=new THREE.Mesh(new THREE.BoxGeometry(10,.35,.6),cropMat), x=-24, z=-10-r*1.4; row.position.set(x,hgt(x,z)+.18,z); scene.add(row); }
+
+  // paths + low walls
+  const pathMat=new THREE.MeshLambertMaterial({color:0xd8cfbb}), wallMat=flat({color:0x8a8172});
+  function seg(x1,z1,x2,z2){
+    const dx=x2-x1, dz=z2-z1, len=Math.hypot(dx,dz), mx=(x1+x2)/2, mz=(z1+z2)/2, ang=Math.atan2(dx,dz), y=hgt(mx,mz);
+    const p=new THREE.Mesh(new THREE.BoxGeometry(1.8,.1,len+.05),pathMat); p.position.set(mx,y+.06,mz); p.rotation.y=ang; scene.add(p);
+    [-1.15,1.15].forEach(off=>{
+      const wx=mx+Math.cos(ang)*off, wz=mz-Math.sin(ang)*off;
+      const wl=new THREE.Mesh(new THREE.BoxGeometry(.35,.6,len+.05),wallMat); wl.position.set(wx,y+.3,wz); wl.rotation.y=ang; scene.add(wl);
+      wallMids.push(new THREE.Vector3(wx,y+.4,wz));
+    });
+  }
+  for(let s=0;s<12;s++){ const a=-34+s*68/12, b=a+68/12; seg(a,0,b,0); seg(0,a,0,b); }
+  for(let s=0;s<26;s++){ const a1=s/26*Math.PI*2, a2=(s+1)/26*Math.PI*2; seg(Math.cos(a1)*17,Math.sin(a1)*17,Math.cos(a2)*17,Math.sin(a2)*17); }
+
+  // people
+  function person(body,head,tall){
+    const g=new THREE.Group(), k=tall||1;
+    const b=new THREE.Mesh(new THREE.CylinderGeometry(.34,.52,1.5*k,7),flat({color:body})); b.position.y=.75*k; g.add(b);
+    const h=new THREE.Mesh(new THREE.SphereGeometry(.31,10,8),new THREE.MeshLambertMaterial({color:head})); h.position.y=1.5*k+.27; g.add(h);
+    g.userData.head=1.5*k+.6; scene.add(g); return g;
+  }
+  const robes=[0x6f6a5e,0x8c7a5b,0x5d6b70,0x7b6458,0x6d7560,0x857b6e,0x5f5a66,0x7a6e57];
+  for(let i=0;i<10;i++){ const v=person(robes[i%robes.length],0xd9b48f); v.userData.a=i/10*Math.PI*2; v.userData.sp=.05+hash(i,9)*.03; v.userData.dir=i%2?1:-1; villagers.push(v); }
+  nunez=person(0xc4622b,0xd2a07c);
+  const pack=new THREE.Mesh(new THREE.BoxGeometry(.5,.6,.3),flat({color:0x3c4d3a})); pack.position.set(0,1.05,-.42); nunez.add(pack);
+  medina=person(0x8c6fae,0xe0bc98); medina.visible=false;
+  const hair=new THREE.Mesh(new THREE.SphereGeometry(.33,10,8,0,Math.PI*2,0,Math.PI*.55),new THREE.MeshLambertMaterial({color:0x3b2a22})); hair.position.y=1.79; medina.add(hair);
+  yacob=person(0x4a4f57,0xc9a585,1.12); const staff=new THREE.Mesh(new THREE.CylinderGeometry(.05,.05,2.2,5),flat({color:0x6b4a2e})); staff.position.set(.55,1.1,0); yacob.add(staff); yacob.visible=false;
+  glow=new THREE.PointLight(0xffc58a,0,8); scene.add(glow);
+
+  // llamas (the villagers raise animals)
+  const llamaCols=[0xf0e6d2,0x8a6a4a,0xffffff,0xc9a27a,0x5b4636];
+  const homes=[[-22,-8],[-28,-16],[14,-24],[-14,24],[27,12]];
+  homes.forEach((hm,i)=>{
+    const g=new THREE.Group(), m=flat({color:llamaCols[i]}), dark=flat({color:0x3a2c22});
+    const body=new THREE.Mesh(new THREE.BoxGeometry(.55,.55,1.1),m); body.position.y=.95; g.add(body);
+    const neck=new THREE.Mesh(new THREE.BoxGeometry(.28,.85,.28),m); neck.position.set(0,1.5,.42); g.add(neck);
+    const head=new THREE.Mesh(new THREE.BoxGeometry(.3,.28,.48),m); head.position.set(0,1.95,.55); g.add(head);
+    [-.09,.09].forEach(x=>{ const e=new THREE.Mesh(new THREE.BoxGeometry(.07,.2,.07),m); e.position.set(x,2.17,.45); g.add(e); });
+    [[-.18,-.38],[.18,-.38],[-.18,.38],[.18,.38]].forEach(p=>{ const l=new THREE.Mesh(new THREE.BoxGeometry(.13,.7,.13),dark); l.position.set(p[0],.35,p[1]); g.add(l); });
+    g.userData={id:i, home:hm, tx:hm[0], tz:hm[1], wait:Math.random()*3};
+    g.position.set(hm[0],hgt(hm[0],hm[1]),hm[1]); scene.add(g); llamas.push(g);
+  });
+
+  // sun + light shafts
+  sun=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex([[0,"rgba(255,248,220,1)"],[.25,"rgba(255,214,140,.95)"],[.6,"rgba(240,160,80,.25)"],[1,"rgba(240,160,80,0)"]]),fog:false,depthWrite:false,transparent:true}));
+  sun.scale.set(130,130,1); sun.position.set(80,-60,-330); scene.add(sun);
+  const sc=document.createElement("canvas"); sc.width=16; sc.height=256; const sx=sc.getContext("2d"); const sg=sx.createLinearGradient(0,0,0,256);
+  sg.addColorStop(0,"rgba(255,230,180,.9)"); sg.addColorStop(1,"rgba(255,230,180,0)"); sx.fillStyle=sg; sx.fillRect(0,0,16,256);
+  shafts=new THREE.Group(); const shaftMat=new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(sc),transparent:true,opacity:0,depthWrite:false,fog:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide});
+  for(let i=0;i<6;i++){ const pl=new THREE.Mesh(new THREE.PlaneGeometry(10+i*3,260),shaftMat); pl.position.y=-130; const holder=new THREE.Group(); holder.add(pl); holder.rotation.z=(i-2.5)*.22; shafts.add(holder); }
+  scene.add(shafts);
+
+  // stars
+  const stG=new THREE.BufferGeometry(), stP=new Float32Array(600*3);
+  for(let i=0;i<600;i++){ const a=Math.random()*Math.PI*2, e=Math.random()*1.2+.1, R=500; stP[i*3]=Math.cos(a)*Math.cos(e)*R; stP[i*3+1]=Math.sin(e)*R; stP[i*3+2]=Math.sin(a)*Math.cos(e)*R; }
+  stG.setAttribute("position",new THREE.BufferAttribute(stP,3));
+  starField=new THREE.Points(stG,new THREE.PointsMaterial({color:0xffffff,size:3.2,sizeAttenuation:false,transparent:true,opacity:0,fog:false,depthWrite:false})); scene.add(starField);
+
+  // snow
+  const SN=700, sng=new THREE.BufferGeometry(), sp=new Float32Array(SN*3);
+  for(let i=0;i<SN;i++){ sp[i*3]=(Math.random()-.5)*120; sp[i*3+1]=Math.random()*60; sp[i*3+2]=(Math.random()-.5)*120; }
+  sng.setAttribute("position",new THREE.BufferAttribute(sp,3));
+  snow=new THREE.Points(sng,new THREE.PointsMaterial({color:0xffffff,size:.5,transparent:true,opacity:.85,depthWrite:false})); scene.add(snow);
+
+  // hint marker
+  marker=new THREE.Mesh(new THREE.RingGeometry(1.1,1.5,32),new THREE.MeshBasicMaterial({color:0xffd27a,transparent:true,opacity:.9,side:THREE.DoubleSide,depthTest:false,fog:false}));
+  marker.renderOrder=10; marker.visible=false; marker.userData.k=1; scene.add(marker);
+
+  // word crystals
+  const haloTex=glowTex([[0,"rgba(180,236,255,.95)"],[.35,"rgba(120,210,245,.45)"],[1,"rgba(120,210,245,0)"]]);
+  for(let i=0;i<4;i++){
+    const g=new THREE.Group();
+    const gem=new THREE.Mesh(new THREE.OctahedronGeometry(.26,0),new THREE.MeshPhongMaterial({color:0xa9e6ff,emissive:0x2b8db8,emissiveIntensity:.8,flatShading:true,shininess:80,transparent:true,opacity:.95,depthTest:false,fog:false}));
+    gem.scale.y=1.5; gem.renderOrder=11; g.add(gem);
+    const halo=new THREE.Sprite(new THREE.SpriteMaterial({map:haloTex,transparent:true,depthTest:false,depthWrite:false,fog:false,blending:THREE.AdditiveBlending}));
+    halo.scale.set(1.3,1.3,1); halo.renderOrder=10; g.add(halo);
+    g.visible=false; g.userData={gem,halo,key:null,base:new THREE.Vector3(),label:null,done:false};
+    scene.add(g); crystals.push(g);
+  }
+  // burst particles
+  const BN=60, bg=new THREE.BufferGeometry(); bg.setAttribute("position",new THREE.BufferAttribute(new Float32Array(BN*3),3));
+  burst=new THREE.Points(bg,new THREE.PointsMaterial({color:0xbff0ff,size:.18,transparent:true,opacity:0,depthTest:false,fog:false,blending:THREE.AdditiveBlending}));
+  burst.renderOrder=12; burst.userData={v:new Float32Array(BN*3),life:0}; scene.add(burst);
+  // echo rings
+  for(let i=0;i<3;i++){
+    const r=new THREE.Mesh(new THREE.RingGeometry(.92,1,64),new THREE.MeshBasicMaterial({color:0x9fe3ff,transparent:true,opacity:0,side:THREE.DoubleSide,depthWrite:false,fog:false,blending:THREE.AdditiveBlending}));
+    r.rotation.x=-Math.PI/2; r.userData.t=-1; scene.add(r); echoRings.push(r);
+  }
+  echoLight=new THREE.PointLight(0x9fe3ff,0,16); scene.add(echoLight);
+
+  resize(); addEventListener("resize",resize);
+  requestAnimationFrame(loop);
+}
+function resize(){ if(renderer) renderer.setSize(innerWidth,innerHeight,false); }
+function setProj(c,hv){
+  const W=innerWidth, H=innerHeight, base=W<H?60:48;
+  if(hv<H-2){ const F=2*H-hv; c.aspect=W/F; c.fov=2*Math.atan(Math.tan(base*Math.PI/360)*F/H)*180/Math.PI; c.setViewOffset(W,F,0,H-hv,W,H); }
+  else { c.aspect=W/H; c.fov=base; c.clearViewOffset(); }
+  c.updateProjectionMatrix();
+}
+
+/* shots: cam/look = [x, z, height above ground] */
+const SHOTS={
+  intro:     {cam:[64,-118,30], look:[0,0,4], top:"#7d97b1", bot:"#dde5ea", near:50, far:320, snow:.5},
+  peak:      {cam:[52,-98,4.5], look:[38,-80,1.6], top:"#5f7894", bot:"#d3dce1", near:30, far:220, snow:1.3, nz:[38,-80,"look"]},
+  slide:     {cam:[46,-46,9], look:[31,-64,1], top:"#5f7894", bot:"#d3dce1", near:25, far:200, snow:1.4, nz:[31,-64,"look"], tilt:.6},
+  landing:   {cam:[30,-32,5.5], look:[21,-44,.6], top:"#6a839e", bot:"#d8e0e4", near:30, far:220, snow:1, nz:[21,-44], lie:true},
+  valleyWide:{cam:[12,-50,6], look:[2,-8,2], top:"#7a94ad", bot:"#e1e7ea", near:40, far:300, snow:.35, nz:[8,-36,[0,0]]},
+  houses:    {cam:[-2.4,-27,2.4], look:[0,-13,1], top:"#7a94ad", bot:"#e1e7ea", near:40, far:300, snow:.25, nz:[0,-23,[0,0]]},
+  villagers: {cam:[25,12,4], look:[16,4,1.2], top:"#8aa3b8", bot:"#e6ebec", near:40, far:300, snow:.1, nz:[22,8,[16,4]]},
+  proud:     {cam:[20,13.5,2], look:[22,8,1.6], top:"#8aa3b8", bot:"#e6ebec", near:40, far:300, snow:.1, nz:[22,8,[16,4]]},
+  farm:      {cam:[-15,-20,4], look:[-24,-14,.5], top:"#8aa3b8", bot:"#e6ebec", near:40, far:300, snow:0, nz:[-19,-18,[-24,-14]]},
+  yacob:     {cam:[8.5,-8.5,2.4], look:[4.4,-4.4,1.3], top:"#8aa3b8", bot:"#ece9e2", near:40, far:300, snow:0, nz:[3.6,-3.6,[5.3,-5.1]], yc:[5.3,-5.1,[3.6,-3.6]]},
+  echo:      {cam:[2.5,-10,1.7], look:[0,-2,1.2], top:"#020306", bot:"#04060a", near:2, far:30, snow:0, light:.04},
+  night:     {cam:[9,-9,3], look:[0,40,25], top:"#141c33", bot:"#3b4560", near:20, far:200, snow:0, stars:1, light:.45, nz:[4,-4,[0,10]], yc:[5.6,-5.3,[4,-4]]},
+  night2:    {cam:[7,1,3.5], look:[3.6,-3.6,1.2], top:"#141c33", bot:"#3b4560", near:20, far:200, snow:0, stars:1, light:.5, nz:[3.6,-3.6,[6,0]], gather:[3.6,-3.6,3.2]},
+  village:   {cam:[10,22,9], look:[-2,4,1], top:"#a4aebf", bot:"#efe4d6", near:40, far:300, snow:0, nz:[-4,3,[-2,4.6]]},
+  medinaMeet:{cam:[-9,10,2.4], look:[-3,3.8,1.2], top:"#a4aebf", bot:"#efe4d6", near:40, far:300, snow:0, nz:[-4.4,3,[-2,4.6]], md:[-1.9,4.6,[-4.4,3]], glow:true},
+  crowd:     {cam:[7,-8,6.5], look:[-2.6,3.8,1], top:"#6b6f86", bot:"#c9b3a8", near:30, far:250, snow:0, light:.85, nz:[-3.4,3.4,[0,0]], md:[-1.8,4.4,[0,0]], gather:[-2.6,3.8,4.5]},
+  dusk:      {cam:[-7,-1,2.8], look:[-2.6,3.8,1.2], top:"#3c4663", bot:"#a7879a", near:20, far:180, snow:.4, light:.7, nz:[-3.4,3.4,[-1.8,4.4]], md:[-1.8,4.4,[-3.4,3.4]], glow:true},
+  dusk2:     {cam:[2,10,3.2], look:[-3.4,3.4,1.5], top:"#2f3754", bot:"#8d7085", near:20, far:180, snow:.5, light:.65, nz:[-3.4,3.4,[-1.8,4.4]], md:[-1.8,4.4,[-3.4,3.4]]},
+  dawn:      {cam:[-6,32,4], look:[50,-160,70], top:"#4f6a8f", bot:"#e7b98a", near:40, far:420, snow:0, nz:[2,24,[60,-180]], sun:120},
+  sunrise:   {cam:[-6,32,4], look:[50,-160,70], top:"#7fa0c4", bot:"#f4c98c", near:40, far:420, snow:0, nz:[2,24,[60,-180]], sun:215},
+  flee:      {cam:[-14,30,6], look:[6,52,3], top:"#86a6c8", bot:"#f4d3a4", near:40, far:420, snow:0, sun:235, run:true},
+  final:     {cam:[0,92,70], look:[0,-6,0], top:"#86a6c8", bot:"#f2d9b0", near:60, far:460, snow:0, sun:240}
+};
+function placeAt(obj,x,z,face){ obj.position.set(x,hgt(x,z),z); if(face) obj.rotation.y=Math.atan2(face[0]-x,face[1]-z); }
+function shot(name,instant){
+  const v=SHOTS[name]; S.shot=name; if(!v||!renderer) return;
+  cam.tPos.set(v.cam[0],hgt(v.cam[0],v.cam[1])+v.cam[2],v.cam[1]);
+  cam.tLook.set(v.look[0],hgt(v.look[0],v.look[1])+v.look[2],v.look[1]);
+  cam.yaw=0; cam.pitch=0;
+  env.tTop.set(v.top); env.tBot.set(v.bot); env.tNear=v.near; env.tFar=v.far; env.tSnow=v.snow; env.tSunY=v.sun!==undefined?v.sun:-60; env.tStars=v.stars||0; env.tLight=v.light!==undefined?v.light:1; env.tGlow=v.glow?1.4:0;
+  nunez.rotation.set(0,0,0);
+  if(v.nz){ nunez.visible=true; const f=v.nz[2]==="look"?[v.look[0],v.look[1]]:v.nz[2]; placeAt(nunez,v.nz[0],v.nz[1],f);
+    if(v.lie){ nunez.rotation.z=Math.PI/2; nunez.rotation.y=.6; nunez.position.y+=.35; }
+    if(v.tilt) nunez.rotation.x=v.tilt; }
+  else if(!v.run) nunez.visible=false;
+  if(v.run){ nunez.visible=true; S.runT=0; }
+  medina.visible=!!v.md; if(v.md) placeAt(medina,v.md[0],v.md[1],v.md[2]);
+  yacob.visible=!!v.yc; if(v.yc) placeAt(yacob,v.yc[0],v.yc[1],v.yc[2]);
+  if(v.md) glow.position.set(medina.position.x-.6,medina.position.y+2.2,medina.position.z+.8);
+  S.gather=v.gather||null;
+  if(instant||reduce){ cam.pos.copy(cam.tPos); cam.look.copy(cam.tLook); env.top.copy(env.tTop); env.bot.copy(env.tBot); env.near=env.tNear; env.far=env.tFar; env.snow=env.tSnow; env.sunY=env.tSunY; env.stars=env.tStars; env.light=env.tLight; }
+}
+function freeHeight(){
+  const c=document.querySelector("#panel:not([hidden]) .card");
+  if(!c) return innerHeight;
+  return Math.max(innerHeight*.36, c.getBoundingClientRect().top-8);
+}
+
+/* ---------- floating labels & speech bubbles ---------- */
+const bubbles=[];
+function clearBubbles(){ bubbles.forEach(b=>b.el.remove()); bubbles.length=0; }
+function addBubble(who,text){
+  const el=document.createElement("div"); el.className="bubble";
+  const name={nunez:"Nuñez",medina:"Medina",yacob:"Yacob",v:"Villager"}[who]||"";
+  el.innerHTML=`<span class="who">${name}</span>${text}`; el.style.opacity=0; labels.appendChild(el);
+  bubbles.push({who,el,obj:null,t:0});
+}
+const pv=new THREE.Vector3();
+function project(v){ pv.copy(v).project(camera); if(pv.z>1) return null; return {x:(pv.x+1)/2*innerWidth, y:(1-pv.y)/2*innerHeight}; }
+function onScreen(p,fh){ return p && p.x>20 && p.x<innerWidth-20 && p.y>70 && p.y<fh-10; }
+function updateLabels(dt){
+  const fh=freeHeight();
+  bubbles.forEach(b=>{
+    b.t+=dt;
+    if(b.who==="v"){
+      if(!b.obj || !onScreen(project(b.obj.position.clone().setY(b.obj.position.y+2.4)),fh)){
+        let best=null, bd=1e9;
+        villagers.forEach(v=>{ const p=project(v.position.clone().setY(v.position.y+2.4)); if(onScreen(p,fh)){ const d=Math.hypot(p.x-innerWidth/2,p.y-fh/2); if(d<bd){bd=d;best=v;} } });
+        b.obj=best;
+      }
+    } else b.obj={nunez,medina,yacob}[b.who];
+    const o=b.obj; let p=null;
+    if(o && o.visible!==false){ pv.set(o.position.x,o.position.y+(o.userData.head||1.9)+.25,o.position.z); p=project(pv); }
+    if(p && onScreen(p,fh) && b.t>.9){ b.el.style.opacity=1; b.el.style.transform=`translate(${p.x}px,${p.y}px) translate(-50%,-100%)`; }
+    else b.el.style.opacity=0;
+  });
+  crystals.forEach(c=>{
+    const u=c.userData; if(!u.label) return;
+    if(!c.visible||u.done){ u.label.style.opacity=0; return; }
+    pv.copy(c.position).setY(c.position.y+.55); const p=project(pv);
+    if(p){ u.label.style.opacity=1; u.label.style.transform=`translate(${p.x}px,${p.y}px) translate(-50%,-100%)`; } else u.label.style.opacity=0;
+  });
+}
+
+/* ---------- crystals ---------- */
+function placeCrystals(keys){
+  if(!renderer) return;
+  const hv=freeHeight(), W=innerWidth;
+  setProj(tmpCam,hv); tmpCam.position.copy(cam.tPos); tmpCam.lookAt(cam.tLook); tmpCam.updateMatrixWorld();
+  const spots=[[.26,.30],[.74,.40],[.30,.66],[.72,.80]];
+  keys.forEach((k,i)=>{
+    const c=crystals[i], u=c.userData, sx=spots[i][0]*W, sy=72+spots[i][1]*(hv-130);
+    const v=new THREE.Vector3(sx/W*2-1, 1-sy/innerHeight*2, .5).unproject(tmpCam).sub(tmpCam.position).normalize();
+    u.base.copy(tmpCam.position).addScaledVector(v,7+i*.5);
+    c.position.copy(u.base); c.visible=true; u.done=false; u.key=k; c.scale.setScalar(.01); u.pop=0;
+    if(!u.label){ u.label=document.createElement("div"); u.label.className="wlabel"; labels.appendChild(u.label); }
+    u.label.textContent=WORDS[k].w; u.label.style.opacity=0;
+  });
+}
+function hideCrystals(){ crystals.forEach(c=>{ c.visible=false; if(c.userData.label) c.userData.label.style.opacity=0; }); }
+function burstAt(pos){
+  const p=burst.geometry.attributes.position.array, v=burst.userData.v;
+  for(let i=0;i<p.length/3;i++){ p[i*3]=pos.x; p[i*3+1]=pos.y; p[i*3+2]=pos.z; const a=Math.random()*Math.PI*2, e=Math.random()*Math.PI-Math.PI/2, s=2+Math.random()*3; v[i*3]=Math.cos(a)*Math.cos(e)*s; v[i*3+1]=Math.sin(e)*s+1.5; v[i*3+2]=Math.sin(a)*Math.cos(e)*s; }
+  burst.geometry.attributes.position.needsUpdate=true; burst.userData.life=1;
+}
+function echoAt(side){
+  const r=new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld,0); const f=new THREE.Vector3(); camera.getWorldDirection(f); f.y=0; f.normalize();
+  const p=camera.position.clone().addScaledVector(f,5).addScaledVector(r,side*5); p.y=hgt(p.x,p.z)+.15;
+  echoRings.forEach((ring,i)=>{ ring.position.copy(p); ring.userData.t=-i*.25; });
+  echoLight.position.set(p.x,p.y+1.5,p.z); echoLight.userData.t=0;
+}
+
+/* ---------- main loop ---------- */
+const tmpV=new THREE.Vector3(), upV=new THREE.Vector3(0,1,0);
+function loop(){
+  requestAnimationFrame(loop);
+  const dt=Math.min(clock.getDelta(),.05), t=clock.elapsedTime;
+  const k=1-Math.exp(-dt*(reduce?30:1.3));
+  if(S.mode==="beat"&&!reduce) cam.tPos.lerp(cam.tLook,dt*.01);
+  cam.pos.lerp(cam.tPos,k); cam.look.lerp(cam.tLook,k);
+  env.top.lerp(env.tTop,k*.8); env.bot.lerp(env.tBot,k*.8);
+  env.near+=(env.tNear-env.near)*k; env.far+=(env.tFar-env.far)*k; env.snow+=(env.tSnow-env.snow)*k; env.sunY+=(env.tSunY-env.sunY)*k*.4; env.stars+=(env.tStars-env.stars)*k; env.light+=(env.tLight-env.light)*k*1.5; env.glow+=(env.tGlow-env.glow)*k;
+  scene.fog.color.copy(env.bot); scene.fog.near=env.near; scene.fog.far=env.far;
+  sky.material.uniforms.top.value=env.top; sky.material.uniforms.bot.value=env.bot;
+  hemi.intensity=.85*env.light; dirL.intensity=.75*env.light; glow.intensity=env.glow;
+  sun.position.y=env.sunY; sun.visible=env.sunY>-20;
+  const sh=Math.max(0,Math.min(1,(env.sunY-40)/120))*.32; shafts.visible=sh>.01; shafts.children.forEach(h=>h.children[0].material.opacity=sh);
+  starField.material.opacity=env.stars*.9; starField.visible=env.stars>.02;
+  clouds.forEach(c=>{ const u=c.userData; u.a+=u.sp*dt; c.position.set(Math.cos(u.a)*u.r,u.y,Math.sin(u.a)*u.r); c.visible=env.light>.3; });
+
+  if(SHOTS[S.shot]&&SHOTS[S.shot].run){
+    S.runT=Math.min(1,(S.runT||0)+dt*.07);
+    const x=2+S.runT*14, z=30+S.runT*46; nunez.position.set(x,hgt(x,z)+Math.abs(Math.sin(t*9))*.18,z); nunez.rotation.y=Math.atan2(14,46);
+    cam.tLook.set(x,hgt(x,z)+1.5,z);
+  }
+
+  tmpV.subVectors(cam.pos,cam.look).applyAxisAngle(upV,cam.yaw+(reduce?0:Math.sin(t*.15)*.025));
+  camera.position.copy(cam.look).add(tmpV); camera.position.y+=cam.pitch*tmpV.length()*.5;
+  if(cam.shake>0){ camera.position.x+=(Math.random()-.5)*cam.shake*.5; camera.position.y+=(Math.random()-.5)*cam.shake*.5; cam.shake=Math.max(0,cam.shake-dt*.7); }
+  camera.lookAt(cam.look); sky.position.copy(camera.position); shafts.position.copy(sun.position); shafts.lookAt(camera.position);
+  cam.hv+=(freeHeight()/innerHeight-cam.hv)*Math.min(1,dt*4);
+  setProj(camera,cam.hv*innerHeight);
+
+  if(env.snow>.03){ snow.visible=true; snow.material.opacity=Math.min(.85,env.snow*.7);
+    const p=snow.geometry.attributes.position, a=p.array, f=env.snow*dt*5;
+    for(let i=0;i<p.count;i++){ a[i*3+1]-=f*(.6+(i%7)*.08); a[i*3]+=Math.sin(t+i)*dt*.5; if(a[i*3+1]<-2) a[i*3+1]=55; }
+    p.needsUpdate=true; snow.position.set(camera.position.x,camera.position.y-30,camera.position.z);
+  } else snow.visible=false;
+
+  villagers.forEach((v,i)=>{
+    const u=v.userData; let x,z,face;
+    if(S.gather){ const g=S.gather, a=i/villagers.length*Math.PI*2; x=g[0]+Math.cos(a)*g[2]; z=g[1]+Math.sin(a)*g[2]; face=[g[0],g[1]]; }
+    else { u.a+=u.sp*dt*u.dir; const r=17+(u.dir>0?.55:-.55); x=Math.cos(u.a)*r; z=Math.sin(u.a)*r; face=[x-Math.sin(u.a)*u.dir, z+Math.cos(u.a)*u.dir]; }
+    v.position.x+=(x-v.position.x)*Math.min(1,dt*(S.gather?1.5:6)); v.position.z+=(z-v.position.z)*Math.min(1,dt*(S.gather?1.5:6));
+    v.position.y=hgt(v.position.x,v.position.z)+(S.gather?0:Math.abs(Math.sin(t*3+i))*.05);
+    v.rotation.y=Math.atan2(face[0]-v.position.x,face[1]-v.position.z);
+  });
+  llamas.forEach(l=>{
+    const u=l.userData, dx=u.tx-l.position.x, dz=u.tz-l.position.z, d=Math.hypot(dx,dz);
+    if(d<.2){ u.wait-=dt; if(u.wait<0){ u.tx=u.home[0]+(Math.random()-.5)*8; u.tz=u.home[1]+(Math.random()-.5)*8; u.wait=2+Math.random()*4; } }
+    else { l.position.x+=dx/d*dt*.8; l.position.z+=dz/d*dt*.8; l.rotation.y=Math.atan2(dx,dz); }
+    l.position.y=hgt(l.position.x,l.position.z)+(d>=.2?Math.abs(Math.sin(t*6+u.id))*.06:0);
+  });
+
+  crystals.forEach((c,i)=>{ if(!c.visible) return; const u=c.userData;
+    if(u.done){ c.scale.multiplyScalar(Math.max(0,1-dt*8)); if(c.scale.x<.02) c.visible=false; return; }
+    u.pop=Math.min(1,u.pop+dt*2.5); c.scale.setScalar(.01+u.pop*(1+Math.sin(t*3+i)*.06));
+    c.position.set(u.base.x,u.base.y+Math.sin(t*1.8+i)*.18,u.base.z); u.gem.rotation.y+=dt*1.2; });
+  if(burst.userData.life>0){ const b=burst.userData, p=burst.geometry.attributes.position.array; b.life-=dt*1.2;
+    for(let i=0;i<p.length;i+=3){ p[i]+=b.v[i]*dt; p[i+1]+=b.v[i+1]*dt; p[i+2]+=b.v[i+2]*dt; b.v[i+1]-=dt*4; }
+    burst.geometry.attributes.position.needsUpdate=true; burst.material.opacity=Math.max(0,b.life); }
+  echoRings.forEach(r=>{ const u=r.userData; if(u.t<-0.9) { r.material.opacity=0; return; } u.t+=dt; if(u.t<0){ r.material.opacity=0; return; }
+    const s=1+u.t*7; r.scale.set(s,s,s); r.material.opacity=Math.max(0,1-u.t/1.6); if(u.t>1.6) u.t=-1; });
+  if(echoLight.userData.t!==undefined&&echoLight.userData.t>=0){ echoLight.userData.t+=dt; echoLight.intensity=Math.max(0,2.4*(1-echoLight.userData.t/1.8)); if(echoLight.userData.t>1.8) echoLight.userData.t=-1; }
+
+  if(marker.visible){ marker.lookAt(camera.position); const s=1+Math.sin(t*5)*.15; marker.scale.set(s*marker.userData.k,s*marker.userData.k,1); }
+  updateLabels(dt);
+  renderer.render(scene,camera);
+}
+
+/* ---------- pointer: drag to look, tap to interact ---------- */
+(function(){
+  let down=false, sx=0, sy=0, y0=0, p0=0, moved=0, t0=0;
+  canvas.addEventListener("pointerdown",e=>{ down=true; sx=e.clientX; sy=e.clientY; y0=cam.yaw; p0=cam.pitch; moved=0; t0=performance.now(); });
+  addEventListener("pointermove",e=>{ if(!down) return; moved=Math.max(moved,Math.hypot(e.clientX-sx,e.clientY-sy));
+    cam.yaw=Math.max(-1,Math.min(1,y0-(e.clientX-sx)*.005)); cam.pitch=Math.max(-.3,Math.min(.45,p0+(e.clientY-sy)*.0025)); });
+  addEventListener("pointerup",e=>{ if(!down) return; down=false; if(moved<12&&performance.now()-t0<600) onTap(e.clientX,e.clientY); });
+})();
+function anchorsFor(target){
+  if(target==="nunez") return [nunez.position.clone().add(new THREE.Vector3(0,.6,0))];
+  if(target==="medina") return [medina.position.clone().add(new THREE.Vector3(0,1,0))];
+  if(target==="sun") return [sun.position.clone()];
+  if(target==="walls") return wallMids;
+  return [];
+}
+function nearest(list,x,y){ let best=null, bd=1e9; list.forEach((a,i)=>{ const p=project(a.pos||a); if(p){ const d=Math.hypot(p.x-x,p.y-y); if(d<bd){bd=d;best=i;} } }); return {i:best,d:bd}; }
+function showMarker(target){
+  if(!renderer) return;
+  let pos, k=1;
+  if(target==="walls"){ let best=null, bd=1e9; wallMids.forEach(m=>{ const d=m.distanceTo(cam.tLook); if(d<bd){bd=d;best=m;} }); pos=best.clone(); k=.8; }
+  else if(target==="sun"){ pos=sun.position.clone(); k=30; }
+  else pos=anchorsFor(target)[0];
+  marker.position.copy(pos); marker.userData.k=k; marker.visible=true;
+}
+function fx(cls,x,y,text){ const d=document.createElement("div"); d.className=cls; d.style.left=x+"px"; d.style.top=y+"px"; if(text) d.textContent=text; document.body.appendChild(d); setTimeout(()=>d.remove(),1150); }
+function onTap(x,y){
+  if(S.modal||!renderer) return;
+  fx("ripple",x,y);
+  if(S.mode==="collect"){
+    const live=crystals.filter(c=>c.visible&&!c.userData.done);
+    const n=nearest(live.map(c=>c.position),x,y);
+    if(n.i!==null&&n.d<60){ const c=live[n.i]; sfx.crystal(); openWord(c.userData.key,{collect:c}); return; }
+  }
+  if(S.finding){
+    const f=S.finding, R=f.target==="sun"?90:f.target==="walls"?34:56;
+    const n=nearest(anchorsFor(f.target),x,y);
+    if(n.i!==null&&n.d<R){ S.finding=null; marker.visible=false; const pts=f.tries===0?2:1; award(f.step.cat||"reading",pts,f.tries===0); sfx.right(); fx("toast",x,y,"+"+pts+" Found it!"); setTimeout(()=>findResult(f,pts),500); return; }
+  }
+  const ln=nearest(llamas.map(l=>l.position.clone().setY(l.position.y+1.2)),x,y);
+  if(ln.i!==null&&ln.d<46){ const id=llamas[ln.i].userData.id, isNew=!S.llamas.has(id); S.llamas.add(id); sfx.llama(); fx("toast",x,y,isNew?`Llama friend ${S.llamas.size}/5`:"Hmmm~"); return; }
+  if(S.finding){ S.finding.tries++; sfx.wrong(); fx("toast",x,y,"Not there"); if(S.finding.tries>=2) showMarker(S.finding.target); }
+}
+
+/* ============================== HUD ============================== */
+const NODES=[[13,29],[24,29],[42,17],[60,5],[78,17],[107,29]];
+const PATHPTS=[[2,29],[13,29],[24,29],[42,17],[60,5],[78,17],[96,29],[107,29],[118,29]];
+const NODE_AT=[1,2,3,4,5,7];
+function mountainSVG(cur,opts){
+  opts=opts||{};
+  const done=Math.min(cur,6);
+  const prog=done>0?PATHPTS.slice(0,NODE_AT[Math.min(done,5)]+(done>=6?2:1)).map(p=>p.join(",")).join(" "):"";
+  const lineCol=opts.dark?"#9fb0bb":"rgba(255,255,255,.45)";
+  let s=`<polyline points="${PATHPTS.map(p=>p.join(",")).join(" ")}" fill="none" stroke="${lineCol}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>`;
+  if(prog) s+=`<polyline points="${prog}" fill="none" stroke="#d9a441" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>`;
+  NODES.forEach((n,i)=>{
+    const fill=i<cur?"#d9a441":(i===cur?"#c4622b":(opts.dark?"#fff":"rgba(255,255,255,.7)"));
+    s+=`<circle cx="${n[0]}" cy="${n[1]}" r="${i===cur?3.6:2.6}" fill="${fill}" stroke="${opts.dark?"#9fb0bb":"none"}" stroke-width=".8"/>`;
+    if(i===cur) s+=`<circle class="svgdot" cx="${n[0]}" cy="${n[1]}" r="5.5" fill="none" stroke="#c4622b" stroke-width="1.2"/>`;
+    if(opts.labels) s+=`<text x="${n[0]}" y="${n[1]+(i===3?-6:i===1?17:9)}" text-anchor="middle">${["Expo.","Incit.","Rising","Climax","Falling","Resol."][i]}</text>`;
+  });
+  return s;
+}
+function renderHUD(){
+  const cur=S.level;
+  $("mtnSvg").innerHTML=mountainSVG(cur);
+  $("mtnLabel").textContent=cur<6?LEVELS[cur].stage:"Summit review";
+  $("score").innerHTML=S.score+"<small> pts</small>";
+  $("jBadge").textContent=S.found.size;
+  $("streak").hidden=S.streak<2; $("streakN").textContent=S.streak;
+}
+function award(cat,pts,firstTry){
+  S.score+=pts; if(S.level<6) S.levelPts[S.level]+=pts; S.cat[cat][0]+=pts;
+  if(firstTry){ S.streak++; S.best=Math.max(S.best,S.streak); if(S.streak===3||S.streak===5||S.streak%8===0){ sfx.combo(); fx("toast combo",innerWidth/2,90,`Streak x${S.streak}!`); } }
+  else S.streak=0;
+  renderHUD();
+}
+
+/* ============================== PANELS ============================== */
+const panel=$("panel");
+function card(html,cls){
+  panel.hidden=false;
+  panel.innerHTML='<div class="card '+(cls||"")+'" role="region" aria-live="polite">'+html+'</div>';
+  const c=panel.firstChild; c.scrollTop=0;
+  c.querySelectorAll(".gl").forEach(b=>b.addEventListener("click",e=>{ e.stopPropagation(); openWord(b.dataset.w,{}); }));
+  return c;
+}
+function eyebrow(){ const L=LEVELS[S.level]; return `<div class="eyebrow"><span>Level ${S.level+1} · ${L.stage}</span><span class="zh">${L.zh}</span></div>`; }
+
+/* ---------- word card ---------- */
+function openWord(k,opt){
+  const w=info(k); if(!w) return;
+  S.modal=true;
+  const lvl=LEVELS.findIndex(L=>L.words.includes(k));
+  const m=$("wordModal"); m.hidden=false;
+  m.innerHTML=`<div class="wcard" role="dialog" aria-label="${w.w}">
+    <div class="wlevel">${WORDS[k]?`Target word · Level ${lvl+1}`:"Glossary"}</div>
+    <div class="wtop"><div class="wword">${w.w}</div>
+      <button class="speak" id="spk" aria-label="Pronounce"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7"/></svg></button></div>
+    <div><span class="wpos">${w.pos}</span> <span class="wzh">${w.zh}</span></div>
+    <p class="wdef">${w.def}</p>
+    <p class="wex">${w.ex}</p>
+    <div class="actions"><button class="btn ${opt.collect?"ice":""}" id="wok">${opt.collect?"Collect word":"Close"}</button></div></div>`;
+  $("spk").onclick=()=>speak(w.w);
+  const close=()=>{ m.hidden=true; m.innerHTML=""; S.modal=false; if(opt.collect) collectWord(opt.collect); if(opt.onClose) opt.onClose(); };
+  $("wok").onclick=close;
+  m.onclick=e=>{ if(e.target===m) close(); };
+  $("wok").focus({preventScroll:true});
+}
+function collectWord(c){
+  const u=c.userData; if(u.done) return;
+  u.done=true; S.found.add(u.key); burstAt(c.position); sfx.collect();
+  const p=project(c.position.clone().setY(c.position.y+.55)), jb=$("journalBtn").getBoundingClientRect();
+  if(p){ const f=document.createElement("div"); f.className="wlabel flyer"; f.textContent=WORDS[u.key].w; f.style.transform=`translate(${p.x}px,${p.y}px) translate(-50%,-100%)`; document.body.appendChild(f);
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{ f.style.transform=`translate(${jb.left+jb.width/2}px,${jb.top+jb.height/2}px) translate(-50%,-50%) scale(.3)`; f.style.opacity=.2; }));
+    setTimeout(()=>{ f.remove(); const b=$("jBadge"); b.classList.remove("pop"); void b.offsetWidth; b.classList.add("pop"); },800); }
+  renderHUD(); if(S.collectUpdate) S.collectUpdate();
+}
+
+/* ---------- journal & mountain overlays ---------- */
+function openJournal(){
+  const ov=$("journal"); ov.hidden=false; S.modal=true;
+  ov.innerHTML=`<div class="ov-inner"><div class="ov-head"><div><div class="wlevel">單字圖鑑</div><h2>Word Journal</h2></div><button class="btn sm" id="jClose">Close</button></div>
+    <p class="small">在 3D 場景裡點水晶蒐集單字。已蒐集 ${S.found.size} / 24，點單字可以再看一次、聽發音。</p>
+    ${LEVELS.map((L,i)=>`<div class="jlevel"><h3>${i+1}. ${L.stage} <span class="small">· ${L.zh}</span></h3><div class="jgrid">${L.words.map(k=>S.found.has(k)?`<button class="jword" data-w="${k}"><b>${WORDS[k].w}</b><span>${WORDS[k].zh}</span></button>`:`<div class="jword locked"><b>• • •</b><span>Level ${i+1}</span></div>`).join("")}</div></div>`).join("")}</div>`;
+  $("jClose").onclick=()=>{ ov.hidden=true; S.modal=!$("wordModal").hidden; };
+  ov.querySelectorAll("[data-w]").forEach(b=>b.onclick=()=>openWord(b.dataset.w,{}));
+}
+function openMountain(){
+  const ov=$("mtnOv"); ov.hidden=false; S.modal=true;
+  ov.innerHTML=`<div class="ov-inner"><div class="ov-head"><div><div class="wlevel">故事架構 · Freytag's Pyramid</div><h2>The Story Mountain</h2></div><button class="btn sm" id="mClose">Close</button></div>
+    <svg class="mini-mtn" viewBox="-6 -12 132 62">${mountainSVG(S.level,{dark:true,labels:true})}</svg>
+    <p class="small">故事像一座山：情節一路往上爬到高潮，再往下走到結局。你現在在 <b>${S.level<6?LEVELS[S.level].stage:"the summit review"}</b>。</p>
+    <div class="stage-list">${LEVELS.map((L,i)=>`<div class="stage-row ${i<S.level?"done":i===S.level?"now":""}"><span class="n">${i+1}</span><div><b>${L.stage}</b> <span class="small">${L.zh}</span><p>${L.does} ${L.doesZh}</p></div></div>`).join("")}</div></div>`;
+  $("mClose").onclick=()=>{ ov.hidden=true; S.modal=false; };
+}
+$("journalBtn").onclick=openJournal;
+$("mtnBtn").onclick=openMountain;
+
+/* ============================== FLOW ============================== */
+function startLevel(i){
+  S.level=i; S.step=-1; clearBubbles(); hideCrystals(); renderHUD();
+  if(i>=LEVELS.length) return startFinal();
+  setPad(i+1); showMission();
+}
+function showMission(){
+  const L=LEVELS[S.level], first=L.steps.find(s=>s.t==="story");
+  shot(first.beats[0].v); S.mode="mission";
+  const c=card(`${eyebrow()}<svg class="mini-mtn" viewBox="-6 -12 132 62" aria-hidden="true">${mountainSVG(S.level,{dark:true,labels:true})}</svg>
+    <p class="stage-does">${L.does}<span class="small" style="display:block;font-family:var(--f-body);font-weight:500">${L.doesZh}</span></p>
+    <div class="goals">
+      <div class="goal"><span class="k vocab">Words</span><div class="v"><div class="wchips">${L.words.map(k=>`<button class="wchip ${S.found.has(k)?"got":""}" data-w="${k}">${WORDS[k].w}</button>`).join("")}</div><span class="zh">在場景中蒐集 4 顆單字水晶</span></div></div>
+      ${L.goals.map(g=>`<div class="goal"><span class="k ${g[0]}">${g[1]}</span><div class="v">${g[2]}<span class="zh">${g[3]}</span></div></div>`).join("")}
+    </div>
+    <div class="actions"><button class="btn warm" id="go">Start mission</button></div>`);
+  c.querySelectorAll(".wchip").forEach(b=>b.onclick=()=>openWord(b.dataset.w,{}));
+  c.querySelector("#go").onclick=()=>{ sfx.page(); S.step=0; showStep(); };
+}
+function nextStep(){ S.step++; sfx.page(); clearBubbles(); if(S.step>=LEVELS[S.level].steps.length) return levelClear(); showStep(); }
+function showStep(){
+  const s=LEVELS[S.level].steps[S.step]; S.mode=null;
+  if(s.t==="story"){ S.beat=0; return showBeat(s); }
+  if(s.t==="collect") return showCollect(s);
+  if(s.t==="q") return showQ(s);
+  if(s.t==="build") return showBuild(s);
+  if(s.t==="evidence") return showEvidence(s);
+  if(s.t==="find") return showFind(s);
+  if(s.t==="sense") return showSenseIntro();
+}
+function showBeat(s){
+  const b=s.beats[S.beat]; S.mode="beat";
+  shot(b.v); clearBubbles();
+  if(b.fx==="fall"){ cam.shake=1.2; sfx.whoosh(); }
+  if(b.fx==="thud") setTimeout(()=>{ sfx.thud(); cam.shake=.6; },800);
+  (b.say||[]).forEach(x=>addBubble(x[0],x[1]));
+  const last=S.beat===s.beats.length-1;
+  const sayFallback=!renderer&&b.say?b.say.map(x=>`<p class="say">“${x[1]}”</p>`).join(""):"";
+  const c=card(`${eyebrow()}<p class="line">${markup(b.s)}</p>${sayFallback}
+    <div class="tap"><span class="dots">${s.beats.map((_,i)=>`<i class="${i<=S.beat?"on":""}"></i>`).join("")}</span><span>${last?"Tap to continue ›":"Tap for next shot ›"}</span></div>`,"caption");
+  c.setAttribute("role","button"); c.tabIndex=0;
+  const go=()=>{ if(S.modal) return; if(S.beat<s.beats.length-1){ S.beat++; sfx.page(); showBeat(s); } else nextStep(); };
+  c.onclick=go; c.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } };
+}
+function showCollect(s){
+  const L=LEVELS[S.level];
+  if(s.v) shot(s.v);
+  S.mode="collect"; clearBubbles();
+  if(!renderer){
+    const c=card(`${eyebrow()}<span class="tag vocab">Word Hunt · 找單字</span><p class="q">Tap each word to study it.</p>
+      <div class="wchips">${L.words.map(k=>`<button class="wchip ${S.found.has(k)?"got":""}" data-w="${k}">${WORDS[k].w}</button>`).join("")}</div><div class="actions"><button class="btn" id="go">Continue</button></div>`);
+    c.querySelectorAll(".wchip").forEach(b=>b.onclick=()=>openWord(b.dataset.w,{onClose:()=>{ S.found.add(b.dataset.w); b.classList.add("got"); renderHUD(); }}));
+    c.querySelector("#go").onclick=nextStep; return;
+  }
+  const draw=()=>{
+    const got=L.words.filter(k=>S.found.has(k)&&crystals.some(c=>c.userData.key===k&&c.userData.done)).length;
+    const all=got===L.words.length;
+    const c=card(`${eyebrow()}<span class="tag vocab">Word Hunt · 找單字</span>
+      <p class="q">${all?"All 4 words collected!":"Tap the glowing word crystals in the scene."}</p>
+      <div class="wchips">${L.words.map(k=>{ const ok=crystals.some(c=>c.userData.key===k&&c.userData.done); return `<span class="wchip ${ok?"got":""}">${ok?WORDS[k].w:"? ? ?"}</span>`; }).join("")}</div>
+      <div class="actions"><span class="small" style="margin-right:auto">${got} / 4 · 拖曳畫面可以轉頭找</span>${all?'<button class="btn ice" id="go">Continue</button>':""}</div>`);
+    if(all){ c.querySelector("#go").onclick=()=>{ S.collectUpdate=null; hideCrystals(); nextStep(); }; }
+  };
+  S.collectUpdate=draw; draw();
+  requestAnimationFrame(()=>placeCrystals(L.words));
+}
+function showFind(s){
+  shot(s.v);
+  if(!renderer){ const c=card(`${eyebrow()}<span class="tag reading">Find it</span><p class="q">${s.prompt}</p><p class="small">此裝置無法顯示 3D，這題直接看解析。</p><div class="feedback good">${s.why}</div><div class="actions"><button class="btn" id="go">Next</button></div>`); c.querySelector("#go").onclick=nextStep; return; }
+  S.finding={target:s.target,tries:0,step:s};
+  const c=card(`${eyebrow()}<span class="tag reading">Find it in the scene · 在場景中找</span><p class="q">${s.prompt}</p>
+    <div class="actions"><span class="small" style="margin-right:auto">${s.zh}</span><button class="btn ghost sm" id="hint">Hint</button></div>`);
+  c.querySelector("#hint").onclick=()=>{ if(S.finding){ S.finding.tries=Math.max(S.finding.tries,1); showMarker(s.target); } };
+}
+function findResult(f,pts){
+  const c=card(`${eyebrow()}<span class="tag reading">Find it</span><div class="feedback good"><b>+${pts}</b> ${f.step.why}</div><div class="actions"><button class="btn" id="go">Continue</button></div>`);
+  c.querySelector("#go").onclick=nextStep;
+}
+function collapsible(c){
+  const h=c.querySelector(".handle"); if(!h) return;
+  h.onclick=()=>{ const col=c.classList.toggle("collapsed"); h.textContent=col?"Show question ▴":"Hide to see the scene ▾"; };
+}
+function showQ(s){
+  let tries=0; const keys="ABCD";
+  const c=card(`<button class="handle">Hide to see the scene ▾</button>${eyebrow()}<span class="tag ${s.cat}">${s.tag}</span>
+    <p class="q">${s.q.replace(/___/g,'<span class="blank"></span>')}</p>
+    <div class="opts">${s.o.map((o,i)=>`<button class="opt" data-i="${i}"><span class="k">${keys[i]}</span><span>${o}</span></button>`).join("")}</div>
+    <div id="fb"></div><div class="actions" id="act"></div>`);
+  collapsible(c);
+  c.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.i;
+    if(i===s.a){
+      const pts=tries===0?2:(tries===1?1:0); award(s.cat,pts,tries===0); sfx.right();
+      b.classList.add("right"); c.querySelectorAll(".opt").forEach(x=>x.disabled=true);
+      c.querySelector("#fb").innerHTML=`<div class="feedback good"><b>${pts?"+"+pts+" ":""}Right.</b> ${s.why}<span class="zh">${s.zh}</span></div>`;
+      c.querySelector("#act").innerHTML=`<button class="btn" id="go">Next</button>`; c.querySelector("#go").onclick=nextStep; c.scrollTop=c.scrollHeight;
+    } else {
+      tries++; if(tries===1){ S.streak=0; renderHUD(); } sfx.wrong(); b.classList.add("wrong","shake"); b.disabled=true;
+      c.querySelector("#fb").innerHTML=`<div class="feedback bad">Not quite. ${tries===1?"回到故事找線索，答對還有 1 分。":"這次答對不計分，但記得看解析。"}</div>`;
+    }
+  });
+}
+function showBuild(s){
+  let tries=0, placed=[]; const pool=shuffle([...s.chunks,...(s.extra||[])].map((t,i)=>({t,id:i})));
+  const draw=(state)=>{
+    const c=card(`<button class="handle">Hide to see the scene ▾</button>${eyebrow()}<span class="tag pattern">Build the Sentence · 拼出句型</span>
+      <p class="q" style="font-size:17px">${s.zhq}</p>
+      <div class="slots ${state==="ok"?"ok":state==="no"?"no shake":""}">${placed.length?placed.map((p,i)=>`<button class="bchip" data-p="${i}">${p.t}</button>`).join(""):'<span class="ph">點下面的字塊，依序拼出英文句子</span>'}</div>
+      <div class="pool">${pool.map(p=>`<button class="bchip ${placed.includes(p)?"used":""}" data-id="${p.id}">${p.t}</button>`).join("")}</div>
+      <div id="fb">${state==="ok"?`<div class="feedback good"><b>${tries===0?"+2 ":tries===1?"+1 ":""}Right.</b> ${s.why}<span class="zh">${s.zh}</span></div>`:state==="no"?`<div class="feedback bad">Not quite. ${tries>=2?"正確答案：<b>"+s.chunks.join(" ")+"</b>":"點拼好的字塊可以拿回來重排。"}</div>`:""}</div>
+      <div class="actions">${state==="ok"||(state==="no"&&tries>=2)?'<button class="btn" id="go">Next</button>':`<button class="btn ghost sm" id="clr">Clear</button><button class="btn warm" id="chk" ${placed.length===s.chunks.length?"":"disabled"}>Check</button>`}</div>`);
+    collapsible(c);
+    if(state==="ok"||(state==="no"&&tries>=2)){ c.querySelector("#go").onclick=nextStep; c.scrollTop=c.scrollHeight; return; }
+    c.querySelectorAll(".pool .bchip").forEach(b=>b.onclick=()=>{ const p=pool.find(x=>x.id==b.dataset.id); if(!placed.includes(p)&&placed.length<s.chunks.length){ placed.push(p); sfx.tick(); draw(); } });
+    c.querySelectorAll(".slots .bchip").forEach(b=>b.onclick=()=>{ placed.splice(+b.dataset.p,1); sfx.tick(); draw(); });
+    c.querySelector("#clr").onclick=()=>{ placed=[]; draw(); };
+    c.querySelector("#chk").onclick=()=>{
+      const ok=placed.map(p=>p.t).join("|")===s.chunks.join("|");
+      if(ok){ const pts=tries===0?2:tries===1?1:0; award("pattern",pts,tries===0); sfx.right(); draw("ok"); }
+      else { tries++; if(tries===1){ S.streak=0; renderHUD(); } sfx.wrong(); if(tries>=2){ placed=s.chunks.map(t=>pool.find(p=>p.t===t)); } draw("no"); }
+    };
+  };
+  draw();
+}
+function showEvidence(s){
+  let tries=0;
+  const c=card(`<button class="handle">Hide to see the scene ▾</button>${eyebrow()}<span class="tag reading">${s.tag} · 找證據</span>
+    <p class="q">${s.q}</p><p class="small">點出能當作證據的那一句。</p>
+    <div class="lines">${s.lines.map((l,i)=>`<button class="ln" data-i="${i}">“${l}”</button>`).join("")}</div>
+    <div id="fb"></div><div class="actions" id="act"></div>`);
+  collapsible(c);
+  c.querySelectorAll(".ln").forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.i;
+    if(i===s.a){ const pts=tries===0?2:tries===1?1:0; award("reading",pts,tries===0); sfx.right(); b.classList.add("right"); c.querySelectorAll(".ln").forEach(x=>x.disabled=true);
+      c.querySelector("#fb").innerHTML=`<div class="feedback good"><b>${pts?"+"+pts+" ":""}Good evidence.</b> ${s.why}<span class="zh">${s.zh}</span></div>`;
+      c.querySelector("#act").innerHTML=`<button class="btn" id="go">Next</button>`; c.querySelector("#go").onclick=nextStep; c.scrollTop=c.scrollHeight; }
+    else { tries++; if(tries===1){ S.streak=0; renderHUD(); } sfx.wrong(); b.classList.add("wrong","shake"); b.disabled=true;
+      c.querySelector("#fb").innerHTML=`<div class="feedback bad">This sentence is true, but it doesn't prove the point. 這句沒有回答問題。</div>`; }
+  });
+}
+function levelClear(){
+  const L=LEVELS[S.level], got=S.levelPts[S.level], max=S.levelMax[S.level], stars=got>=max?3:got>=max*.6?2:1;
+  sfx.level(); S.mode=null; clearBubbles();
+  const words=L.words.filter(k=>S.found.has(k)).length;
+  const c=card(`<div class="eyebrow"><span>Stage cleared · ${L.stage}</span><span class="zh">${L.zh}</span></div>
+    <svg class="mini-mtn" viewBox="-6 -12 132 62" aria-hidden="true">${mountainSVG(S.level+1,{dark:true,labels:true})}</svg>
+    <div class="actions" style="justify-content:space-between"><div class="big" style="color:var(--gold);font-size:38px">${"★".repeat(stars)}<span style="color:#c8d1d6">${"★".repeat(3-stars)}</span></div><span class="small">${got} / ${max} pts · words ${words}/4</span></div>
+    <p class="stage-does" style="font-size:16px">${L.takeaway}</p>
+    <div class="actions"><button class="btn warm" id="go">${S.level<5?"Climb on: "+LEVELS[S.level+1].stage:"Summit review"}</button></div>`);
+  c.querySelector("#go").onclick=()=>startLevel(S.level+1);
+}
+
+/* ---------- echo challenge ---------- */
+function showSenseIntro(){
+  shot("yacob");
+  const c=card(`${eyebrow()}<span class="tag">Echo Challenge · 用耳朵認路</span><h2>See the valley with your ears</h2>
+    <p class="small" style="font-size:15px">The world will go dark, like the villagers' world. Listen to 4 sounds and tap <b>LEFT</b> or <b>RIGHT</b>. After each answer, the echo shows where the sound really was.</p>
+    <p class="small">請戴耳機。沒有耳機可以先跳過。</p>
+    <div class="actions"><button class="btn ghost" id="skip">Skip</button><button class="btn warm" id="go">Close my eyes</button></div>`);
+  c.querySelector("#go").onclick=runSense; c.querySelector("#skip").onclick=nextStep;
+}
+function runSense(){
+  if(!S.sound){ S.sound=true; updateSoundBtn(); }
+  panel.hidden=true; $("sense").hidden=false; shot("echo"); S.mode="echo";
+  const order=shuffle(SENSE_SOUNDS).slice(0,4);
+  let round=0, side=0, locked=true, hits=0; const msg=$("senseMsg");
+  function play(){ locked=true; side=Math.random()<.5?-1:1; msg.textContent="Listen… ("+(round+1)+"/4)";
+    setTimeout(()=>{ order[round].play(side*.95); setTimeout(()=>{ locked=false; msg.textContent="Where was it?"; },700); },900); }
+  function answer(s){ if(locked) return; locked=true;
+    const ok=s===side; if(ok){ hits++; S.score++; S.levelPts[S.level]++; renderHUD(); sfx.right(); } else sfx.wrong();
+    if(renderer) echoAt(side);
+    msg.textContent=(ok?"Yes! ":"No… ")+order[round].name+", on the "+(side<0?"left":"right")+".";
+    round++; setTimeout(()=>{ if(round<4) play(); else finish(); },1900); }
+  function finish(){
+    $("sense").hidden=true; S.sense=hits; shot("yacob"); S.mode=null;
+    const c=card(`${eyebrow()}<span class="tag">Echo Challenge</span><h2>${hits} / 4 by ear</h2>
+      <p class="small" style="font-size:15px">${hits>=3?"You found your way like a villager.":"Not easy, is it?"} The villagers do this every day. They know their valley <b>intimately</b> through sound, touch, and smell.</p>
+      <p class="small">想想看：Nuñez 一開始覺得自己「高人一等」，但在這裡，誰才是真正的專家？</p>
+      <div class="actions"><button class="btn" id="go">Continue</button></div>`);
+    c.querySelector("#go").onclick=nextStep;
+  }
+  $("senseL").onclick=()=>answer(-1); $("senseR").onclick=()=>answer(1);
+  play();
+}
+
+/* ---------- summit review ---------- */
+function startFinal(){
+  S.level=6; renderHUD(); shot("final"); setPad(7); S.mode=null;
+  const c=card(`<div class="eyebrow"><span>Summit Review · 1 of 3</span><span class="zh">單字快閃</span></div>
+    <h2>Word Rush</h2><p class="small" style="font-size:15px">${RUSH_N} words from your journal, 10 seconds each. Answer within 5 seconds for a speed bonus.</p>
+    <div class="actions"><button class="btn warm" id="go">Go!</button></div>`);
+  c.querySelector("#go").onclick=()=>rush(0,shuffle(Object.keys(WORDS)).slice(0,RUSH_N));
+}
+function rush(n,list){
+  if(n>=list.length) return pyramid();
+  const k=list[n], opts=shuffle([k,...shuffle(Object.keys(WORDS).filter(x=>x!==k)).slice(0,3)]);
+  let done=false; const t0=performance.now();
+  const c=card(`<div class="eyebrow"><span>Word Rush · ${n+1} / ${list.length}</span><span class="zh">選出符合的單字</span></div>
+    <div class="timer"><i id="tbar"></i></div>
+    <p class="q">${WORDS[k].zh}<span class="small" style="display:block;font-family:var(--f-body);font-weight:500;font-size:15px">${WORDS[k].def}</span></p>
+    <div class="opts">${opts.map((o,i)=>`<button class="opt" data-k="${o}"><span class="k">${"ABCD"[i]}</span><span>${WORDS[o].w}</span></button>`).join("")}</div>`);
+  const bar=$("tbar"); bar.style.transition="none"; bar.style.transform="scaleX(1)";
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{ bar.style.transition="transform 10s linear"; bar.style.transform="scaleX(0)"; }));
+  const end=(pick)=>{
+    if(done) return; done=true; clearTimeout(timer);
+    const el=(performance.now()-t0)/1000, ok=pick===k;
+    c.querySelectorAll(".opt").forEach(b=>{ b.disabled=true; if(b.dataset.k===k) b.classList.add("right"); else if(b.dataset.k===pick) b.classList.add("wrong"); });
+    if(ok){ const pts=1+(el<5?1:0); award("vocab",pts,true); sfx.right(); fx("toast",innerWidth/2,innerHeight*.35,pts===2?"+2 Fast!":"+1"); } else { S.streak=0; renderHUD(); sfx.wrong(); }
+    setTimeout(()=>rush(n+1,list),ok?700:1400);
+  };
+  const timer=setTimeout(()=>end(null),10000);
+  c.querySelectorAll(".opt").forEach(b=>b.onclick=()=>end(b.dataset.k));
+}
+function pyramid(){
+  const shuffled=shuffle(EVENTS).map(e=>({...e})); let idx=0, miss=0;
+  const slots=[[30,112],[88,112],[128,72],[170,26],[212,72],[270,112]];
+  const STG=["Exposition","Inciting Incident","Rising Action","Climax","Falling Action","Resolution"];
+  const svg=()=>`<svg class="pyr" viewBox="0 0 300 140" role="img" aria-label="Freytag's pyramid">
+    <polyline points="10,118 60,118 170,26 260,118 295,118" fill="none" stroke="#9fb0bb" stroke-width="2"/>
+    ${slots.map((p,i)=>`<g><rect class="slot ${i<idx?"filled":""}" x="${p[0]-14}" y="${p[1]-11}" width="28" height="22" rx="5"/>
+      <text class="${i<idx?"slot-t":""}" x="${p[0]}" y="${p[1]+4}" text-anchor="middle">${i<idx?(i+1):"?"}</text>
+      <text x="${p[0]}" y="${p[1]+(i===3?-16:24)}" text-anchor="middle">${STG[i]}</text></g>`).join("")}</svg>`;
+  function draw(){
+    const c=card(`<div class="eyebrow"><span>Summit Review · 2 of 3</span><span class="zh">情節金字塔</span></div>
+      <h2>Rebuild the Story Mountain</h2>${svg()}<p class="small">依故事順序，點選下一個事件（${idx}/6）。</p>
+      <div class="chips">${shuffled.map((e,i)=>`<button class="chip ${e.used?"used":""}" data-i="${i}">${e.txt}</button>`).join("")}</div>`);
+    c.querySelectorAll(".chip").forEach(b=>b.onclick=()=>{
+      const e=shuffled[+b.dataset.i];
+      if(e.k===EVENTS[idx].k){ e.used=true; idx++; sfx.right(); if(idx===6){ const pts=Math.max(0,6-miss); award("story",pts,miss===0); setTimeout(charCard,600);} draw(); }
+      else { miss++; S.streak=0; renderHUD(); sfx.wrong(); b.classList.remove("shake"); void b.offsetWidth; b.classList.add("shake"); }
+    });
+  }
+  draw();
+}
+function charCard(){
+  const adjs=["childish","arrogant","generous","humorous"];
+  const reasons=[{t:"He felt superior to the blind villagers.",ok:true},{t:"He shared his food with hungry villagers.",ok:false},{t:"He believed his sight should make him a “king” among them.",ok:true},{t:"He taught every villager to read and write.",ok:false},{t:"He ran away from the village at sunrise.",ok:false}];
+  let adj=null, picks=new Set();
+  function draw(done){
+    const ready=adj&&picks.size===2&&!done;
+    const c=card(`<div class="eyebrow"><span>Summit Review · 3 of 3</span><span class="zh">人物判讀</span></div>
+      <h2>Who was Nuñez at the start?</h2><p class="q">Nuñez is a(n) <span class="blank">${adj||""}</span> person because…</p>
+      <div class="adj">${adjs.map(a=>`<button class="chip ${adj===a?"sel":""}" data-a="${a}">${a}</button>`).join("")}</div>
+      <p class="small">選一個形容詞，再選兩個理由。</p>
+      <div class="chips">${reasons.map((r,i)=>`<button class="chip ${picks.has(i)?"sel":""}" data-r="${i}">${r.t}</button>`).join("")}</div>
+      <div id="fb">${done||""}</div>
+      <div class="actions">${done?'<button class="btn warm" id="res">See my results</button>':`<button class="btn warm" id="go" ${ready?"":"disabled"}>Check</button>`}</div>`);
+    if(!done){
+      c.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{ adj=b.dataset.a; draw(); });
+      c.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{ const i=+b.dataset.r; if(picks.has(i)) picks.delete(i); else if(picks.size<2) picks.add(i); draw(); });
+      c.querySelector("#go").onclick=()=>{ let pts=adj==="arrogant"?1:0; picks.forEach(i=>{ if(reasons[i].ok) pts++; });
+        award("story",pts,pts===3); pts===3?sfx.right():sfx.wrong();
+        draw(`<div class="feedback ${pts===3?"good":"bad"}"><b>+${pts} / 3.</b> Nuñez was <b>arrogant</b>: he felt superior to the villagers and believed his sight should make him their “king.”<span class="zh">傲慢：自認優於村民，以為看得見就能稱王。</span></div>`); };
+    } else { c.querySelector("#res").onclick=results; c.scrollTop=c.scrollHeight; }
+  }
+  draw();
+}
+function results(){
+  sfx.level(); S.level=6; renderHUD();
+  const pct=Math.round(S.score/S.max*100);
+  const rank=pct>=90?["Clear-Eyed Climber","看清自己的登山家"]:pct>=75?["Valley Insider","山谷通"]:pct>=55?["Brave Outsider","勇敢的外來者"]:["Lost Climber","迷路的登山客"];
+  const meters=Object.keys(CAT).map(k=>{ const [g,m]=S.cat[k], p=m?Math.round(g/m*100):0; return `<div class="meter-row"><span>${CAT[k][0]} <span class="small">${CAT[k][1]}</span></span><span class="num">${g} / ${m}</span><div class="meter"><i style="width:${p}%;background:${CAT[k][2]}"></i></div></div>`; }).join("");
+  const c=card(`<div class="eyebrow"><span>Summit reached</span><span class="zh">請截圖這個畫面繳交</span></div>
+    <div class="rank">${rank[0]} <span class="small">${rank[1]}</span></div>
+    <div class="big">${S.score}<small> / ${S.max} pts · ${pct}%</small></div>
+    <div class="meters">${meters}</div>
+    <div class="extras"><span>Words collected ${S.found.size}/24</span><span>Echo ${S.sense}/4</span><span>Best streak ${S.best}</span><span>Llama friends ${S.llamas.size}/5</span></div>
+    <div class="hand">Think and reflect</div>
+    <p style="font-size:16px;line-height:1.55">1. Have you ever had to choose between staying true to yourself and changing to fit in? What did you do?<br>2. Nuñez and the villagers judged beauty in different ways. What is <i>your</i> standard of beauty?</p>
+    <p class="small">鳳新高中英文科李姬慧老師 X AI 彙整製作 · Lesson 6 The Country of the Blind</p>
+    <div class="actions"><button class="btn ghost" id="jr">Word Journal</button><button class="btn" id="again">Play again</button></div>`);
+  c.querySelector("#jr").onclick=openJournal;
+  c.querySelector("#again").onclick=()=>location.reload();
+}
+
+/* ---------- sound toggle & boot ---------- */
+function updateSoundBtn(){
+  $("soundBtn").setAttribute("aria-label",S.sound?"Turn sound off":"Turn sound on");
+  $("waveA").style.opacity=$("waveB").style.opacity=S.sound?1:.15;
+  if(master) master.gain.setTargetAtTime(S.sound?.8:0,AC.currentTime,.1);
+}
+$("soundBtn").onclick=()=>{ S.sound=!S.sound; updateSoundBtn(); };
+
+window.__cob={ S, shot:n=>shot(n,true), crystals:()=>crystals.filter(c=>c.visible&&!c.userData.done).map(c=>project(c.position)),
+  find:()=>{ if(!S.finding) return null; const fh=freeHeight(); let best=null, bd=1e9; anchorsFor(S.finding.target).forEach(a=>{ const p=project(a); if(onScreen(p,fh)){ const d=Math.hypot(p.x-innerWidth/2,p.y-fh/2); if(d<bd){bd=d;best=p;} } }); return best; },
+  llamas:()=>llamas.map(l=>project(l.position.clone().setY(l.position.y+1.2))) };
+
+try{ if(window.THREE) initWorld(); }catch(e){ console.error(e); renderer=null; }
+if(!renderer) document.body.style.background="linear-gradient(#7d97b1,#dde5ea 60%,#c9a45e)";
+else shot("intro",true);
+$("startBtn").onclick=()=>{
+  initAudio(); if(AC&&AC.state==="suspended") AC.resume();
+  $("start").hidden=true; $("hud").hidden=false; startLevel(0);
+};
+renderHUD();
+})();
+</script>
+</body>
+</html>
