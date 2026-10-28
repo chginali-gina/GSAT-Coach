@@ -263,6 +263,7 @@ footer b{color:var(--gold-ink);font-weight:900}
     <b>Gina教室的AI奇蹟</b>
     <span>鳳新高中英文科李姬慧老師 X AI 彙整製作</span>
     <span>啟動好奇，一起長大。</span>
+    <span>配樂：九首原創管弦樂，以 GeneralUser GS 音色庫製作。</span>
   </div>
 </footer>
 
@@ -482,154 +483,60 @@ const KIND={web:['互動網頁','live'],pdf:['PDF','demo'],lock:['限校內','cl
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
-/* ---------- 樂章引擎：Web Audio 即時合成管弦樂，不需要任何音檔 ----------
-   每座島：調性、調式、速度、主奏樂器、旋律各不相同。登島先奏「登島號角」，接著進入可循環的島嶼主題。 */
-const SCALES={ionian:[0,2,4,5,7,9,11],dorian:[0,2,3,5,7,9,10],mixolydian:[0,2,4,5,7,9,10],lydian:[0,2,4,6,7,9,11],aeolian:[0,2,3,5,7,8,10],harmonic:[0,2,3,5,7,8,11]};
-const THEMES={
-  hub:    {title:'群島序曲',     root:50,mode:'aeolian',   bpm:76, prog:[0,5,2,6],lead:'brass', pad:'choir',  perc:'heart', lift:12,
-           motif:[[0,2],[4,2],[3,1],[2,1],[4,2],[5,2],[4,1],[2,1],[0,4]]},
-  exam:   {title:'倒數進行曲',   root:50,mode:'aeolian',   bpm:104,prog:[0,5,6,4],lead:'brass', pad:'strings',perc:'march', lift:12, tick:true,
-           motif:[[4,1],[4,.5],[4,.5],[7,1.5],[6,.5],[4,1],[2,1],[3,1],[4,1],[5,1.5],[4,.5],[3,1],[1,1],[2,2],[0,2]]},
-  story:  {title:'書頁秘境',     root:52,mode:'dorian',    bpm:84, prog:[0,6,3,0],lead:'harp',  pad:'strings',perc:'soft',  lift:12,
-           motif:[[0,.5],[2,.5],[4,.5],[6,.5],[7,1],[6,.5],[4,.5],[5,2],[3,.5],[5,.5],[7,.5],[9,.5],[8,1],[7,1],[6,2],[4,2],[0,2]]},
-  voice:  {title:'風之演說',     root:46,mode:'ionian',    bpm:100,prog:[0,4,5,3],lead:'brass', pad:'strings',perc:'march', lift:12,
-           motif:[[0,1],[4,1],[7,2],[9,1],[8,.5],[7,.5],[8,2],[5,1],[6,1],[7,1],[9,1],[11,2],[7,2]]},
-  compass:{title:'遠航羅盤',     root:45,mode:'mixolydian',bpm:96, prog:[0,6,3,0],lead:'flute', pad:'strings',perc:'sail',  lift:24,
-           motif:[[4,1.5],[5,.5],[6,1],[7,1],[9,1.5],[7,.5],[6,2],[4,1],[6,1],[7,1.5],[6,.5],[4,1],[3,1],[4,2]]},
-  heart:  {title:'雲朵搖籃',     root:53,mode:'lydian',    bpm:66, prog:[0,1,5,4],lead:'bell',  pad:'choir',  perc:'none',  lift:24,
-           motif:[[7,2],[6,1],[4,1],[5,2],[3,2],[4,1],[6,1],[8,2],[7,4]]},
-  sdgs:   {title:'森林議會',     root:43,mode:'ionian',    bpm:88, prog:[0,3,5,4],lead:'flute', pad:'strings',perc:'soft',  lift:24,
-           motif:[[4,1],[5,.5],[4,.5],[2,1],[4,1],[7,2],[5,2],[4,1],[2,1],[1,1],[2,1],[0,4]]},
-  class:  {title:'星星慶典',     root:48,mode:'ionian',    bpm:122,prog:[0,4,5,3],lead:'brass', pad:'strings',perc:'festive',lift:12,
-           motif:[[0,.5],[2,.5],[4,.5],[7,.5],[4,.5],[7,.5],[9,1],[7,.5],[5,.5],[4,.5],[2,.5],[4,1],[7,1],[5,.5],[4,.5],[2,.5],[1,.5],[2,1],[4,1],[0,2],[7,2]]},
-  teacher:{title:'齒輪秘法',     root:49,mode:'harmonic',  bpm:80, prog:[0,5,3,4],lead:'organ', pad:'choir',  perc:'march', lift:12,
-           motif:[[0,1.5],[2,.5],[3,1],[4,1],[6,2],[5,1],[4,1],[3,1.5],[2,.5],[1,1],[2,1],[4,2],[0,2]]}
-};
+/* ---------- 樂章：原創管弦樂錄音（GeneralUser GS 音色庫算繪），登島號角接無縫循環 ---------- */
+const TRACKS={"hub": {"title": "群島序曲", "ls": 17.1429, "le": 85.7143}, "exam": {"title": "倒數進行曲", "ls": 13.3333, "le": 66.6667}, "story": {"title": "書頁秘境", "ls": 18, "le": 90}, "voice": {"title": "風之演說", "ls": 15, "le": 75}, "compass": {"title": "遠航羅盤", "ls": 12.8571, "le": 64.2857}, "heart": {"title": "雲朵搖籃", "ls": 16.3636, "le": 81.8182}, "sdgs": {"title": "森林議會", "ls": 16.3636, "le": 81.8182}, "class": {"title": "星星慶典", "ls": 11.6129, "le": 58.0645}, "teacher": {"title": "齒輪秘法", "ls": 18.9474, "le": 94.7368}};
+const THEMES=TRACKS;
 const Music=(()=>{
-  let ctx=null,master=null,verb=null,bus=null,timer=null,st=null,noiseBuf=null;
-  let on=false,vol=Math.min(1,Math.max(0,parseFloat(store.get('gta-vol')??'0.7')||0.7));
-  const listeners=[];
-  const emit=()=>listeners.forEach(f=>f({on,title:st?THEMES[st.id].title:'',id:st?.id}));
-  const mtof=m=>440*Math.pow(2,(m-69)/12);
-  const deg=(th,d,base)=>{const sc=SCALES[th.mode];const o=Math.floor(d/7),i=((d%7)+7)%7;return base+sc[i]+12*o};
-
-  function init(){
-    if(ctx)return true;
-    const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;
-    try{ctx=new AC()}catch(e){return false}
-    const comp=ctx.createDynamicsCompressor();comp.threshold.value=-16;comp.ratio.value=4;comp.attack.value=.01;comp.release.value=.3;
-    master=ctx.createGain();master.gain.value=0.0001;master.connect(comp);comp.connect(ctx.destination);
-    verb=ctx.createConvolver();verb.buffer=impulse(3.4,2.4);const wet=ctx.createGain();wet.gain.value=.42;verb.connect(wet);wet.connect(master);
-    document.addEventListener('visibilitychange',()=>{if(!ctx)return;if(document.hidden)ctx.suspend();else if(on)ctx.resume()});
-    return true;
+  let ctx=null,master=null,on=false,cur=null,want=null,prefetched=false;
+  let vol=Math.min(1,Math.max(0,parseFloat(store.get('gta-vol')??'0.8')||0.8));
+  const bufs={},pend={},listeners=[];
+  const emit=(loading)=>listeners.forEach(f=>f({on,id:want,title:want?TRACKS[want].title:'',loading:!!loading}));
+  const AC=window.AudioContext||window.webkitAudioContext;
+  function init(){if(ctx)return true;if(!AC)return false;try{ctx=new AC()}catch(e){return false}
+    master=ctx.createGain();master.gain.value=0.0001;master.connect(ctx.destination);
+    document.addEventListener('visibilitychange',()=>{if(!ctx)return;if(document.hidden)ctx.suspend();else if(on)ctx.resume()});return true}
+  function bytes(id){
+    const d=window.MUSIC_DATA&&window.MUSIC_DATA[id];
+    if(d){const bin=atob(d);const u=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u[i]=bin.charCodeAt(i);return Promise.resolve(u.buffer)}
+    return fetch('music/'+id+'.mp3').then(r=>{if(!r.ok)throw new Error(r.status);return r.arrayBuffer()});
   }
-  function impulse(sec,decay){const r=ctx.sampleRate,l=Math.floor(r*sec),b=ctx.createBuffer(2,l,r);for(let c=0;c<2;c++){const d=b.getChannelData(c);for(let i=0;i<l;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/l,decay)}return b}
-  function noise(){if(!noiseBuf){const l=ctx.sampleRate*2;noiseBuf=ctx.createBuffer(1,l,ctx.sampleRate);const d=noiseBuf.getChannelData(0);for(let i=0;i<l;i++)d[i]=Math.random()*2-1}const n=ctx.createBufferSource();n.buffer=noiseBuf;return n}
-  function newBus(){
-    if(bus){const old=bus;old.dry.gain.setTargetAtTime(0.0001,ctx.currentTime,.35);old.send.gain.setTargetAtTime(0.0001,ctx.currentTime,.35);setTimeout(()=>{try{old.dry.disconnect();old.send.disconnect()}catch(e){}},3000)}
-    const dry=ctx.createGain(),send=ctx.createGain();dry.connect(master);send.connect(verb);bus={dry,send};
+  function load(id){
+    if(bufs[id])return Promise.resolve(bufs[id]);
+    if(!pend[id])pend[id]=bytes(id).then(ab=>new Promise((res,rej)=>{const p=ctx.decodeAudioData(ab,res,rej);if(p&&p.then)p.then(res,rej)})).then(b=>(bufs[id]=b)).catch(e=>{delete pend[id];throw e});
+    return pend[id];
   }
-  function out(node,rev=.5){node.connect(bus.dry);const s=ctx.createGain();s.gain.value=rev;node.connect(s);s.connect(bus.send)}
-  function env(p,t,a,peak,d,sus,end,rel){const g=p;g.setValueAtTime(0.0001,t);g.exponentialRampToValueAtTime(Math.max(peak,0.0002),t+a);g.exponentialRampToValueAtTime(Math.max(sus,0.0002),t+a+d);g.setValueAtTime(Math.max(sus,0.0002),Math.max(end,t+a+d));g.exponentialRampToValueAtTime(0.0001,Math.max(end,t+a+d)+rel)}
-
-  /* ---- 樂器 ---- */
-  const I={
-    taiko(t,v=1){
-      const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.setValueAtTime(120,t);o.frequency.exponentialRampToValueAtTime(40,t+.4);
-      env(g.gain,t,.004,.95*v,.3,.001,t+.32,.25);o.connect(g);out(g,.35);o.start(t);o.stop(t+1);
-      const n=noise(),f=ctx.createBiquadFilter(),ng=ctx.createGain();f.type='lowpass';f.frequency.value=700;env(ng.gain,t,.002,.45*v,.07,.001,t+.08,.06);n.connect(f);f.connect(ng);out(ng,.3);n.start(t);n.stop(t+.3);
-    },
-    swell(t,len,v=.22){const n=noise(),f=ctx.createBiquadFilter(),g=ctx.createGain();f.type='highpass';f.frequency.value=4500;g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(v,t+len);g.gain.exponentialRampToValueAtTime(0.0001,t+len+.05);n.loop=true;n.connect(f);f.connect(g);out(g,.9);n.start(t);n.stop(t+len+.1)},
-    crash(t,v=.26){const n=noise(),f=ctx.createBiquadFilter(),g=ctx.createGain();f.type='highpass';f.frequency.value=3200;env(g.gain,t,.003,v,2.2,.0005,t+2.2,.4);n.loop=true;n.connect(f);f.connect(g);out(g,.8);n.start(t);n.stop(t+3)},
-    wood(t,v=.14){const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=1650;env(g.gain,t,.001,v,.04,.0005,t+.05,.03);o.connect(g);out(g,.2);o.start(t);o.stop(t+.15)},
-    brass(m,t,dur,v=.2){
-      const f=ctx.createBiquadFilter(),g=ctx.createGain();f.type='lowpass';f.Q.value=2.2;
-      f.frequency.setValueAtTime(350,t);f.frequency.exponentialRampToValueAtTime(2800,t+.09);f.frequency.exponentialRampToValueAtTime(1400,t+.35);
-      env(g.gain,t,.05,v,.25,v*.7,t+dur*.9,.25);f.connect(g);out(g,.45);
-      [-7,0,7].forEach(c=>{const o=ctx.createOscillator();o.type='sawtooth';o.frequency.value=mtof(m);o.detune.value=c;o.connect(f);o.start(t);o.stop(t+dur+.4)});
-    },
-    strings(ms,t,dur,v=.06){
-      ms.forEach(m=>{const f=ctx.createBiquadFilter(),g=ctx.createGain();f.type='lowpass';f.frequency.value=1700;env(g.gain,t,.5,v,.4,v*.85,t+dur,1.1);f.connect(g);out(g,.75);
-        [-11,9].forEach(c=>{const o=ctx.createOscillator();o.type='sawtooth';o.frequency.value=mtof(m);o.detune.value=c;o.connect(f);o.start(t);o.stop(t+dur+1.3)})});
-    },
-    choir(ms,t,dur,v=.06){
-      ms.forEach(m=>{const g=ctx.createGain(),b1=ctx.createBiquadFilter(),b2=ctx.createBiquadFilter();b1.type=b2.type='bandpass';b1.frequency.value=720;b2.frequency.value=1150;b1.Q.value=b2.Q.value=5;
-        env(g.gain,t,.8,v*2.4,.5,v*2,t+dur,1.4);b1.connect(g);b2.connect(g);out(g,.85);
-        const lfo=ctx.createOscillator(),lg=ctx.createGain();lfo.frequency.value=5.2;lg.gain.value=9;lfo.connect(lg);
-        [-6,6].forEach(c=>{const o=ctx.createOscillator();o.type='sawtooth';o.frequency.value=mtof(m);o.detune.value=c;lg.connect(o.detune);o.connect(b1);o.connect(b2);o.start(t);o.stop(t+dur+1.6)});
-        lfo.start(t);lfo.stop(t+dur+1.6)});
-    },
-    organ(ms,t,dur,v=.05){(Array.isArray(ms)?ms:[ms]).forEach(m=>{const g=ctx.createGain();env(g.gain,t,.03,v,.1,v*.9,t+dur,.35);out(g,.7);[[1,1],[2,.5],[4,.25]].forEach(([h,a])=>{const o=ctx.createOscillator(),og=ctx.createGain();o.type='sine';o.frequency.value=mtof(m)*h;og.gain.value=a;o.connect(og);og.connect(g);o.start(t);o.stop(t+dur+.5)})})},
-    harp(m,t,v=.16){const g=ctx.createGain();env(g.gain,t,.004,v,1.4,.0005,t+1.4,.3);out(g,.6);[['triangle',1,1],['sine',2,.35],['sine',3,.12]].forEach(([ty,h,a])=>{const o=ctx.createOscillator(),og=ctx.createGain();o.type=ty;o.frequency.value=mtof(m)*h;og.gain.value=a;o.connect(og);og.connect(g);o.start(t);o.stop(t+1.8)})},
-    bell(m,t,v=.12){const g=ctx.createGain();env(g.gain,t,.004,v,2.6,.0005,t+2.6,.3);out(g,.7);[[1,1],[2.76,.4],[5.4,.15]].forEach(([h,a])=>{const o=ctx.createOscillator(),og=ctx.createGain();o.type='sine';o.frequency.value=mtof(m)*h;og.gain.value=a;o.connect(og);og.connect(g);o.start(t);o.stop(t+3)})},
-    flute(m,t,dur,v=.14){const g=ctx.createGain();env(g.gain,t,.07,v,.2,v*.8,t+dur*.92,.18);out(g,.6);const o=ctx.createOscillator();o.type='sine';o.frequency.value=mtof(m);const l=ctx.createOscillator(),lg=ctx.createGain();l.frequency.value=5.5;lg.gain.value=7;l.connect(lg);lg.connect(o.detune);o.connect(g);
-      const n=noise(),bf=ctx.createBiquadFilter(),ng=ctx.createGain();bf.type='bandpass';bf.frequency.value=mtof(m)*2;bf.Q.value=8;ng.gain.value=.25;n.connect(bf);bf.connect(ng);ng.connect(g);
-      o.start(t);l.start(t);n.start(t);o.stop(t+dur+.3);l.stop(t+dur+.3);n.stop(t+dur+.3)}
-  };
-  function lead(th,m,t,dur,v){const k=th.lead;
-    if(k==='brass')I.brass(m,t,dur,.2*v);else if(k==='harp')I.harp(m,t,.2*v);else if(k==='bell')I.bell(m,t,.14*v);
-    else if(k==='flute')I.flute(m,t,dur,.15*v);else if(k==='organ')I.organ([m,m+12],t,dur,.05*v);}
-  function chordNotes(th,d,base){return [deg(th,d,base),deg(th,d+2,base),deg(th,d+4,base)]}
-  function pad(th,d,t,dur,v){const ms=chordNotes(th,d,th.root+12);if(th.pad==='choir')I.choir(ms,t,dur,.05*v);else I.strings(ms,t,dur,.055*v);
-    I.strings([th.root-12+SCALES[th.mode][((d%7)+7)%7]],t,dur,.05*v)}
-  function motifBar(th,bar,t,beat,v){let b=0;for(const [d,len] of th.motif){if(b>=bar*4&&b<bar*4+4){const m=deg(th,d,th.root+th.lift);lead(th,m,t+(b-bar*4)*beat,len*beat,v)}b+=len}}
-  function perc(th,t,beat,v=1,big=false){const p=th.perc;
-    if(p==='none')return;
-    if(p==='heart'){I.taiko(t,.55*v);I.taiko(t+beat*.5,.35*v);if(big)I.taiko(t+beat*2,.6*v)}
-    else if(p==='march'){I.taiko(t,.7*v);I.taiko(t+beat*2,.5*v);I.taiko(t+beat*3.5,.35*v);if(big){I.taiko(t+beat*3,.4*v);I.taiko(t+beat*3.75,.35*v)}}
-    else if(p==='sail'){I.taiko(t,.6*v);I.taiko(t+beat*1.5,.4*v);I.taiko(t+beat*3,.45*v)}
-    else if(p==='festive'){for(let k=0;k<4;k++)I.taiko(t+beat*k,(k%2?.35:.55)*v);for(let k=0;k<8;k++)I.wood(t+beat*k/2,.08*v)}
-    else if(p==='soft'){I.taiko(t,.35*v);I.taiko(t+beat*2,.25*v)}
-    if(th.tick)for(let k=0;k<4;k++)I.wood(t+beat*k,.09*v)}
-
-  /* 一個小節一個小節排程 */
-  function scheduleBar(){
-    const th=THEMES[st.id],beat=60/th.bpm,t=st.nextT,b=st.bar;
-    if(st.phase==='fanfare'){
-      if(b===0){I.swell(t,beat*4,.2);[2,2.5,3,3.25,3.5,3.75].forEach((x,k)=>I.taiko(t+beat*x,.35+k*.1));I.strings([th.root-12],t+beat*2,beat*2,.05)}
-      else if(b>=1&&b<=4){const i=b-1;if(b===1){I.crash(t);I.taiko(t,1.1)}
-        pad(th,th.prog[i],t,beat*4,1.25);motifBar(th,i,t,beat,1.1);perc(th,t,beat,1,true);
-        if(th.lead!=='brass'&&b%2===1)I.brass(deg(th,th.prog[i],th.root),t,beat*1.5,.12)}
-      else if(b===5){I.crash(t,.3);I.taiko(t,1.2);I.taiko(t+beat*.5,.7);
-        const ms=chordNotes(th,0,th.root+12);I.strings([...ms,th.root+24],t,beat*6,.075);I.choir(ms,t,beat*6,.05);I.brass(th.root,t,beat*3,.16);I.brass(th.root+7,t,beat*3,.12);
-        lead(th,deg(th,7,th.root+th.lift),t,beat*4,1)}
-      else if(b===6){/* 餘韻 */}
-      if(b>=6){st.phase='loop';st.bar=-1}
-    }else{
-      const i=((b%4)+4)%4;pad(th,th.prog[i],t,beat*4,.7);
-      if(th.lead!=='brass'||st.id==='hub'){const ms=chordNotes(th,th.prog[i],th.root+12);for(let k=0;k<8;k++)I.harp(ms[k%3]+(k>=4?12:0),t+beat*k/2,.07)}
-      perc(th,t,beat,.55);
-      const cyc=b%16;if(cyc>=8&&cyc<12)motifBar(th,cyc-8,t,beat,.55);
-    }
-    st.bar++;st.nextT+=beat*4;
-  }
-  function tick(){if(!st||!ctx)return;while(st.nextT<ctx.currentTime+.35)scheduleBar()}
-  function play(id,fanfare=true){
+  function stopCur(fade=1.4){if(!cur)return;const c=cur;cur=null;const t=ctx.currentTime;c.g.gain.cancelScheduledValues(t);c.g.gain.setValueAtTime(Math.max(c.g.gain.value,0.0001),t);c.g.gain.exponentialRampToValueAtTime(0.0001,t+fade);try{c.src.stop(t+fade+.05)}catch(e){}}
+  function play(id,fromLoop){
     if(!on||!init())return;
-    if(st&&st.id===id&&!fanfare)return;
-    newBus();
-    st={id,bar:0,phase:fanfare?'fanfare':'loop',nextT:ctx.currentTime+.08};
-    if(!timer)timer=setInterval(tick,90);
-    tick();emit();
+    if(cur&&cur.id===id&&fromLoop)return;
+    want=id;emit(!bufs[id]);
+    load(id).then(buf=>{
+      if(!on||want!==id)return;
+      stopCur(fromLoop?2:1.1);
+      const tr=TRACKS[id],src=ctx.createBufferSource(),g=ctx.createGain();
+      src.buffer=buf;src.loop=true;src.loopStart=tr.ls;src.loopEnd=Math.min(tr.le,buf.duration);
+      src.connect(g);g.connect(master);
+      const t=ctx.currentTime+.05;g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(1,t+(fromLoop?2.2:.25));
+      src.start(t,fromLoop?tr.ls:0);cur={id,src,g};emit(false);
+      if(!prefetched){prefetched=true;setTimeout(()=>{Object.keys(TRACKS).reduce((p,k)=>p.then(()=>on?load(k).catch(()=>{}):null),Promise.resolve())},2500)}
+    }).catch(()=>{if(want===id)emit(false)});
   }
   function setOn(v){
-    if(v){if(!init())return false;on=true;ctx.resume();master.gain.cancelScheduledValues(ctx.currentTime);master.gain.setTargetAtTime(vol*.9+0.0001,ctx.currentTime,.2)}
-    else{on=false;if(ctx){master.gain.setTargetAtTime(0.0001,ctx.currentTime,.25);setTimeout(()=>{if(!on){clearInterval(timer);timer=null;st=null;emit();ctx.suspend()}},900)}}
-    store.set('gta-music',on?'1':'0');emit();return true;
+    if(v){if(!init())return false;on=true;ctx.resume();const t=ctx.currentTime;master.gain.cancelScheduledValues(t);master.gain.setTargetAtTime(vol+0.0001,t,.15)}
+    else{on=false;want=null;if(ctx){stopCur(.8);master.gain.setTargetAtTime(0.0001,ctx.currentTime,.25);setTimeout(()=>{if(!on)ctx.suspend()},1200)}}
+    store.set('gta-music',on?'1':'0');emit(false);return true;
   }
   return{
     get on(){return on},get vol(){return vol},
-    supported:()=>!!(window.AudioContext||window.webkitAudioContext),
-    enable(id='hub'){if(setOn(true))play(id,true)},
+    supported:()=>!!AC,
+    enable(id='hub'){if(setOn(true))play(id,false)},
     disable(){setOn(false)},
-    island(id){if(on)play(id,true)},
-    home(){if(on)play('hub',false)},
-    setVol(v){vol=v;store.set('gta-vol',String(v));if(ctx&&on)master.gain.setTargetAtTime(vol*.9+0.0001,ctx.currentTime,.1)},
-    preview(id){if(!on)setOn(true);play(id,true)},
+    island(id){if(on)play(id,false)},
+    home(){if(on)play('hub',true)},
+    setVol(v){vol=v;store.set('gta-vol',String(v));if(ctx&&on)master.gain.setTargetAtTime(vol+0.0001,ctx.currentTime,.1)},
     onChange(f){listeners.push(f)}
   };
 })();
-
 
 /* ---------- 頁面清單 ---------- */
 const allTools=ISLANDS.flatMap(i=>i.tools);
@@ -709,7 +616,7 @@ $('#openSettings').onclick=()=>{
   const big=document.documentElement.classList.contains('big');
   $('#sheet').innerHTML=`<div class="grab"></div><div class="sheet-head"><div class="wrap"><h3 id="sheetTitle"><small>Settings</small>設定</h3><button class="x" aria-label="關閉">${svg('x')}</button></div></div>
     <div class="wrap sheet-body"><div class="set-row"><b>字級</b><div class="seg"><button class="${big?'':'on'}" data-size="0">標準</button><button class="${big?'on':''}" data-size="1">放大</button></div></div>
-    <div class="set-row"><b>樂章音量</b><input type="range" id="vol" min="0" max="1" step="0.05" value="${Music.vol}" aria-label="樂章音量"><span class="status">${Music.supported()?'音樂由瀏覽器即時合成，不需下載。':'這個瀏覽器不支援即時合成音樂。'}</span></div>
+    <div class="set-row"><b>樂章音量</b><input type="range" id="vol" min="0" max="1" step="0.05" value="${Music.vol}" aria-label="樂章音量"><span class="status">${Music.supported()?'原創管弦樂，每首約 1 分鐘，登島號角後無縫循環。':'這個瀏覽器不支援網頁音訊。'}</span></div>
     <div class="set-row"><b>小任務進度</b><span class="status num">已完成 ${done.size} / ${ISLANDS.length} 座島的小任務（只存在這台裝置）。</span></div></div>`;
   $('#mask').hidden=false;$('#sheet').hidden=false;
   $('#sheet .x').onclick=closeSheet;$('#sheet .x').focus();
@@ -721,8 +628,8 @@ $('#openSettings').onclick=()=>{
 (function(){
   const btn=$('#musicBtn'),go=$('#startVoyage');
   if(!Music.supported()){btn.hidden=true;go.querySelector('svg')?.remove();go.lastChild.textContent='啟航';go.onclick=()=>$('#stage').scrollIntoView({behavior:'smooth'});return}
-  Music.onChange(({on,title})=>{btn.classList.toggle('on',on);btn.setAttribute('aria-pressed',on);$('#musicLabel').textContent=on?'靜音':'樂章';
-    $('#nowPlaying').hidden=!on||!title;$('#nowText').textContent=title?'正在演奏《'+title+'》':'';});
+  Music.onChange(({on,title,loading})=>{btn.classList.toggle('on',on);btn.setAttribute('aria-pressed',on);$('#musicLabel').textContent=on?'靜音':'樂章';
+    $('#nowPlaying').hidden=!on||!title;$('#nowText').textContent=title?(loading?'正在載入《'+title+'》…':'正在演奏《'+title+'》'):'';});
   btn.onclick=()=>{if(Music.on)Music.disable();else Music.enable(current?current.id:'hub')};
   go.onclick=()=>{Music.enable('hub');$('#stage').scrollIntoView({behavior:'smooth',block:'center'})};
   if(store.get('gta-music')==='1'){const wake=e=>{if(e&&e.target&&e.target.closest&&e.target.closest('#musicBtn,#startVoyage,#playHere'))return;document.removeEventListener('pointerdown',wake,true);document.removeEventListener('keydown',wake,true);if(!Music.on)Music.enable(current?current.id:'hub')};document.addEventListener('pointerdown',wake,true);document.addEventListener('keydown',wake,true)}
