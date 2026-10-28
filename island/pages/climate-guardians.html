@@ -1,0 +1,806 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Climate Guardians 氣候守衛者</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+/* Layout: a one-column board game for phones. Sticky HUD (level, coins, stars, CO2 meter) on top, three tabs (Cards / City / Team), bottom sheets for each move. Single bright "board game" look, light only by choice. */
+:root{
+  --paper:#EEF7FF; --sky:#D6ECFF; --card:#FFFFFF;
+  --navy:#14284B; --ink-soft:#4B5D7E; --line:#C9D9EE;
+  --ocean:#2F6FEB; --leaf:#16A06E; --sun:#FFC43D; --ember:#FF6A4D; --grape:#7B61FF;
+  --good:#0E8A5C; --bad:#D63B22;
+  --display:'Lilita One','Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;
+  --body:'Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;
+  --r:16px; --r-sm:11px; --pop:0 4px 0 var(--navy);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{background:var(--paper);color:var(--navy)}
+body{font-family:var(--body);font-size:16px;line-height:1.6;background:linear-gradient(180deg,var(--sky) 0,var(--paper) 340px) no-repeat,var(--paper)}
+h1,h2,h3,h4{margin:0;line-height:1.25;text-wrap:balance}
+p{margin:0}
+button,input,select{font-family:inherit;color:inherit;font-size:inherit}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wide{max-width:1040px}
+.disp{font-family:var(--display);font-weight:400;letter-spacing:.01em}
+.num{font-family:var(--display);font-variant-numeric:tabular-nums}
+.muted{color:var(--ink-soft)} .small{font-size:.86rem}
+
+/* bilingual: EN first, Chinese smaller underneath */
+html[data-lang="en"] .zh, html[data-lang="zh"] .en{display:none!important}
+.bi{display:block}.bi>.en,.bi>.zh{display:block}
+html[data-lang="both"] .bi>.zh{font-size:.84em;color:var(--ink-soft);font-weight:500;margin-top:1px}
+html[data-lang="both"] .bi-inline>.zh::before{content:" ";}
+html[data-lang="both"] .bi-inline>.zh{font-size:.88em;opacity:.8}
+
+/* top bar */
+.topbar .wrap{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-block:12px}
+.logo{display:flex;align-items:center;gap:8px;font-family:var(--display);font-size:1.15rem;line-height:1.1}
+.logo small{display:block;font-family:var(--body);font-weight:900;font-size:.7rem;letter-spacing:.12em;color:var(--leaf)}
+.langs{display:inline-flex;background:var(--card);border:2px solid var(--navy);border-radius:999px;padding:2px}
+.langs button{border:0;background:transparent;padding:4px 10px;border-radius:999px;cursor:pointer;font-weight:700;font-size:.8rem}
+.langs button[aria-pressed="true"]{background:var(--navy);color:#fff}
+
+/* HUD */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--navy)}
+.hud{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--navy);color:#fff;box-shadow:0 4px 0 rgba(20,40,75,.15)}
+.hud .wrap{padding-block:8px 10px;display:grid;gap:7px}
+.hud-row{display:flex;align-items:center;gap:8px}
+.lv{background:var(--sun);color:var(--navy);font-family:var(--display);padding:2px 10px;border-radius:8px;font-size:1rem;white-space:nowrap}
+.pill{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.12);padding:2px 9px;border-radius:999px;font-family:var(--display);font-size:1.05rem;white-space:nowrap}
+.pill svg{width:16px;height:16px;flex:none}
+.hud-row .spacer{flex:1}
+.endbtn{border:0;background:var(--leaf);color:#fff;font-weight:900;padding:6px 12px;border-radius:10px;cursor:pointer;box-shadow:0 3px 0 #0B6A48;font-size:.86rem;white-space:nowrap}
+.endbtn:active{transform:translateY(2px);box-shadow:0 1px 0 #0B6A48}
+.meter{position:relative;height:16px;background:rgba(255,255,255,.14);border-radius:999px;overflow:visible}
+.meter i{position:absolute;left:0;top:0;bottom:0;border-radius:999px;transition:width .6s ease,background .6s}
+.meter .goal{position:absolute;left:50%;top:-4px;bottom:-4px;width:3px;background:var(--sun);border-radius:2px}
+.meter-label{display:flex;justify-content:space-between;font-size:.78rem;gap:8px}
+.meter-label b{font-family:var(--display);font-weight:400;font-size:.95rem}
+
+/* panels & buttons */
+main{padding-block:14px 40px}
+.panel{background:var(--card);border:2px solid var(--navy);border-radius:var(--r);box-shadow:var(--pop);padding:16px}
+.stack{display:grid;gap:16px}
+.tag{display:inline-block;font-weight:900;font-size:.72rem;letter-spacing:.1em;color:#fff;background:var(--ember);padding:2px 9px;border-radius:6px}
+.h2{font-family:var(--display);font-size:clamp(1.5rem,5vw,2rem);font-weight:400}
+.h3{font-family:var(--display);font-size:1.2rem;font-weight:400}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:2px solid var(--navy);background:var(--ocean);color:#fff;font-weight:900;padding:11px 18px;border-radius:12px;cursor:pointer;box-shadow:var(--pop);transition:transform .08s,box-shadow .08s;font-size:1rem;text-align:center;line-height:1.3}
+.btn:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 var(--navy)}
+.btn:disabled{background:#B9C6DA;color:#fff;cursor:not-allowed;box-shadow:none;border-color:#9AA9C2}
+.btn.green{background:var(--leaf)} .btn.sun{background:var(--sun);color:var(--navy)} .btn.ghost{background:var(--card);color:var(--navy)} .btn.red{background:var(--ember)}
+.btn.block{width:100%}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap}
+.btn-row>.btn{flex:1 1 140px}
+:focus-visible{outline:3px solid var(--grape);outline-offset:2px}
+
+/* home */
+.hero{display:grid;gap:12px}
+.hero h1{font-family:var(--display);font-weight:400;font-size:clamp(1.7rem,6.5vw,2.5rem);line-height:1.1}
+.map svg{width:100%;height:auto;display:block;border-radius:var(--r-sm);border:2px solid var(--navy)}
+.field{display:grid;gap:4px}
+.field label{font-weight:700;font-size:.88rem}
+.field input,.field select{border:2px solid var(--line);border-radius:10px;padding:9px 11px;background:#fff;width:100%;min-width:0}
+.field input:focus,.field select:focus{border-color:var(--ocean);outline:none}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.roles{display:grid;gap:8px}
+.role-row{display:grid;grid-template-columns:auto minmax(0,1fr) minmax(0,1.1fr);gap:10px;align-items:center}
+.role-row input{border:2px solid var(--line);border-radius:10px;padding:8px 10px;width:100%;min-width:0;background:#fff}
+.mono{width:32px;height:32px;border-radius:10px;display:grid;place-items:center;color:#fff;font-family:var(--display);font-size:1.05rem;border:2px solid var(--navy);flex:none}
+.steps{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.step{background:var(--paper);border-radius:var(--r-sm);padding:10px;display:grid;gap:4px;font-size:.88rem;line-height:1.45}
+.step b{font-family:var(--display);font-weight:400;font-size:1.3rem;color:var(--ocean)}
+
+/* tutorial */
+.dots{display:flex;gap:6px}
+.dots i{width:28px;height:8px;border-radius:99px;background:var(--line)}
+.dots i.on{background:var(--leaf)}
+.opts{display:grid;gap:8px}
+.opt{border:2px solid var(--navy);background:#fff;border-radius:12px;padding:11px 14px;text-align:left;cursor:pointer;font-family:var(--display);font-size:1.15rem;box-shadow:0 3px 0 var(--navy)}
+.opt.right{background:#D7F5E7;border-color:var(--good)}
+.opt.wrong{background:#FFE1DA;border-color:var(--bad)}
+.formula{background:var(--paper);border:2px dashed var(--line);border-radius:12px;padding:10px 12px;font-family:var(--display);font-size:1.02rem;display:grid;gap:4px;overflow-x:auto}
+.formula .q{color:var(--ember)}
+.formula .lbl{font-family:var(--body);font-size:.75rem;font-weight:700;color:var(--ink-soft)}
+
+/* tabs */
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--card);border:2px solid var(--navy);border-radius:14px;padding:4px;margin-bottom:14px}
+.tabs button{border:0;background:transparent;border-radius:10px;padding:8px 4px;font-weight:900;cursor:pointer;position:relative;line-height:1.2;font-size:.9rem}
+.tabs button[aria-selected="true"]{background:var(--navy);color:#fff}
+.tabs .dot{position:absolute;top:5px;right:10px;width:9px;height:9px;border-radius:50%;background:var(--ember);border:2px solid #fff}
+.news{display:flex;gap:10px;align-items:flex-start;background:#FFF4D6;border:2px solid var(--navy);border-radius:var(--r-sm);padding:10px 12px;margin-bottom:12px;font-size:.88rem;line-height:1.45}
+.news .tag{background:var(--navy);flex:none}
+
+/* cards */
+.hand{display:grid;gap:12px}
+@media(min-width:600px){.hand{grid-template-columns:1fr 1fr}}
+.gcard{border:2px solid var(--navy);border-radius:var(--r);background:var(--card);box-shadow:var(--pop);overflow:hidden;cursor:pointer;text-align:left;padding:0;display:flex;flex-direction:column;transition:transform .12s}
+.gcard:hover{transform:translateY(-2px)}
+.gcard:disabled{cursor:not-allowed;opacity:.55;transform:none}
+.gc-head{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:7px 12px;color:#fff;font-weight:900;font-size:.78rem;letter-spacing:.05em}
+.coin{display:inline-flex;align-items:center;gap:4px;background:#fff;color:var(--navy);border-radius:999px;padding:1px 8px 1px 4px;font-family:var(--display);font-size:.95rem;border:2px solid var(--navy)}
+.coin svg{width:15px;height:15px}
+.coin.income{background:#D7F5E7}
+.gc-body{padding:10px 12px 12px;display:grid;gap:6px}
+.gc-body h4{font-size:1.05rem;font-weight:900}
+.effect{font-family:var(--display);font-size:1rem;color:var(--ocean)}
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip{font-size:.72rem;font-weight:700;padding:1px 7px;border-radius:999px;border:1.5px solid}
+.chip.up{color:var(--good);border-color:#9FDDC2;background:#EDFBF4}
+.chip.down{color:var(--bad);border-color:#F7B9AC;background:#FFF2EF}
+.empty{text-align:center;padding:24px 12px;border:2px dashed var(--line);border-radius:var(--r);color:var(--ink-soft)}
+
+/* city */
+.tablebox{overflow-x:auto;margin-top:10px}
+table{border-collapse:collapse;width:100%;font-size:.86rem}
+th,td{padding:7px 6px;border-bottom:1.5px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left;white-space:normal}
+th{font-size:.74rem;color:var(--ink-soft);font-weight:700}
+td.n{font-family:var(--display);font-size:.98rem}
+tr.total td{border-bottom:0;font-weight:900}
+.neg{color:var(--good)}
+
+/* team */
+.member{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1.5px solid var(--line)}
+.member:last-child{border-bottom:0}
+.member .bar{height:8px;background:var(--paper);border-radius:99px;overflow:hidden;margin-top:4px}
+.member .bar i{display:block;height:100%;border-radius:99px;transition:width .5s}
+.member .val{font-family:var(--display);font-size:1.2rem}
+.mission{font-size:.78rem;line-height:1.4;margin-top:3px}
+.ok{color:var(--good);font-weight:700} .no{color:var(--bad);font-weight:700}
+.voice{display:flex;gap:10px;align-items:flex-start;padding:8px 0}
+.voice .mono{width:28px;height:28px;font-size:.9rem;border-radius:8px}
+.voice div{font-size:.9rem;line-height:1.5;min-width:0}
+
+/* sheet */
+.sheet-back{position:fixed;inset:0;z-index:40;background:rgba(20,40,75,.5);display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--card);width:min(640px,100%);max-height:88%;overflow:auto;border:2px solid var(--navy);border-bottom:0;border-radius:20px 20px 0 0;padding:16px max(16px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:grid;gap:12px;animation:up .22s ease}
+@media(min-width:700px){.sheet-back{align-items:center}.sheet{border-bottom:2px solid var(--navy);border-radius:20px}}
+@keyframes up{from{transform:translateY(40px)}to{transform:none}}
+.grab{width:44px;height:5px;border-radius:9px;background:var(--line);margin:0 auto}
+.sheet-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.x{border:2px solid var(--navy);background:#fff;border-radius:10px;width:34px;height:34px;cursor:pointer;font-weight:900;flex:none}
+.gainlose{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.gainlose>div{border-radius:10px;padding:8px 10px;font-size:.84rem;line-height:1.5}
+.gain{background:#EDFBF4}.lose{background:#FFF2EF}
+.vote-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:center;padding:6px 0}
+.yn{display:flex;gap:6px}
+.yn button{border:2px solid var(--navy);background:#fff;border-radius:10px;padding:6px 12px;font-weight:900;cursor:pointer;min-width:58px}
+.yn button[aria-pressed="true"].y{background:var(--leaf);color:#fff}
+.yn button[aria-pressed="true"].n{background:var(--ember);color:#fff}
+.tally{font-family:var(--display);font-size:1.05rem;display:flex;gap:14px;flex-wrap:wrap}
+.signs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.signs button{border:2px solid var(--navy);background:#fff;border-radius:12px;padding:10px;font-weight:900;cursor:pointer;line-height:1.3}
+.signs button[aria-pressed="true"]{background:var(--navy);color:#fff}
+.ans{display:flex;gap:8px;align-items:center}
+.ans input{flex:1;min-width:0;border:2px solid var(--navy);border-radius:12px;padding:10px 12px;font-family:var(--display);font-size:1.3rem;background:#fff}
+.ans span{font-family:var(--display);font-size:1.1rem}
+.fb{border-radius:10px;padding:9px 12px;font-size:.9rem;font-weight:500}
+.fb.good{background:#D7F5E7;color:#085C3D}.fb.bad{background:#FFE1DA;color:#8C2512}.fb.hint{background:#FFF1C9;color:#6B4A00}
+.report{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rbox{background:var(--paper);border-radius:12px;padding:10px}
+.rbox .v{font-family:var(--display);font-size:1.5rem}
+.rbox .k{font-size:.75rem;color:var(--ink-soft);font-weight:700}
+
+/* toast */
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:50;width:min(420px,calc(100% - 32px));background:var(--navy);color:#fff;border-radius:16px;padding:12px 14px;box-shadow:0 8px 24px rgba(20,40,75,.35);display:grid;gap:4px;animation:pop .35s cubic-bezier(.2,1.4,.4,1)}
+.toast .big{font-family:var(--display);font-size:1.9rem;line-height:1}
+.toast .big.g{color:#7CF0BF}.toast .big.r{color:#FFB3A3}
+.toast .q{font-size:.86rem;opacity:.9;line-height:1.45}
+@keyframes pop{from{transform:translate(-50%,20px) scale(.9);opacity:0}to{transform:translate(-50%,0);opacity:1}}
+
+/* final */
+.medal{display:flex;gap:14px;align-items:center}
+.disc{width:78px;height:78px;border-radius:50%;display:grid;place-items:center;font-family:var(--display);font-size:2rem;color:#fff;border:3px solid var(--navy);box-shadow:var(--pop);flex:none}
+.mrow{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1.5px solid var(--line);font-size:.9rem;align-items:center}
+.mrow:last-child{border-bottom:0}
+.prompts{margin:6px 0 0;padding-left:1.2em;display:grid;gap:8px}
+.code{font-family:ui-monospace,Menlo,monospace;font-size:.75rem;word-break:break-all;background:var(--paper);border:2px dashed var(--line);border-radius:10px;padding:8px;user-select:all}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:60;width:100%;height:100%}
+
+/* teacher */
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.tdots{display:flex;gap:3px}
+.tdots i{width:18px;height:18px;border-radius:5px;display:grid;place-items:center;font-style:normal;font-family:var(--display);font-size:.7rem;color:#fff}
+.teacher table td,.teacher table th{white-space:nowrap}
+textarea{width:100%;min-height:70px;border:2px solid var(--line);border-radius:10px;padding:8px;font-family:ui-monospace,Menlo,monospace;font-size:.78rem;background:#fff;color:var(--navy)}
+
+footer .wrap{padding-block:18px 26px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:.84rem;color:var(--ink-soft)}
+footer b{color:var(--navy)}
+.linkbtn{background:none;border:0;color:var(--ocean);font-weight:900;cursor:pointer;text-decoration:underline;padding:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.blades{transform-box:fill-box;transform-origin:center;animation:spin 3.5s linear infinite}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<header class="topbar">
+  <div class="wrap">
+    <div class="logo"><svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><path d="M17 2 L30 7 V17 C30 25 24 30 17 32 C10 30 4 25 4 17 V7 Z" fill="#16A06E" stroke="#14284B" stroke-width="2.5"/><path d="M11 19 C11 13 16 10 23 10 C23 17 20 22 13 22 Z" fill="#FFC43D" stroke="#14284B" stroke-width="2"/></svg><span>Climate Guardians<small>氣候守衛者</small></span></div>
+    <div class="langs" role="group" aria-label="Language">
+      <button type="button" data-lang="both" aria-pressed="true">EN+中</button><button type="button" data-lang="en" aria-pressed="false">EN</button><button type="button" data-lang="zh" aria-pressed="false">中</button>
+    </div>
+  </div>
+</header>
+
+<div class="hud" id="hud" hidden>
+  <div class="wrap">
+    <div class="hud-row">
+      <span class="lv" id="hudLv">LV1 · 2030</span>
+      <span class="pill" title="Coins"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="7" fill="#FFC43D" stroke="#fff" stroke-width="1.5"/><text x="8" y="11.5" font-size="9" text-anchor="middle" fill="#14284B" font-family="Lilita One">$</text></svg><span id="hudCoins">50</span></span>
+      <span class="pill" title="Guardian Stars"><svg viewBox="0 0 16 16"><path d="M8 1l2.1 4.4 4.8.6-3.5 3.3.9 4.7L8 11.8 3.7 14l.9-4.7L1.1 6l4.8-.6z" fill="#FFC43D"/></svg><span id="hudStars">0</span></span>
+      <span class="spacer"></span>
+      <button class="endbtn" id="endBtn" type="button">End year ▶</button>
+    </div>
+    <div class="meter" aria-hidden="true"><i id="meterBar"></i><span class="goal"></span></div>
+    <div class="meter-label"><span><b id="hudNet">251,000</b> t CO₂e</span><span id="hudCut">−0% · goal −50%</span></div>
+  </div>
+</div>
+
+<main class="wrap" id="app">
+
+  <!-- HOME -->
+  <section id="scr-home" class="stack">
+    <div class="panel hero">
+      <span><span class="tag">MISSION 任務</span></span>
+      <h1><span class="bi"><span class="en">Cut Riverbend’s CO₂ in half by 2050</span><span class="zh">2050 年前讓河灣市碳排放減半</span></span></h1>
+      <p class="muted small"><span class="bi"><span class="en">Your group is the city’s Climate Committee. Six roles, three years, one city. Test every plan with Activity Data × Emission Factor before you vote.</span><span class="zh">你們這組就是市政府的氣候變遷委員會：六個角色、三個年度、一座城市。每個方案都要先用「活動數據 × 排放係數」算過，再表決。</span></span></p>
+      <div class="map" id="homeMap"></div>
+    </div>
+
+    <div class="panel stack">
+      <h2 class="h3"><span class="bi"><span class="en">1. Set up your team</span><span class="zh">1. 建立小組</span></span></h2>
+      <div class="two">
+        <div class="field"><label for="inClass"><span class="bi-inline"><span class="en">Class</span><span class="zh">班級</span></span></label><input id="inClass" placeholder="e.g. 208" maxlength="12" autocomplete="off"></div>
+        <div class="field"><label for="inGroup"><span class="bi-inline"><span class="en">Group</span><span class="zh">組別</span></span></label><select id="inGroup"></select></div>
+      </div>
+      <div class="roles" id="roleInputs"></div>
+      <p class="small muted"><span class="bi"><span class="en">Only 4 or 5 players? One person can take two roles. Type the same name twice.</span><span class="zh">只有 4–5 人？一人可以兼兩個角色，輸入同一個名字即可。</span></span></p>
+    </div>
+
+    <div class="panel stack">
+      <h2 class="h3"><span class="bi"><span class="en">2. How to play</span><span class="zh">2. 玩法</span></span></h2>
+      <div class="steps">
+        <div class="step"><b>1</b><span class="bi"><span class="en">Each year you draw 5 policy cards and get 50 coins.</span><span class="zh">每年抽 5 張政策卡，獲得 50 枚金幣。</span></span></div>
+        <div class="step"><b>2</b><span class="bi"><span class="en">Pick a card. All six roles vote. Tie? The Mayor decides.</span><span class="zh">選一張卡，六個角色投票；平手由市長決定。</span></span></div>
+        <div class="step"><b>3</b><span class="bi"><span class="en">Calculate the CO₂ change. Right answer: ★ + 5 coins.</span><span class="zh">算出排放變化，答對得 ★ 與 5 枚金幣。</span></span></div>
+        <div class="step"><b>4</b><span class="bi"><span class="en">After 2050, see your medal and each role’s mission.</span><span class="zh">2050 年結算：看獎章與每個角色的任務。</span></span></div>
+      </div>
+      <p class="fb hint" id="homeErr" hidden></p>
+      <div class="btn-row">
+        <button class="btn green" type="button" id="btnTutorial"><span class="bi-inline"><span class="en">Start with training</span><span class="zh">從教學關開始</span></span> ▶</button>
+        <button class="btn ghost" type="button" id="btnSkip"><span class="bi-inline"><span class="en">Skip training</span><span class="zh">跳過教學</span></span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TUTORIAL -->
+  <section id="scr-tut" hidden></section>
+
+  <!-- GAME -->
+  <section id="scr-game" hidden>
+    <div class="tabs" role="tablist">
+      <button type="button" role="tab" id="tab-cards" aria-selected="true"><span class="bi"><span class="en">Cards</span><span class="zh">政策卡</span></span></button>
+      <button type="button" role="tab" id="tab-city" aria-selected="false"><span class="bi"><span class="en">City</span><span class="zh">城市</span></span><span class="dot" id="cityDot" hidden></span></button>
+      <button type="button" role="tab" id="tab-team" aria-selected="false"><span class="bi"><span class="en">Team</span><span class="zh">團隊</span></span><span class="dot" id="teamDot" hidden></span></button>
+    </div>
+    <div id="pane-cards"></div>
+    <div id="pane-city" hidden></div>
+    <div id="pane-team" hidden></div>
+  </section>
+
+  <!-- FINAL -->
+  <section id="scr-final" hidden></section>
+
+  <!-- TEACHER -->
+  <section id="scr-teacher" class="teacher" hidden></section>
+</main>
+
+<footer><div class="wrap"><span><b>Gina &amp; 宏孝的SDGs多元選修課</b> · Climate Guardians</span><button class="linkbtn" type="button" id="btnTeacher">教師端 Teacher view</button></div></footer>
+
+<div class="sheet-back" id="sheet" hidden role="dialog" aria-modal="true"><div class="sheet" id="sheetBody"></div></div>
+<div class="toast" id="toast" hidden role="status" aria-live="polite"></div>
+<canvas id="confetti" hidden></canvas>
+
+<script>
+/* ===== helpers ===== */
+const $=id=>document.getElementById(id);
+const B=(en,zh)=>`<span class="bi"><span class="en">${en}</span><span class="zh">${zh}</span></span>`;
+const BI=(en,zh)=>`<span class="bi-inline"><span class="en">${en}</span><span class="zh">${zh}</span></span>`;
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=(n,sign)=>{const r=Math.round(n);return (r<0?'−':(sign&&r>0?'+':''))+Math.abs(r).toLocaleString('en-US');};
+const fmtEF=n=>(n<0?'−':'')+Math.abs(Math.round(n*100)/100);
+const clone=o=>JSON.parse(JSON.stringify(o));
+const COIN=`<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="#FFC43D" stroke="#14284B" stroke-width="1.5"/></svg>`;
+
+/* ===== data ===== */
+const BASE={
+  elec:{en:'Electricity',zh:'電力',adU:'kWh',efU:'kg CO₂e/kWh',conv:1000,ad:400e6,ef:0.5,color:'#E8A400'},
+  fuel:{en:'Cars',zh:'汽車',adU:'L',efU:'kg CO₂e/L',conv:1000,ad:30e6,ef:2.3,color:'#FF6A4D'},
+  waste:{en:'Landfill',zh:'掩埋垃圾',adU:'t',efU:'t CO₂e/t',conv:1,ad:20000,ef:0.6,color:'#A0663A'},
+  rice:{en:'Rice paddies',zh:'水稻田',adU:'ha',efU:'t CO₂e/ha',conv:1,ad:2000,ef:5,color:'#5FA834'},
+  forest:{en:'Forest',zh:'森林',adU:'ha',efU:'t CO₂e/ha',conv:1,ad:5000,ef:-8,color:'#16A06E'}
+};
+const BASELINE=251000, TARGET=50, YEARS=[2030,2040,2050], HAND=5;
+const ROLES={
+  mayor:{m:'M',c:'#2F6FEB',en:'Mayor',zh:'市長',mission:['Average support 60+ and CO₂ cut 40%+','平均支持度 ≥ 60，且減碳 ≥ 40%'],check:g=>avgSat(g)>=60&&cut(g)>=40},
+  biz:{m:'B',c:'#E8A400',en:'Business Owner',zh:'企業家',mission:['Business support 65+ and CO₂ cut 30%+','企業支持度 ≥ 65，且減碳 ≥ 30%'],check:g=>g.sat.biz>=65&&cut(g)>=30},
+  act:{m:'A',c:'#16A06E',en:'Activist',zh:'環保行動者',mission:['CO₂ cut 55% or more','減碳 ≥ 55%'],check:g=>cut(g)>=55},
+  farmer:{m:'F',c:'#5FA834',en:'Farmer',zh:'農民',mission:['Farmer support 60+ and 1,800+ ha of rice paddies','農民支持度 ≥ 60，且稻田 ≥ 1,800 公頃'],check:g=>g.sat.farmer>=60&&g.s.rice.ad>=1800},
+  plan:{m:'P',c:'#7B61FF',en:'Urban Planner',zh:'都市規劃師',mission:['Forest 5,000+ ha and CO₂ cut 40%+','森林 ≥ 5,000 公頃，且減碳 ≥ 40%'],check:g=>g.s.forest.ad>=5000&&cut(g)>=40},
+  res:{m:'R',c:'#FF6A4D',en:'Resident',zh:'居民代表',mission:['Resident support 70+','居民支持度 ≥ 70'],check:g=>g.sat.res>=70}
+};
+const RK=Object.keys(ROLES);
+const CARDS=[
+ {id:'solar',cost:30,tag:'elec',en:'Rooftop Solar',zh:'屋頂太陽能板',eff:'−80M kWh',
+  d:['Solar panels on city roofs. The city buys 80 million kWh less from the grid.','市區屋頂裝太陽能板，向電網購電減少 8,000 萬度。'],
+  fx:[{s:'elec',k:'ad',d:-80e6}],sat:{biz:5,act:10,res:8,plan:5,mayor:3},
+  v:[['res','Lower electricity bills? Yes, please!','電費變便宜？太好了！'],['act','Clean energy from our own roofs. Great start!','用自家屋頂發乾淨的電，好的開始！']]},
+ {id:'wind',cost:40,tag:'elec',en:'Offshore Wind Farm',zh:'離岸風電場',eff:'EF −0.1 kg/kWh',
+  d:['Wind turbines off the west coast make the grid cleaner. The emission factor drops by 0.1 kg per kWh.','在西岸外海興建風機，電力變乾淨：排放係數每度降低 0.1 公斤。'],
+  fx:[{s:'elec',k:'ef',d:-0.1}],sat:{biz:5,act:8,res:-3,plan:3,mayor:-5},
+  v:[['mayor','Expensive, but the winter monsoon gives us strong wind.','很貴，但冬季季風帶來強勁風力。'],['res','Will my electricity price go up?','電價會不會漲？']]},
+ {id:'led',cost:15,tag:'elec',en:'LED & Smart Meters',zh:'節能燈具與智慧電表',eff:'−40M kWh',
+  d:['Homes and shops switch to LED lights and track their power use.','住家與商店換裝 LED 並追蹤用電，用電減少 4,000 萬度。'],
+  fx:[{s:'elec',k:'ad',d:-40e6}],sat:{res:5,biz:3,act:3,mayor:3},
+  v:[['biz','Cheaper lighting means lower costs for my shop.','照明省電，店裡成本也降低。']]},
+ {id:'ebus',cost:25,tag:'fuel',en:'Electric Bus Network',zh:'電動公車路網',eff:'−9M L · +12M kWh',
+  d:['Electric buses take people out of cars. Gasoline falls by 9 million L, but electricity rises by 12 million kWh.','電動公車讓民眾少開車：汽油減少 900 萬公升，但用電增加 1,200 萬度。'],
+  fx:[{s:'fuel',k:'ad',d:-9e6},{s:'elec',k:'ad',d:12e6}],sat:{res:8,act:8,biz:-2,plan:6,mayor:2},
+  v:[['plan','Buses need power too. Check the net result!','公車也要用電，要看淨效果！'],['res','No more riding a scooter to school in the rain!','下雨天不用再騎機車上學了！']]},
+ {id:'bike',cost:8,tag:'fuel',en:'Bike Lanes & Car-free Streets',zh:'自行車道與無車街區',eff:'−3M L',
+  d:['Some downtown streets become bike lanes and walking zones.','部分市中心道路改為自行車道與步行區，汽油減少 300 萬公升。'],
+  fx:[{s:'fuel',k:'ad',d:-3e6}],sat:{biz:-10,res:-4,act:10,plan:6},
+  v:[['biz','If customers can’t park, will they still come?','客人不能停車，還會來店裡嗎？'],['act','Quieter streets and cleaner air!','街道更安靜、空氣更乾淨！']]},
+ {id:'compost',cost:8,tag:'waste',en:'Food Waste Composting',zh:'廚餘堆肥',eff:'−8,000 t waste',
+  d:['Food waste becomes compost for farms instead of going to the landfill.','廚餘做成堆肥給農田用，掩埋垃圾減少 8,000 公噸。'],
+  fx:[{s:'waste',k:'ad',d:-8000}],sat:{farmer:8,res:-5,act:5},
+  v:[['farmer','Free compost makes my soil healthier!','免費堆肥讓土壤更健康！'],['res','Sorting food waste every day takes time.','每天分類廚餘要多花時間。']]},
+ {id:'awd',cost:6,tag:'rice',en:'Smart Rice Irrigation',zh:'稻田乾濕交替灌溉',eff:'EF −2 t/ha',
+  d:['Paddies dry out between floodings. More oxygen in the soil means less methane.','稻田在灌水之間適度曬田，土壤含氧增加、甲烷減少：排放係數每公頃降 2 噸。'],
+  fx:[{s:'rice',k:'ef',d:-2}],sat:{farmer:5,act:4,plan:2},
+  v:[['farmer','We save water too, which helps in the dry winter.','還能省水，冬季枯水期很有幫助。']]},
+ {id:'reforest',cost:12,tag:'forest',en:'Reforest the Hillsides',zh:'山坡地造林',eff:'+1,000 ha forest',
+  d:['Plant native trees on unused hillsides. A bigger forest is a bigger carbon sink.','在閒置山坡種原生樹種，森林變大、碳匯變大。'],
+  fx:[{s:'forest',k:'ad',d:1000}],sat:{farmer:-8,act:12,plan:8,res:3},
+  v:[['farmer','My family planned to farm some of that hillside.','那片山坡有些是我家要耕作的地。'],['plan','Trees also prevent landslides in typhoons.','樹林還能在颱風時減少土石流。']]},
+ {id:'agri',cost:20,tag:'elec',en:'Solar Farm on Paddies',zh:'農地種電',eff:'−60M kWh · −300 ha rice',
+  d:['Solar panels cover 300 ha of rice paddies. Less grid power, but less farmland.','在 300 公頃稻田上架太陽能板：電網購電減少 6,000 萬度，但稻田也變少。'],
+  fx:[{s:'elec',k:'ad',d:-60e6},{s:'rice',k:'ad',d:-300}],sat:{farmer:-10,biz:6,act:2,plan:-3,res:2},
+  v:[['farmer','Where will our rice come from? Food matters too.','那我們的米從哪裡來？糧食也很重要。'],['biz','Green power helps us win global orders.','綠電幫我們接到國際訂單。']]},
+ {id:'green',cost:10,tag:'elec',en:'Green Roofs & Street Trees',zh:'綠屋頂與行道樹',eff:'−10M kWh',
+  d:['Plants cool the city and reduce the urban heat island, so people use less air-conditioning.','綠化讓城市降溫、減緩都市熱島效應，冷氣用電減少 1,000 萬度。'],
+  fx:[{s:'elec',k:'ad',d:-10e6}],sat:{res:8,plan:8,act:4,biz:-2},
+  v:[['res','Our street feels 2°C cooler in summer!','夏天街上涼了 2 度！']]},
+ {id:'park',cost:-40,tag:'forest',en:'Industrial Park in the Forest',zh:'森林開發工業園區',eff:'−1,000 ha forest · +40 coins',
+  d:['Clear forest for new factories. The city earns 40 coins in taxes but loses part of its carbon sink.','砍森林蓋工廠：市府多 40 枚金幣稅收，但碳匯變小。'],
+  fx:[{s:'forest',k:'ad',d:-1000}],sat:{biz:15,mayor:10,res:5,act:-20,farmer:-5,plan:-8},
+  v:[['biz','New factories mean new jobs for young people.','新工廠代表年輕人有新工作。'],['act','You’re cutting our carbon sink for quick money!','為了短期利益砍掉我們的碳匯！']]}
+];
+const EVENTS=[
+ {en:'Heat Wave',zh:'熱浪來襲',d:['A record heat wave! Air-conditioning pushes electricity up by 20 million kWh.','破紀錄熱浪！冷氣讓用電增加 2,000 萬度。'],fx:[{s:'elec',k:'ad',d:20e6}],sat:{res:-5}},
+ {en:'Typhoon',zh:'颱風侵襲',d:['A strong typhoon knocks down trees on the eastern slopes: forest −300 ha.','強颱吹倒東側山坡樹木：森林減少 300 公頃。'],fx:[{s:'forest',k:'ad',d:-300}],sat:{farmer:-5,plan:-3}},
+ {en:'Population Growth',zh:'人口成長',d:['New residents arrive: gasoline +3 million L and landfill waste +2,000 t.','新居民遷入：汽油增加 300 萬公升、垃圾增加 2,000 公噸。'],fx:[{s:'fuel',k:'ad',d:3e6},{s:'waste',k:'ad',d:2000}],sat:{plan:-3}}
+];
+
+/* ===== model ===== */
+let G=null;
+const emis=s=>s.ad*s.ef/s.conv;
+const net=g=>Object.values(g.s).reduce((a,s)=>a+emis(s),0);
+const cut=g=>(BASELINE-net(g))/BASELINE*100;
+const avgSat=g=>RK.reduce((a,k)=>a+g.sat[k],0)/RK.length;
+const card=id=>CARDS.find(c=>c.id===id);
+const who=(g,k)=>g.names[k]||ROLES[k].en;
+const fxDelta=(g,f)=>{const s=g.s[f.s];return f.k==='ad'?f.d*s.ef/s.conv:s.ad*f.d/s.conv;};
+function fxLine(g,f,show){
+  const s=g.s[f.s];
+  const left=f.k==='ad'?`${fmt(f.d,true)} ${s.adU} × ${fmtEF(s.ef)} ${s.efU}`:`${fmt(s.ad)} ${s.adU} × (${f.d>0?'+':'−'}${Math.abs(f.d)}) ${s.efU}`;
+  return `<div><span class="lbl">${BI(s.en,s.zh)}</span><br>${left}${s.conv>1?' ÷ 1,000':''} = ${show?`<b>${fmt(fxDelta(g,f),true)} t</b>`:'<span class="q">? t</span>'}</div>`;
+}
+const applyFx=(g,l)=>l.forEach(f=>{g.s[f.s][f.k]=Math.round((g.s[f.s][f.k]+f.d)*1000)/1000;});
+const applySat=(g,o)=>Object.entries(o).forEach(([k,v])=>{g.sat[k]=Math.max(0,Math.min(100,g.sat[k]+v));});
+function newGame(cls,grp,names){return {cls,grp,names,round:0,budget:50,stars:0,s:clone(BASE),sat:Object.fromEntries(RK.map(k=>[k,60])),used:[],hand:[],voices:[],history:[],roundStartNet:BASELINE,acted:false,event:null,tab:'cards',submitted:null};}
+function drawHand(g){const pool=CARDS.filter(c=>!g.used.includes(c.id)).map(c=>c.id);for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]];}g.hand=pool.slice(0,HAND);}
+
+/* ===== language ===== */
+function setLang(l){document.documentElement.setAttribute('data-lang',l);document.querySelectorAll('.langs button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lang===l)));try{localStorage.setItem('cg-lang',l);}catch(e){}}
+document.querySelectorAll('.langs button').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
+try{setLang(localStorage.getItem('cg-lang')||'both');}catch(e){setLang('both');}
+
+/* ===== map ===== */
+const TREES=(()=>{const p=[];for(let y=112;y<=238;y+=18)for(let x=298;x<=392;x+=15)p.push([x+((y/18)%2?7:0),y]);return p.sort((a,b)=>b[0]-a[0]);})();
+function drawMap(g){
+  const s=g.s,u=id=>g.used.includes(id),o=[];
+  o.push(`<svg viewBox="0 0 400 250" role="img" aria-label="Map of Riverbend City">`);
+  o.push(`<rect width="400" height="250" fill="#E2F6D3"/><path d="M0 0 H62 C72 60 54 120 66 170 C72 210 60 230 64 250 H0Z" fill="#8FD0FF"/>`);
+  o.push(`<path d="M282 250 L292 150 L318 70 L340 100 L368 38 L400 72 V250Z" fill="#BFE5A8"/><path d="M362 50 L368 38 L376 49Z" fill="#fff"/>`);
+  o.push(`<path d="M372 66 C330 110 300 122 262 132 S172 150 142 168 S92 186 64 192" stroke="#6CC1FF" stroke-width="8" fill="none" stroke-linecap="round"/>`);
+  const t=Math.max(0,Math.min(TREES.length,Math.round(s.forest.ad/5000*24)));
+  for(let i=0;i<t;i++){const[x,y]=TREES[i];o.push(`<circle cx="${x}" cy="${y}" r="6.5" fill="${i>=24?'#45C98E':'#16A06E'}" stroke="#14284B" stroke-width=".8"/>`);}
+  if(u('park'))[[296,196],[312,212],[298,226],[318,232]].forEach(([x,y])=>o.push(`<rect x="${x}" y="${y}" width="14" height="10" fill="#8C95A8" stroke="#14284B" stroke-width=".8"/>`));
+  const tiles=Math.round(s.rice.ad/100),sol=u('agri')?3:0;
+  for(let i=0;i<20;i++){const x=196+(i%5)*17,y=150+Math.floor(i/5)*20;
+    if(i<tiles)o.push(`<rect x="${x}" y="${y}" width="14" height="16" rx="2" fill="${u('awd')?'#A8E06A':'#6CC24A'}"/>`);
+    else if(i<tiles+sol)o.push(`<rect x="${x}" y="${y}" width="14" height="16" rx="2" fill="#2F4FA8"/><line x1="${x}" y1="${y+8}" x2="${x+14}" y2="${y+8}" stroke="#A9C6FF"/>`);
+    else o.push(`<rect x="${x}" y="${y}" width="14" height="16" rx="2" fill="#E9DFC4"/>`);}
+  o.push(`<rect x="66" y="203" width="222" height="6" fill="#8E9AB0"/>`);
+  if(u('bike'))o.push(`<line x1="70" y1="214" x2="285" y2="214" stroke="#16A06E" stroke-width="3" stroke-dasharray="6 4"/>`);
+  if(u('ebus'))[[132,201],[236,201]].forEach(([x,y])=>o.push(`<rect x="${x}" y="${y}" width="18" height="9" rx="2" fill="#FFC43D" stroke="#14284B" stroke-width=".8"/>`));
+  const cols=['#FFD27A','#A9C8FF','#FFB38A','#C9B8FF','#9EE3C4'];
+  [[108,150,14],[124,128,14],[140,140,16],[158,118,14],[174,146,12]].forEach(([x,y,w],i)=>{
+    o.push(`<rect x="${x}" y="${y}" width="${w}" height="${200-y}" fill="${cols[i]}" stroke="#14284B" stroke-width=".8"/>`);
+    if(u('solar'))o.push(`<rect x="${x}" y="${y-4}" width="${w}" height="4" fill="#2F4FA8"/>`);
+    if(u('green'))o.push(`<rect x="${x}" y="${y-(u('solar')?8:4)}" width="${w}" height="4" fill="#16A06E"/>`);});
+  if(u('green'))[[100,196],[194,196],[128,216],[178,216]].forEach(([x,y])=>o.push(`<circle cx="${x}" cy="${y}" r="4" fill="#16A06E"/>`));
+  const ratio=Math.max(0,Math.min(1.2,net(g)/BASELINE));
+  [[72,222],[90,218]].forEach(([x,y])=>{o.push(`<rect x="${x}" y="${y}" width="16" height="${244-y}" fill="#8C95A8" stroke="#14284B" stroke-width=".8"/><rect x="${x+10}" y="${y-14}" width="4" height="14" fill="#5D6882"/><circle cx="${x+12}" cy="${y-20}" r="${4+ratio*5}" fill="#5B4A3A" opacity="${(.15+ratio*.5).toFixed(2)}"/>`);});
+  if(u('wind'))[[22,70],[42,112],[22,152]].forEach(([x,y])=>o.push(`<line x1="${x}" y1="${y}" x2="${x}" y2="${y+34}" stroke="#fff" stroke-width="2.5"/><g class="blades"><line x1="${x}" y1="${y}" x2="${x}" y2="${y-11}" stroke="#fff" stroke-width="2.5"/><line x1="${x}" y1="${y}" x2="${x+9.5}" y2="${y+5.5}" stroke="#fff" stroke-width="2.5"/><line x1="${x}" y1="${y}" x2="${x-9.5}" y2="${y+5.5}" stroke="#fff" stroke-width="2.5"/></g>`));
+  const lab=(x,y,t,a='start')=>o.push(`<text x="${x}" y="${y}" font-size="9.5" font-weight="700" fill="#14284B" text-anchor="${a}" font-family="Noto Sans TC,sans-serif">${t}</text>`);
+  lab(8,16,'Sea 海');lab(66,248,'Port 港區');lab(146,110,'City 市中心','middle');lab(238,144,'Paddies 稻田','middle');lab(318,60,'Forest 森林','middle');
+  o.push(`<rect width="400" height="250" fill="#5B4A3A" opacity="${(ratio*.2).toFixed(3)}" pointer-events="none"/></svg>`);
+  return o.join('');
+}
+
+/* ===== screens ===== */
+const SCREENS=['scr-home','scr-tut','scr-game','scr-final','scr-teacher'];
+function show(id){SCREENS.forEach(s=>$(s).hidden=s!==id);$('hud').hidden=id!=='scr-game';window.scrollTo({top:0});}
+
+/* ===== home ===== */
+$('inGroup').innerHTML=Array.from({length:10},(_,i)=>`<option value="${i+1}">${i+1}</option>`).join('');
+$('roleInputs').innerHTML=RK.map(k=>{const r=ROLES[k];return `<div class="role-row"><span class="mono" style="background:${r.c}">${r.m}</span><label for="name-${k}" style="font-weight:700;font-size:.92rem">${B(r.en,r.zh)}</label><input id="name-${k}" maxlength="16" placeholder="Name 姓名" autocomplete="off"></div>`;}).join('');
+$('homeMap').innerHTML=drawMap(newGame('', '', {}));
+function readSetup(){
+  const names={};RK.forEach(k=>{const v=$('name-'+k).value.trim();if(v)names[k]=v;});
+  return {cls:$('inClass').value.trim(),grp:$('inGroup').value,names};
+}
+$('btnTutorial').addEventListener('click',()=>{const s=readSetup();G=newGame(s.cls,s.grp,s.names);tut(0);});
+$('btnSkip').addEventListener('click',()=>{const s=readSetup();G=newGame(s.cls,s.grp,s.names);beginRound();});
+
+/* ===== tutorial ===== */
+const TUT=[
+ {q:['Training: LED lights cut electricity use by 40 million kWh. Which number is the Activity Data?','教學關：LED 讓用電減少 4,000 萬度。哪一個是「活動數據」？'],
+  f:'−40,000,000 kWh × 0.5 kg CO₂e/kWh ÷ 1,000 = ?',opts:['−40,000,000 kWh','0.5 kg CO₂e/kWh','1,000'],a:0,
+  why:['Activity data = how much we do. Here it is the change in electricity use.','活動數據就是「做了多少」，這裡是用電量的變化。']},
+ {q:['Step 2: Multiply by the emission factor. −40,000,000 × 0.5 = ?','第 2 步：乘上排放係數。−40,000,000 × 0.5 = ？'],
+  f:'−40,000,000 kWh × 0.5 kg/kWh = ? kg',opts:['−20,000,000 kg','−80,000,000 kg','−40,000,000 kg'],a:0,
+  why:['Half of 40 million is 20 million. The answer is in kilograms.','4,000 萬的一半是 2,000 萬，單位是公斤。']},
+ {q:['Step 3: Change kilograms into tonnes. −20,000,000 kg ÷ 1,000 = ?','第 3 步：把公斤換成公噸。−20,000,000 kg ÷ 1,000 = ？'],
+  f:'−20,000,000 kg ÷ 1,000 = ? t',opts:['−20,000 t','−20,000,000 t','−2,000 t'],a:0,
+  why:['1 tonne = 1,000 kg. The city emits 20,000 t less CO₂e. Less CO₂ = choose “Less” in the game.','1 公噸 = 1,000 公斤。全市少排 20,000 噸，遊戲中要選「減少」。']}
+];
+function tut(i){
+  show('scr-tut');
+  if(i>=TUT.length){
+    $('scr-tut').innerHTML=`<div class="panel stack"><div class="dots">${TUT.map(()=>'<i class="on"></i>').join('')}</div>
+      <h2 class="h2">${B('Training complete!','教學關完成！')}</h2>
+      <p>${B('In the game, type the number and choose Less or More. A right answer gives your team ★ + 5 coins.','正式遊戲中，輸入數字並選擇「減少」或「增加」。答對全隊得 ★ 與 5 枚金幣。')}</p>
+      <button class="btn green block" type="button" id="tutGo">${BI('Start 2030','進入 2030 年')} ▶</button></div>`;
+    $('tutGo').addEventListener('click',beginRound);return;
+  }
+  const t=TUT[i];
+  $('scr-tut').innerHTML=`<div class="panel stack"><div class="dots">${TUT.map((_,j)=>`<i class="${j<=i?'on':''}"></i>`).join('')}</div>
+    <h2 class="h3">${B(t.q[0],t.q[1])}</h2><div class="formula">${t.f}</div>
+    <div class="opts">${t.opts.map((o,j)=>`<button class="opt" type="button" data-j="${j}">${o}</button>`).join('')}</div>
+    <p class="fb" id="tutFb" hidden></p><button class="btn block" type="button" id="tutNext" hidden>${BI('Next','下一步')} ▶</button>
+    <button class="linkbtn small" type="button" id="tutSkip">${BI('Skip training','跳過教學')}</button></div>`;
+  document.querySelectorAll('.opt').forEach(b=>b.addEventListener('click',()=>{
+    const j=+b.dataset.j;
+    if(j===t.a){b.classList.add('right');$('tutFb').className='fb good';$('tutFb').innerHTML=B('Correct! '+t.why[0],'答對了！'+t.why[1]);$('tutFb').hidden=false;$('tutNext').hidden=false;document.querySelectorAll('.opt').forEach(x=>x.disabled=true);$('tutNext').focus();}
+    else{b.classList.add('wrong');b.disabled=true;$('tutFb').className='fb hint';$('tutFb').innerHTML=B('Not this one. Try again.','不是這個，再試一次。');$('tutFb').hidden=false;}
+  }));
+  $('tutNext').addEventListener('click',()=>tut(i+1));
+  $('tutSkip').addEventListener('click',beginRound);
+}
+
+/* ===== game flow ===== */
+function beginRound(){
+  const g=G,ev=EVENTS[g.round];
+  if(g.round>0)g.budget+=50;
+  const lines=ev.fx.map(f=>fxLine(g,f,true)).join('');
+  applyFx(g,ev.fx);applySat(g,ev.sat);
+  g.event={i:g.round,lines};g.roundStartNet=net(g);g.acted=false;g.tab='cards';
+  drawHand(g);show('scr-game');renderAll();
+  openSheet(`<div class="grab"></div><span><span class="tag">BREAKING NEWS 快訊</span></span>
+    <h3 class="h2">${B(`${YEARS[g.round]}: ${ev.en}`,`${YEARS[g.round]} 年：${ev.zh}`)}</h3>
+    <p>${B(ev.d[0],ev.d[1])}</p><div class="formula">${lines}</div>
+    <p class="small muted">${B(`You get ${g.round?'50 more':'50'} coins and 5 new cards.`,`你們獲得 50 枚金幣和 5 張新卡。`)}</p>
+    <button class="btn green block" type="button" id="evOk">${BI("Let’s go","開始行動")} ▶</button>`);
+  $('evOk').addEventListener('click',closeSheet);
+}
+function setTab(t){G.tab=t;['cards','city','team'].forEach(k=>{$('tab-'+k).setAttribute('aria-selected',String(k===t));$('pane-'+k).hidden=k!==t;});if(t==='city')$('cityDot').hidden=true;if(t==='team')$('teamDot').hidden=true;}
+['cards','city','team'].forEach(k=>$('tab-'+k).addEventListener('click',()=>setTab(k)));
+
+function renderAll(){
+  const g=G,n=net(g),c=cut(g);
+  $('hudLv').textContent=`LV${g.round+1} · ${YEARS[g.round]}`;
+  $('hudCoins').textContent=g.budget;$('hudStars').textContent=g.stars;$('hudNet').textContent=fmt(n);
+  const w=Math.max(4,Math.min(100,n/BASELINE*100));
+  $('meterBar').style.width=w+'%';
+  $('meterBar').style.background=c>=50?'var(--leaf)':c>=25?'var(--sun)':'var(--ember)';
+  $('hudCut').innerHTML=`${c>=0?'−':'+'}${Math.abs(c).toFixed(1)}% · ${BI('goal −50%','目標 −50%')}`;
+  $('endBtn').innerHTML=g.round<2?BI('End year','結束本年')+' ▶':BI('Finish','結算')+' ▶';
+  renderCards();renderCity();renderTeam();setTab(g.tab);
+}
+function renderCards(){
+  const g=G,ev=EVENTS[g.round];
+  const hand=g.hand.filter(id=>!g.used.includes(id));
+  $('pane-cards').innerHTML=`<div class="news"><span class="tag">${YEARS[g.round]}</span><span>${B(ev.en+': '+ev.d[0],ev.zh+'：'+ev.d[1])}</span></div>
+   ${hand.length?`<div class="hand">${hand.map(id=>{const c=card(id),s=BASE[c.tag],afford=c.cost<=g.budget;
+     return `<button class="gcard" type="button" data-card="${id}" ${afford?'':'disabled'}>
+      <div class="gc-head" style="background:${s.color}"><span>${BI(s.en.toUpperCase(),s.zh)}</span><span class="coin ${c.cost<0?'income':''}">${COIN}${c.cost<0?'+'+(-c.cost):c.cost}</span></div>
+      <div class="gc-body"><h4>${B(c.en,c.zh)}</h4><span class="effect">${c.eff}</span>
+      <div class="chips">${Object.entries(c.sat).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<span class="chip ${v>0?'up':'down'}">${v>0?'▲':'▼'} ${ROLES[k].zh}</span>`).join('')}</div>
+      ${afford?'':`<span class="small no">${BI('Not enough coins','金幣不足')}</span>`}</div></button>`;}).join('')}</div>`
+    :`<div class="empty">${B('No cards left this year. Tap “End year”.','今年的卡都用完了，請按「結束本年」。')}</div>`}`;
+  document.querySelectorAll('[data-card]').forEach(b=>b.addEventListener('click',()=>cardInfo(b.dataset.card)));
+}
+function renderCity(){
+  const g=G,n=net(g);
+  $('pane-city').innerHTML=`<div class="stack"><div class="panel map">${drawMap(g)}</div>
+   <div class="panel"><h3 class="h3">${B('Carbon ledger','碳帳本')}</h3>
+   <p class="small muted">${B('Emissions = Activity Data × Emission Factor','排放量 = 活動數據 × 排放係數')}</p>
+   <div class="tablebox"><table><tr><th>${BI('Sector','部門')}</th><th>${BI('Activity data','活動數據')}</th><th>${BI('EF','係數')}</th><th>t CO₂e</th></tr>
+   ${Object.values(g.s).map(s=>{const e=emis(s);return `<tr><td>${B(s.en,s.zh)}</td><td class="n">${fmt(s.ad)} <span class="small muted">${s.adU}</span></td><td class="n">${fmtEF(s.ef)}</td><td class="n ${e<0?'neg':''}">${fmt(e)}</td></tr>`;}).join('')}
+   <tr class="total"><td>${BI('Net total','淨排放')}</td><td></td><td></td><td class="n">${fmt(n)}</td></tr></table></div></div></div>`;
+}
+function renderTeam(){
+  const g=G;
+  $('pane-team').innerHTML=`<div class="stack"><div class="panel"><h3 class="h3">${B('Team & missions','團隊與任務')}</h3>
+   ${RK.map(k=>{const r=ROLES[k],ok=r.check(g);return `<div class="member"><span class="mono" style="background:${r.c}">${r.m}</span>
+     <div style="min-width:0"><b>${esc(who(g,k))}</b> <span class="small muted">${BI(r.en,r.zh)}</span>
+     <div class="bar"><i style="width:${g.sat[k]}%;background:${r.c}"></i></div>
+     <div class="mission">${ok?'<span class="ok">✓</span>':'<span class="muted">○</span>'} ${BI(r.mission[0],r.mission[1])}</div></div>
+     <span class="val">${g.sat[k]}</span></div>`;}).join('')}
+   <p class="small muted" style="margin-top:8px">${B('The number is each role’s support (0–100). ✓ = mission on track right now.','數字是各角色的支持度（0–100），✓ 表示任務目前達標。')}</p></div>
+   <div class="panel"><h3 class="h3">${B('City voices','市民回應')}</h3>
+   ${g.voices.length?g.voices.slice(0,6).map(v=>`<div class="voice"><span class="mono" style="background:${ROLES[v.r].c}">${ROLES[v.r].m}</span><div>${B('“'+v.en+'”','「'+v.zh+'」')}</div></div>`).join(''):`<p class="muted small">${B('Play a card to hear from the city.','執行政策後，這裡會出現市民的聲音。')}</p>`}</div></div>`;
+}
+
+/* ===== sheets ===== */
+function openSheet(html){$('sheetBody').innerHTML=html;$('sheet').hidden=false;const f=$('sheetBody').querySelector('button.btn,button.x');if(f)setTimeout(()=>f.focus(),40);}
+function closeSheet(){$('sheet').hidden=true;$('sheetBody').innerHTML='';}
+$('sheet').addEventListener('click',e=>{if(e.target===$('sheet')&&!$('sheet').dataset.lock)closeSheet();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('sheet').hidden&&!$('sheet').dataset.lock)closeSheet();});
+const head=(c)=>`<div class="grab"></div><div class="sheet-head"><div><span class="coin ${c.cost<0?'income':''}">${COIN}${c.cost<0?'+'+(-c.cost):c.cost}</span><h3 class="h2" style="margin-top:6px">${B(c.en,c.zh)}</h3></div><button class="x" type="button" id="xBtn" aria-label="Close">✕</button></div>`;
+
+function cardInfo(id){
+  const c=card(id),g=G;
+  const gain=Object.entries(c.sat).filter(([,v])=>v>0).map(([k,v])=>`${BI(ROLES[k].en,ROLES[k].zh)} +${v}`).join('<br>')||'—';
+  const lose=Object.entries(c.sat).filter(([,v])=>v<0).map(([k,v])=>`${BI(ROLES[k].en,ROLES[k].zh)} ${v}`).join('<br>')||'—';
+  openSheet(`${head(c)}<p>${B(c.d[0],c.d[1])}</p>
+   <div class="gainlose"><div class="gain"><b>${BI('Happier','支持')} ▲</b><br>${gain}</div><div class="lose"><b>${BI('Unhappy','反對')} ▼</b><br>${lose}</div></div>
+   <p class="small muted">${B('Discuss in role: who gains and who pays? Then vote.','用角色立場討論：誰得利？誰付出代價？再投票。')}</p>
+   <button class="btn block" type="button" id="toVote">${BI('Vote on it','進行表決')} ▶</button>`);
+  $('xBtn').addEventListener('click',closeSheet);
+  $('toVote').addEventListener('click',()=>vote(id));
+}
+function vote(id){
+  const c=card(id),g=G,v={};
+  const draw=()=>{
+    const y=RK.filter(k=>v[k]===true).length,n=RK.filter(k=>v[k]===false).length,left=6-y-n;
+    $('sheetBody').innerHTML=`${head(c)}<h4>${B('Each role votes','每個角色投票')}</h4>
+    ${RK.map(k=>`<div class="vote-row"><span class="mono" style="background:${ROLES[k].c}">${ROLES[k].m}</span><span style="min-width:0"><b>${esc(who(g,k))}</b><br><span class="small muted">${BI(ROLES[k].en,ROLES[k].zh)}</span></span>
+      <span class="yn"><button type="button" class="y" data-k="${k}" data-v="1" aria-pressed="${v[k]===true}">${BI('Yes','贊成')}</button><button type="button" class="n" data-k="${k}" data-v="0" aria-pressed="${v[k]===false}">${BI('No','反對')}</button></span></div>`).join('')}
+    <div class="tally"><span class="ok">${BI('Yes','贊成')} ${y}</span><span class="no">${BI('No','反對')} ${n}</span><span class="muted">${BI('Waiting','未投')} ${left}</span></div>
+    <button class="btn block" type="button" id="count" ${left?'disabled':''}>${BI('Count the votes','開票')}</button>`;
+    $('xBtn').addEventListener('click',closeSheet);
+    document.querySelectorAll('.yn button').forEach(b=>b.addEventListener('click',()=>{v[b.dataset.k]=b.dataset.v==='1';draw();}));
+    $('count').addEventListener('click',()=>{
+      const pass=y>n||(y===n&&v.mayor===true),tie=y===n;
+      if(pass){
+        $('sheetBody').innerHTML=`${head(c)}<p class="fb good">${B(`Passed ${y}–${n}${tie?' (the Mayor broke the tie)':''}. Now calculate the change!`,`${y} 比 ${n} 通過${tie?'（市長裁決平手）':''}，接著計算排放變化！`)}</p><button class="btn green block" type="button" id="toCalc">${BI('Calculate','開始計算')} ▶</button>`;
+        $('xBtn').addEventListener('click',closeSheet);$('toCalc').addEventListener('click',()=>calc(id));$('toCalc').focus();
+      }else{
+        g.hand=g.hand.filter(h=>h!==id);
+        const opp=Object.entries(c.sat).sort((a,b)=>a[1]-b[1])[0][0];
+        $('sheetBody').innerHTML=`${head(c)}<p class="fb bad">${B(`Rejected ${y}–${n}${tie?' (the Mayor broke the tie)':''}. The card leaves your hand this year.`,`${y} 比 ${n} 未通過${tie?'（市長裁決平手）':''}，這張卡今年不能再用。`)}</p><button class="btn ghost block" type="button" id="okRej">OK</button>`;
+        $('xBtn').addEventListener('click',()=>{closeSheet();renderAll();});$('okRej').addEventListener('click',()=>{closeSheet();renderAll();});
+        const q=c.v.find(x=>x[0]===opp)||c.v[0];G.voices.unshift({r:q[0],en:q[1],zh:q[2]});
+      }
+    });
+  };
+  draw();
+}
+function calc(id){
+  const c=card(id),g=G,exp=c.fx.reduce((a,f)=>a+fxDelta(g,f),0),multi=c.fx.length>1;
+  let sign=0,tries=0,done=false;
+  $('sheet').dataset.lock='1';
+  $('sheetBody').innerHTML=`${head(c)}
+   <p class="small">${multi?B('Two things change. Work out each line, then add them for the net change.','有兩項改變：先算每一行，再相加得出淨變化。'):B('Use the formula. Is the result less or more CO₂?','套用公式：結果是排放減少還是增加？')}</p>
+   <div class="formula">${c.fx.map(f=>fxLine(g,f,false)).join('')}${multi?`<div><span class="lbl">${BI('Net change','淨變化')}</span><br><span class="q">? t</span></div>`:''}</div>
+   <div class="signs"><button type="button" id="sLess" aria-pressed="false">▼ ${BI('Less CO₂','減少')}</button><button type="button" id="sMore" aria-pressed="false">▲ ${BI('More CO₂','增加')}</button></div>
+   <div class="ans"><input id="ansIn" inputmode="numeric" autocomplete="off" placeholder="20000" aria-label="Answer in tonnes"><span>t</span></div>
+   <div id="calcFb"></div>
+   <div class="btn-row" id="calcBtns"><button class="btn green" type="button" id="checkBtn">${BI('Check','檢查')}</button><button class="btn ghost" type="button" id="skipBtn">${BI('Show answer','看答案')}</button></div>`;
+  $('xBtn').hidden=true;
+  const setSign=s=>{sign=s;$('sLess').setAttribute('aria-pressed',String(s<0));$('sMore').setAttribute('aria-pressed',String(s>0));};
+  $('sLess').addEventListener('click',()=>setSign(-1));$('sMore').addEventListener('click',()=>setSign(1));
+  const fb=(cls,en,zh)=>{$('calcFb').innerHTML=`<p class="fb ${cls}">${B(en,zh)}</p>`;};
+  const finish=star=>{
+    done=true;$('ansIn').disabled=true;
+    $('calcFb').innerHTML+=`<div class="formula" style="margin-top:8px">${c.fx.map(f=>fxLine(g,f,true)).join('')}${multi?`<div><span class="lbl">${BI('Net change','淨變化')}</span><br><b>${fmt(exp,true)} t</b></div>`:''}</div>`;
+    $('calcBtns').innerHTML=`<button class="btn block" type="button" id="applyBtn">${BI('Put it into action','執行政策')} ▶</button>`;
+    $('applyBtn').addEventListener('click',()=>play(c,star,exp));$('applyBtn').focus();
+  };
+  $('skipBtn').addEventListener('click',()=>{fb('hint','Here is the worked answer. No star this time.','這是完整算式，這次沒有星星。');finish(false);});
+  const check=()=>{
+    if(done)return;
+    const raw=$('ansIn').value.replace(/[^\d.]/g,''),num=parseFloat(raw);
+    if(!sign){fb('hint','First choose Less or More.','請先選「減少」或「增加」。');return;}
+    if(isNaN(num)){fb('hint','Type a number, for example 20000.','請輸入數字，例如 20000。');return;}
+    const v=sign*num,tol=Math.max(1,Math.abs(exp)*0.01);
+    if(Math.abs(v-exp)<=tol){fb('good','Correct! +1 ★ and +5 coins for your team.','答對了！全隊獲得 1 顆 ★ 與 5 枚金幣。');finish(true);}
+    else if(tries===0&&Math.abs(-v-exp)<=tol){tries++;fb('hint','The number is right. Check Less or More again.','數字對了，再檢查一次是「減少」還是「增加」。');}
+    else if(tries===0&&Math.abs(Math.abs(v)/1000-Math.abs(exp))<=tol){tries++;fb('hint','Almost! Remember: kg ÷ 1,000 = tonnes.','差一點！記得：公斤 ÷ 1,000 = 公噸。');}
+    else if(tries===0){tries++;fb('hint','Not yet. Check each line once more. One more try!','還沒對，再檢查每一行算式，再試一次！');}
+    else{fb('bad','Not quite. Study the worked answer.','還是不對，看看完整算式。');finish(false);}
+  };
+  $('checkBtn').addEventListener('click',check);
+  $('ansIn').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();check();}});
+  setTimeout(()=>$('sLess').focus(),40);
+}
+function play(c,star,exp){
+  const g=G;
+  g.budget-=c.cost;applyFx(g,c.fx);applySat(g,c.sat);g.used.push(c.id);g.acted=true;
+  if(star){g.stars++;g.budget+=5;}
+  g.history.push({id:c.id,round:g.round,star});
+  c.v.slice().reverse().forEach(([r,en,zh])=>g.voices.unshift({r,en,zh}));
+  delete $('sheet').dataset.lock;closeSheet();renderAll();
+  $('cityDot').hidden=false;$('teamDot').hidden=false;
+  const q=c.v[0];
+  toast(`<span class="small">${BI(c.en,c.zh)}</span><span class="big ${exp<=0?'g':'r'}">${fmt(exp,true)} t CO₂e</span>${star?`<span class="small">★ +1 · ${BI('coins','金幣')} +5</span>`:''}<span class="q">${ROLES[q[0]].m} · ${B('“'+q[1]+'”','「'+q[2]+'」')}</span>`);
+}
+let toastT;function toast(html){const t=$('toast');t.innerHTML=html;t.hidden=false;t.style.animation='none';void t.offsetWidth;t.style.animation='';clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,3600);}
+$('toast').addEventListener('click',()=>$('toast').hidden=true);
+
+/* ===== end year ===== */
+$('endBtn').addEventListener('click',()=>{
+  const g=G,playable=g.hand.filter(id=>!g.used.includes(id)&&card(id).cost<=g.budget);
+  if(playable.length){
+    openSheet(`<div class="grab"></div><h3 class="h2">${B(`End ${YEARS[g.round]} now?`,`確定結束 ${YEARS[g.round]} 年？`)}</h3>
+     <p>${B(`You still have ${g.budget} coins and ${playable.length} card(s) you can afford. Unused coins carry over, but this year’s cards go back to the deck.`,`你們還有 ${g.budget} 枚金幣，以及 ${playable.length} 張買得起的卡。金幣會保留到下一年，但今年的卡會放回牌堆。`)}</p>
+     <div class="btn-row"><button class="btn ghost" type="button" id="keep">${BI('Keep playing','繼續出牌')}</button><button class="btn green" type="button" id="endNow">${BI('End year','結束本年')}</button></div>`);
+    $('keep').addEventListener('click',closeSheet);$('endNow').addEventListener('click',report);
+  }else report();
+});
+function report(){
+  const g=G,n=net(g),d=n-g.roundStartNet,last=g.round===2;let note='';
+  if(!g.acted){g.sat.act=Math.max(0,g.sat.act-10);note=`<p class="fb hint">${B('No climate action this year. The Activist loses 10 support.','今年沒有任何氣候行動，環保行動者支持度 −10。')}</p>`;}
+  openSheet(`<div class="grab"></div><span><span class="tag">${YEARS[g.round]} REPORT 年度報告</span></span>
+   <div class="report"><div class="rbox"><div class="k">${BI('Net CO₂e','淨排放')}</div><div class="v">${fmt(n)}</div></div>
+   <div class="rbox"><div class="k">${BI('This year','本年變化')}</div><div class="v ${d<=0?'ok':'no'}">${fmt(d,true)}</div></div>
+   <div class="rbox"><div class="k">${BI('Total cut','累計減碳')}</div><div class="v">${cut(g).toFixed(1)}%</div></div>
+   <div class="rbox"><div class="k">${BI('Avg. support','平均支持度')}</div><div class="v">${Math.round(avgSat(g))}</div></div></div>${note}
+   <button class="btn green block" type="button" id="nextBtn">${last?BI('See final results','查看結算'):BI(`Go to ${YEARS[g.round+1]}`,`前往 ${YEARS[g.round+1]} 年`)} ▶</button>`);
+  $('nextBtn').addEventListener('click',()=>{closeSheet();if(last)final();else{g.round++;beginRound();}});
+}
+
+/* ===== results / db ===== */
+let DB=null,USER=null,ME=null,OWNER=false;
+const capsReady=(async()=>{
+  try{const c=window.claude;if(!c||!c.use)return;
+    USER=await c.use('user');DB=await c.use('db');
+    if(USER){try{OWNER=!!(await USER.isOwner());}catch(e){}try{ME=await USER.id();}catch(e){}}
+  }catch(e){}
+})();
+function resultOf(g){
+  const missions={};RK.forEach(k=>missions[k]=ROLES[k].check(g));
+  const c=cut(g),medal=c>=50?'G':c>=35?'S':c>=20?'B':'-';
+  return {v:2,cls:g.cls,grp:g.grp,names:g.names,cut:Math.round(c*10)/10,net:Math.round(net(g)),stars:g.stars,avg:Math.round(avgSat(g)),elected:avgSat(g)>=50,missions,medal,cards:g.history.map(h=>h.id),t:Date.now()};
+}
+const enc=o=>'CG-'+btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+const dec=s=>{s=s.trim().replace(/^CG-/,'').replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return JSON.parse(decodeURIComponent(escape(atob(s))));};
+async function saveRun(r){
+  await capsReady;if(!DB||!ME)return false;
+  try{const ref=DB.doc('results/'+ME);let runs=[];
+    try{const s=await ref.get();if(s.exists){runs=((s.data()||{}).runs||[]).slice(-39);}}catch(e){}
+    runs.push(r);await ref.set({runs});return true;}catch(e){return false;}
+}
+
+/* ===== final ===== */
+const MEDALS={G:['#E8A400','Climate Guardian','氣候守衛者'],S:['#8E9AB0','Climate Defender','氣候捍衛者'],B:['#B9733F','Climate Learner','氣候學習者'],'-':['#B9C6DA','Keep Going','再接再厲']};
+function final(){
+  const g=G,r=resultOf(g),m=MEDALS[r.medal];
+  show('scr-final');
+  $('scr-final').innerHTML=`<div class="stack">
+   <div class="panel stack"><div class="medal"><span class="disc" style="background:${m[0]}">${r.medal==='-'?'!':r.medal}</span>
+     <div><span class="tag">2050 RESULT 結算</span><h2 class="h2" style="margin-top:6px">${B(m[1],m[2])}</h2>
+     <p class="small muted">${BI('Class','班級')} ${esc(g.cls)||'—'} · ${BI('Group','組')} ${esc(g.grp)}</p></div></div>
+    <div class="report"><div class="rbox"><div class="k">${BI('CO₂ cut','減碳')}</div><div class="v">${r.cut}%</div></div>
+     <div class="rbox"><div class="k">${BI('Guardian Stars','守衛之星')}</div><div class="v">★ ${r.stars}</div></div>
+     <div class="rbox"><div class="k">${BI('Net 2050','2050 淨排放')}</div><div class="v">${fmt(r.net)}</div></div>
+     <div class="rbox"><div class="k">${BI('Avg. support','平均支持度')}</div><div class="v">${r.avg}</div></div></div>
+    <p class="fb ${r.elected?'good':'bad'}">${r.elected?B('Citizens re-elect your committee!','市民投票讓委員會連任！'):B('Support fell below 50. Your committee is voted out.','平均支持度低於 50，委員會落選。')}</p></div>
+   <div class="panel"><h3 class="h3">${B('Role missions','角色任務')} · ${RK.filter(k=>r.missions[k]).length}/6</h3>
+    ${RK.map(k=>`<div class="mrow"><span style="display:flex;gap:8px;align-items:center;min-width:0"><span class="mono" style="background:${ROLES[k].c}">${ROLES[k].m}</span><span style="min-width:0"><b>${esc(who(g,k))}</b><br><span class="small muted">${BI(ROLES[k].mission[0],ROLES[k].mission[1])}</span></span></span><span class="${r.missions[k]?'ok':'no'}" style="font-size:1.3rem">${r.missions[k]?'✓':'✗'}</span></div>`).join('')}</div>
+   <div class="panel" id="sendBox"><h3 class="h3">${B('Send to your teacher','回傳給老師')}</h3><p class="muted small" id="sendStatus">${B('Sending…','傳送中…')}</p></div>
+   <div class="panel"><h3 class="h3">${B('Talk about it (Worksheet B-5)','討論與反思（學習單 B-5）')}</h3>
+    <ol class="prompts"><li>${B('Which card cut the most CO₂e per coin? Show your calculation.','哪張卡每枚金幣減碳最多？寫出計算。')}</li>
+    <li>${B('Which role lost the most? What would you say to them?','哪個角色犧牲最多？你會對他說什麼？')}</li>
+    <li>${B('Design a new level set in a real place in Taiwan. Where, and why?','以台灣一個真實地點設計新關卡：選哪裡？為什麼？')}</li></ol></div>
+   <button class="btn ghost block" type="button" id="again">${BI('Play again','再玩一次')}</button></div>`;
+  $('again').addEventListener('click',()=>{G=null;show('scr-home');});
+  if(r.medal==='G')confetti();
+  const code=enc(r);
+  const showCode=(msgEn,msgZh)=>{
+    $('sendBox').innerHTML=`<h3 class="h3">${B('Send to your teacher','回傳給老師')}</h3><p class="small">${B(msgEn,msgZh)}</p><div class="code" id="codeTxt">${code}</div><button class="btn block" type="button" id="copyCode" style="margin-top:10px">${BI('Copy result code','複製成果代碼')}</button><p class="small muted" id="copyMsg" aria-live="polite"></p>`;
+    $('copyCode').addEventListener('click',()=>{const ok=()=>{$('copyMsg').innerHTML=BI('Copied!','已複製！');};
+      if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(code).then(ok).catch(()=>{const s=window.getSelection(),rg=document.createRange();rg.selectNodeContents($('codeTxt'));s.removeAllRanges();s.addRange(rg);$('copyMsg').innerHTML=BI('Code selected. Copy it now.','代碼已選取，請手動複製。');});
+      else{const s=window.getSelection(),rg=document.createRange();rg.selectNodeContents($('codeTxt'));s.removeAllRanges();s.addRange(rg);}});
+  };
+  if(g.submitted){$('sendStatus').innerHTML=B('Saved. Your teacher can see this result.','已儲存，老師看得到你們的成果。');return;}
+  saveRun(r).then(ok=>{
+    if(ok){g.submitted=true;$('sendStatus').innerHTML=`<span class="ok">✓</span> `+B('Saved. Your teacher can see this result now.','已儲存，老師現在就看得到你們的成果。');}
+    else showCode('We could not save it automatically. Copy this code and send it to your teacher (Google Classroom or LINE).','無法自動儲存。請複製下方代碼，傳給老師（Google Classroom 或 LINE）。');
+  });
+}
+function confetti(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const cv=$('confetti');cv.hidden=false;const ctx=cv.getContext('2d');const W=cv.width=innerWidth,H=cv.height=innerHeight;
+  const cols=['#FFC43D','#16A06E','#2F6FEB','#FF6A4D','#7B61FF'];
+  const p=Array.from({length:140},()=>({x:Math.random()*W,y:-20-Math.random()*H*.5,vx:(Math.random()-.5)*2,vy:2+Math.random()*3,r:Math.random()*6,c:cols[Math.floor(Math.random()*5)],a:Math.random()*6}));
+  let f=0;(function tick(){ctx.clearRect(0,0,W,H);p.forEach(q=>{q.x+=q.vx;q.y+=q.vy;q.a+=.1;ctx.fillStyle=q.c;ctx.save();ctx.translate(q.x,q.y);ctx.rotate(q.a);ctx.fillRect(-4,-2.5,8,5);ctx.restore();});
+    if(++f<200)requestAnimationFrame(tick);else{ctx.clearRect(0,0,W,H);cv.hidden=true;}})();
+}
+
+/* ===== teacher ===== */
+let TROWS=[],LOCAL=[],TSUB=null,TFILTER='all',TDOCS=[];
+$('btnTeacher').addEventListener('click',openTeacher);
+async function openTeacher(){
+  show('scr-teacher');$('scr-teacher').innerHTML=`<div class="panel"><p class="muted">${B('Loading…','載入中…')}</p></div>`;
+  await capsReady;
+  if(OWNER&&DB&&!TSUB){
+    TSUB=DB.collection('results').onSnapshot(snap=>{TDOCS=snap.docs;TROWS=[];snap.docs.forEach(d=>((d.data()||{}).runs||[]).forEach(r=>TROWS.push(r)));if(!$('scr-teacher').hidden)renderTeacher();},()=>{TSUB=null;});
+  }
+  renderTeacher();
+}
+function renderTeacher(){
+  const all=[...TROWS,...LOCAL].sort((a,b)=>b.t-a.t);
+  const classes=[...new Set(all.map(r=>r.cls||'—'))].sort();
+  const rows=TFILTER==='all'?all:all.filter(r=>(r.cls||'—')===TFILTER);
+  const avg=rows.length?rows.reduce((a,r)=>a+r.cut,0)/rows.length:0;
+  const best=rows.slice().sort((a,b)=>b.cut-a.cut)[0];
+  const ownerNote=OWNER&&DB?B('Results from every group’s device appear here live.','各組裝置的成果會即時出現在這裡。')
+    :B('Only the page owner sees saved class results. You can still paste result codes below to view them on this device.','只有頁面擁有者看得到已儲存的全班成果；你仍可在下方貼上成果代碼，在本機檢視。');
+  $('scr-teacher').innerHTML=`<div class="stack">
+   <div class="panel stack"><div class="sheet-head"><div><span class="tag">TEACHER 教師端</span><h2 class="h2" style="margin-top:6px">${B('Class results','全班成果')}</h2></div><button class="btn ghost" type="button" id="tBack">${BI('Back','返回')}</button></div>
+    <p class="small muted">${ownerNote}</p>
+    <div class="field"><label for="tClass">${BI('Class','班級')}</label><select id="tClass"><option value="all">${'All 全部'}</option>${classes.map(c=>`<option ${c===TFILTER?'selected':''}>${esc(c)}</option>`).join('')}</select></div>
+    <div class="tiles"><div class="rbox"><div class="k">${BI('Groups','組數')}</div><div class="v">${rows.length}</div></div><div class="rbox"><div class="k">${BI('Avg. cut','平均減碳')}</div><div class="v">${avg.toFixed(1)}%</div></div><div class="rbox"><div class="k">${BI('Top group','最佳組')}</div><div class="v">${best?esc((best.cls?best.cls+'-':'')+best.grp):'—'}</div></div></div></div>
+   <div class="panel"><div class="tablebox"><table>
+    <tr><th>${BI('Group','組別')}</th><th>${BI('CO₂ cut','減碳')}</th><th>${BI('Medal','獎章')}</th><th>★</th><th>${BI('Support','支持')}</th><th>${BI('Missions','任務')}</th><th>${BI('Elected','連任')}</th><th>${BI('Cards','政策')}</th><th>${BI('Time','時間')}</th></tr>
+    ${rows.length?rows.map(r=>`<tr><td><b>${esc(r.cls||'—')}</b> · #${esc(r.grp)}</td><td class="n">${r.cut}%</td><td>${MEDALS[r.medal]?MEDALS[r.medal][2]:'—'}</td><td class="n">${r.stars}</td><td class="n">${r.avg}</td>
+     <td><span class="tdots">${RK.map(k=>`<i style="background:${r.missions&&r.missions[k]?ROLES[k].c:'#C9D9EE'}" title="${ROLES[k].en}">${ROLES[k].m}</i>`).join('')}</span></td>
+     <td>${r.elected?'<span class="ok">✓</span>':'<span class="no">✗</span>'}</td><td class="n">${(r.cards||[]).length}</td><td class="small">${new Date(r.t).toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'})}</td></tr>`).join('')
+     :`<tr><td colspan="9" class="muted" style="text-align:center;padding:18px">${B('No results yet. They appear when groups finish 2050.','還沒有成果，各組完成 2050 結算後就會出現。')}</td></tr>`}
+   </table></div><p class="small muted" style="margin-top:8px">${B('Mission squares light up in the role’s color when that role’s mission is complete.','任務方格亮起角色顏色，代表該角色任務達成。')}</p></div>
+   <div class="panel stack"><h3 class="h3">${B('Add result codes','貼上成果代碼')}</h3>
+    <label for="codesIn" class="small">${B('Paste one or more codes (one per line).','貼上一個或多個代碼（每行一個）。')}</label><textarea id="codesIn" placeholder="CG-…"></textarea>
+    <button class="btn" type="button" id="addCodes">${BI('Add','加入')}</button><p class="small" id="codeMsg" aria-live="polite"></p></div>
+   ${OWNER&&DB?`<div class="panel stack"><h3 class="h3">${B('New class session','開始新的一節課')}</h3><p class="small muted">${B('Delete all saved results before the next class.','在下一節課前刪除所有已儲存的成果。')}</p><div id="clearBox"><button class="btn red" type="button" id="clearBtn">${BI('Delete all results','刪除全部成果')}</button></div></div>`:''}
+  </div>`;
+  $('tBack').addEventListener('click',()=>show(G?'scr-game':'scr-home'));
+  $('tClass').addEventListener('change',e=>{TFILTER=e.target.value;renderTeacher();});
+  $('addCodes').addEventListener('click',async()=>{
+    const lines=$('codesIn').value.split(/\s+/).filter(Boolean);let ok=0,bad=0;
+    for(const l of lines){try{const r=dec(l);if(typeof r.cut!=='number')throw 0;
+      if(OWNER&&DB){if(await saveRun(r))ok++;else{LOCAL.push(r);ok++;}}else{LOCAL.push(r);ok++;}}catch(e){bad++;}}
+    $('codeMsg').innerHTML=BI(`Added ${ok}${bad?`, ${bad} not readable`:''}.`,`已加入 ${ok} 筆${bad?`，${bad} 筆無法讀取`:''}。`);
+    $('codesIn').value='';if(!(OWNER&&DB))renderTeacher();
+  });
+  if($('clearBtn'))$('clearBtn').addEventListener('click',()=>{
+    $('clearBox').innerHTML=`<p class="fb bad">${B('This removes every saved result for good. Continue?','這會永久刪除所有成果，確定嗎？')}</p><div class="btn-row"><button class="btn ghost" type="button" id="clearNo">${BI('Cancel','取消')}</button><button class="btn red" type="button" id="clearYes">${BI('Delete all','全部刪除')}</button></div>`;
+    $('clearNo').addEventListener('click',renderTeacher);
+    $('clearYes').addEventListener('click',async()=>{for(const d of TDOCS){try{await DB.doc('results/'+d.id).delete();}catch(e){}}LOCAL=[];});
+  });
+}
+
+/* ===== live-update hook ===== */
+function boot(data){if(data&&data.G){G=data.G;if(data.screen==='final')final();else{show('scr-game');renderAll();}}}
+window.claude?.hot?.snapshot?.(()=>({G,screen:!$('scr-final').hidden?'final':(!$('scr-game').hidden?'game':'home')}));
+window.claude?.hot?.ready?window.claude.hot.ready(boot):boot(window.claude?.hot?.data??{});
+</script>
+
+<a href="../" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:9999;background:#2F86D6;color:#fff;font:700 13px/1 system-ui,sans-serif;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.2)">← 回群島</a>
+</body></html>

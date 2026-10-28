@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Nuclear Energy and Climate Change — Comprehension Quiz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --amber: #D97706;
+  --amber-deep: #B45309;
+  --amber-dark: #92400E;
+  --teal: #0F766E;
+  --teal-soft: #E8F3F1;
+  --ink: #2E2419;
+  --ink-soft: #6B5D4F;
+  --bg: #FDF8F1;
+  --bg-warm: #F7EFE3;
+  --card: #FFFFFF;
+  --line: #E8DCCB;
+  --good: #0F766E;
+  --bad: #B91C1C;
+  --good-bg: #E8F3F1;
+  --bad-bg: #FCE9E9;
+  --radius: 16px;
+  --shadow: 0 4px 20px rgba(146,64,14,.08);
+  --shadow-lg: 0 12px 34px rgba(146,64,14,.14);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #201A12; --bg-warm: #2A2116; --card: #2E2419;
+    --ink: #F3E9DA; --ink-soft: #C9B79E; --line: #4A3B2A;
+    --good-bg: #113B36; --bad-bg: #3B1616;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #201A12; --bg-warm: #2A2116; --card: #2E2419;
+  --ink: #F3E9DA; --ink-soft: #C9B79E; --line: #4A3B2A;
+  --good-bg: #113B36; --bad-bg: #3B1616;
+}
+* { box-sizing: border-box; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+body {
+  margin: 0; min-height: 100%;
+  font-family: 'Source Sans 3', sans-serif;
+  background: var(--bg); color: var(--ink);
+  line-height: 1.6;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+.display { font-family: 'Playfair Display', serif; }
+.wrap { max-width: 780px; margin: 0 auto; padding: 0 20px 60px; }
+
+/* ---- Header ---- */
+header.hero {
+  background: linear-gradient(180deg, var(--bg-warm), var(--bg));
+  padding: 48px 20px 32px;
+  text-align: center;
+  border-bottom: 1px solid var(--line);
+}
+.eyebrow { color: var(--amber); font-family: 'Playfair Display', serif; font-style: italic; font-size: .95rem; margin: 0 0 6px; }
+h1.title { font-size: clamp(1.6rem, 5vw, 2.4rem); color: var(--amber-dark); margin: 0 0 10px; }
+.subtitle { color: var(--ink-soft); max-width: 560px; margin: 0 auto; font-size: 1rem; }
+
+/* ---- Tabs ---- */
+.tabbar {
+  display: flex; gap: 8px; max-width: 780px; margin: 24px auto 0; padding: 0 20px;
+  border-bottom: 1px solid var(--line);
+}
+.tabbtn {
+  flex: 1; background: none; border: none; cursor: pointer;
+  font-family: 'Source Sans 3', sans-serif; font-size: .95rem; font-weight: 600;
+  padding: 12px 10px; color: var(--ink-soft); border-bottom: 3px solid transparent;
+}
+.tabbtn.active { color: var(--amber-dark); border-bottom-color: var(--amber); }
+.tabpanel { display: none; padding-top: 28px; }
+.tabpanel.active { display: block; }
+
+/* ---- Quiz ---- */
+.progress-row { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+.progress-track { flex: 1; height: 8px; background: var(--line); border-radius: 999px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--amber); border-radius: 999px; transition: width .35s ease; }
+.progress-label { font-size: .82rem; color: var(--ink-soft); white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+.qcard {
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 26px; box-shadow: var(--shadow);
+}
+.qprompt { font-size: 1.15rem; font-weight: 600; margin: 0 0 18px; color: var(--ink); }
+.options { display: flex; flex-direction: column; gap: 10px; }
+.option-btn {
+  text-align: left; background: var(--bg-warm); border: 1.5px solid var(--line); border-radius: 12px;
+  padding: 13px 16px; font-family: 'Source Sans 3', sans-serif; font-size: .98rem; color: var(--ink);
+  cursor: pointer; transition: border-color .2s ease, background .2s ease; display: flex; gap: 10px; align-items: flex-start;
+}
+.option-btn:hover:not(:disabled) { border-color: var(--amber); }
+.option-btn:disabled { cursor: default; }
+.option-letter {
+  flex: 0 0 auto; width: 24px; height: 24px; border-radius: 50%; background: var(--card); border: 1.5px solid var(--line);
+  display: flex; align-items: center; justify-content: center; font-size: .78rem; font-weight: 700; color: var(--ink-soft);
+}
+.option-btn.correct { background: var(--good-bg); border-color: var(--good); }
+.option-btn.correct .option-letter { background: var(--good); border-color: var(--good); color: #fff; }
+.option-btn.incorrect { background: var(--bad-bg); border-color: var(--bad); }
+.option-btn.incorrect .option-letter { background: var(--bad); border-color: var(--bad); color: #fff; }
+
+.hint-row { margin-top: 14px; }
+.hint-btn {
+  background: none; border: none; color: var(--teal); font-size: .85rem; cursor: pointer; padding: 0;
+  text-decoration: underline; font-family: 'Source Sans 3', sans-serif;
+}
+.hint-text { margin-top: 8px; font-size: .88rem; color: var(--ink-soft); font-style: italic; }
+
+.feedback-box {
+  margin-top: 16px; padding: 14px 16px; border-radius: 12px; font-size: .92rem; display: none;
+}
+.feedback-box.show { display: block; }
+.feedback-box.good { background: var(--good-bg); border: 1px solid var(--good); color: var(--ink); }
+.feedback-box.bad { background: var(--bad-bg); border: 1px solid var(--bad); color: var(--ink); }
+.feedback-verdict { font-weight: 700; margin-bottom: 4px; }
+.feedback-verdict.good-text { color: var(--good); }
+.feedback-verdict.bad-text { color: var(--bad); }
+
+.quiz-nav { display: flex; justify-content: flex-end; margin-top: 20px; }
+.btn {
+  font-family: 'Source Sans 3', sans-serif; font-weight: 600; font-size: .95rem;
+  padding: 11px 26px; border-radius: 999px; border: none; cursor: pointer;
+  background: var(--amber); color: #fff; transition: background .2s ease, transform .15s ease;
+}
+.btn:hover { background: var(--amber-deep); }
+.btn:disabled { background: var(--line); color: var(--ink-soft); cursor: not-allowed; }
+.btn.ghost { background: transparent; border: 1.5px solid var(--amber); color: var(--amber-dark); }
+.btn.ghost:hover { background: var(--bg-warm); }
+
+/* ---- Score screen ---- */
+.score-screen { text-align: center; padding: 20px 10px; }
+.score-ring {
+  width: 140px; height: 140px; margin: 0 auto 20px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; flex-direction: column;
+  border: 8px solid var(--amber); background: var(--bg-warm);
+}
+.score-num { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--amber-dark); font-weight: 700; }
+.score-den { font-size: .85rem; color: var(--ink-soft); }
+.score-msg { font-size: 1.05rem; color: var(--ink); margin-bottom: 22px; }
+
+/* ---- Reflection ---- */
+.reflect-card {
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 22px; box-shadow: var(--shadow); margin-bottom: 18px;
+}
+.reflect-num {
+  display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px;
+  border-radius: 50%; background: var(--teal); color: #fff; font-family: 'Playfair Display', serif;
+  font-weight: 700; font-size: .9rem; margin-right: 8px; flex: 0 0 auto;
+}
+.reflect-q { display: flex; align-items: flex-start; gap: 2px; font-size: 1.02rem; font-weight: 600; margin-bottom: 12px; color: var(--ink); }
+.reflect-q span.qtext { padding-top: 2px; }
+textarea.reflect-input {
+  width: 100%; min-height: 90px; resize: vertical; border: 1.5px solid var(--line); border-radius: 10px;
+  padding: 12px 14px; font-family: 'Source Sans 3', sans-serif; font-size: .95rem; color: var(--ink);
+  background: var(--bg-warm); line-height: 1.5;
+}
+textarea.reflect-input:focus { outline: none; border-color: var(--amber); }
+.save-note { font-size: .78rem; color: var(--ink-soft); margin-top: 8px; display: flex; align-items: center; gap: 6px; }
+.save-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); display: inline-block; opacity: 0; transition: opacity .3s ease; }
+.save-dot.show { opacity: 1; }
+
+footer.page-footer { text-align: center; padding: 30px 20px 10px; color: var(--ink-soft); font-size: .85rem; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <p class="eyebrow">SDGs 13 · Climate Action</p>
+  <h1 class="title display">Nuclear Energy and Climate Change</h1>
+  <p class="subtitle">Test your understanding of the video, then reflect on the bigger questions it raises.</p>
+</header>
+
+<div class="tabbar" id="tabbar">
+  <button class="tabbtn active" data-tab="quiz">📝 Comprehension Quiz</button>
+  <button class="tabbtn" data-tab="reflect">💭 Reflection Questions</button>
+</div>
+
+<div class="wrap">
+
+  <!-- QUIZ TAB -->
+  <div class="tabpanel active" data-panel="quiz">
+    <div id="quizArea"></div>
+  </div>
+
+  <!-- REFLECTION TAB -->
+  <div class="tabpanel" data-panel="reflect">
+    <p class="subtitle" style="text-align:left; margin-bottom:20px;">There's no single right answer here — write a few sentences for each question. Your answers are saved automatically in this browser.</p>
+    <div id="reflectArea"></div>
+  </div>
+
+</div>
+
+<footer class="page-footer">#Gina & 宏孝的SDGs多元選修課</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  var questions = [
+    {
+      prompt: "What does the video say is one of the most impactful strategies for cutting emissions across industries?",
+      options: [
+        "Banning the import of fossil fuels",
+        "Electrifying as many sectors as possible",
+        "Reducing the number of factories",
+        "Increasing oil and gas production"
+      ],
+      correct: 1,
+      hint: "Think about what happens when something 'plugs into a socket' instead of burning fuel.",
+      explanation: "The video explains that switching sectors like transportation and heating from burning fossil fuels to electricity is one of the most powerful tools for cutting emissions, because electricity can be produced with low-emission technologies."
+    },
+    {
+      prompt: "According to the video, roughly what percentage of the world's primary energy currently comes from fossil fuels?",
+      options: ["16%", "50%", "84%", "100%"],
+      correct: 2,
+      hint: "Add up oil, coal, and gas.",
+      explanation: "The video states that 84% of the world's primary energy comes from fossil fuels: 33% oil, 27% coal, and 24% gas."
+    },
+    {
+      prompt: "Which two energy sources provide most of the electricity in countries with the lowest-carbon power grids, like France and Sweden?",
+      options: ["Solar and wind", "Coal and gas", "Nuclear and hydropower", "Bioenergy and geothermal"],
+      correct: 2,
+      hint: "France relies heavily on one of these two, Sweden on the other.",
+      explanation: "France gets about 67% of its electricity from nuclear power, while Sweden gets around 45% from hydropower — together nuclear and hydro power the world's cleanest grids."
+    },
+    {
+      prompt: "Which group of countries does the video mention as having built NEW nuclear reactors in the last 20 years?",
+      options: ["Germany and Japan", "China, India, and South Korea", "France and Sweden", "The United States and Canada"],
+      correct: 1,
+      hint: "These countries are the opposite of Germany and Japan, which shut reactors down.",
+      explanation: "The video contrasts China, India, and South Korea — which built new reactors — with Germany and Japan, which have been taking their nuclear plants offline."
+    },
+    {
+      prompt: "What is one major challenge of solar and wind power mentioned in the video?",
+      options: [
+        "They release large amounts of greenhouse gases",
+        "They cannot generate any electricity at all",
+        "They are not reliable or consistent all the time",
+        "They are illegal in most countries"
+      ],
+      correct: 2,
+      hint: "Think about the weather — does the sun always shine?",
+      explanation: "The video points out that the sun doesn't always shine and it isn't always windy, so without massive storage capacity, renewables can't always guarantee a steady electricity supply."
+    },
+    {
+      prompt: "Why does the video argue that the world will need MORE electricity in the future, not just cleaner electricity?",
+      options: [
+        "Because electricity will become much cheaper",
+        "Because sectors like cars and heating will switch from fossil fuels to electricity",
+        "Because coal plants will need more electricity to run",
+        "Because nuclear plants use more power than they generate"
+      ],
+      correct: 1,
+      hint: "Think about what 'electrifying a sector' actually adds to the grid.",
+      explanation: "As industries like transportation and heating switch from burning fuel to using electricity, total demand for electricity will rise sharply."
+    },
+    {
+      prompt: "According to the video, why has building new nuclear reactors become difficult in most Western countries?",
+      options: [
+        "There is no public demand for electricity",
+        "Renewable energy has been banned",
+        "High costs, lost expertise, and stricter regulations",
+        "Nuclear technology has been completely lost"
+      ],
+      correct: 2,
+      hint: "Compare this to how quickly South Korea or China can build reactors.",
+      explanation: "The video cites a loss of know-how in construction, policy changes, and increased regulatory constraints as reasons nuclear plants take longer and cost more to build in the West."
+    },
+    {
+      prompt: "What new technology does the video mention that could reduce the problems with nuclear waste?",
+      options: [
+        "Building only coal plants instead",
+        "Small reactors and technology that turns waste into new fuel",
+        "Stopping all nuclear research permanently",
+        "Burying all waste underground with no further plans"
+      ],
+      correct: 1,
+      hint: "This technology recycles something usually seen as a problem.",
+      explanation: "The video mentions small modular reactors and next-generation technology that can turn radioactive waste into new fuel, though these aren't yet deployed at a large scale."
+    },
+    {
+      prompt: "What does the video warn could happen if nuclear plants are shut down immediately?",
+      options: [
+        "Renewables will instantly replace all the lost electricity",
+        "The missing capacity may be partly replaced by fossil fuels",
+        "Global electricity demand will drop to zero",
+        "All countries will immediately switch to solar power"
+      ],
+      correct: 1,
+      hint: "Think about what fills the gap when a reliable power source disappears suddenly.",
+      explanation: "The video warns that taking nuclear capacity offline right now would likely be replaced, at least in part, by fossil fuels — the opposite of the intended goal."
+    },
+    {
+      prompt: "What is the video's overall opinion about nuclear energy and renewable energy?",
+      options: [
+        "Only one of them should be used, never both",
+        "They should be seen as competitors fighting for the same funding",
+        "They should be treated as partners, and both need investment",
+        "Neither is a realistic solution to climate change"
+      ],
+      correct: 2,
+      hint: "The video uses the word 'partners' near the end.",
+      explanation: "The video's stated opinion is that nuclear and renewables should be seen as partners rather than opponents, and both deserve continued investment and innovation."
+    }
+  ];
+
+  var reflectionQuestions = [
+    "In your own words, explain why it's difficult for the world to stop using fossil fuels for electricity quickly.",
+    "Do you think nuclear energy is a good solution for reducing carbon emissions? Why or why not?",
+    "What are the main risks and benefits of nuclear energy mentioned in the video?",
+    "Why do you think Germany and Japan chose to shut down nuclear plants, while China and South Korea built more? What might explain the difference?",
+    "The video says nuclear and renewable energy should be \u201Cpartners, not opponents.\u201D What do you think this means in practice, and do you agree?",
+    "If you were a government leader, would you invest more in nuclear energy, renewable energy, or both? Explain your reasoning using evidence from the video."
+  ];
+
+  var STORAGE_KEY = "nuclear-quiz-progress-v1";
+  var REFLECT_KEY = "nuclear-quiz-reflections-v1";
+  var letters = ["A", "B", "C", "D", "E"];
+
+  var state = { current: 0, answers: new Array(questions.length).fill(null), revealed: new Array(questions.length).fill(false) };
+
+  function loadState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        if (parsed && Array.isArray(parsed.answers) && parsed.answers.length === questions.length) {
+          state = parsed;
+        }
+      }
+    } catch (e) { /* storage unavailable — start fresh */ }
+  }
+
+  function saveState() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* ignore */ }
+  }
+
+  function renderQuiz() {
+    var area = document.getElementById("quizArea");
+    var allDone = state.current >= questions.length;
+
+    if (allDone) {
+      renderScoreScreen(area);
+      return;
+    }
+
+    var idx = state.current;
+    var q = questions[idx];
+    var picked = state.answers[idx];
+    var revealed = state.revealed[idx];
+
+    var pct = Math.round((idx / questions.length) * 100);
+
+    var html = '';
+    html += '<div class="progress-row">';
+    html += '  <div class="progress-track"><div class="progress-fill" style="width:' + pct + '%"></div></div>';
+    html += '  <div class="progress-label">Question ' + (idx + 1) + ' / ' + questions.length + '</div>';
+    html += '</div>';
+    html += '<div class="qcard">';
+    html += '  <p class="qprompt">' + q.prompt + '</p>';
+    html += '  <div class="options" id="optionsRow"></div>';
+    html += '  <div class="hint-row" id="hintRow"></div>';
+    html += '  <div class="feedback-box" id="feedbackBox"></div>';
+    html += '  <div class="quiz-nav"><button class="btn" id="nextBtn" disabled>' + (idx === questions.length - 1 ? "See score" : "Next question") + '</button></div>';
+    html += '</div>';
+    area.innerHTML = html;
+
+    var optionsRow = document.getElementById("optionsRow");
+    q.options.forEach(function (optText, i) {
+      var btn = document.createElement("button");
+      btn.className = "option-btn";
+      btn.type = "button";
+      btn.innerHTML = '<span class="option-letter">' + letters[i] + '</span><span>' + optText + '</span>';
+      btn.disabled = revealed;
+      if (revealed) {
+        if (i === q.correct) btn.classList.add("correct");
+        else if (i === picked) btn.classList.add("incorrect");
+      }
+      btn.addEventListener("click", function () { selectOption(idx, i); });
+      optionsRow.appendChild(btn);
+    });
+
+    var hintRow = document.getElementById("hintRow");
+    if (!revealed && q.hint) {
+      var hintBtn = document.createElement("button");
+      hintBtn.className = "hint-btn";
+      hintBtn.type = "button";
+      hintBtn.textContent = "Need a hint?";
+      var hintText = document.createElement("p");
+      hintText.className = "hint-text";
+      hintText.style.display = "none";
+      hintText.textContent = q.hint;
+      hintBtn.addEventListener("click", function () {
+        hintText.style.display = hintText.style.display === "none" ? "block" : "none";
+      });
+      hintRow.appendChild(hintBtn);
+      hintRow.appendChild(hintText);
+    }
+
+    if (revealed) {
+      showFeedback(idx);
+      document.getElementById("nextBtn").disabled = false;
+    }
+
+    document.getElementById("nextBtn").addEventListener("click", function () {
+      state.current = idx + 1;
+      saveState();
+      renderQuiz();
+      window.scrollTo({ top: document.querySelector(".tabbar").offsetTop - 10, behavior: "smooth" });
+    });
+  }
+
+  function selectOption(qIdx, optIdx) {
+    if (state.revealed[qIdx]) return;
+    state.answers[qIdx] = optIdx;
+    state.revealed[qIdx] = true;
+    saveState();
+    renderQuiz();
+  }
+
+  function showFeedback(idx) {
+    var q = questions[idx];
+    var picked = state.answers[idx];
+    var box = document.getElementById("feedbackBox");
+    var isCorrect = picked === q.correct;
+    box.classList.add("show", isCorrect ? "good" : "bad");
+    var verdict = isCorrect ? "Correct!" : "Not quite.";
+    var verdictClass = isCorrect ? "good-text" : "bad-text";
+    box.innerHTML = '<div class="feedback-verdict ' + verdictClass + '">' + verdict + '</div><div>' + q.explanation + '</div>';
+  }
+
+  function renderScoreScreen(area) {
+    var score = 0;
+    questions.forEach(function (q, i) { if (state.answers[i] === q.correct) score++; });
+    var pct = Math.round((score / questions.length) * 100);
+    var msg;
+    if (pct === 100) msg = "Perfect score — you clearly understood the whole video!";
+    else if (pct >= 70) msg = "Great work — you understood most of the key points.";
+    else if (pct >= 40) msg = "Good effort — it might help to rewatch a few sections.";
+    else msg = "Consider rereading the transcript before moving on to the reflection questions.";
+
+    var html = '';
+    html += '<div class="score-screen">';
+    html += '  <div class="score-ring"><div class="score-num">' + score + '/' + questions.length + '</div><div class="score-den">' + pct + '%</div></div>';
+    html += '  <p class="score-msg">' + msg + '</p>';
+    html += '  <button class="btn ghost" id="retakeBtn">Retake the quiz</button>';
+    html += '  <button class="btn" id="goReflectBtn" style="margin-left:10px;">Go to reflection questions →</button>';
+    html += '</div>';
+    area.innerHTML = html;
+
+    document.getElementById("retakeBtn").addEventListener("click", function () {
+      state = { current: 0, answers: new Array(questions.length).fill(null), revealed: new Array(questions.length).fill(false) };
+      saveState();
+      renderQuiz();
+    });
+    document.getElementById("goReflectBtn").addEventListener("click", function () {
+      document.querySelector('.tabbtn[data-tab="reflect"]').click();
+    });
+  }
+
+  function loadReflections() {
+    try {
+      var raw = localStorage.getItem(REFLECT_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) { /* ignore */ }
+    return {};
+  }
+
+  function saveReflection(idx, value) {
+    try {
+      var all = loadReflections();
+      all[idx] = value;
+      localStorage.setItem(REFLECT_KEY, JSON.stringify(all));
+    } catch (e) { /* ignore */ }
+  }
+
+  function renderReflections() {
+    var area = document.getElementById("reflectArea");
+    var saved = loadReflections();
+    var html = '';
+    reflectionQuestions.forEach(function (q, i) {
+      html += '<div class="reflect-card">';
+      html += '  <div class="reflect-q"><span class="reflect-num">' + (i + 1) + '</span><span class="qtext">' + q + '</span></div>';
+      html += '  <textarea class="reflect-input" id="reflect' + i + '" placeholder="Write a few sentences here...">' + (saved[i] || "") + '</textarea>';
+      html += '  <div class="save-note"><span class="save-dot" id="dot' + i + '"></span><span>Saved automatically</span></div>';
+      html += '</div>';
+    });
+    area.innerHTML = html;
+
+    reflectionQuestions.forEach(function (q, i) {
+      var el = document.getElementById("reflect" + i);
+      var dot = document.getElementById("dot" + i);
+      var timer = null;
+      el.addEventListener("input", function () {
+        clearTimeout(timer);
+        timer = setTimeout(function () {
+          saveReflection(i, el.value);
+          dot.classList.add("show");
+          setTimeout(function () { dot.classList.remove("show"); }, 900);
+        }, 400);
+      });
+    });
+  }
+
+  function initTabs() {
+    var buttons = document.querySelectorAll(".tabbtn");
+    buttons.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        buttons.forEach(function (b) { b.classList.remove("active"); });
+        document.querySelectorAll(".tabpanel").forEach(function (p) { p.classList.remove("active"); });
+        btn.classList.add("active");
+        document.querySelector('.tabpanel[data-panel="' + btn.dataset.tab + '"]').classList.add("active");
+      });
+    });
+  }
+
+  loadState();
+  initTabs();
+  renderQuiz();
+  renderReflections();
+})();
+</script>
+<a href="../" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:9999;background:#2F86D6;color:#fff;font:700 13px/1 system-ui,sans-serif;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.2)">← 回群島</a>
+</body>
+</html>

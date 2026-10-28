@@ -1,0 +1,691 @@
+<!doctype html><html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style></head><body>
+<title>Gina 的教學群島</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="登上一座島，打開一間教室。Gina教室的AI奇蹟的教學工具、課程與工作坊，整理成八座主題島嶼。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Layout: sticky header → 3D archipelago stage with HTML labels → island index grid → shared discovery wall → footer. Island detail opens as a bottom sheet. */
+:root{
+  --bg:#F5F9FD; --bg-2:#EAF3FB; --card:#FFFFFF;
+  --accent:#2F86D6; --accent-deep:#1F6FB8; --accent-ink:#155A96; --tint:#DCEBFA;
+  --second:#0E9A9A; --second-tint:#D7F2F0;
+  --ink:#17324D; --ink-soft:#557089; --line:#D3E2EF; --on-accent:#FFFFFF;
+  --good:#3F7A3A; --good-tint:#E3EFDD; --bad:#A63D2A; --bad-tint:#F8E1DA;
+  --shadow:0 6px 22px rgba(31,111,184,.10);
+  --radius:16px;
+  /* 3D scene */
+  --sea:#CFE5F7; --sea-deep:#A9CFEE; --grass:#BFE3C4; --sand:#F1E6CF; --rock:#C9D6E2; --sky-top:#EAF4FD;
+  --f-body:'Nunito','Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1A26; --bg-2:#132233; --card:#182A3D;
+  --accent:#6CB4F0; --accent-deep:#4A9BE0; --accent-ink:#A6D2F8; --tint:#1C3550;
+  --second:#4FD1C5; --second-tint:#173A3A;
+  --ink:#E6EFF8; --ink-soft:#9FB3C8; --line:#26394D; --on-accent:#0F1A26;
+  --good:#8CC983; --good-tint:#22321F; --bad:#F09A84; --bad-tint:#3B231C;
+  --shadow:0 6px 22px rgba(0,0,0,.35);
+  --sea:#14304A; --sea-deep:#0F2539; --grass:#3E6B52; --sand:#6B5D45; --rock:#3A4D60; --sky-top:#0F1A26;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1A26; --bg-2:#132233; --card:#182A3D;
+  --accent:#6CB4F0; --accent-deep:#4A9BE0; --accent-ink:#A6D2F8; --tint:#1C3550;
+  --second:#4FD1C5; --second-tint:#173A3A;
+  --ink:#E6EFF8; --ink-soft:#9FB3C8; --line:#26394D; --on-accent:#0F1A26;
+  --good:#8CC983; --good-tint:#22321F; --bad:#F09A84; --bad-tint:#3B231C;
+  --shadow:0 6px 22px rgba(0,0,0,.35);
+  --sea:#14304A; --sea-deep:#0F2539; --grass:#3E6B52; --sand:#6B5D45; --rock:#3A4D60; --sky-top:#0F1A26;
+  color-scheme:dark}
+
+html{font-size:106.25%}
+html.big{font-size:118.75%}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);line-height:1.8;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--card)}
+a{color:var(--accent-ink)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:8px}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.num{font-variant-numeric:lining-nums tabular-nums}
+svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--card);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;align-items:center;gap:12px;padding-block:10px}
+.brand{display:flex;align-items:baseline;gap:8px;min-width:0;flex:1}
+.brand b{font-weight:900;font-size:1.02rem;white-space:nowrap}
+.brand .count{font-weight:800;color:var(--accent);font-size:1.02rem}
+.brand small{color:var(--ink-soft);font-size:.74rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pill{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-weight:700;font-size:.86rem;cursor:pointer}
+.pill:hover{border-color:var(--accent)}
+
+/* hero */
+.hero{padding-block:22px 6px}
+.eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:.74rem;font-weight:800;letter-spacing:.14em;color:var(--second);text-transform:uppercase}
+h1{font-size:clamp(1.55rem,6vw,2.2rem);line-height:1.3;font-weight:800;margin:6px 0 6px;text-wrap:balance}
+h1 em{font-style:normal;color:var(--accent)}
+.lead{color:var(--ink-soft);margin:0 0 4px;max-width:34em}
+.stats{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:10px;font-size:.86rem;color:var(--ink-soft)}
+.stats b{color:var(--ink);font-weight:800;font-size:1.05rem;margin-right:3px}
+
+/* stage */
+.stage-box{position:relative;margin-top:14px;border-radius:22px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(180deg,var(--sky-top),var(--sea));box-shadow:var(--shadow);height:clamp(340px,62vh,520px);touch-action:none}
+.stage-box canvas{display:block;width:100%;height:100%;cursor:grab}
+.stage-box canvas.drag{cursor:grabbing}
+.labels{position:absolute;inset:0;pointer-events:none}
+.ilabel{position:absolute;left:0;top:0;transform:translate(-50%,-100%);pointer-events:auto;display:flex;align-items:center;gap:6px;padding:4px 10px 4px 5px;border-radius:999px;background:var(--card);border:1.5px solid var(--line);color:var(--ink);font:inherit;font-weight:800;font-size:.78rem;white-space:nowrap;box-shadow:0 3px 10px rgba(23,50,77,.12);cursor:pointer;transition:transform .15s,border-color .15s}
+.ilabel:hover,.ilabel.on{border-color:var(--accent);color:var(--accent-ink)}
+.ilabel .dot{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;color:#fff}
+.ilabel .dot svg{width:13px;height:13px;stroke-width:2.4}
+.ilabel.hub{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.stage-hint{position:absolute;left:12px;bottom:10px;right:12px;display:flex;justify-content:space-between;gap:8px;pointer-events:none;font-size:.74rem;color:var(--ink-soft)}
+.stage-hint span{background:color-mix(in srgb,var(--card) 82%,transparent);padding:3px 10px;border-radius:999px}
+.stage-fallback{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px;color:var(--ink-soft)}
+.zoom{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;gap:6px}
+.zoom button{width:40px;height:40px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);display:grid;place-items:center;cursor:pointer}
+
+/* chips */
+.chips{display:flex;gap:8px;overflow-x:auto;padding:12px 2px 4px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px 0 6px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);font:inherit;font-weight:700;font-size:.84rem;color:var(--ink);cursor:pointer}
+.chip .dot{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;color:#fff}
+.chip .dot svg{width:15px;height:15px}
+
+/* sections */
+section.block{padding-block:34px 6px}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:14px}
+h2{font-size:1.32rem;font-weight:800;margin:0;line-height:1.35;text-wrap:balance}
+h2 .en{display:block;font-size:.72rem;font-weight:800;letter-spacing:.14em;color:var(--second);text-transform:uppercase;margin-bottom:2px}
+.sec-sub{color:var(--ink-soft);margin:4px 0 0;font-size:.92rem}
+
+/* island grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.icard{display:flex;flex-direction:column;gap:8px;text-align:left;padding:16px;border-radius:var(--radius);background:var(--card);border:1.5px solid var(--line);font:inherit;color:var(--ink);cursor:pointer;min-width:0}
+.icard:hover{border-color:var(--accent)}
+.icard .row{display:flex;align-items:center;gap:10px}
+.icard .hex{width:42px;height:42px;flex:none;display:grid;place-items:center;color:#fff;clip-path:polygon(25% 4%,75% 4%,100% 50%,75% 96%,25% 96%,0 50%)}
+.icard .hex svg{width:20px;height:20px}
+.icard h3{margin:0;font-size:1.02rem;font-weight:800;line-height:1.3}
+.icard h3 small{display:block;font-size:.7rem;font-weight:700;color:var(--ink-soft);letter-spacing:.06em}
+.icard p{margin:0;color:var(--ink-soft);font-size:.86rem;line-height:1.65}
+.icard .meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
+.tag{white-space:nowrap;flex:none;display:inline-flex;align-items:center;gap:4px;font-size:.72rem;font-weight:800;padding:2px 9px;border-radius:999px;background:var(--bg-2);color:var(--ink-soft)}
+.tag.live{background:var(--good-tint);color:var(--good)}
+.tag.demo{background:var(--tint);color:var(--accent-ink)}
+.tag.class{background:var(--second-tint);color:var(--second)}
+
+/* wall */
+.wall-form{display:grid;gap:10px;padding:16px;border-radius:var(--radius);background:var(--card);border:1.5px solid var(--line)}
+.wall-form .two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:460px){.wall-form .two{grid-template-columns:1fr}}
+label.f{display:grid;gap:4px;font-size:.82rem;font-weight:700;color:var(--ink-soft);min-width:0}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;min-height:46px;width:100%;min-width:0}
+textarea{resize:vertical;min-height:84px;line-height:1.6}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
+.form-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.form-foot small{color:var(--ink-soft)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 20px;border-radius:999px;border:none;background:var(--accent);color:var(--on-accent);font:inherit;font-weight:800;cursor:pointer;text-decoration:none}
+.btn:hover{background:var(--accent-deep)}
+.btn.ghost{background:var(--card);color:var(--accent-ink);border:1.5px solid var(--accent)}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.notes{display:grid;gap:10px;margin-top:14px}
+.note{padding:14px 16px;border-radius:var(--radius);background:var(--card);border:1px solid var(--line);display:grid;gap:6px;min-width:0}
+.note .who{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:.8rem;color:var(--ink-soft)}
+.note .who b{color:var(--ink);font-weight:800}
+.note p{margin:0;overflow-wrap:anywhere}
+.empty{padding:22px 16px;border-radius:var(--radius);border:1.5px dashed var(--line);color:var(--ink-soft);text-align:center;font-size:.92rem}
+.status{font-size:.82rem;color:var(--ink-soft)}
+.status.err{color:var(--bad)}
+
+/* sheet */
+.mask{position:fixed;inset:0;background:rgba(15,26,38,.42);z-index:40}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;max-height:88vh;overflow-y:auto;background:var(--bg);border-radius:22px 22px 0 0;box-shadow:0 -10px 40px rgba(15,26,38,.25);padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))}
+@media (min-width:820px){.sheet{left:50%;right:auto;width:720px;transform:translateX(-50%);bottom:24px;border-radius:22px;max-height:84vh}}
+.sheet .grab{width:44px;height:5px;border-radius:9px;background:var(--line);margin:10px auto 0}
+.sheet-head{position:sticky;top:0;z-index:2;background:var(--bg);padding-block:12px 0}
+.sheet-head .wrap{display:flex;align-items:center;gap:12px}
+.sheet-head .hex{width:48px;height:48px;flex:none;display:grid;place-items:center;color:#fff;clip-path:polygon(25% 4%,75% 4%,100% 50%,75% 96%,25% 96%,0 50%)}
+.sheet-head .hex svg{width:22px;height:22px}
+.sheet-head h3{margin:0;font-size:1.22rem;font-weight:800;line-height:1.25;flex:1;min-width:0}
+.sheet-head h3 small{display:block;font-size:.72rem;letter-spacing:.1em;color:var(--ink-soft);font-weight:700;text-transform:uppercase}
+.x{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);color:var(--ink);display:grid;place-items:center;cursor:pointer;flex:none}
+.seg{display:flex;background:var(--bg-2);border-radius:999px;padding:4px;margin:12px 0 2px}
+.seg button{flex:1;min-height:40px;border:none;background:none;border-radius:999px;font:inherit;font-weight:800;font-size:.88rem;color:var(--ink-soft);cursor:pointer}
+.seg button.on{background:var(--accent);color:var(--on-accent)}
+.sheet-body{padding-block:14px 4px;display:grid;gap:12px}
+
+.chief{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:var(--radius);background:var(--card);border:1px solid var(--line)}
+.chief .face{width:64px;height:64px;flex:none;border-radius:18px;display:grid;place-items:center}
+.chief .face svg{width:56px;height:56px}
+.chief b{font-weight:900}
+.chief .kind{font-size:.78rem;color:var(--ink-soft)}
+.chief p{margin:4px 0 0}
+.tools{display:grid;gap:10px}
+.tool{display:grid;gap:6px;padding:14px 16px;border-radius:var(--radius);background:var(--card);border:1.5px solid var(--line);min-width:0}
+.tool .t-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.tool h4{margin:0;font-size:1rem;font-weight:800;line-height:1.4}
+.tool p{margin:0;font-size:.88rem;color:var(--ink-soft);line-height:1.65}
+.tool .use{font-size:.84rem;color:var(--ink);background:var(--bg-2);border-radius:10px;padding:8px 10px;line-height:1.6}
+.tool .use b{color:var(--second)}
+.tool .go{justify-self:start;min-height:42px;font-size:.88rem;padding:0 16px}
+.tool .pending{font-size:.8rem;color:var(--ink-soft)}
+.talk{display:grid;gap:10px}
+.bubble{padding:14px 16px;border-radius:4px 18px 18px 18px;background:var(--card);border:1px solid var(--line)}
+.bubble .lab{display:flex;align-items:center;gap:6px;font-size:.74rem;font-weight:800;letter-spacing:.1em;color:var(--second);text-transform:uppercase;margin-bottom:4px}
+.bubble ul{margin:4px 0 0;padding-left:1.2em}
+.bubble li{margin:2px 0}
+.mission{background:var(--second-tint);border-color:transparent}
+.mission .lab{color:var(--second)}
+.mission .steps{counter-reset:s;list-style:none;padding:0;margin:6px 0 0;display:grid;gap:6px}
+.mission .steps li{counter-increment:s;display:flex;gap:10px}
+.mission .steps li::before{content:counter(s);flex:none;width:24px;height:24px;border-radius:50%;background:var(--second);color:var(--bg);display:grid;place-items:center;font-weight:800;font-size:.8rem}
+.done-row{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
+
+/* settings sheet */
+.set-row{display:grid;gap:6px;padding:12px 0;border-bottom:1px solid var(--line)}
+.set-row:last-child{border-bottom:none}
+.set-row b{font-weight:800}
+
+footer{margin-top:40px;padding-block:26px calc(26px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);background:var(--bg-2)}
+footer .wrap{display:grid;gap:4px;font-size:.84rem;color:var(--ink-soft)}
+footer b{color:var(--ink);font-weight:900}
+
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><b>Gina 的教學群島</b><span class="count num" id="toolCount"></span><small>Teaching Archipelago</small></div>
+    <button class="pill" id="openSettings" aria-label="設定"><svg class="i" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>設定</button>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <span class="eyebrow"><svg class="i" viewBox="0 0 24 24" style="width:15px;height:15px"><path d="M3 18c2 0 2-1.5 4.5-1.5S10 18 12 18s2-1.5 4.5-1.5S19 18 21 18"/><path d="M8 13l4-8 4 8z"/></svg>Gina教室的AI奇蹟</span>
+    <h1>八座島，<em>一間會長大的教室</em>。</h1>
+    <p class="lead">這裡收著 Gina 在鳳新高中做過的互動網頁與 PDF 教材，每一項都能直接打開。點一座島，島長會推薦工具、陪你想怎麼帶進課堂，再給你一個 10 分鐘就能開始的小任務。</p>
+    <div class="stats num" id="stats"></div>
+
+    <div class="stage-box" id="stage">
+      <div class="labels" id="labels"></div>
+      <div class="zoom">
+        <button id="zIn" aria-label="放大"><svg class="i" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
+        <button id="zOut" aria-label="縮小"><svg class="i" viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
+      </div>
+      <div class="stage-hint"><span>拖曳旋轉 · 雙指或滾輪縮放</span><span>點島名登島</span></div>
+    </div>
+    <div class="chips" id="chips" aria-label="島嶼快速選單"></div>
+  </div>
+
+  <section class="block" id="islands">
+    <div class="wrap">
+      <div class="sec-head"><div><h2><span class="en">Island Index</span>群島清單</h2><p class="sec-sub">不想轉地圖，直接從這裡登島。</p></div></div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <section class="block" id="wall" hidden>
+    <div class="wrap">
+      <div class="sec-head"><div><h2><span class="en">Learn Together</span>一起共學</h2><p class="sec-sub">用過哪個工具、改了什麼、學生怎麼反應？留一句你的發現，讓靈感在島與島之間接力。</p></div></div>
+      <form class="wall-form" id="wallForm" autocomplete="off">
+        <div class="two">
+          <label class="f" for="nick">暱稱或學校<input id="nick" maxlength="20" placeholder="例：高雄英文老師"></label>
+          <label class="f" for="isle">從哪座島帶回來<select id="isle"></select></label>
+        </div>
+        <label class="f" for="msg">一句發現（80 字內）<textarea id="msg" maxlength="80" placeholder="例：論述練功房的 3 分鐘計時，讓原本不敢開口的學生願意先講 1 分鐘。"></textarea></label>
+        <div class="form-foot"><small class="status" id="wallStatus">連線中…</small><button class="btn" id="wallSend" type="submit" disabled>留下發現</button></div>
+      </form>
+      <div class="notes" id="notes"><div class="empty">還沒有人留言。第一則發現會出現在這裡。</div></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <b>Gina教室的AI奇蹟</b>
+    <span>鳳新高中英文科李姬慧老師 X AI 彙整製作</span>
+    <span>啟動好奇，一起長大。</span>
+  </div>
+</footer>
+
+<div class="mask" id="mask" hidden></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ---------- 圖示（SVG 線條） ---------- */
+const IC={
+  clock:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/>',
+  book:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5M9 7h6"/>',
+  mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',
+  compass:'<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',
+  heart:'<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>',
+  leaf:'<path d="M5 19c0-8 5-13 14-14 0 9-5 14-13 14z"/><path d="M5 19l7-7"/>',
+  star:'<path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.5 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/>',
+  gear:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/>',
+  hub:'<path d="M3 10l9-6 9 6M5 10v9h14v-9"/><path d="M10 19v-5h4v5"/>',
+  file:'<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>',
+  link:'<path d="M14 4h6v6M20 4l-9 9"/><path d="M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/>',
+  x:'<path d="M6 6l12 12M18 6L6 18"/>',
+  check:'<path d="M5 12l5 5 9-10"/>',
+  spark:'<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6"/>'
+};
+const svg=(k,cls='i')=>`<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="true">${IC[k]}</svg>`;
+
+/* ---------- 成品連結：新增或修改，只要改這裡 ----------
+   k: 'web' 互動網頁 ｜ 'pdf' 學生版 PDF ｜ 'lock' 限校內使用（不開放連結）
+   u: 相對路徑（pages/、pdf/ 在本資料夾；../ 是 GSAT-Coach 工具箱）或完整網址 */
+const GC='../';
+const LP='https://chginali-gina.github.io/LearningPortofolio/';
+const P=s=>'pages/'+s+'.html', F=s=>'pdf/'+s+'.pdf';
+/* 在 GitHub Pages 用相對路徑；在其他地方預覽時改連到公開網址 */
+const SITE='https://chginali-gina.github.io/GSAT-Coach/island/';
+const abs=u=>{try{return new URL(u,/github\.io$/.test(location.hostname)?location.href:SITE).href}catch(e){return u}};
+
+/* ---------- 島嶼資料 ---------- */
+const ISLANDS=[
+{ id:'exam', name:'學測備考島', en:'Exam Harbor', icon:'clock', color:'#2F86D6',
+  blurb:'倒數、課表、每日覆盤、題型分析與長句文法練習，陪高三生把一年拆成每一天。',
+  chief:{name:'潮潮',kind:'海豚 × 時鐘精靈',ears:'fin',mark:'clock',
+    hello:'我負責幫學生把「還有 80 天」變成「今天做這三件事」。老師先挑一個最常被問到的困擾，我們從那裡開始。'},
+  tools:[
+    {n:'學測陪跑系統',k:'web',u:GC+'gina-gsat-coach.html',d:'學測倒數、週課表規劃、各科戰況追蹤，Gemini 給個人化備考策略。',use:'班會時讓全班一起設定週課表，兩週後回來對照戰況。'},
+    {n:'每日學習 × AI 診斷',k:'web',u:GC+'gina-holistic-time-system.html',d:'三色時間軸、番茄鐘、分心計數、費曼輸出，最後 AI 依腦科學框架覆盤。',use:'早自習 10 分鐘記錄前一天時間，週五挑一份匿名分享。'},
+    {n:'如何申請 Gemini API Key',k:'web',u:GC+'gemini-apikey-guide.html',d:'圖文步驟，3 分鐘完成、免費、免綁信用卡。給成年使用者。'},
+    {n:'學測英文歷屆題型分析（111–115）',k:'pdf',u:F('gsat-question-type-analysis'),d:'逐題統計五年學測英文：各題型考點、選項設計手法、混合題與非選評分重點。',use:'學期初給學生看「分數藏在哪裡」，再決定複習順序。'},
+    {n:'學測長句拆解特訓（30 題）',k:'pdf',u:F('long-sentence-30'),d:'分詞構句與複合長句，社群媒體與數位健康主題。'},
+    {n:'學測長句拆解特訓（50 題）',k:'pdf',u:F('long-sentence-50'),d:'加入延伸文法句構的完整版。'},
+    {n:'L4–L6 文法重點與練習',k:'pdf',u:F('l4-l6-grammar-practice'),d:'每課 11 個文法重點，選擇、改寫、翻譯共 33 題。'},
+    {n:'文法強化學習單',k:'pdf',u:F('grammar-boost-student'),d:'動詞形式、詞性、不可數名詞、平行結構：環境議題寫作常見錯誤。'},
+    {n:'課文改寫題組綜合練習卷',k:'pdf',u:F('text-rewrite-practice-student'),d:'綜合測驗 30 題＋文意選填 60 題，學測仿真。'},
+    {n:'多益衝刺十週計畫',k:'pdf',u:F('toeic-10-week-plan'),d:'目標設定、每日 1 小時的十週進度表。'},
+    {n:'TOEIC 錯題訂正模版',k:'pdf',u:F('toeic-error-log'),d:'把錯題變成下一次的得分。'}
+  ],
+  think:['你的學生最常卡在「不知道從哪開始」，還是「開始了撐不下去」？','如果只能留一個數字給學生看，你希望是倒數天數，還是本週完成率？'],
+  after:['用完後問學生：哪一個時段最容易分心？他打算拿什麼換掉它？'],
+  mission:{t:'10 分鐘：幫一位學生排出下週',steps:['打開學測陪跑系統，用自己的帳號跑一次週課表。','把排好的畫面截圖。','下次輔導時拿給一位學生看，請他改成他的版本。']}},
+
+{ id:'story', name:'課文闖關島', en:'Story Isle', icon:'book', color:'#0E9A9A',
+  blurb:'課本每一課的 3D 闖關、拼字競技場、學習單與單字練習。',
+  chief:{name:'羽羽',kind:'貓頭鷹 × 書頁精靈',ears:'tuft',mark:'book',
+    hello:'一篇課文在我這裡會變成一座山、一場拼字賽或一張學習單。你手上這一課，想先從哪裡開始？'},
+  tools:[
+    {n:'L6 The Country of the Blind · 3D 闖關',k:'web',u:GC+'country-of-the-blind.html',d:'跟登山家 Nuñez 掉進盲人山谷：3D 過場、找線索、用耳朵辨方向，6 關走完單字、句型與情節。',use:'第一節課當暖身，讓學生先闖前兩關再讀原文。'},
+    {n:'L6 Story Mountain Quest · v2',k:'web',u:GC+'country-of-the-blind-v2.html',d:'蒐集 24 顆單字水晶、拼課本句型、從文中找證據。',use:'課文教完後當總複習，看誰先爬到山頂。'},
+    {n:'L2 The Marshmallow Challenge 學習單',k:'pdf',u:F('l2-marshmallow-student'),d:'CEFR B2 課文學習單：單字、句型、閱讀理解。'},
+    {n:'L2 Crossword 填字遊戲',k:'pdf',u:F('l2-marshmallow-crossword'),d:'用英英定義找出本課核心字。'},
+    {n:'L2 Vocabulary Bingo 字卡',k:'pdf',u:F('l2-marshmallow-bingo'),d:'5 分鐘就能開局的單字賓果。'},
+    {n:'L3 Prometheus 學習單',k:'pdf',u:F('l3-prometheus-student'),d:'The Champion of Humankind 全課學習單。'},
+    {n:'L3 Prometheus Crossword',k:'pdf',u:F('l3-prometheus-crossword'),d:'本課核心字填字遊戲。'},
+    {n:'普羅米修斯拼字競技場',k:'web',u:P('prometheus-spelling'),d:'L3 單字拼字闖關遊戲。',use:'下課前 5 分鐘全班一起闖，錯最多的字就是明天的小考。'},
+    {n:'L4 Day of the Dead 學習單',k:'pdf',u:F('l4-day-of-the-dead-student'),d:'14 頁完整學習單：單字、片語、句型與閱讀。'},
+    {n:'亡靈節拼字競技場',k:'web',u:P('day-of-the-dead-spelling'),d:'L4 單字拼字遊戲。'},
+    {n:'L5 Kyoto: The Heart of Japan 學習單',k:'pdf',u:F('kyoto-worksheet'),d:'修訂版閱讀學習單。'},
+    {n:'智慧記憶宮殿',k:'web',u:P('memory-palace'),d:'貼文字或上傳 PDF，抽出關鍵詞，配上宮殿錨點與荒謬劇本來記單字。'},
+    {n:'詞彙練習 Level 5',k:'pdf',u:F('vocab-level5'),d:'文意選填 20 題與詞彙單選，Level 5 全範圍。'},
+    {n:'詞彙練習（landlady～zoom）',k:'pdf',u:F('vocab-landlady-student'),d:'四篇短文文意選填。'},
+    {n:'聽英拼寫高機率單字表',k:'pdf',u:F('spelling-contest-wordlist'),d:'113、114 學年度英文單字比賽考題分析，依陷阱類型分 6 類。'},
+    {n:'單字自學任務 × ChatGPT 學習模式',k:'pdf',u:F('vocab-selfstudy-chatgpt'),d:'讓學生用 AI 學習模式自學單字的任務單。'}
+  ],
+  think:['這一課最重要的是情節、單字，還是作者觀點？遊戲只該放大其中一個。','學生「玩完」之後，你要他帶走哪一句可以用在作文裡的句型？'],
+  after:['問學生：哪一關最難？是英文看不懂，還是情節想不通？'],
+  mission:{t:'10 分鐘：把一課變成一座山',steps:['打開 Story Mountain v2，只看關卡結構。','在紙上把下週要教的課文分成 開端／上升／高潮／結局。','每段挑 4 個關鍵字，這就是你自己的單字水晶。']}},
+
+{ id:'voice', name:'寫作講台島', en:'Voice Isle', icon:'mic', color:'#4F6BD8',
+  blurb:'3 分鐘論述、白話拆解、兩段式作文與氣候演講稿。',
+  chief:{name:'啾啾',kind:'鸚鵡 × 風之精靈',ears:'crest',mark:'mic',
+    hello:'會說和會寫是同一件事：先想清楚，再說出來，最後寫下來。'},
+  tools:[
+    {n:'論述練功房 3:00',k:'web',u:GC+'argument-gym.html',d:'8 種說服技巧、4 種講稿架構，AI 找正反觀點，最後計時講一次。中英雙語。',use:'面試、備審口試、英文口說前各練一輪。'},
+    {n:'白話拆解教室',k:'web',u:P('plain-talk-studio'),d:'把大主題一層一層講白話的開課引子。這個公開版可瀏覽示範內容，AI 拆解功能只在 Gina 的 claude.ai 版開放。'},
+    {n:'兩段式作文衝刺課',k:'web',u:P('two-paragraph-essay'),d:'主題句、支持句、架構、連貫、進階句型的互動課。',use:'搭配下方講義，一節課走完一篇。'},
+    {n:'兩段式作文衝刺講義',k:'pdf',u:F('two-paragraph-essay-student'),d:'12 頁學生版講義。'},
+    {n:'學測英文作文高分寫作手冊',k:'pdf',u:F('gsat-essay-handbook'),d:'五個評分面向逐一拆解，附範例與自我檢核。'},
+    {n:'Voices for the Earth 氣候演講稿',k:'web',u:'https://voices-for-the-earth.vercel.app',d:'六大模組帶學生寫出 3–5 分鐘英文氣候演講稿，附互評檢核。'},
+    {n:'氣候演講稿範文（學生版）',k:'pdf',u:F('climate-speech-student'),d:'Let’s Take Action Against Climate Change 範文。'},
+    {n:'學測英文作文批改站',k:'lock',d:'AI 依學測評分規準批改作文。目前限 Gina 的班級使用。'}
+  ],
+  think:['你希望學生練的是「敢開口」，還是「講得有邏輯」？兩者的第一步不一樣。','什麼樣的題目，學生不用查資料也能有立場？'],
+  after:['講完或寫完後只問一題：你最有把握的是哪一句？'],
+  mission:{t:'10 分鐘：自己先講 3 分鐘',steps:['打開論述練功房，選「上課收手機」這題。','挑一種講稿架構，用手機計時講一次。','記下你卡住的地方，那就是學生最需要的鷹架。']}},
+
+{ id:'compass', name:'升學航道島', en:'Compass Isle', icon:'compass', color:'#1F8F6A',
+  blurb:'學習歷程、自主學習選題、專題研究與實作發想。',
+  chief:{name:'穩穩',kind:'海龜 × 羅盤精靈',ears:'shell',mark:'compass',
+    hello:'升學不是衝刺，是航行。我幫學生先找到一個真心好奇的問題，再一步一步做成作品。'},
+  tools:[
+    {n:'作伙做學檔（學生版）',k:'web',u:LP,d:'課程學習成果呈現指南，源自台大「作伙學」計畫。',use:'高二下學期，用案例讓小組互評一份學習成果。'},
+    {n:'作伙做學檔（教師版）',k:'web',u:LP+'teacher.html',d:'含 6 個小組討論案例的帶領版本。'},
+    {n:'學檔鑑賞大會學習單',k:'pdf',u:F('learning-portfolio-worksheet'),d:'小組評析優良課程學習成果與自主學習計畫。'},
+    {n:'自主學習選題羅盤',k:'web',u:P('topic-compass'),d:'一步步帶學生把興趣縮小成可執行的題目。'},
+    {n:'專題研究工具箱',k:'web',u:P('research-toolbox'),d:'文獻、問卷、訪談與質性編碼、結果解讀、研究倫理五個模組。'},
+    {n:'實作發想工坊',k:'web',u:P('maker-workshop'),d:'把興趣變成能力與資源範圍內做得出來的作品。'},
+    {n:'城市提案｜自主學習計畫書範本',k:'pdf',u:F('city-proposal-plan-template'),d:'3–5 人小組一學期 18 週的計畫範本。'},
+    {n:'假訊息偵探社｜自主學習計畫書範本',k:'pdf',u:F('fake-news-detective-plan-template'),d:'2–4 人小組媒體素養主題計畫範本。'},
+    {n:'生活觀察解題室',k:'lock',d:'從日常觀察找問題、挑實作方案。限鳳新高中學生登入使用。'}
+  ],
+  think:['學生的題目太大，還是太無聊？兩種要用的提問完全不同。','一份「好的」學習成果，你會先看過程還是先看結論？'],
+  after:['請學生用一句話說：如果三週後只剩一個發現，他希望是什麼？'],
+  mission:{t:'10 分鐘：看完一個討論案例',steps:['打開作伙做學檔，挑一個討論案例。','用便利貼寫下你會給這份成果的一個優點、一個建議。','把這兩張便利貼帶進下次的小組討論當示範。']}},
+
+{ id:'heart', name:'心晴小島', en:'Heart Isle', icon:'heart', color:'#D46A8C',
+  blurb:'社會情緒學習：AI 隊友、情緒調節工具箱。',
+  chief:{name:'軟軟',kind:'兔 × 雲朵精靈',ears:'long',mark:'heart',
+    hello:'情緒不是要被修好，是要被看見。我先陪學生把心情說出名字。'},
+  tools:[
+    {n:'心航小隊 Compass Crew',k:'web',u:GC+'compass-crew.html',d:'AI 隊友陪聊生活、情緒與升學探索；需自備 API 金鑰。',use:'給已能自行申請金鑰的成年學生或家長；未成年學生改由老師帶領示範。'},
+    {n:'心航小隊產品企劃書',k:'pdf',u:F('compass-crew-proposal'),d:'定位、角色設計、安全機制與使用情境。'},
+    {n:'我的情緒調節工具箱',k:'pdf',u:F('sel-emotion-toolbox'),d:'情緒紅綠燈自我檢測與調節策略的 SEL 學習單。',use:'段考前一週的班會課使用。'}
+  ],
+  think:['你的班上，最常被忽略的是哪一種情緒？','學生需要的是說出來，還是先安靜下來？'],
+  after:['結束時請學生在紙上寫一個詞，形容現在的自己。不收、不看，只是寫。'],
+  mission:{t:'10 分鐘：自己走一次情緒冰山',steps:['回想這週一件讓你卡住的教學小事。','寫下表面的反應，再往下寫你真正在意的是什麼。','想想：如果學生也這樣寫，你希望他寫到第幾層？']}},
+
+{ id:'sdgs', name:'SDGs 永續島', en:'Green Isle', icon:'leaf', color:'#3F9A3A',
+  blurb:'多元選修的永續島遊戲、氣候委員會、綠色亞運提案、COP 與核能閱讀。',
+  chief:{name:'綠綠',kind:'樹蛙 × 葉子精靈',ears:'frog',mark:'leaf',
+    hello:'永續不是背 17 個目標，是在取捨裡做決定。我讓學生扮演部長，吵完再投票。'},
+  tools:[
+    {n:'SDGs 永續島（入門版＋議會版）',k:'web',u:'https://sdgs-island.vercel.app',d:'六角浮島介面的雙語遊戲，個人版認識取捨、議會版四人共決。',use:'學期初玩入門版，期末專題前玩議會版，比較前後的辯護句。'},
+    {n:'Climate Guardians 氣候守衛者',k:'web',u:P('climate-guardians'),d:'6 角色氣候委員會遊戲，帶河灣市在 2050 年前減碳 50%。'},
+    {n:'綠色亞運提案匿名投票',k:'web',u:'https://chginali-gina.github.io/SDGs_Green-Asian-Games-Proposal-Votes/',d:'90 秒倒數、大螢幕開票、匿名理由便利貼牆。'},
+    {n:'綠色亞運六大提案：解方與配套',k:'pdf',u:F('green-asian-games-six-proposals'),d:'中英雙語提案範例。'},
+    {n:'綠色亞運工作坊學習單',k:'pdf',u:F('sdgs-workshop-worksheets'),d:'50 分鐘雙語提案工作坊，大字版。'},
+    {n:'SDGs Around the World 尋寶遊戲',k:'pdf',u:F('sdgs-scavenger-hunt'),d:'站點卡與答題單，英文為主、地理為輔。'},
+    {n:'SDGs 世界地圖海報',k:'pdf',u:F('sdgs-world-map-poster'),d:'尋寶遊戲的配套教具。'},
+    {n:'用 AI 查 SDGs 統計數據',k:'pdf',u:F('sdgs-ai-statistics-student'),d:'用 Perplexity 等工具查證數據的學習單。'},
+    {n:'COP21 到今日：地理 × 英文閱讀',k:'web',u:P('cop21-reading'),d:'氣候高峰會跨科課堂活動。'},
+    {n:'COP21 到今日學習單',k:'pdf',u:F('cop21-worksheet'),d:'From Paris to Belém 學生學習單。'},
+    {n:'COP15–29 拼圖閱讀卡',k:'pdf',u:F('cop-jigsaw-cards'),d:'專家小組拼圖閱讀用卡片。'},
+    {n:'COP 模擬談判國家代表團卡',k:'pdf',u:F('cop-negotiation-cards'),d:'6 組國家角色卡，正反面。'},
+    {n:'我們需要核能，才能阻止氣候變遷嗎？',k:'web',u:P('nuclear-reading'),d:'雙立場議題閱讀。'},
+    {n:'Nuclear Energy and Climate Change Quiz',k:'web',u:P('nuclear-quiz'),d:'搭配核能閱讀的理解測驗。'},
+    {n:'From Waste to Worth 學習單',k:'pdf',u:F('waste-to-worth-worksheet'),d:'循環經濟與氣候變遷學生學習單。'},
+    {n:'SDGs 城市提案網站',k:'web',u:'https://sdgs-city-proposal.vercel.app',d:'高中生城市提案成果展示。'}
+  ],
+  think:['這個議題裡，誰的聲音最常被忘記？','學生做決定時，是看數據還是看人？兩種都要練。'],
+  after:['投完票問：如果你是輸的那一組，你會怎麼改提案？'],
+  mission:{t:'10 分鐘：設計一個兩難',steps:['挑一個校園內的永續議題（例：福利社塑膠袋）。','寫出兩個都有道理的立場。','各給一個數據，這就是下一堂課的辯論題。']}},
+
+{ id:'class', name:'班級經營島', en:'Class Town', icon:'star', color:'#D99A1E',
+  blurb:'好事星探社、班級 Debug 松與園遊會點餐。',
+  chief:{name:'旺旺',kind:'柴犬 × 星星精靈',ears:'pointy',mark:'star',
+    hello:'好的班級是學生一起修出來的。我把每一件小小的好事都記下來，讓它被看見。'},
+  tools:[
+    {n:'好事星探社',k:'web',u:P('star-points'),d:'學生自薦或互薦好事，老師審核給點。公開版為示範資料，資料只存在瀏覽器。'},
+    {n:'班級 Debug 松',k:'web',u:P('class-debugthon'),d:'仿市政 Debug 松，學生一起找班級問題、提案、追蹤修正。示範版。'},
+    {n:'園遊會菜單與點餐',k:'web',u:'https://class208-fair.vercel.app',d:'菜單展示、試算與出示給櫃檯的點餐單。'}
+  ],
+  think:['你希望學生在乎的是點數，還是被同學看見？','班上哪一個問題，其實學生比你更清楚？'],
+  after:['一週後問：誰的好事最讓你意外？'],
+  mission:{t:'10 分鐘：開一張班級 Debug 單',steps:['在黑板角落寫「本週 Bug：＿＿」。','讓學生投票選出一個最想修的小問題。','下週回報修好了沒，這就是 Debug 松的第一輪。']}},
+
+{ id:'teacher', name:'教師增能島', en:'Teacher Lab', icon:'gear', color:'#7A5BC4',
+  blurb:'給老師的課程地圖工作坊與 AI 出題手冊。',
+  chief:{name:'阿構',kind:'狐狸 × 齒輪精靈',ears:'pointy',mark:'gear',
+    hello:'工具每個月都在變，備課的邏輯不太變。我陪老師先想清楚學生要什麼，再挑 AI。'},
+  tools:[
+    {n:'課程地圖工作坊',k:'web',u:P('course-map-workshop'),d:'把課程計畫 PDF 用 AI 做成可點選的課程地圖：流程、提示詞與範例。'},
+    {n:'課程地圖範本',k:'web',u:P('course-map-template'),d:'2D 課程地圖成品範本。'},
+    {n:'課程群島 3D',k:'web',u:P('course-islands-3d'),d:'3D 版課程群島範例。'},
+    {n:'AI 單字題庫與隨機出題操作手冊',k:'pdf',u:F('ai-vocab-bank-manual'),d:'用試算表＋AI 建單字題庫、每次隨機出不同考卷。'}
+  ],
+  think:['你最想省下的備課時間，是找素材、出題，還是批改？','哪一份教材你每學期都在重做？那就是第一個值得自動化的。'],
+  after:['工作坊結束前，請老師寫下「明天早上第一件要試的事」。'],
+  mission:{t:'10 分鐘：選一份要自動化的教材',steps:['列出這學期你重做最多次的三份教材。','圈出格式最固定的那一份。','把它的格式寫成一段給 AI 的說明，這就是你的第一個 Skill。']}}
+];
+const HUB={id:'hub',name:'共學廣場',en:'The Commons',icon:'hub',color:'#2F86D6'};
+
+/* ---------- 島長頭像（線條） ---------- */
+function chiefFace(c,color){
+  const e={
+    fin:'<path d="M32 12c6-6 12-6 14-4-4 1-7 4-8 8"/>',
+    tuft:'<path d="M18 16l-4-9 9 5M46 16l4-9-9 5"/>',
+    crest:'<path d="M32 12c-2-6 2-9 6-8-3 2-2 5-1 8M28 12c-4-5-2-8 1-9"/>',
+    shell:'<path d="M14 40c-4-14 8-26 18-26s22 12 18 26"/>',
+    long:'<path d="M23 16c-3-10-1-14 2-14s4 6 2 14M41 16c3-10 1-14-2-14s-4 6-2 14"/>',
+    frog:'<circle cx="22" cy="15" r="5"/><circle cx="42" cy="15" r="5"/>',
+    pointy:'<path d="M17 20l1-12 9 7M47 20l-1-12-9 7"/>'
+  }[c.ears]||'';
+  return `<svg viewBox="0 0 64 64" fill="none" stroke="${color}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    ${e}<circle cx="32" cy="35" r="17" fill="var(--card)"/>
+    <circle cx="25.5" cy="33" r="1.8" fill="${color}"/><circle cx="38.5" cy="33" r="1.8" fill="${color}"/>
+    <path d="M28 40c2.4 2 5.6 2 8 0"/>
+    <g transform="translate(43 43) scale(.62)"><circle cx="12" cy="12" r="11" fill="var(--card)"/>${IC[c.mark]}</g>
+  </svg>`;
+}
+
+/* ---------- 狀態 ---------- */
+const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+const done=new Set((store.get('gta-done')||'').split(',').filter(Boolean));
+if(store.get('gta-big')==='1')document.documentElement.classList.add('big');
+const KIND={web:['互動網頁','live'],pdf:['PDF','demo'],lock:['限校內','class']};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- 頁面清單 ---------- */
+const allTools=ISLANDS.flatMap(i=>i.tools);
+$('#toolCount').textContent=allTools.length;
+$('#stats').innerHTML=`<span><b>${ISLANDS.length}</b>座主題島</span><span><b>${allTools.filter(t=>t.k==='web').length}</b>個互動網頁</span><span><b>${allTools.filter(t=>t.k==='pdf').length}</b>份 PDF 教材</span>`;
+$('#chips').innerHTML=ISLANDS.map(i=>`<button class="chip" data-id="${i.id}"><span class="dot" style="background:${i.color}">${svg(i.icon)}</span>${i.name}</button>`).join('');
+$('#grid').innerHTML=ISLANDS.map(i=>{
+  const web=i.tools.filter(t=>t.k==='web').length, pdf=i.tools.filter(t=>t.k==='pdf').length;
+  return `<button class="icard" data-id="${i.id}">
+    <div class="row"><span class="hex" style="background:${i.color}">${svg(i.icon)}</span><h3><small>${i.en}</small>${i.name}</h3></div>
+    <p>${i.blurb}</p>
+    <div class="meta"><span class="tag">島長 ${i.chief.name}</span>${web?`<span class="tag live num">${web} 網頁</span>`:''}${pdf?`<span class="tag demo num">${pdf} PDF</span>`:''}${done.has(i.id)?'<span class="tag demo">任務完成</span>':''}</div>
+  </button>`}).join('');
+$('#isle').innerHTML=ISLANDS.map(i=>`<option value="${i.id}">${i.name}</option>`).join('');
+document.addEventListener('click',e=>{const b=e.target.closest('[data-id]');if(b&&!b.closest('.sheet'))openIsland(b.dataset.id)});
+
+/* ---------- 島嶼面板 ---------- */
+let current=null,tab='tools',lastFocus=null;
+function openIsland(id){
+  if(id==='hub'){const w=document.getElementById('wall');(w.hidden?document.getElementById('islands'):w).scrollIntoView({behavior:'smooth'});return}
+  current=ISLANDS.find(i=>i.id===id);if(!current)return;
+  tab='tools';lastFocus=document.activeElement;
+  renderSheet();$('#mask').hidden=false;$('#sheet').hidden=false;$('#sheet').scrollTop=0;
+  document.body.style.overflow='hidden';
+  setTimeout(()=>$('#sheet .x')?.focus(),30);
+  focusIsland(id);
+}
+function closeSheet(){
+  $('#mask').hidden=true;$('#sheet').hidden=true;document.body.style.overflow='';
+  document.querySelectorAll('.ilabel').forEach(l=>l.classList.remove('on'));
+  current=null;lastFocus?.focus?.();
+}
+function renderSheet(){
+  const i=current,c=i.chief;
+  const toolsHTML=i.tools.map(t=>{const [lab,cls]=KIND[t.k];return `<article class="tool">
+    <div class="t-head"><h4>${esc(t.n)}</h4><span class="tag ${cls}">${lab}</span></div>
+    <p>${esc(t.d)}</p>
+    ${t.use?`<div class="use"><b>課堂用法</b>　${esc(t.use)}</div>`:''}
+    ${t.u?`<a class="btn go" href="${abs(t.u)}" target="_blank" rel="noopener">${svg(t.k==='pdf'?'file':'link')}${t.k==='pdf'?'開啟 PDF':'開啟網頁'}</a>`:`<span class="pending">不開放公開連結。</span>`}
+  </article>`}).join('');
+  const talkHTML=`<div class="talk">
+    <div class="bubble"><div class="lab">${svg('spark')}用之前想一想</div><ul>${i.think.map(q=>`<li>${q}</li>`).join('')}</ul></div>
+    <div class="bubble"><div class="lab">${svg('check')}用之後問一問</div><ul>${i.after.map(q=>`<li>${q}</li>`).join('')}</ul></div>
+    <div class="bubble mission"><div class="lab">${svg('star')}小任務 · ${i.mission.t}</div>
+      <ol class="steps">${i.mission.steps.map(s=>`<li>${s}</li>`).join('')}</ol>
+      <div class="done-row"><button class="btn ${done.has(i.id)?'ghost':''}" id="doneBtn">${svg('check')}${done.has(i.id)?'已完成，再做一次':'我完成了'}</button>${document.getElementById('wall').hidden?'':'<button class="btn ghost" id="toWall">去共學牆留言</button>'}</div>
+    </div></div>`;
+  $('#sheet').innerHTML=`<div class="grab"></div>
+    <div class="sheet-head"><div class="wrap">
+      <span class="hex" style="background:${i.color}">${svg(i.icon)}</span>
+      <h3 id="sheetTitle"><small>${i.en}</small>${i.name}</h3>
+      <button class="x" aria-label="關閉">${svg('x')}</button>
+    </div><div class="wrap"><div class="seg" role="tablist">
+      <button role="tab" class="${tab==='tools'?'on':''}" data-tab="tools" aria-selected="${tab==='tools'}">成品 <span class="num">${i.tools.length}</span></button>
+      <button role="tab" class="${tab==='talk'?'on':''}" data-tab="talk" aria-selected="${tab==='talk'}">找島長聊聊</button>
+    </div></div></div>
+    <div class="wrap sheet-body">
+      <div class="chief"><div class="face" style="background:${i.color}22">${chiefFace(c,i.color)}</div>
+        <div><b>島長 ${c.name}</b> <span class="kind">${c.kind}</span><p>${c.hello}</p></div></div>
+      ${tab==='tools'?`<div class="tools">${toolsHTML}</div>`:talkHTML}
+    </div>`;
+  $('#sheet .x').onclick=closeSheet;
+  $('#sheet').querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;renderSheet();$('#sheet').scrollTop=0});
+  const db_=$('#doneBtn');if(db_)db_.onclick=()=>{done.add(i.id);store.set('gta-done',[...done].join(','));renderSheet();refreshGrid()};
+  const tw=$('#toWall');if(tw)tw.onclick=()=>{closeSheet();$('#isle').value=i.id;document.getElementById('wall').scrollIntoView({behavior:'smooth'});setTimeout(()=>$('#msg').focus(),500)};
+}
+function refreshGrid(){document.querySelectorAll('.icard').forEach(card=>{const id=card.dataset.id;const m=card.querySelector('.meta');if(done.has(id)&&!m.querySelector('.tag.demo'))m.insertAdjacentHTML('beforeend','<span class="tag demo">任務完成</span>')})}
+$('#mask').onclick=closeSheet;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#sheet').hidden)closeSheet()});
+
+/* ---------- 設定 ---------- */
+$('#openSettings').onclick=()=>{
+  current=null;lastFocus=document.activeElement;
+  const big=document.documentElement.classList.contains('big');
+  $('#sheet').innerHTML=`<div class="grab"></div><div class="sheet-head"><div class="wrap"><h3 id="sheetTitle"><small>Settings</small>設定</h3><button class="x" aria-label="關閉">${svg('x')}</button></div></div>
+    <div class="wrap sheet-body"><div class="set-row"><b>字級</b><div class="seg"><button class="${big?'':'on'}" data-size="0">標準</button><button class="${big?'on':''}" data-size="1">放大</button></div></div>
+    <div class="set-row"><b>小任務進度</b><span class="status num">已完成 ${done.size} / ${ISLANDS.length} 座島的小任務（只存在這台裝置）。</span></div></div>`;
+  $('#mask').hidden=false;$('#sheet').hidden=false;
+  $('#sheet .x').onclick=closeSheet;$('#sheet .x').focus();
+  $('#sheet').querySelectorAll('[data-size]').forEach(b=>b.onclick=()=>{document.documentElement.classList.toggle('big',b.dataset.size==='1');store.set('gta-big',b.dataset.size);$('#openSettings').click()});
+};
+
+/* ---------- 3D 群島 ---------- */
+let focusIsland=()=>{};
+(function(){
+  const box=$('#stage');
+  if(!window.THREE){box.insertAdjacentHTML('beforeend','<div class="stage-fallback">3D 地圖暫時無法載入，請用下方島嶼清單登島。</div>');return}
+  let renderer;
+  try{renderer=new THREE.WebGLRenderer({antialias:true,alpha:true})}catch(e){box.insertAdjacentHTML('beforeend','<div class="stage-fallback">這台裝置不支援 3D 顯示，請用下方島嶼清單登島。</div>');return}
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  box.prepend(renderer.domElement);
+  const scene=new THREE.Scene();
+  const cam=new THREE.PerspectiveCamera(38,1,0.1,200);
+  const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const hemi=new THREE.HemisphereLight(0xffffff,0x88aacc,0.85);scene.add(hemi);
+  const sun=new THREE.DirectionalLight(0xffffff,0.75);sun.position.set(8,16,6);scene.add(sun);
+
+  const mats={};
+  function M(key,c){if(!mats[key])mats[key]=new THREE.MeshLambertMaterial({color:c});return mats[key]}
+  const sea=new THREE.Mesh(new THREE.CircleGeometry(40,64),new THREE.MeshLambertMaterial({color:0xcfe5f7}));
+  sea.rotation.x=-Math.PI/2;sea.position.y=-0.55;scene.add(sea);
+  const ring=new THREE.Mesh(new THREE.RingGeometry(9.2,9.35,96),new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.35}));
+  ring.rotation.x=-Math.PI/2;ring.position.y=-0.5;scene.add(ring);
+
+  const world=new THREE.Group();scene.add(world);
+  const pick=[];const anchors=[];
+  function island(def,x,z,r,isHub){
+    const g=new THREE.Group();g.position.set(x,0,z);
+    const base=new THREE.Mesh(new THREE.CylinderGeometry(r*1.02,r*0.82,0.9,6),M('rock',0xc9d6e2));base.position.y=-0.2;
+    const sand=new THREE.Mesh(new THREE.CylinderGeometry(r,r*1.02,0.22,6),M('sand',0xf1e6cf));sand.position.y=0.36;
+    const top=new THREE.Mesh(new THREE.CylinderGeometry(r*0.86,r*0.9,0.2,6),M('grass',0xbfe3c4));top.position.y=0.55;
+    g.add(base,sand,top);
+    const col=new THREE.Color(def.color);
+    const roof=new THREE.MeshLambertMaterial({color:col});
+    const wall=M('wall',0xffffff);
+    if(isHub){
+      const plaza=new THREE.Mesh(new THREE.CylinderGeometry(r*0.5,r*0.5,0.08,6),M('plaza',0xeaf3fb));plaza.position.y=0.69;g.add(plaza);
+      const tower=new THREE.Mesh(new THREE.CylinderGeometry(0.28,0.34,1.6,6),wall);tower.position.y=1.5;
+      const cap=new THREE.Mesh(new THREE.ConeGeometry(0.5,0.7,6),roof);cap.position.y=2.65;g.add(tower,cap);
+      for(let k=0;k<6;k++){const a=k/6*Math.PI*2;const b=new THREE.Mesh(new THREE.BoxGeometry(.18,.5,.18),wall);b.position.set(Math.cos(a)*r*.62,0.9,Math.sin(a)*r*.62);g.add(b)}
+    }else{
+      const seed=[...def.id].reduce((a,c)=>a+c.charCodeAt(0),0);
+      const rnd=n=>{const s=Math.sin(seed*9.7+n*12.9)*43758.5;return s-Math.floor(s)};
+      const h=new THREE.Mesh(new THREE.BoxGeometry(.7,.55,.6),wall);h.position.set(-.15,.92,.05);
+      const hr=new THREE.Mesh(new THREE.ConeGeometry(.6,.45,4),roof);hr.position.set(-.15,1.42,.05);hr.rotation.y=Math.PI/4;
+      g.add(h,hr);
+      const n=3+Math.floor(rnd(1)*3);
+      for(let k=0;k<n;k++){
+        const a=rnd(k+2)*Math.PI*2,d=r*(.45+rnd(k+7)*.3);
+        const t=new THREE.Group();
+        const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.05,.06,.3,6),M('trunk',0xb08b62));trunk.position.y=.15;
+        const leaf=new THREE.Mesh(new THREE.ConeGeometry(.24,.55,6),M('leaf',0x7cc49a));leaf.position.y=.55;
+        t.add(trunk,leaf);t.position.set(Math.cos(a)*d,.65,Math.sin(a)*d);t.scale.setScalar(.8+rnd(k+11)*.5);g.add(t);
+      }
+      const pole=new THREE.Mesh(new THREE.CylinderGeometry(.025,.025,1.1,6),M('pole',0x557089));pole.position.set(.5,1.2,-.35);
+      const flag=new THREE.Mesh(new THREE.PlaneGeometry(.42,.26),new THREE.MeshLambertMaterial({color:col,side:THREE.DoubleSide}));flag.position.set(.71,1.6,-.35);
+      g.add(pole,flag);g.userData.flag=flag;
+    }
+    g.traverse(o=>{if(o.isMesh)o.userData.id=def.id});
+    g.userData={...g.userData,id:def.id,phase:Math.random()*6};
+    world.add(g);pick.push(g);
+    const anchor=new THREE.Object3D();anchor.position.set(0,isHub?3.2:2.15,0);g.add(anchor);
+    const el=document.createElement('button');
+    el.className='ilabel'+(isHub?' hub':'');el.dataset.id=def.id;
+    el.innerHTML=isHub?`${svg('hub')}${def.name}`:`<span class="dot" style="background:${def.color}">${svg(def.icon)}</span>${def.name}`;
+    $('#labels').append(el);anchors.push({anchor,el,g});
+  }
+  island(HUB,0,0,1.75,true);
+  ISLANDS.forEach((d,k)=>{const a=k/ISLANDS.length*Math.PI*2-Math.PI/2;const R=k%2?6.9:6.1;island(d,Math.cos(a)*R,Math.sin(a)*R,1.25,false)});
+
+  function recolor(){
+    const c=(n,f)=>{try{return new THREE.Color(css(n)||f)}catch(e){return new THREE.Color(f)}};
+    sea.material.color=c('--sea','#CFE5F7');M('grass').color=c('--grass','#BFE3C4');M('sand').color=c('--sand','#F1E6CF');M('rock').color=c('--rock','#C9D6E2');
+    const dark=getComputedStyle(document.documentElement).colorScheme==='dark'||css('--bg').toLowerCase()==='#0f1a26';
+    M('wall').color=new THREE.Color(dark?'#D7E2EE':'#FFFFFF');ring.material.opacity=dark?.12:.35;hemi.intensity=dark?.6:.85;
+  }
+  recolor();
+  matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',recolor);
+  new MutationObserver(recolor).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+
+  let yaw=0.35,pitch=0.82,dist=19,targetYaw=null,auto=true,drag=null,pinch=null;
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function size(){const w=box.clientWidth,h=box.clientHeight;renderer.setSize(w,h,false);cam.aspect=w/h;dist=Math.max(dist,w<500?21:17);cam.updateProjectionMatrix()}
+  new ResizeObserver(size).observe(box);size();
+  const cv=renderer.domElement;
+  cv.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,yaw,pitch,moved:false,id:e.pointerId};cv.setPointerCapture(e.pointerId);cv.classList.add('drag');auto=false;targetYaw=null});
+  cv.addEventListener('pointermove',e=>{if(!drag||pinch)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>5)drag.moved=true;yaw=drag.yaw-dx*0.008;pitch=Math.min(1.25,Math.max(0.42,drag.pitch+dy*0.005))});
+  cv.addEventListener('pointerup',e=>{cv.classList.remove('drag');if(drag&&!drag.moved)clickAt(e);drag=null});
+  cv.addEventListener('pointercancel',()=>{drag=null;cv.classList.remove('drag')});
+  cv.addEventListener('wheel',e=>{e.preventDefault();dist=Math.min(30,Math.max(10,dist+e.deltaY*0.02));auto=false},{passive:false});
+  cv.addEventListener('touchstart',e=>{if(e.touches.length===2){const[a,b]=e.touches;pinch={d:Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY),dist};drag=null}},{passive:true});
+  cv.addEventListener('touchmove',e=>{if(pinch&&e.touches.length===2){const[a,b]=e.touches;const d=Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);dist=Math.min(30,Math.max(10,pinch.dist*pinch.d/d))}},{passive:true});
+  cv.addEventListener('touchend',e=>{if(e.touches.length<2)pinch=null},{passive:true});
+  $('#zIn').onclick=()=>{dist=Math.max(10,dist-2.5);auto=false};
+  $('#zOut').onclick=()=>{dist=Math.min(30,dist+2.5);auto=false};
+  const ray=new THREE.Raycaster(),v2=new THREE.Vector2();
+  function clickAt(e){const r=cv.getBoundingClientRect();v2.set((e.clientX-r.left)/r.width*2-1,-(e.clientY-r.top)/r.height*2+1);ray.setFromCamera(v2,cam);const hit=ray.intersectObjects(pick,true)[0];if(hit)openIsland(hit.object.userData.id)}
+  focusIsland=id=>{const a=anchors.find(x=>x.g.userData.id===id);document.querySelectorAll('.ilabel').forEach(l=>l.classList.toggle('on',l.dataset.id===id));if(!a||id==='hub')return;auto=false;const p=a.g.position;targetYaw=Math.atan2(p.x,p.z)};
+  const tmp=new THREE.Vector3();let t0=performance.now();
+  function frame(now){
+    const dt=Math.min(0.05,(now-t0)/1000);t0=now;
+    if(auto&&!reduce)yaw+=dt*0.08;
+    if(targetYaw!==null){let d=targetYaw-yaw;d=Math.atan2(Math.sin(d),Math.cos(d));yaw+=d*Math.min(1,dt*4);if(Math.abs(d)<0.002)targetYaw=null}
+    cam.position.set(Math.sin(yaw)*Math.cos(pitch)*dist,Math.sin(pitch)*dist,Math.cos(yaw)*Math.cos(pitch)*dist);cam.lookAt(0,0.4,0);
+    if(!reduce)pick.forEach(g=>{g.position.y=Math.sin(now/900+g.userData.phase)*0.07;if(g.userData.flag)g.userData.flag.rotation.y=Math.sin(now/400+g.userData.phase)*0.25});
+    renderer.render(scene,cam);
+    const w=box.clientWidth,h=box.clientHeight;
+    anchors.forEach(({anchor,el})=>{anchor.getWorldPosition(tmp);tmp.project(cam);const vis=tmp.z<1;el.style.transform=`translate(${(tmp.x*.5+.5)*w}px,${(-tmp.y*.5+.5)*h}px) translate(-50%,-100%)`;el.style.visibility=vis?'visible':'hidden';el.style.zIndex=String(Math.round((1-tmp.z)*1000))});
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+
+/* ---------- 一起共學（共享留言牆） ---------- */
+(async function(){
+  const st=$('#wallStatus'),send=$('#wallSend'),list=$('#notes');
+  const name=id=>(ISLANDS.find(i=>i.id===id)||{}).name||'群島';
+  const color=id=>(ISLANDS.find(i=>i.id===id)||{}).color||'var(--accent)';
+  const nick=store.get('gta-nick');if(nick)$('#nick').value=nick;
+  let db=null,user=null;
+  try{[db,user]=await Promise.all([window.claude?.use?.('db')??null,window.claude?.use?.('user')??null])}catch(e){}
+  if(!db)return;
+  document.getElementById('wall').hidden=false;
+  const me=user?await user.id():null;
+  const col=db.collection('notes');
+  col.orderBy('at','desc').limit(60).onSnapshot(snap=>{
+    if(snap.empty){list.innerHTML='<div class="empty">還沒有人留言。第一則發現會出現在這裡。</div>';return}
+    list.innerHTML=snap.docs.map(d=>{const n=d.data()||{};const when=n.at?new Date(n.at).toLocaleDateString('zh-TW',{month:'numeric',day:'numeric'}):'';
+      return `<article class="note"><div class="who"><b>${esc(n.nick||'匿名老師')}</b><span class="tag" style="background:${color(n.isle)}22;color:${color(n.isle)}">${esc(name(n.isle))}</span><span class="num">${when}</span>${d.id===me?'<span class="tag demo">你的留言</span>':''}</div><p>${esc(n.text||'')}</p></article>`}).join('');
+  },()=>{st.textContent='留言牆暫時讀不到，稍後再試。';st.classList.add('err')});
+  if(!me){st.textContent='登入 claude.ai 後就能留言。';return}
+  const mine=await col.doc(me).get().catch(()=>null);
+  if(mine?.exists){const m=mine.data();$('#msg').value=m.text||'';if(m.isle)$('#isle').value=m.isle;if(m.nick)$('#nick').value=m.nick}
+  st.textContent='每人保留一則，再送出會更新你的留言。';send.disabled=false;
+  $('#wallForm').addEventListener('submit',async e=>{
+    e.preventDefault();const text=$('#msg').value.trim();
+    if(text.length<4){st.textContent='再多寫幾個字，讓其他老師看得懂。';st.classList.add('err');return}
+    send.disabled=true;st.classList.remove('err');st.textContent='送出中…';
+    const n=$('#nick').value.trim().slice(0,20);store.set('gta-nick',n);
+    try{await col.doc(me).set({nick:n,isle:$('#isle').value,text:text.slice(0,80),at:Date.now()});st.textContent='已留下，謝謝你的接力。'}
+    catch(err){st.textContent=err?.code==='permission_denied'||err?.code==='not_granted'?'你目前的權限只能瀏覽留言。':'沒有送出，請檢查網路再試一次。';st.classList.add('err')}
+    send.disabled=false;
+  });
+})();
+</script>
+
+</body></html>

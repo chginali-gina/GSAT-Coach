@@ -1,0 +1,516 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>亡靈節拼字競技場</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{
+  /* layout: single-screen card game, warm amber editorial palette, Playfair display + Noto Serif TC body */
+  --bg:#FDF8F1; --bg-warm:#F7EFE3; --card:#FFFFFF;
+  --amber:#D97706; --amber-deep:#B45309; --amber-dark:#92400E;
+  --teal:#0F766E; --teal-soft:#5EAEA6;
+  --ink:#2E2419; --ink-soft:#6B5D4F;
+  --line:#E8DCCB; --shadow:0 4px 20px rgba(146,64,14,.10); --shadow-lg:0 14px 40px rgba(146,64,14,.16);
+  --radius:18px; --radius-sm:12px;
+  --slot-bg:#F3E9D8; --slot-border:#D9C9AE; --tile-bg:#FFFFFF; --tile-border:#D9C9AE;
+  --correct:#2F7A4F; --correct-bg:#E4F1E8; --wrong:#B3432F;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#1B140F; --bg-warm:#241A13; --card:#2A1E16;
+    --amber:#F0A94E; --amber-deep:#F6BE72; --amber-dark:#FBD9A5;
+    --teal:#5EAEA6; --teal-soft:#8FC9C2;
+    --ink:#F3E8DA; --ink-soft:#C9B59F;
+    --line:#43321F; --shadow:0 4px 20px rgba(0,0,0,.35); --shadow-lg:0 14px 40px rgba(0,0,0,.45);
+    --slot-bg:#352819; --slot-border:#52402B; --tile-bg:#352819; --tile-border:#5C4A33;
+    --correct:#6FCF97; --correct-bg:#243B2C; --wrong:#E08571;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1B140F; --bg-warm:#241A13; --card:#2A1E16;
+  --amber:#F0A94E; --amber-deep:#F6BE72; --amber-dark:#FBD9A5;
+  --teal:#5EAEA6; --teal-soft:#8FC9C2;
+  --ink:#F3E8DA; --ink-soft:#C9B59F;
+  --line:#43321F; --shadow:0 4px 20px rgba(0,0,0,.35); --shadow-lg:0 14px 40px rgba(0,0,0,.45);
+  --slot-bg:#352819; --slot-border:#52402B; --tile-bg:#352819; --tile-border:#5C4A33;
+  --correct:#6FCF97; --correct-bg:#243B2C; --wrong:#E08571;
+  color-scheme:dark;
+}
+*{box-sizing:border-box;}
+[hidden]{ display:none !important; }
+@font-face-fallback{}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:'Noto Serif TC', 'PingFang TC', 'Microsoft JhengHei', serif;
+  min-height:100%;
+}
+.display{ font-family:'Playfair Display', serif; }
+.mono{ font-family: ui-monospace, 'SFMono-Regular', Menlo, Consolas, 'Noto Sans Mono TC', monospace; }
+
+.wrap{ max-width:620px; margin:0 auto; padding:env(safe-area-inset-top,0px) 18px calc(env(safe-area-inset-bottom,0px) + 24px); }
+
+header{ text-align:center; padding:26px 0 10px; }
+.eyebrow{ font-family:'Playfair Display', serif; color:var(--amber); letter-spacing:.09em; font-size:.88rem; text-transform:uppercase; }
+h1{ font-size:clamp(1.5rem, 6vw, 2.1rem); margin:6px 0 4px; color:var(--amber-dark); text-wrap:balance; }
+.subtitle{ color:var(--ink-soft); font-size:.92rem; margin-bottom:6px; }
+
+.stats{ display:flex; justify-content:center; gap:18px; margin-top:10px; font-size:.95rem; color:var(--ink-soft); font-variant-numeric:tabular-nums; }
+.stats b{ color:var(--amber-dark); }
+
+.card{ background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px 22px; margin:16px 0; }
+
+.clue-label{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--teal); font-family:'Playfair Display', serif; margin-bottom:8px; }
+.clue-text{ font-size:1.12rem; line-height:1.7; }
+.clue-zh{ color:var(--ink-soft); font-size:.95rem; margin-top:8px; }
+
+.slots{ display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin:22px 0; }
+.slot{
+  width:44px; height:52px; border-radius:10px; border:2px solid var(--slot-border);
+  background:var(--slot-bg); display:flex; align-items:center; justify-content:center;
+  font-size:1.35rem; font-weight:700; color:var(--ink); user-select:none; position:relative;
+  transition:border-color .2s ease, background .2s ease, transform .15s ease;
+}
+.slot.filled{ cursor:pointer; }
+.slot.locked{ border-color:var(--correct); background:var(--correct-bg); color:var(--correct); cursor:default; }
+.slot.shake{ animation:shake .4s ease; }
+@keyframes shake{ 0%,100%{transform:translateX(0);} 20%{transform:translateX(-6px);} 40%{transform:translateX(6px);} 60%{transform:translateX(-4px);} 80%{transform:translateX(4px);} }
+
+.tray{
+  display:flex; flex-wrap:wrap; justify-content:center; gap:10px;
+  min-height:76px; padding:16px; border-radius:var(--radius); background:var(--bg-warm);
+  border:1px dashed var(--line);
+}
+.tile{
+  width:46px; height:54px; border-radius:10px; border:1px solid var(--tile-border);
+  background:var(--tile-bg); box-shadow:var(--shadow);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.3rem; font-weight:700; color:var(--ink);
+  touch-action:none; cursor:grab; user-select:none;
+  transition:box-shadow .15s ease, transform .15s ease;
+}
+.tile:active{ cursor:grabbing; }
+.tile.dragging{ position:fixed; z-index:50; box-shadow:var(--shadow-lg); pointer-events:none; }
+.tile.placeholder{ visibility:hidden; }
+
+.controls{ display:flex; gap:12px; justify-content:center; margin:22px 0 6px; flex-wrap:wrap; }
+.btn{
+  display:inline-flex; align-items:center; gap:6px; background:var(--amber); color:#fff;
+  font-weight:600; padding:11px 22px; border-radius:999px; border:none; font-size:.92rem;
+  cursor:pointer; transition:background .2s ease, transform .15s ease; font-family:inherit;
+}
+.btn:hover{ background:var(--amber-deep); transform:translateY(-1px); }
+.btn:disabled{ opacity:.45; cursor:not-allowed; transform:none; }
+.btn-ghost{ background:transparent; color:var(--amber-dark); border:1.5px solid var(--amber); }
+.btn-ghost:hover{ background:var(--bg-warm); }
+
+.feedback{ text-align:center; font-weight:600; margin-top:4px; min-height:1.4em; font-size:.98rem; }
+.feedback.good{ color:var(--correct); }
+.feedback.bad{ color:var(--wrong); }
+
+.overlay{
+  position:fixed; inset:0; background:rgba(20,14,8,.55); display:flex; align-items:center; justify-content:center;
+  padding:20px; z-index:100;
+}
+.results-card{
+  background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow-lg); padding:32px 28px;
+  max-width:420px; width:100%; text-align:center; border:1px solid var(--line);
+}
+.results-card h2{ color:var(--amber-dark); font-family:'Playfair Display', serif; margin-top:0; }
+.result-row{ display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px solid var(--line); font-size:.98rem; }
+.result-row:last-of-type{ border-bottom:none; }
+.result-row b{ color:var(--amber-dark); font-variant-numeric:tabular-nums; }
+
+footer{ text-align:center; color:var(--ink-soft); font-size:.8rem; margin-top:30px; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Lesson 4 · Day of the Dead</div>
+    <h1 class="display">亡靈節拼字競技場</h1>
+    <div class="subtitle">拖曳或點選字母卡，拼出正確的英文單字</div>
+    <div class="stats">
+      <span id="progress">1 / 17</span>
+      <span id="score">Score: <b id="scoreVal">0</b></span>
+    </div>
+  </header>
+
+  <div class="card clue-card">
+    <div class="clue-label">Definition 定義</div>
+    <div class="clue-text" id="clueText">Loading…</div>
+    <div class="clue-zh" id="clueZh"></div>
+  </div>
+
+  <div class="slots" id="slots"></div>
+
+  <div class="tray" id="tray"></div>
+
+  <div class="feedback" id="feedback"></div>
+
+  <div class="controls">
+    <button id="hintBtn" class="btn btn-ghost">💡 提示 Hint (−20)</button>
+    <button id="skipBtn" class="btn btn-ghost">⏭ 跳過 Skip</button>
+  </div>
+
+  <footer>字彙範圍與 Crossword 學習單相同（龍騰 Lesson 4 核心單字）</footer>
+</div>
+
+<div class="overlay" id="resultsOverlay" hidden>
+  <div class="results-card">
+    <h2 class="display">遊戲結束！Game Over</h2>
+    <div class="result-row"><span>總分 Total Score</span><b id="resScore">0</b></div>
+    <div class="result-row"><span>完美過關 Perfect Words</span><b id="resPerfect">0 / 17</b></div>
+    <div class="result-row"><span>使用提示 Hints Used</span><b id="resHints">0</b></div>
+    <div class="result-row"><span>花費時間 Time</span><b id="resTime">0:00</b></div>
+    <button id="restartBtn" class="btn" style="margin-top:20px;">🔄 再玩一次 Restart</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var WORDS = [
+    { w:'JOYOUS', def:'making one feel very happy; filling one with happiness', zh:'令人愉快的' },
+    { w:'ACCOMPANY', def:'to go somewhere with someone', zh:'陪伴' },
+    { w:'ESSENTIAL', def:'related to the basic nature or most important part', zh:'本質的；基本的' },
+    { w:'CONCEPT', def:'an idea one can imagine or think up', zh:'概念' },
+    { w:'SORROW', def:'great sadness or unhappiness', zh:'悲傷' },
+    { w:'OCCASION', def:'a special or significant event or happening', zh:'場合' },
+    { w:'REUNION', def:'a gathering of people who have been apart, coming together again', zh:'重逢；團聚' },
+    { w:'ANTICIPATE', def:'to look forward to something', zh:'期盼' },
+    { w:'PREFERENCE', def:'a stronger liking of something compared to others', zh:'偏愛' },
+    { w:'RECEPTION', def:'a way in which someone or something is welcomed', zh:'歡迎；接待' },
+    { w:'FEAST', def:'to eat and drink a lot with great pleasure', zh:'盡情享用' },
+    { w:'TRANSFORM', def:'to change something in nature, shape, or form', zh:'使改變形態' },
+    { w:'RESEMBLE', def:'to look or seem like something or someone else', zh:'看起來像；像' },
+    { w:'PARTICIPATE', def:'to take part or be involved in something', zh:'參加' },
+    { w:'MOCK', def:'to make fun of or treat with little respect', zh:'嘲弄；不尊重' },
+    { w:'INEVITABLE', def:'impossible to avoid; sure to happen', zh:'不可避免的' },
+    { w:'CYCLE', def:'a continuous process repeated in the same order', zh:'循環' }
+  ];
+
+  var FULL_SCORE = 100, WRONG_PENALTY = 15, HINT_PENALTY = 20;
+
+  function shuffle(arr){
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function scrambleLetters(word){
+    var letters = word.split('');
+    var scrambled;
+    var tries = 0;
+    do {
+      scrambled = shuffle(letters);
+      tries++;
+    } while (scrambled.join('') === word && tries < 20);
+    return scrambled;
+  }
+
+  var state = {
+    order: [],
+    idx: 0,
+    score: 0,
+    perfect: 0,
+    hintsUsed: 0,
+    startTime: Date.now(),
+    wrongThisWord: 0,
+    hintsThisWord: 0,
+    slots: [],     // array of {letter, locked, tileId|null}
+    tiles: [],     // array of {id, letter, placedSlot|null}
+  };
+
+  var elSlots = document.getElementById('slots');
+  var elTray = document.getElementById('tray');
+  var elClue = document.getElementById('clueText');
+  var elClueZh = document.getElementById('clueZh');
+  var elProgress = document.getElementById('progress');
+  var elScoreVal = document.getElementById('scoreVal');
+  var elFeedback = document.getElementById('feedback');
+  var elHintBtn = document.getElementById('hintBtn');
+  var elSkipBtn = document.getElementById('skipBtn');
+  var elOverlay = document.getElementById('resultsOverlay');
+  var elRestart = document.getElementById('restartBtn');
+
+  function newGame(){
+    state.order = shuffle(WORDS.map(function(x,i){ return i; }));
+    state.idx = 0;
+    state.score = 0;
+    state.perfect = 0;
+    state.hintsUsed = 0;
+    state.startTime = Date.now();
+    elOverlay.hidden = true;
+    loadWord();
+  }
+
+  function currentWord(){ return WORDS[state.order[state.idx]]; }
+
+  function loadWord(){
+    var item = currentWord();
+    state.wrongThisWord = 0;
+    state.hintsThisWord = 0;
+    elFeedback.textContent = '';
+    elFeedback.className = 'feedback';
+    elClue.textContent = item.def;
+    elClueZh.textContent = item.zh;
+    elProgress.textContent = (state.idx + 1) + ' / ' + WORDS.length;
+
+    var letters = item.w.split('');
+    state.slots = letters.map(function(ch){ return { letter: ch, locked: false, tileId: null }; });
+
+    var scrambled = scrambleLetters(item.w);
+    state.tiles = scrambled.map(function(ch, i){ return { id: 't' + state.idx + '_' + i + '_' + Date.now(), letter: ch, placedSlot: null }; });
+
+    renderSlots();
+    renderTray();
+    updateControls();
+  }
+
+  function renderSlots(){
+    elSlots.innerHTML = '';
+    state.slots.forEach(function(s, i){
+      var d = document.createElement('div');
+      d.className = 'slot mono' + (s.locked ? ' locked' : (s.tileId ? ' filled' : ''));
+      d.dataset.index = i;
+      d.textContent = s.locked ? s.letter : (s.tileId ? tileById(s.tileId).letter : '');
+      if (s.tileId && !s.locked){
+        d.addEventListener('click', function(){ returnTileFromSlot(i); });
+      }
+      elSlots.appendChild(d);
+    });
+  }
+
+  function tileById(id){
+    for (var i = 0; i < state.tiles.length; i++) if (state.tiles[i].id === id) return state.tiles[i];
+    return null;
+  }
+
+  function renderTray(){
+    elTray.innerHTML = '';
+    state.tiles.forEach(function(t){
+      var d = document.createElement('div');
+      d.className = 'tile mono' + (t.placedSlot !== null ? ' placeholder' : '');
+      d.textContent = t.letter;
+      d.dataset.id = t.id;
+      attachPointerHandlers(d, t);
+      elTray.appendChild(d);
+    });
+  }
+
+  function firstEmptySlot(){
+    for (var i = 0; i < state.slots.length; i++){
+      if (!state.slots[i].locked && !state.slots[i].tileId) return i;
+    }
+    return -1;
+  }
+
+  function placeTileInSlot(tile, slotIndex){
+    if (slotIndex < 0) return;
+    var slot = state.slots[slotIndex];
+    if (slot.locked) return;
+    // if slot already occupied, bounce that tile back first
+    if (slot.tileId && slot.tileId !== tile.id){
+      var occ = tileById(slot.tileId);
+      if (occ) occ.placedSlot = null;
+      slot.tileId = null;
+    }
+    // remove tile from any previous slot
+    if (tile.placedSlot !== null){
+      state.slots[tile.placedSlot].tileId = null;
+    }
+    tile.placedSlot = slotIndex;
+    slot.tileId = tile.id;
+    renderSlots();
+    renderTray();
+    maybeCheck();
+  }
+
+  function returnTileFromSlot(slotIndex){
+    var slot = state.slots[slotIndex];
+    if (slot.locked || !slot.tileId) return;
+    var t = tileById(slot.tileId);
+    if (t) t.placedSlot = null;
+    slot.tileId = null;
+    renderSlots();
+    renderTray();
+  }
+
+  function maybeCheck(){
+    var allFilled = state.slots.every(function(s){ return s.locked || s.tileId; });
+    if (allFilled) checkGuess();
+  }
+
+  function checkGuess(){
+    var allCorrect = true;
+    state.slots.forEach(function(s, i){
+      if (s.locked) return;
+      var t = tileById(s.tileId);
+      if (t && t.letter === s.letter){
+        s.locked = true;
+      } else {
+        allCorrect = false;
+      }
+    });
+
+    if (allCorrect){
+      onWordSolved();
+    } else {
+      state.wrongThisWord++;
+      // bounce back incorrect (non-locked) tiles to tray
+      state.slots.forEach(function(s){
+        if (!s.locked && s.tileId){
+          var t = tileById(s.tileId);
+          if (t) t.placedSlot = null;
+          s.tileId = null;
+        }
+      });
+      renderSlots();
+      renderTray();
+      elFeedback.textContent = '不太對喔，再試試看！Not quite — try again.';
+      elFeedback.className = 'feedback bad';
+      var slotEls = elSlots.querySelectorAll('.slot');
+      slotEls.forEach(function(el){ el.classList.add('shake'); setTimeout(function(){ el.classList.remove('shake'); }, 400); });
+    }
+  }
+
+  function wordPoints(){
+    var pts = FULL_SCORE - (state.wrongThisWord * WRONG_PENALTY) - (state.hintsThisWord * HINT_PENALTY);
+    return Math.max(0, pts);
+  }
+
+  function onWordSolved(skipped){
+    renderSlots();
+    var pts = skipped ? 0 : wordPoints();
+    state.score += pts;
+    if (!skipped && state.wrongThisWord === 0 && state.hintsThisWord === 0) state.perfect++;
+    elScoreVal.textContent = state.score;
+    elFeedback.textContent = skipped ? ('答案是 ' + currentWord().w) : ('答對了！+' + pts + ' 分');
+    elFeedback.className = 'feedback good';
+    updateControls(true);
+    setTimeout(advance, 1100);
+  }
+
+  function advance(){
+    if (state.idx + 1 >= WORDS.length){
+      showResults();
+    } else {
+      state.idx++;
+      loadWord();
+    }
+  }
+
+  function updateControls(solved){
+    elHintBtn.disabled = !!solved;
+    elSkipBtn.disabled = !!solved;
+  }
+
+  function useHint(){
+    var i = firstEmptySlotOrWrong();
+    if (i < 0) return;
+    var slot = state.slots[i];
+    if (slot.tileId){
+      var occ = tileById(slot.tileId);
+      if (occ) occ.placedSlot = null;
+      slot.tileId = null;
+    }
+    slot.locked = true;
+    state.hintsThisWord++;
+    state.hintsUsed++;
+    renderSlots();
+    renderTray();
+    maybeCheck();
+  }
+
+  function firstEmptySlotOrWrong(){
+    var i = firstEmptySlot();
+    if (i >= 0) return i;
+    return -1;
+  }
+
+  function skipWord(){
+    state.slots.forEach(function(s){ s.locked = true; });
+    onWordSolved(true);
+  }
+
+  function showResults(){
+    var elapsed = Math.round((Date.now() - state.startTime) / 1000);
+    var mm = Math.floor(elapsed / 60), ss = elapsed % 60;
+    document.getElementById('resScore').textContent = state.score;
+    document.getElementById('resPerfect').textContent = state.perfect + ' / ' + WORDS.length;
+    document.getElementById('resHints').textContent = state.hintsUsed;
+    document.getElementById('resTime').textContent = mm + ':' + (ss < 10 ? '0' : '') + ss;
+    elOverlay.hidden = false;
+  }
+
+  // ---- pointer / tap handling ----
+  function attachPointerHandlers(el, tile){
+    var startX, startY, moved, dragging, ghost;
+    el.addEventListener('pointerdown', function(ev){
+      if (tile.placedSlot !== null) return;
+      startX = ev.clientX; startY = ev.clientY; moved = false; dragging = false;
+      el.setPointerCapture(ev.pointerId);
+
+      function onMove(mv){
+        var dx = mv.clientX - startX, dy = mv.clientY - startY;
+        if (!dragging && Math.sqrt(dx*dx + dy*dy) > 6){
+          dragging = true;
+          moved = true;
+          el.classList.add('dragging');
+          var rect = el.getBoundingClientRect();
+          el.style.width = rect.width + 'px';
+          el.style.height = rect.height + 'px';
+          el.style.left = rect.left + 'px';
+          el.style.top = rect.top + 'px';
+        }
+        if (dragging){
+          el.style.left = (rect0Left + (mv.clientX - startX)) + 'px';
+          el.style.top = (rect0Top + (mv.clientY - startY)) + 'px';
+        }
+      }
+      var rect0 = el.getBoundingClientRect();
+      var rect0Left = rect0.left, rect0Top = rect0.top;
+
+      function onUp(up){
+        el.releasePointerCapture(up.pointerId);
+        document.removeEventListener('pointermove', onMove);
+        document.removeEventListener('pointerup', onUp);
+        if (dragging){
+          el.classList.remove('dragging');
+          el.style.position = ''; el.style.left = ''; el.style.top = ''; el.style.width = ''; el.style.height = '';
+          var dropEl = document.elementFromPoint(up.clientX, up.clientY);
+          var slotEl = dropEl ? dropEl.closest('.slot') : null;
+          if (slotEl){
+            placeTileInSlot(tile, parseInt(slotEl.dataset.index, 10));
+          } else {
+            renderTray();
+          }
+        } else {
+          // tap: place into first empty slot
+          var target = firstEmptySlot();
+          if (target >= 0) placeTileInSlot(tile, target);
+        }
+      }
+      document.addEventListener('pointermove', onMove);
+      document.addEventListener('pointerup', onUp);
+    });
+  }
+
+  elHintBtn.addEventListener('click', useHint);
+  elSkipBtn.addEventListener('click', skipWord);
+  elRestart.addEventListener('click', newGame);
+
+  function start(){ newGame(); }
+  if (window.claude && window.claude.hot && window.claude.hot.ready){
+    window.claude.hot.ready(start);
+  } else {
+    start();
+  }
+})();
+</script>
+
+<a href="../" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:9999;background:#2F86D6;color:#fff;font:700 13px/1 system-ui,sans-serif;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.2)">← 回群島</a>
+</body></html>

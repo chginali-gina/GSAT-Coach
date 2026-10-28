@@ -1,0 +1,1076 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>班級 Debug 松</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+/* 版面概念：少年漫畫分格。粗墨線格框＋網點底＋效果字，五個階段是五集「EP」，主操作區是一格一格的漫畫格。 */
+:root{
+  --paper:#FFFCF5; --paper-2:#FFF1CF; --panel:#FFFFFF; --ink:#17131C; --ink-soft:#5A5262;
+  --pink:#FF3B7A; --yellow:#FFD23F; --cyan:#1FB5E8; --green:#22B573; --dot:rgba(23,19,28,.13);
+  --on-accent:#17131C; --bubble:#FFFFFF; --mute:#EEE7DA;
+  --f-sfx:'Bangers', 'Impact', 'Arial Black', sans-serif;
+  --f-body:'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+  --stroke:3px; --shadow:5px 5px 0 var(--ink); --shadow-sm:3px 3px 0 var(--ink);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#15121A; --paper-2:#211A27; --panel:#221D2A; --ink:#F6F1E7; --ink-soft:#BDB2C8;
+  --pink:#FF5C93; --yellow:#FFD23F; --cyan:#45C7F2; --green:#3DD08B; --dot:rgba(246,241,231,.08);
+  --on-accent:#17131C; --bubble:#2C2636; --mute:#2E2838; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#15121A; --paper-2:#211A27; --panel:#221D2A; --ink:#F6F1E7; --ink-soft:#BDB2C8;
+  --pink:#FF5C93; --yellow:#FFD23F; --cyan:#45C7F2; --green:#3DD08B; --dot:rgba(246,241,231,.08);
+  --on-accent:#17131C; --bubble:#2C2636; --mute:#2E2838; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.7;
+  background-image:radial-gradient(var(--dot) 1.1px, transparent 1.3px);background-size:11px 11px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+.wrap{max-width:900px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{text-wrap:balance;margin:0;line-height:1.3}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--cyan);outline-offset:2px}
+.sfx{font-family:var(--f-sfx);letter-spacing:.04em;font-weight:400}
+
+/* 示範橫幅 */
+.demo{margin-top:14px;background:var(--yellow);color:var(--on-accent);border:var(--stroke) solid var(--ink);box-shadow:var(--shadow-sm);
+  padding:8px 12px;font-size:.88rem;font-weight:700;border-radius:4px}
+
+/* Hero 分格 */
+.hero{margin-top:16px;display:grid;grid-template-columns:1.35fr 1fr;border:var(--stroke) solid var(--ink);box-shadow:var(--shadow);
+  background:var(--panel);border-radius:4px;overflow:hidden}
+.hero-text{padding:22px 22px 20px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.hero-kicker{display:inline-block;align-self:flex-start;background:var(--ink);color:var(--paper);font-family:var(--f-sfx);
+  font-size:1.05rem;letter-spacing:.08em;padding:2px 10px;transform:skewX(-8deg)}
+.hero h1{font-size:clamp(1.9rem,6.4vw,3rem);font-weight:900;letter-spacing:.02em}
+.hero h1 em{font-style:normal;background:linear-gradient(transparent 58%, var(--yellow) 58%);padding:0 4px;color:var(--ink)}
+.hero p{margin:0;color:var(--ink-soft);font-weight:500}
+.hero-art{position:relative;border-left:var(--stroke) solid var(--ink);min-height:200px;display:grid;place-items:center;
+  background:repeating-conic-gradient(from 0deg at 50% 55%, var(--paper-2) 0deg 6deg, var(--panel) 6deg 12deg)}
+.hero-art svg{width:min(190px,80%);height:auto;position:relative;z-index:1;animation:bob 3s ease-in-out infinite}
+.hero-art .boom{position:absolute;top:10px;right:12px;font-family:var(--f-sfx);font-size:2.1rem;color:var(--pink);
+  -webkit-text-stroke:2px var(--ink);transform:rotate(9deg);z-index:2}
+.hero-art .boom2{position:absolute;bottom:8px;left:12px;font-family:var(--f-sfx);font-size:1.4rem;color:var(--yellow);
+  -webkit-text-stroke:1.5px var(--ink);transform:rotate(-7deg);z-index:2}
+@keyframes bob{50%{transform:translateY(-6px) rotate(-2deg)}}
+
+/* EP 階段條 */
+.eps{list-style:none;margin:18px 0 0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.ep{border:var(--stroke) solid var(--ink);background:var(--panel);border-radius:4px;padding:6px 6px 8px;text-align:center;cursor:pointer;
+  box-shadow:var(--shadow-sm);transition:transform .15s}
+.ep:hover{transform:translate(-1px,-1px)}
+.ep b{display:block;font-family:var(--f-sfx);font-size:1.1rem;letter-spacing:.06em;font-weight:400}
+.ep span{display:block;font-size:.78rem;font-weight:700;line-height:1.3}
+.ep.done{background:var(--mute);color:var(--ink-soft)}
+.ep.now{background:var(--pink);color:var(--on-accent);transform:translateY(-3px) rotate(-1.5deg)}
+.ep.now b::after{content:" NOW";font-size:.8rem}
+
+/* 分頁 */
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;margin-top:18px;background:var(--paper);padding-block:10px;
+  border-bottom:var(--stroke) solid var(--ink)}
+.tabs-in{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.tabs-in::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;border:var(--stroke) solid var(--ink);background:var(--panel);border-radius:999px;padding:5px 14px;font-weight:700;
+  font-size:.92rem;cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--paper)}
+
+main{padding-block:18px 60px}
+.panel-view{animation:pop .28s ease-out}
+@keyframes pop{from{transform:translateY(8px) scale(.99)}}
+.sec-head{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.sec-head h2{font-size:clamp(1.35rem,4.4vw,1.9rem);font-weight:900}
+.sec-head .sfx{font-size:1.5rem;color:var(--pink);-webkit-text-stroke:1px var(--ink);transform:rotate(-4deg)}
+
+/* 漫畫格（卡片） */
+.frame{background:var(--panel);border:var(--stroke) solid var(--ink);border-radius:4px;box-shadow:var(--shadow);padding:18px;min-width:0}
+.frame + .frame{margin-top:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.grid .frame + .frame{margin-top:0}
+.frame h3{font-size:1.1rem;font-weight:900}
+.muted{color:var(--ink-soft)}
+.small{font-size:.86rem}
+
+/* 對話框 */
+.bubble{position:relative;background:var(--bubble);border:var(--stroke) solid var(--ink);border-radius:22px;padding:12px 16px;font-weight:500;margin:0 0 22px 46px}
+.bubble::before{content:"";position:absolute;left:-15px;bottom:10px;border:9px solid transparent;border-right-color:var(--ink);border-bottom-color:var(--ink)}
+.bubble::after{content:"";position:absolute;left:-8px;bottom:13px;border:6px solid transparent;border-right-color:var(--bubble);border-bottom-color:var(--bubble)}
+.bubble-who{position:absolute;left:-50px;bottom:-6px;width:38px;height:38px}
+
+/* 標籤 */
+.chip{display:inline-block;border:2px solid var(--ink);border-radius:999px;padding:0 9px;font-size:.78rem;font-weight:700;background:var(--paper-2);line-height:1.6}
+.chip.pink{background:var(--pink);color:var(--on-accent)}
+.chip.cyan{background:var(--cyan);color:var(--on-accent)}
+.chip.yellow{background:var(--yellow);color:var(--on-accent)}
+.chip.green{background:var(--green);color:var(--on-accent)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+
+/* 表單 */
+form{display:grid;gap:14px}
+label.f{display:grid;gap:5px;font-weight:700;font-size:.95rem}
+label.f .hint{font-weight:500;font-size:.82rem;color:var(--ink-soft)}
+input[type=text],input[type=number],input[type=password],select,textarea{width:100%;border:2.5px solid var(--ink);border-radius:6px;
+  background:var(--paper);padding:9px 11px;font-size:1rem;min-width:0}
+textarea{min-height:84px;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.radios{display:flex;flex-wrap:wrap;gap:8px}
+.radios label{cursor:pointer}
+.radios input{position:absolute;opacity:0;pointer-events:none}
+.radios span{display:inline-block;border:2.5px solid var(--ink);border-radius:999px;padding:4px 14px;font-weight:700;background:var(--panel)}
+.radios input:checked + span{background:var(--yellow);color:var(--on-accent);box-shadow:var(--shadow-sm)}
+.radios input:focus-visible + span{outline:3px solid var(--cyan);outline-offset:2px}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:700;font-size:.95rem}
+.check input{width:20px;height:20px;margin-top:3px;accent-color:var(--pink);flex:0 0 auto}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:var(--stroke) solid var(--ink);background:var(--pink);
+  color:var(--on-accent);font-weight:900;font-size:1rem;padding:9px 20px;border-radius:6px;cursor:pointer;box-shadow:var(--shadow-sm);
+  transition:transform .1s, box-shadow .1s}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.btn.alt{background:var(--panel);color:var(--ink)}
+.btn.y{background:var(--yellow)}
+.btn.c{background:var(--cyan)}
+.btn.sm{font-size:.85rem;padding:4px 11px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.btn-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+/* 回報列表 */
+.report{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start}
+.report p{margin:6px 0 0}
+.plus{display:grid;justify-items:center;gap:0;min-width:58px;border:var(--stroke) solid var(--ink);border-radius:6px;background:var(--paper-2);
+  cursor:pointer;padding:4px 6px;font-weight:900;box-shadow:var(--shadow-sm)}
+.plus b{font-family:var(--f-sfx);font-size:1.5rem;font-weight:400;line-height:1.1}
+.plus small{font-size:.7rem}
+.plus[aria-pressed="true"]{background:var(--yellow);color:var(--on-accent)}
+
+/* Bug 卡 */
+.bugcard{position:relative;overflow:hidden}
+.bugcard .no{position:absolute;right:-6px;top:-14px;font-family:var(--f-sfx);font-size:3.6rem;color:var(--paper-2);-webkit-text-stroke:2px var(--ink);
+  transform:rotate(8deg);pointer-events:none}
+.bugcard h3{padding-right:46px}
+.stats{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:.85rem;font-weight:700}
+.stats b{font-family:var(--f-sfx);font-size:1.25rem;font-weight:400;color:var(--pink);margin-right:2px}
+
+/* 隊伍 */
+details.card-more{margin-top:10px;border-top:2px dashed var(--ink);padding-top:8px}
+details.card-more summary{cursor:pointer;font-weight:700;list-style:none}
+details.card-more summary::before{content:"▶ ";font-size:.75rem}
+details[open].card-more summary::before{content:"▼ "}
+dl.kv{margin:8px 0 0;display:grid;gap:8px}
+dl.kv dt{font-weight:900;font-size:.85rem}
+dl.kv dd{margin:0;white-space:pre-wrap}
+.metric{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;font-weight:700;font-size:.9rem}
+.metric .arrow{font-family:var(--f-sfx);font-size:1.3rem;color:var(--pink)}
+.mvp{margin-top:8px;font-weight:700;background:var(--paper-2);border-left:5px solid var(--pink);padding:6px 10px;border-radius:2px}
+
+/* 投票 */
+.pick{display:grid;gap:10px}
+.pick label{display:block;cursor:pointer}
+.pick input{position:absolute;opacity:0;pointer-events:none}
+.pick .frame{box-shadow:var(--shadow-sm);transition:transform .12s}
+.pick input:checked + .frame{background:var(--yellow);color:var(--on-accent);transform:rotate(-1deg) translateY(-2px);box-shadow:var(--shadow)}
+.pick input:checked + .frame .muted{color:var(--on-accent)}
+.pick input:focus-visible + .frame{outline:3px solid var(--cyan);outline-offset:3px}
+.bars{display:grid;gap:10px}
+.bar{display:grid;grid-template-columns:minmax(0,7em) 1fr 2.5em;gap:8px;align-items:center;font-weight:700}
+.bar .track{height:22px;border:2.5px solid var(--ink);border-radius:4px;background:var(--panel);overflow:hidden}
+.bar .fill{height:100%;background:var(--pink);border-right:2.5px solid var(--ink)}
+.bar .n{font-family:var(--f-sfx);font-size:1.3rem;font-weight:400;font-variant-numeric:tabular-nums;text-align:right}
+.bar .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.meter{height:14px;border:2.5px solid var(--ink);border-radius:999px;overflow:hidden;background:var(--panel);margin-top:6px}
+.meter i{display:block;height:100%;background:var(--cyan)}
+
+/* 試辦 */
+.chart{width:100%;height:auto;display:block;margin-top:10px}
+.chart text{fill:var(--ink);font-family:var(--f-body);font-size:10px;font-weight:700}
+table.log{width:100%;border-collapse:collapse;margin-top:10px;font-size:.9rem}
+table.log th,table.log td{border-bottom:2px solid var(--mute);padding:5px 6px;text-align:left}
+table.log td.num{font-variant-numeric:tabular-nums;font-weight:900}
+.tablewrap{overflow-x:auto}
+
+/* 老師 */
+.adm-list{display:grid;gap:10px}
+.adm-item{border:2.5px solid var(--ink);border-radius:6px;padding:10px 12px;background:var(--paper)}
+.adm-item p{margin:4px 0 0;font-size:.92rem}
+.confirm{margin-top:8px;padding:10px;border:2.5px dashed var(--pink);border-radius:6px;font-weight:700}
+
+.empty{text-align:center;padding:26px 16px}
+.empty .sfx{font-size:2rem;color:var(--cyan);-webkit-text-stroke:1px var(--ink);display:block}
+.locked{background:var(--mute);border:2.5px dashed var(--ink);border-radius:6px;padding:10px 14px;font-weight:700;margin-bottom:14px}
+
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(140%);
+  background:var(--ink);color:var(--paper);font-weight:700;padding:10px 18px;border-radius:999px;z-index:20;transition:transform .25s;max-width:calc(100% - 32px);text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.err{background:var(--pink);color:var(--on-accent);border:3px solid var(--ink)}
+
+footer{border-top:var(--stroke) solid var(--ink);padding-block:16px 26px;font-size:.85rem;color:var(--ink-soft);font-weight:500}
+footer b{color:var(--ink)}
+
+
+/* 通行證 */
+.pass{margin-top:16px;border:var(--stroke) solid var(--ink);border-radius:4px;background:var(--panel);box-shadow:var(--shadow-sm);
+  padding:10px 14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.pass .tag{font-family:var(--f-sfx);font-size:1.15rem;letter-spacing:.06em;background:var(--cyan);color:var(--on-accent);border:2.5px solid var(--ink);
+  padding:0 8px;transform:rotate(-2deg);flex:0 0 auto}
+.pass form{display:flex;gap:8px;flex-wrap:wrap;align-items:center;flex:1 1 260px}
+.pass input{max-width:170px;font-family:var(--f-sfx);font-size:1.25rem;letter-spacing:.25em;text-transform:uppercase;padding:4px 10px}
+.pass .who{font-weight:900;flex:1 1 auto;min-width:0}
+.pass .who small{display:block;font-weight:500;color:var(--ink-soft);font-size:.82rem}
+.need-login{background:var(--paper-2);border:2.5px dashed var(--ink);border-radius:6px;padding:10px 14px;font-weight:700;margin-bottom:14px}
+table.roster{width:100%;border-collapse:collapse;font-size:.88rem;margin-top:10px;min-width:520px}
+table.roster th,table.roster td{border-bottom:2px solid var(--mute);padding:5px 6px;text-align:left;white-space:nowrap}
+table.roster td.code{font-family:var(--f-sfx);font-size:1.05rem;letter-spacing:.12em}
+table.roster tr.low td{background:var(--paper-2)}
+.ok{color:var(--green);font-weight:900}
+
+@media (max-width:620px){
+  .hero{grid-template-columns:1fr}
+  .hero-art{border-left:0;border-top:var(--stroke) solid var(--ink);min-height:160px}
+  .hero-art svg{width:140px}
+  .row2{grid-template-columns:1fr}
+  .ep span{font-size:.68rem}
+  .ep b{font-size:.95rem}
+  .ep.now b::after{content:""}
+  .bubble{margin-left:44px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
+</style>
+
+<div class="wrap">
+  <div id="demoBar" class="demo" hidden>示範模式：資料只存在這台裝置。學生代碼可用 AAAAA（1 號，垃圾終結者隊員）、BBBBB（2 號，還沒組隊）；老師面板密碼 demo。</div>
+
+  <header class="hero">
+    <div class="hero-text">
+      <span class="hero-kicker">CLASS DEBUG-THON</span>
+      <h1><span id="clsName">我們班</span>的<em>Debug 松</em></h1>
+      <p>班上哪裡卡卡的？把它當成程式裡的 Bug：先一起抓出來，再分隊修好，最後用數據證明真的修好了。</p>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <span class="boom">BUG!</span>
+      <svg viewBox="0 0 200 190" role="img">
+        <!-- 原創吉祥物：抓蟲蟲「小臭蟲」，戴頭帶、拿扳手 -->
+        <g stroke="var(--ink)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M78 46 Q66 18 52 14" fill="none"/><path d="M122 46 Q134 18 148 14" fill="none"/>
+          <circle cx="52" cy="14" r="8" fill="var(--yellow)"/><circle cx="148" cy="14" r="8" fill="var(--yellow)"/>
+          <path d="M52 120 L24 112 M52 140 L22 146 M148 120 L176 112 M148 140 L180 146" fill="none"/>
+          <ellipse cx="100" cy="122" rx="56" ry="50" fill="var(--cyan)"/>
+          <path d="M100 76 L100 170" fill="none" stroke-width="4"/>
+          <circle cx="78" cy="138" r="7" fill="var(--panel)" stroke-width="3"/><circle cx="124" cy="150" r="5" fill="var(--panel)" stroke-width="3"/>
+          <circle cx="100" cy="70" r="40" fill="var(--panel)"/>
+          <path d="M62 58 Q100 40 138 58 L138 68 Q100 52 62 68 Z" fill="var(--pink)"/>
+          <ellipse cx="85" cy="78" rx="10" ry="13" fill="var(--ink)" stroke-width="0"/>
+          <ellipse cx="117" cy="78" rx="10" ry="13" fill="var(--ink)" stroke-width="0"/>
+          <circle cx="89" cy="73" r="4" fill="#fff" stroke-width="0"/><circle cx="121" cy="73" r="4" fill="#fff" stroke-width="0"/>
+          <circle cx="82" cy="83" r="2" fill="#fff" stroke-width="0"/><circle cx="114" cy="83" r="2" fill="#fff" stroke-width="0"/>
+          <path d="M92 96 Q100 103 108 96" fill="none" stroke-width="4"/>
+          <ellipse cx="70" cy="92" rx="7" ry="4" fill="var(--pink)" stroke-width="0" opacity=".55"/>
+          <ellipse cx="130" cy="92" rx="7" ry="4" fill="var(--pink)" stroke-width="0" opacity=".55"/>
+          <path d="M150 100 L176 74" fill="none" stroke-width="7"/>
+          <path d="M170 64 a12 12 0 1 0 16 16 l-7 -2 l-3 -7 z" fill="var(--yellow)" stroke-width="4"/>
+        </g>
+      </svg>
+      <span class="boom2">FIX IT!</span>
+    </div>
+  </header>
+
+  <ol class="eps" id="eps" aria-label="活動階段"></ol>
+  <section class="pass" id="pass" aria-label="我的通行證"></section>
+</div>
+
+<nav class="tabs"><div class="wrap"><div class="tabs-in" role="tablist" id="tabs"></div></div></nav>
+
+<main class="wrap" id="main" aria-live="polite"></main>
+
+<footer><div class="wrap"><b>Gina教室的AI奇蹟</b>｜鳳新高中英文科李姬慧老師 X AI 彙整製作。對事不對人，一起把班級修得更順。</div></footer>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+// ===== 設定：接上 Google Sheet 後，把 Apps Script 網址貼在這裡（留空＝示範模式） =====
+var CONFIG = { API_URL: '' };
+
+// ===== Debug 松核心邏輯（網頁示範模式與 Apps Script 共用同一份） =====
+// 記名規則：組隊、試辦紀錄記名；回報只記「交了幾則」不記內容是誰寫的；投票只記「投過了」不記投給誰。
+var CATS = ['打掃與環境', '作業與學習', '秩序與規則', '設備與教室', '班費與活動', '溝通與資訊', '其他'];
+var FREQS = ['每天', '每週幾次', '偶爾'];
+var STAGES = ['抓 Bug', '組隊認領', 'Demo 投票', '試辦追蹤', '結案'];
+var VERDICTS = ['', '納入班規', '再修一輪', '停止試辦'];
+var CODE_ABC = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+
+function uid() { return Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(-4); }
+function emptyDb() { return { settings: { stage: 1, showResults: false, className: '我們班' }, reports: [], bugs: [], teams: [], tally: {}, people: {} }; }
+function clean(s, max) { s = String(s == null ? '' : s).trim(); return s.length > max ? s.slice(0, max) : s; }
+function need(c, m) { if (!c) throw new Error(m); }
+function findBy(arr, id) { for (var i = 0; i < arr.length; i++) if (arr[i].id === id) return arr[i]; return null; }
+function normCode(c) { return clean(c, 12).toUpperCase().replace(/\s/g, ''); }
+function seatKey(s) { return String(s); }
+
+function person(db, seat) {
+  var k = seatKey(seat);
+  if (!db.people[k]) db.people[k] = { reports: 0, voted: false, plused: [] };
+  return db.people[k];
+}
+function whoIs(ctx, code) {
+  code = normCode(code);
+  if (!code) return null;
+  for (var i = 0; i < ctx.roster.length; i++) if (ctx.roster[i].code && ctx.roster[i].code === code) return ctx.roster[i];
+  return null;
+}
+function mustLogin(ctx, p) { var s = whoIs(ctx, p.code); need(s, '請先輸入你的個人代碼'); return s; }
+function teamOf(db, seat) {
+  var k = seatKey(seat);
+  for (var i = 0; i < db.teams.length; i++) if (db.teams[i].members.indexOf(k) >= 0) return db.teams[i];
+  return null;
+}
+function votedCount(db) { var n = 0; for (var k in db.people) if (db.people[k].voted) n++; return n; }
+
+function meView(db, s) {
+  var pp = db.people[seatKey(s.seat)] || { reports: 0, voted: false, plused: [] };
+  var t = teamOf(db, s.seat);
+  return { seat: seatKey(s.seat), name: s.name, reports: pp.reports, voted: pp.voted, plused: pp.plused || [], teamId: t ? t.id : null };
+}
+
+function publicState(db, ctx, p) {
+  var s = whoIs(ctx, p.code);
+  return {
+    settings: db.settings,
+    reports: db.reports.filter(function (r) { return r.status === 'approved'; })
+      .map(function (r) { return { id: r.id, category: r.category, situation: r.situation, frequency: r.frequency, impact: r.impact, plus: r.plus || 0 }; }),
+    bugs: db.bugs,
+    teams: db.teams,
+    turnout: { used: votedCount(db), total: ctx.roster.filter(function (r) { return r.code; }).length },
+    counts: db.settings.showResults ? db.tally : null,
+    me: s ? meView(db, s) : null,
+    badCode: !!normCode(p.code) && !s
+  };
+}
+
+function adminView(db, ctx) {
+  var v = JSON.parse(JSON.stringify(db));
+  v.roster = ctx.roster.map(function (r) {
+    var pp = db.people[seatKey(r.seat)] || { reports: 0, voted: false };
+    var t = teamOf(db, r.seat), logs = 0;
+    db.teams.forEach(function (tm) { tm.trial.entries.forEach(function (e) { if (e.by === seatKey(r.seat)) logs++; }); });
+    return { seat: seatKey(r.seat), name: r.name, code: r.code, reports: pp.reports, voted: pp.voted, team: t ? t.name : '', logs: logs };
+  });
+  v.counts = db.tally;
+  delete v.people;
+  return v;
+}
+
+function teamFields(p) {
+  var f = {
+    name: clean(p.name, 20), bugId: clean(p.bugId, 20),
+    steps: clean(p.steps, 400), cause: clean(p.cause, 400), mvp: clean(p.mvp, 80), how: clean(p.how, 500),
+    metric: clean(p.metric, 40), unit: clean(p.unit, 10),
+    baseline: Number(p.baseline), target: Number(p.target)
+  };
+  need(f.name, '請填隊名');
+  need(f.bugId, '請選擇要認領的 Bug');
+  need(f.mvp, '請用一句話寫出你們的 MVP');
+  need(f.metric, '請寫出要追蹤的成功指標');
+  need(isFinite(f.baseline) && isFinite(f.target) && p.baseline !== '' && p.target !== '', '請填現在的數值和目標數值');
+  need(f.baseline !== f.target, '目標數值要和現在不一樣，才看得出有沒有改善');
+  return f;
+}
+
+function coreHandle(db, action, p, ctx) {
+  p = p || {};
+  var st = db.settings.stage;
+  var isAdmin = !!ctx.adminPass && p.pass === ctx.adminPass;
+  var t, r, s, pp;
+  switch (action) {
+    case 'state':
+      return { data: publicState(db, ctx, p) };
+
+    case 'report':
+      s = mustLogin(ctx, p);
+      need(st <= 2, '回報 Bug 的時間已經結束');
+      need(CATS.indexOf(p.category) >= 0, '請選一個分類');
+      need(clean(p.situation, 300).length >= 6, '請多寫一點：什麼時候、在哪裡發生？');
+      need(FREQS.indexOf(p.frequency) >= 0, '請選多常發生');
+      need(p.agree === true, '請先勾選「對事不對人」的確認');
+      need(db.reports.length < 300, '回報數量已達上限，請老師整理後再開放');
+      pp = person(db, s.seat);
+      need(pp.reports < 10, '每人最多回報 10 則');
+      // 回報內容不存座號；座號那邊只加一次數
+      db.reports.push({ id: uid(), category: p.category, situation: clean(p.situation, 300), frequency: p.frequency,
+        impact: clean(p.impact, 300), status: 'pending', plus: 0 });
+      pp.reports++;
+      return { changed: true, data: {} };
+
+    case 'plus':
+      s = mustLogin(ctx, p);
+      r = findBy(db.reports, p.id);
+      need(r && r.status === 'approved', '找不到這則回報');
+      pp = person(db, s.seat);
+      need(pp.plused.indexOf(r.id) < 0, '你已經按過這則了');
+      pp.plused.push(r.id);
+      r.plus = (r.plus || 0) + 1;
+      return { changed: true, data: {} };
+
+    case 'team':
+      s = mustLogin(ctx, p);
+      need(st === 2, '組隊登記只在「組隊認領」階段開放');
+      var f = teamFields(p);
+      need(findBy(db.bugs, f.bugId), '這張 Bug 卡不存在了，請重新選擇');
+      if (p.id) {
+        t = findBy(db.teams, p.id);
+        need(t, '找不到這一隊');
+        need(t.members.indexOf(seatKey(s.seat)) >= 0, '只有這一隊的成員可以修改報告卡');
+        for (var k in f) t[k] = f[k];
+        return { changed: true, data: {} };
+      }
+      need(!teamOf(db, s.seat), '你已經在一個隊伍裡了，要先退出才能開新隊');
+      need(db.teams.length < 20, '隊伍數量已達上限');
+      t = f; t.id = uid(); t.members = [seatKey(s.seat)]; t.trial = { on: false, entries: [], verdict: '' };
+      db.teams.push(t);
+      return { changed: true, data: {} };
+
+    case 'join':
+      s = mustLogin(ctx, p);
+      need(st === 2, '加入隊伍只在「組隊認領」階段開放');
+      t = findBy(db.teams, p.teamId); need(t, '找不到這一隊');
+      need(!teamOf(db, s.seat), '你已經在一個隊伍裡了');
+      need(t.members.length < 8, '這一隊人數已滿（最多 8 人）');
+      t.members.push(seatKey(s.seat));
+      return { changed: true, data: {} };
+
+    case 'leave':
+      s = mustLogin(ctx, p);
+      need(st === 2, '退出隊伍只在「組隊認領」階段開放');
+      t = teamOf(db, s.seat); need(t, '你目前沒有隊伍');
+      t.members = t.members.filter(function (m) { return m !== seatKey(s.seat); });
+      return { changed: true, data: {} };
+
+    case 'vote':
+      s = mustLogin(ctx, p);
+      need(st === 3, '投票還沒開放，或已經結束');
+      pp = person(db, s.seat);
+      need(!pp.voted, '你已經投過票了');
+      t = findBy(db.teams, p.teamId); need(t, '請選擇一個隊伍');
+      need(t.members.indexOf(seatKey(s.seat)) < 0, '不能投給自己的隊伍');
+      // 只記「投過了」和各隊總票數，不記誰投給誰
+      pp.voted = true;
+      db.tally[t.id] = (db.tally[t.id] || 0) + 1;
+      return { changed: true, data: {} };
+
+    case 'trialEntry':
+      t = findBy(db.teams, p.teamId);
+      need(t && t.trial && t.trial.on, '這一隊目前沒有在試辦');
+      if (!isAdmin) {
+        s = mustLogin(ctx, p);
+        need(t.members.indexOf(seatKey(s.seat)) >= 0, '只有這一隊的成員可以記錄數據');
+        need(st === 4, '記錄數據只在「試辦追蹤」階段開放');
+      }
+      var val = Number(p.value);
+      need(p.value !== '' && isFinite(val), '請填數值');
+      need(t.trial.entries.length < 30, '紀錄數量已達上限');
+      t.trial.entries.push({ week: clean(p.week, 20) || ('第 ' + (t.trial.entries.length + 1) + ' 週'), value: val,
+        note: clean(p.note, 120), by: s ? seatKey(s.seat) : '老師', t: ctx.now });
+      return { changed: true, data: {} };
+
+    case 'adminState':
+      need(isAdmin, '老師密碼不正確');
+      return { data: adminView(db, ctx) };
+
+    case 'admin':
+      need(isAdmin, '老師密碼不正確');
+      adminOp(db, p, ctx);
+      return { changed: true, data: adminView(db, ctx) };
+  }
+  throw new Error('不支援的動作');
+}
+
+function adminOp(db, p, ctx) {
+  var t, r, b;
+  switch (p.op) {
+    case 'setStage': need(p.stage >= 1 && p.stage <= 5, '階段錯誤'); db.settings.stage = Number(p.stage); return;
+    case 'setResults': db.settings.showResults = !!p.on; return;
+    case 'setClass': db.settings.className = clean(p.name, 16) || '我們班'; return;
+    case 'review':
+      r = findBy(db.reports, p.id); need(r, '找不到回報');
+      need(['approved', 'rejected', 'pending'].indexOf(p.status) >= 0, '狀態錯誤'); r.status = p.status; return;
+    case 'saveBug':
+      var title = clean(p.title, 30); need(title, '請填 Bug 卡標題');
+      var data = { title: title, desc: clean(p.desc, 200), category: CATS.indexOf(p.category) >= 0 ? p.category : '其他',
+        reportIds: (p.reportIds || []).slice(0, 50).map(String) };
+      if (p.id) { b = findBy(db.bugs, p.id); need(b, '找不到 Bug 卡'); for (var k in data) b[k] = data[k]; }
+      else { need(db.bugs.length < 12, 'Bug 卡最多 12 張'); data.id = uid(); db.bugs.push(data); }
+      return;
+    case 'deleteBug': db.bugs = db.bugs.filter(function (x) { return x.id !== p.id; }); return;
+    case 'deleteTeam': db.teams = db.teams.filter(function (x) { return x.id !== p.id; }); delete db.tally[p.id]; return;
+    case 'removeMember':
+      t = findBy(db.teams, p.teamId); need(t, '找不到隊伍');
+      t.members = t.members.filter(function (m) { return m !== seatKey(p.seat); }); return;
+    case 'resetVotes':
+      db.tally = {}; db.settings.showResults = false;
+      for (var q in db.people) db.people[q].voted = false;
+      return;
+    case 'genCodes':
+      var have = {};
+      ctx.roster.forEach(function (x) { if (x.code) have[x.code] = 1; });
+      ctx.roster.forEach(function (x) {
+        if (x.code) return;
+        var s; do { s = ''; for (var j = 0; j < 5; j++) s += CODE_ABC[Math.floor(Math.random() * CODE_ABC.length)]; } while (have[s]);
+        have[s] = 1; x.code = s; ctx.rosterChanged = true;
+      });
+      need(ctx.roster.length, '名單是空的，請先在試算表「名單」工作表貼上座號和姓名');
+      return;
+    case 'setTrial': t = findBy(db.teams, p.teamId); need(t, '找不到隊伍'); t.trial.on = !!p.on; return;
+    case 'verdict': t = findBy(db.teams, p.teamId); need(t, '找不到隊伍');
+      need(VERDICTS.indexOf(p.verdict) >= 0, '判定錯誤'); t.trial.verdict = p.verdict; return;
+    case 'deleteEntry': t = findBy(db.teams, p.teamId); need(t, '找不到隊伍');
+      t.trial.entries.splice(Number(p.index), 1); return;
+  }
+  throw new Error('不支援的老師操作');
+}
+
+
+var DEMO = !CONFIG.API_URL;
+var DEMO_PASS = 'demo';
+var S = null, A = null, adminPass = '', TAB = null, pending = {};
+var LS = {
+  get: function (k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+  del: function (k) { try { localStorage.removeItem(k); } catch (e) {} }
+};
+var CODE_KEY = 'debugthon-code' + (DEMO ? '-demo' : '');
+var myCode = LS.get(CODE_KEY, '');
+
+// ===== 示範資料（只在示範模式使用，名字都是虛構的） =====
+function demoRoster() {
+  var out = [];
+  for (var i = 1; i <= 36; i++) out.push({ seat: String(i), name: '示範同學' + (i < 10 ? '0' : '') + i, code: i === 1 ? 'AAAAA' : i === 2 ? 'BBBBB' : 'D' + (i < 10 ? '00' : '0') + i + 'X' });
+  return out;
+}
+function demoSeed() {
+  var db = emptyDb();
+  db.settings = { stage: 2, showResults: false, className: '示範班' };
+  db.reports = [
+    { id: 'r1', category: '打掃與環境', situation: '午休後倒垃圾時間常常沒人去，垃圾桶塞滿到隔天早上，教室後面有味道。', frequency: '每週幾次', impact: '早自習時坐後面的人會聞到味道，也容易有螞蟻。', status: 'approved', plus: 14 },
+    { id: 'r2', category: '作業與學習', situation: '小老師收作業時，不知道誰交了誰沒交，要一本一本對座號。', frequency: '每天', impact: '收一次要十分鐘，下課都沒了。', status: 'approved', plus: 9 },
+    { id: 'r3', category: '溝通與資訊', situation: '班級公告有時在 LINE 群、有時在 Classroom、有時只寫在黑板。', frequency: '每週幾次', impact: '請假的人常常錯過繳費和考試範圍。', status: 'approved', plus: 17 },
+    { id: 'r4', category: '打掃與環境', situation: '回收桶分類常常混在一起，外掃區評分被扣分。', frequency: '每週幾次', impact: '整潔成績被扣，大家又要重新分一次。', status: 'approved', plus: 6 },
+    { id: 'r5', category: '設備與教室', situation: '冷氣遙控器常常找不到，上課前要花時間找。', frequency: '偶爾', impact: '第一節課很熱，老師也要等。', status: 'approved', plus: 4 },
+    { id: 'r6', category: '秩序與規則', situation: '午休時手機螢幕光很亮，前後同學睡不著。', frequency: '每天', impact: '下午上課很想睡。', status: 'pending', plus: 0 }
+  ];
+  db.bugs = [
+    { id: 'b1', title: '垃圾沒人倒，堆到隔天', desc: '倒垃圾沒有固定負責人，回收也常混在一起。', category: '打掃與環境', reportIds: ['r1', 'r4'] },
+    { id: 'b2', title: '收作業太慢、不知道誰沒交', desc: '小老師要一本一本對座號，下課時間被吃掉。', category: '作業與學習', reportIds: ['r2'] },
+    { id: 'b3', title: '公告散在三個地方', desc: 'LINE、Classroom、黑板各說各的，請假的人最容易漏掉。', category: '溝通與資訊', reportIds: ['r3'] }
+  ];
+  var tr = function () { return { on: false, entries: [], verdict: '' }; };
+  db.teams = [
+    { id: 't1', name: '垃圾終結者', bugId: 'b1', members: ['1', '11', '18', '27'], steps: '1. 午休結束\n2. 沒有人被指定去倒\n3. 每個人都以為別人會去', cause: '責任沒有綁在人身上，也沒有提醒。', mvp: '「倒垃圾輪值卡」＋午休鐘響提醒', how: '座號輪值表貼在垃圾桶上，輪到的人倒完蓋章。衛生股長每天看一眼有沒有蓋章。', metric: '垃圾滿到隔天的天數', unit: '天/週', baseline: 3, target: 0, trial: tr() },
+    { id: 't2', name: '交了沒', bugId: 'b2', members: ['5', '9', '22'], steps: '1. 小老師收作業\n2. 拿座號表一本一本勾', cause: '沒有一眼就看得出缺交的工具。', mvp: '照座號排的作業收件格', how: '在櫃子上貼 1～36 號的格子，作業放進自己的格子，空格就是沒交。', metric: '收一次作業花的時間', unit: '分鐘', baseline: 10, target: 3, trial: tr() },
+    { id: 't3', name: '一站看完', bugId: 'b3', members: ['14', '30', '33'], steps: '1. 老師在不同地方發公告\n2. 請假的人不知道要看哪裡', cause: '沒有規定「唯一」的公告地點。', mvp: 'Classroom 置頂一則「本週公告」', how: '所有公告都整理到同一則，學藝股長每天放學前更新，LINE 只貼連結。', metric: '每週漏看公告的人數', unit: '人', baseline: 6, target: 1, trial: tr() }
+  ];
+  [1, 3, 5, 9, 11, 14, 18, 22, 27, 30].forEach(function (s, i) { db.people[String(s)] = { reports: i % 3 + 1, voted: false, plused: [] }; });
+  return db;
+}
+
+function api(action, p) {
+  p = Object.assign({}, p || {});
+  if (myCode && p.code == null) p.code = myCode;
+  if (DEMO) {
+    return new Promise(function (res, rej) {
+      var store = LS.get('debugthon-demo2', null) || { db: demoSeed(), roster: demoRoster() };
+      try {
+        var ctx = { adminPass: DEMO_PASS, now: Date.now(), roster: store.roster };
+        var r = coreHandle(store.db, action, p, ctx);
+        if (r.changed || ctx.rosterChanged) LS.set('debugthon-demo2', store);
+        setTimeout(function () { res(JSON.parse(JSON.stringify(r.data))); }, 120);
+      } catch (e) { rej(e); }
+    });
+  }
+  return fetch(CONFIG.API_URL, { method: 'POST', body: JSON.stringify(Object.assign({ action: action }, p)) })
+    .then(function (r) { return r.json(); }, function () { throw new Error('連不上 Google Sheet，請檢查網路或網址設定'); })
+    .then(function (j) { if (!j.ok) throw new Error(j.error || '發生錯誤'); return j.data; });
+}
+
+// ===== 小工具 =====
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function $(s, el) { return (el || document).querySelector(s); }
+function toast(msg, err) {
+  var t = $('#toast'); t.textContent = msg; t.className = 'toast show' + (err ? ' err' : '');
+  clearTimeout(toast._t); toast._t = setTimeout(function () { t.className = 'toast'; }, 2600);
+}
+function bugById(id) { for (var i = 0; i < S.bugs.length; i++) if (S.bugs[i].id === id) return S.bugs[i]; return null; }
+function teamById(id) { for (var i = 0; i < S.teams.length; i++) if (S.teams[i].id === id) return S.teams[i]; return null; }
+function inTeam(t) { return !!(S.me && t.members.indexOf(S.me.seat) >= 0); }
+function seats(t) { return t.members.length ? t.members.map(function (m) { return m + ' 號'; }).join('、') : '目前沒有成員'; }
+function bubble(text) {
+  return '<div class="bubble"><svg class="bubble-who" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="22" r="16" fill="var(--panel)" stroke="var(--ink)" stroke-width="3"/>' +
+    '<path d="M6 17 Q20 8 34 17 L34 21 Q20 13 6 21Z" fill="var(--pink)" stroke="var(--ink)" stroke-width="2"/>' +
+    '<ellipse cx="15" cy="24" rx="3" ry="4" fill="var(--ink)"/><ellipse cx="25" cy="24" rx="3" ry="4" fill="var(--ink)"/></svg>' + text + '</div>';
+}
+function lockedNote(stageNeeded, what) {
+  var st = S.settings.stage;
+  if (st === stageNeeded) return '';
+  return '<div class="locked">' + (st < stageNeeded ? '還沒輪到這一集：' : '這一集已經播完：') + what + '（現在是 EP.' + st + '「' + STAGES[st - 1] + '」）</div>';
+}
+function needLogin(what) { return S.me ? '' : '<div class="need-login">先在上方「通行證」輸入你的個人代碼，才能' + what + '。</div>'; }
+
+// ===== 分頁 =====
+var TABS = [
+  { id: 'report', label: '回報 Bug' }, { id: 'board', label: 'Bug 看板' }, { id: 'teams', label: '隊伍與報告卡' },
+  { id: 'vote', label: '投票' }, { id: 'trial', label: '試辦追蹤' }, { id: 'admin', label: '老師面板' }
+];
+var STAGE_TAB = { 1: 'report', 2: 'teams', 3: 'vote', 4: 'trial', 5: 'trial' };
+
+function renderPass() {
+  var el = $('#pass');
+  if (S.me) {
+    var t = S.me.teamId && teamById(S.me.teamId);
+    el.innerHTML = '<span class="tag">PASS</span><div class="who">' + esc(S.me.seat) + ' 號 ' + esc(S.me.name) +
+      '<small>已回報 ' + S.me.reports + ' 則｜' + (t ? '隊伍：' + esc(t.name) : '還沒有隊伍') + '｜' + (S.me.voted ? '已投票' : '還沒投票') + '</small></div>' +
+      '<button class="btn sm alt" data-act="logoutStu">登出</button>';
+  } else {
+    el.innerHTML = '<span class="tag">PASS</span><form id="fCode"><label for="stuCode" class="small" style="font-weight:900">我的個人代碼</label>' +
+      '<input type="text" id="stuCode" maxlength="5" autocomplete="off" autocapitalize="characters" required placeholder="5 碼">' +
+      '<button class="btn sm" type="submit">登入</button></form>' +
+      (S.badCode ? '<span class="small" style="color:var(--pink);font-weight:900">這組代碼查不到，請再核對一次</span>' : '<span class="muted small">代碼由老師發給你，只有你自己知道</span>');
+  }
+}
+
+function renderChrome() {
+  $('#clsName').textContent = S.settings.className || '我們班';
+  var st = S.settings.stage;
+  $('#eps').innerHTML = STAGES.map(function (n, i) {
+    var k = i + 1;
+    return '<li class="ep ' + (k < st ? 'done' : k === st ? 'now' : '') + '" data-ep="' + k + '" tabindex="0" role="button" aria-label="EP ' + k + ' ' + n + (k === st ? '（進行中）' : '') + '"><b>EP.' + k + '</b><span>' + n + '</span></li>';
+  }).join('');
+  $('#tabs').innerHTML = TABS.map(function (t) {
+    return '<button class="tab" role="tab" data-tab="' + t.id + '" id="tab-' + t.id + '" aria-selected="' + (t.id === TAB) + '">' + t.label + '</button>';
+  }).join('');
+  renderPass();
+}
+
+function render() {
+  renderChrome();
+  var f = { report: vReport, board: vBoard, teams: vTeams, vote: vVote, trial: vTrial, admin: vAdmin }[TAB];
+  $('#main').innerHTML = '<section class="panel-view">' + f() + '</section>';
+  if (TAB === 'teams') fillTeamForm();
+}
+
+function go(tab) {
+  TAB = tab;
+  try { if (history.replaceState) history.replaceState(null, '', '#' + tab); } catch (e) {}
+  render();
+  var tb = $('#tab-' + tab); if (tb && tb.scrollIntoView) tb.scrollIntoView({ block: 'nearest', inline: 'center' });
+}
+
+// ===== EP1 回報 =====
+function vReport() {
+  var open = S.settings.stage <= 2 && !!S.me;
+  return '<div class="sec-head"><h2>回報一個 Bug</h2><span class="sfx">REPORT!</span></div>' +
+    bubble('寫「事情」，不寫「人」。好的 Bug 回報要讓別人看了就能想像當時的畫面：<b>什麼時候、在哪裡、發生什麼事</b>。<br>老師只看得到「你交了幾則」，<b>看不到哪一則是你寫的</b>。') +
+    (S.settings.stage <= 2 ? needLogin('回報 Bug') : '<div class="locked">回報時間已結束，可以到「Bug 看板」看大家抓到的 Bug。</div>') +
+    '<div class="frame"><form id="fReport">' +
+    '<label class="f">分類<select id="rCat" required><option value="">請選擇</option>' + CATS.map(function (c) { return '<option>' + c + '</option>'; }).join('') + '</select></label>' +
+    '<label class="f">什麼時候、在哪裡發生？<span class="hint">例：午休後倒垃圾時間，常常沒人去，垃圾堆到隔天</span><textarea id="rSit" maxlength="300" required></textarea></label>' +
+    '<div class="f" style="display:grid;gap:6px;font-weight:700">多常發生？<div class="radios">' + FREQS.map(function (q, i) { return '<label><input type="radio" name="rFreq" id="rFreq' + i + '" value="' + q + '"><span>' + q + '</span></label>'; }).join('') + '</div></div>' +
+    '<label class="f">造成什麼影響？<span class="hint">選填。例：早自習坐後面的人會聞到味道</span><textarea id="rImp" maxlength="300"></textarea></label>' +
+    '<label class="check"><input type="checkbox" id="rAgree">我描述的是「事情」，沒有點名或暗示任何同學。</label>' +
+    '<div class="btn-row"><button class="btn" type="submit"' + (open ? '' : ' disabled') + '>送出 Bug</button><span class="muted small">送出後會先進入老師審核</span></div>' +
+    '</form></div>';
+}
+
+// ===== Bug 看板 =====
+function vBoard() {
+  var plused = S.me ? S.me.plused : [];
+  var teamsFor = function (bid) { return S.teams.filter(function (t) { return t.bugId === bid; }); };
+  var plusOf = function (b) { var s = 0; S.reports.forEach(function (r) { if ((b.reportIds || []).indexOf(r.id) >= 0) s += r.plus; }); return s; };
+  var cards = S.bugs.length ? '<div class="grid">' + S.bugs.map(function (b, i) {
+    var ts = teamsFor(b.id);
+    return '<article class="frame bugcard"><span class="no" aria-hidden="true">#' + (i + 1) + '</span><span class="chip">' + esc(b.category) + '</span>' +
+      '<h3 style="margin-top:6px">' + esc(b.title) + '</h3><p class="muted small" style="margin:6px 0 0">' + esc(b.desc) + '</p>' +
+      '<div class="stats"><span><b>' + (b.reportIds || []).length + '</b>則回報</span><span><b>' + plusOf(b) + '</b>人也遇過</span><span><b>' + ts.length + '</b>隊認領</span></div>' +
+      (ts.length ? '<div class="chips" style="margin-top:8px">' + ts.map(function (t) { return '<span class="chip cyan">' + esc(t.name) + '</span>'; }).join('') + '</div>' : '') +
+      '</article>';
+  }).join('') + '</div>' : '<div class="frame empty"><span class="sfx">SOON</span>老師整理回報後，Bug 卡會出現在這裡。</div>';
+
+  var cat = pending.cat || '全部';
+  var list = S.reports.filter(function (r) { return cat === '全部' || r.category === cat; }).sort(function (a, b) { return b.plus - a.plus; });
+  var reports = list.length ? list.map(function (r) {
+    var on = plused.indexOf(r.id) >= 0;
+    return '<article class="frame report"><div style="min-width:0"><div class="chips"><span class="chip">' + esc(r.category) + '</span><span class="chip yellow">' + esc(r.frequency) + '</span></div>' +
+      '<p><b>' + esc(r.situation) + '</b></p>' + (r.impact ? '<p class="muted small">影響：' + esc(r.impact) + '</p>' : '') + '</div>' +
+      '<button class="plus" data-plus="' + r.id + '" aria-pressed="' + on + '"' + (on || !S.me ? ' disabled' : '') + ' aria-label="我也遇過，目前 ' + r.plus + ' 人"><b>+' + r.plus + '</b><small>' + (on ? '已按' : '我也遇過') + '</small></button></article>';
+  }).join('') : '<div class="frame empty"><span class="sfx">EMPTY</span>這個分類還沒有公開的回報。</div>';
+
+  return '<div class="sec-head"><h2>Bug 卡</h2><span class="sfx">BOSS LIST</span></div>' +
+    bubble('老師把相似的回報合併成 Bug 卡，一張卡就是一個要修的關卡。下一集 EP.2，每一隊認領一張。') + cards +
+    '<div class="sec-head" style="margin-top:30px"><h2>大家的回報</h2></div>' + (S.me ? '' : '<p class="muted small">登入後可以按「我也遇過」。</p>') +
+    '<div class="chips" style="margin-bottom:12px">' + ['全部'].concat(CATS).map(function (c) {
+      return '<button class="tab" data-cat="' + c + '" aria-pressed="' + (c === cat) + '" style="font-size:.82rem;padding:3px 11px' + (c === cat ? ';background:var(--ink);color:var(--paper)' : '') + '">' + c + '</button>';
+    }).join('') + '</div>' + reports;
+}
+
+// ===== EP2 隊伍 =====
+function teamCard(t) {
+  var b = bugById(t.bugId), st = S.settings.stage, mine = inTeam(t);
+  var dir = t.target < t.baseline ? '降到' : '提高到';
+  var acts = '';
+  if (st === 2 && S.me) {
+    if (mine) acts = '<button class="btn sm alt" data-editteam="' + t.id + '">修改報告卡</button>' + '<button class="btn sm alt" data-ask="leave|' + t.id + '">退出這一隊</button>';
+    else if (!S.me.teamId) acts = '<button class="btn sm y" data-join="' + t.id + '">加入這一隊</button>';
+  }
+  return '<article class="frame"' + (mine ? ' style="background:var(--paper-2)"' : '') + '><div class="chips">' + (b ? '<span class="chip">' + esc(b.title) + '</span>' : '') +
+    (mine ? '<span class="chip cyan">我的隊</span>' : '') +
+    (t.trial && t.trial.on ? '<span class="chip green">試辦中</span>' : '') + (t.trial && t.trial.verdict ? '<span class="chip pink">' + esc(t.trial.verdict) + '</span>' : '') + '</div>' +
+    '<h3 style="margin-top:6px">' + esc(t.name) + '</h3>' +
+    '<p class="muted small" style="margin:2px 0 0">成員：' + seats(t) + '</p>' +
+    '<div class="mvp">MVP：' + esc(t.mvp) + '</div>' +
+    '<div class="metric">' + esc(t.metric) + '<span class="chip">' + esc(t.baseline) + ' ' + esc(t.unit) + '</span><span class="arrow">→</span><span class="chip yellow">' + dir + ' ' + esc(t.target) + ' ' + esc(t.unit) + '</span></div>' +
+    '<details class="card-more"><summary>看完整 Bug 報告卡</summary><dl class="kv">' +
+    '<dt>重現步驟</dt><dd>' + esc(t.steps || '—') + '</dd><dt>根本原因</dt><dd>' + esc(t.cause || '—') + '</dd><dt>MVP 怎麼運作</dt><dd>' + esc(t.how || '—') + '</dd></dl></details>' +
+    (acts ? '<div class="btn-row" style="margin-top:10px">' + acts + '</div>' : '') + confirmBox('leave', t.id, '確定退出「' + esc(t.name) + '」？') +
+    '</article>';
+}
+
+function vTeams() {
+  var st = S.settings.stage;
+  var editing = pending.editTeam && teamById(pending.editTeam);
+  var canForm = st === 2 && S.me && (editing ? inTeam(editing) : !S.me.teamId);
+  var form = '<div class="frame" id="teamFormBox"><h3 id="teamFormTitle">開一個新隊伍，填 Bug 報告卡</h3><p class="muted small" style="margin:4px 0 12px">開隊的人會自動成為隊員，其他人在上面的隊伍卡按「加入這一隊」。隊上每個人都可以修改報告卡。</p>' +
+    '<form id="fTeam"><input type="hidden" id="tId">' +
+    '<label class="f">隊名<input type="text" id="tName" maxlength="20" required></label>' +
+    '<label class="f">認領哪一張 Bug 卡<select id="tBug" required><option value="">請選擇</option>' + S.bugs.map(function (b) { return '<option value="' + b.id + '">' + esc(b.title) + '</option>'; }).join('') + '</select></label>' +
+    '<label class="f">① 重現步驟<span class="hint">Bug 是怎麼一步一步發生的？</span><textarea id="tSteps" maxlength="400"></textarea></label>' +
+    '<label class="f">② 根本原因<span class="hint">問三次「為什麼」，找到真正卡住的地方</span><textarea id="tCause" maxlength="400"></textarea></label>' +
+    '<label class="f">③ MVP 一句話<span class="hint">最小、明天就能試的解法。例：倒垃圾輪值卡＋午休鐘響提醒</span><input type="text" id="tMvp" maxlength="80" required></label>' +
+    '<label class="f">MVP 怎麼運作<span class="hint">誰做、什麼時候做、用什麼工具</span><textarea id="tHow" maxlength="500"></textarea></label>' +
+    '<label class="f">④ 成功指標<span class="hint">要追蹤的數字。例：垃圾滿到隔天的天數</span><input type="text" id="tMetric" maxlength="40" required></label>' +
+    '<div class="row2"><label class="f">現在的數值<input type="number" id="tBase" step="any" required></label><label class="f">目標數值<input type="number" id="tTarget" step="any" required></label></div>' +
+    '<label class="f">單位<span class="hint">例：天/週、分鐘、人</span><input type="text" id="tUnit" maxlength="10"></label>' +
+    '<div class="btn-row"><button class="btn" type="submit">' + (editing ? '更新報告卡' : '開隊並送出報告卡') + '</button>' + (editing ? '<button class="btn alt" type="button" id="tReset">取消修改</button>' : '') + '</div>' +
+    '</form></div>';
+  var list = S.teams.length ? '<div class="grid">' + S.teams.map(teamCard).join('') + '</div>'
+    : '<div class="frame empty"><span class="sfx">ASSEMBLE!</span>還沒有隊伍登記。</div>';
+  var formArea = !S.bugs.length ? '<div class="frame empty">老師還沒建立 Bug 卡，先等一下。</div>'
+    : canForm ? form
+    : (st === 2 && S.me && S.me.teamId) ? '<div class="frame small muted">你已經在隊伍裡了。要修改報告卡，按你隊伍卡上的「修改報告卡」。</div>' : '';
+  return '<div class="sec-head"><h2>隊伍與 Bug 報告卡</h2><span class="sfx">ASSEMBLE!</span></div>' +
+    lockedNote(2, '組隊和報告卡在 EP.2 開放') + (st === 2 ? needLogin('開隊或加入隊伍') : '') +
+    bubble('報告卡四格：<b>重現步驟 → 根本原因 → MVP → 成功指標</b>。MVP 不一定要寫程式，一張輪值表、一個表單、一條新規則都算。') +
+    list + '<div style="height:18px"></div>' + formArea;
+}
+
+function fillTeamForm() {
+  var t = pending.editTeam && teamById(pending.editTeam);
+  if (!t || !$('#fTeam')) return;
+  $('#teamFormTitle').textContent = '修改：' + t.name;
+  $('#tId').value = t.id; $('#tName').value = t.name; $('#tBug').value = t.bugId;
+  $('#tSteps').value = t.steps || ''; $('#tCause').value = t.cause || ''; $('#tMvp').value = t.mvp; $('#tHow').value = t.how || '';
+  $('#tMetric').value = t.metric; $('#tBase').value = t.baseline; $('#tTarget').value = t.target; $('#tUnit').value = t.unit || '';
+}
+
+// ===== EP3 投票 =====
+function vVote() {
+  var st = S.settings.stage, open = st === 3 && S.me && !S.me.voted;
+  var tt = S.turnout, pct = tt.total ? Math.round(tt.used / tt.total * 100) : 0;
+  var turnout = '<div class="frame" style="margin-bottom:16px"><div style="display:flex;justify-content:space-between;font-weight:900"><span>投票率</span><span class="sfx" style="font-size:1.3rem">' + tt.used + ' / ' + tt.total + '</span></div><div class="meter"><i style="width:' + pct + '%"></i></div></div>';
+  var results = '';
+  if (S.counts) {
+    var max = 1; S.teams.forEach(function (t) { max = Math.max(max, S.counts[t.id] || 0); });
+    results = '<div class="sec-head" style="margin-top:8px"><h2>開票結果</h2><span class="sfx">RESULT!</span></div><div class="frame bars">' +
+      S.teams.slice().sort(function (a, b) { return (S.counts[b.id] || 0) - (S.counts[a.id] || 0); }).map(function (t) {
+        var n = S.counts[t.id] || 0;
+        return '<div class="bar"><span class="nm">' + esc(t.name) + '</span><span class="track"><span class="fill" style="display:block;width:' + Math.round(n / max * 100) + '%"></span></span><span class="n">' + n + '</span></div>';
+      }).join('') + '</div><div style="height:18px"></div>';
+  }
+  var form;
+  if (!S.teams.length) form = '<div class="frame empty">還沒有隊伍可以投。</div>';
+  else if (S.me && S.me.voted) form = '<div class="frame empty"><span class="sfx">THANKS!</span>你已經投過票了。系統只記得你投過，不記得你投給誰。</div>';
+  else form = '<div class="frame"><form id="fVote"><div class="f" style="font-weight:700">選一隊你最想讓它試辦的 MVP<span class="hint" style="display:block;font-weight:500">自己的隊伍不能投。系統只記「你投過了」，不記你投給誰。</span></div><div class="pick">' +
+    S.teams.map(function (t, i) {
+      var b = bugById(t.bugId), own = inTeam(t);
+      return '<label' + (own ? ' style="opacity:.5;cursor:not-allowed"' : '') + '><input type="radio" name="vTeam" id="vTeam' + i + '" value="' + t.id + '"' + (own ? ' disabled' : '') + '><div class="frame"><h3>' + esc(t.name) + (own ? '（我的隊）' : '') + '</h3>' +
+        '<p class="muted small" style="margin:2px 0 0">修：' + esc(b ? b.title : '') + '</p><div class="mvp" style="background:transparent">' + esc(t.mvp) + '</div></div></label>';
+    }).join('') + '</div><div class="btn-row"><button class="btn" type="submit"' + (open ? '' : ' disabled') + '>投下這一票</button></div></form></div>';
+  return '<div class="sec-head"><h2>Demo 後投票</h2><span class="sfx">VOTE!</span></div>' +
+    lockedNote(3, '投票在 EP.3 開放') + (st === 3 ? needLogin('投票') : '') +
+    bubble('每一隊 Demo 完 3 分鐘後投票。投給「最可能真的改善班上」的 MVP，不是投給好朋友那一隊。') +
+    turnout + results + form;
+}
+
+// ===== EP4 試辦 =====
+function chartSvg(t) {
+  var es = t.trial.entries, W = 320, H = 150, L = 34, R = 10, T = 14, B = 26;
+  var vals = es.map(function (e) { return e.value; }).concat([t.baseline, t.target]);
+  var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals);
+  if (hi === lo) { hi += 1; lo -= 1; }
+  var pad = (hi - lo) * .12; lo -= pad; hi += pad;
+  var n = Math.max(es.length, 1);
+  var x = function (i) { return L + (n === 1 ? (W - L - R) / 2 : i * (W - L - R) / (n - 1)); };
+  var y = function (v) { return T + (hi - v) / (hi - lo) * (H - T - B); };
+  var fmt = function (v) { return Math.round(v * 10) / 10; };
+  var s = '<svg class="chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(t.metric) + '每週數值">';
+  s += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(t.baseline) + '" y2="' + y(t.baseline) + '" stroke="var(--ink-soft)" stroke-width="1.5" stroke-dasharray="4 4"/>';
+  s += '<text x="' + (L - 4) + '" y="' + (y(t.baseline) + 3) + '" text-anchor="end">' + fmt(t.baseline) + '</text>';
+  s += '<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(t.target) + '" y2="' + y(t.target) + '" stroke="var(--green)" stroke-width="2.5" stroke-dasharray="7 4"/>';
+  s += '<text x="' + (L - 4) + '" y="' + (y(t.target) + 3) + '" text-anchor="end" style="fill:var(--green)">' + fmt(t.target) + '</text>';
+  s += '<text x="' + (W - R) + '" y="' + (y(t.baseline) - 4) + '" text-anchor="end" style="fill:var(--ink-soft)">起點</text>';
+  s += '<text x="' + (W - R) + '" y="' + (y(t.target) - 4) + '" text-anchor="end" style="fill:var(--green)">目標</text>';
+  if (es.length) {
+    s += '<polyline fill="none" stroke="var(--pink)" stroke-width="3.5" stroke-linejoin="round" points="' + es.map(function (e, i) { return x(i) + ',' + y(e.value); }).join(' ') + '"/>';
+    es.forEach(function (e, i) {
+      s += '<circle cx="' + x(i) + '" cy="' + y(e.value) + '" r="' + (i === es.length - 1 ? 6 : 4.5) + '" fill="var(--yellow)" stroke="var(--ink)" stroke-width="2.5"/>';
+      s += '<text x="' + x(i) + '" y="' + (H - 8) + '" text-anchor="middle">' + esc(e.week).slice(0, 6) + '</text>';
+      s += '<text x="' + x(i) + '" y="' + (y(e.value) - 10) + '" text-anchor="middle">' + fmt(e.value) + '</text>';
+    });
+  }
+  return s + '</svg>';
+}
+
+function vTrial() {
+  var st = S.settings.stage;
+  var ts = S.teams.filter(function (t) { return t.trial && t.trial.on; });
+  var body = ts.length ? ts.map(function (t) {
+    var es = t.trial.entries, last = es.length ? es[es.length - 1].value : null;
+    var down = t.target < t.baseline;
+    var hit = last != null && (down ? last <= t.target : last >= t.target);
+    var canLog = (inTeam(t) && st === 4) || !!A;
+    return '<article class="frame">' + '<div class="chips"><span class="chip green">試辦中</span>' + (inTeam(t) ? '<span class="chip cyan">我的隊</span>' : '') + (t.trial.verdict ? '<span class="chip pink">' + esc(t.trial.verdict) + '</span>' : '') +
+      (last != null ? '<span class="chip ' + (hit ? 'yellow' : '') + '">' + (hit ? '已達標' : '還沒達標') + '</span>' : '') + '</div>' +
+      '<h3 style="margin-top:6px">' + esc(t.name) + '｜' + esc(t.mvp) + '</h3>' +
+      '<p class="muted small" style="margin:4px 0 0">指標：' + esc(t.metric) + '（' + esc(t.unit) + '），目標' + (down ? '降到 ' : '提高到 ') + esc(t.target) + '</p>' +
+      chartSvg(t) +
+      (es.length ? '<div class="tablewrap"><table class="log"><thead><tr><th>週次</th><th>數值</th><th>備註</th><th>記錄</th></tr></thead><tbody>' +
+        es.map(function (e) { return '<tr><td>' + esc(e.week) + '</td><td class="num">' + esc(e.value) + '</td><td>' + esc(e.note || '') + '</td><td>' + (e.by === '老師' ? '老師' : esc(e.by) + ' 號') + '</td></tr>'; }).join('') + '</tbody></table></div>'
+        : '<p class="muted small">還沒有紀錄。第一週結束後記下第一個數字。</p>') +
+      (canLog ? '<form class="fEntry" data-team="' + t.id + '" style="margin-top:12px"><div class="row2"><label class="f">週次<input type="text" id="w-' + t.id + '" placeholder="第 ' + (es.length + 1) + ' 週" maxlength="20"></label>' +
+        '<label class="f">這週的數值<input type="number" step="any" id="v-' + t.id + '" required></label></div><label class="f">備註<input type="text" id="n-' + t.id + '" maxlength="120" placeholder="選填：這週發生什麼事"></label>' +
+        '<div class="btn-row"><button class="btn c" type="submit">記錄這週數據</button></div></form>' : '') +
+      '</article>';
+  }).join('') : '<div class="frame empty"><span class="sfx">STAND BY</span>投票結束後，老師會選出試辦的隊伍。</div>';
+  return '<div class="sec-head"><h2>試辦追蹤</h2><span class="sfx">PATCH TEST</span></div>' +
+    lockedNote(4, '試辦數據在 EP.4 記錄') +
+    bubble('修好了沒，看數字說話。試辦隊的隊員每週記錄一次，粉紅線碰到綠色虛線就是達標。兩週後全班一起決定：<b>納入班規、再修一輪，還是停止</b>。') + body;
+}
+
+// ===== 老師面板 =====
+function vAdmin() {
+  if (!A) {
+    return '<div class="sec-head"><h2>老師面板</h2><span class="sfx">GM MODE</span></div><div class="frame"><form id="fLogin">' +
+      '<label class="f">老師密碼<input type="password" id="aPass" autocomplete="current-password" required></label>' +
+      '<div class="btn-row"><button class="btn" type="submit">進入</button>' + (DEMO ? '<span class="muted small">示範模式密碼：demo</span>' : '') + '</div></form></div>';
+  }
+  var st = A.settings.stage;
+  var pend = A.reports.filter(function (r) { return r.status === 'pending'; });
+  var appr = A.reports.filter(function (r) { return r.status === 'approved'; });
+  var sel = pending.sel || {};
+  var nameOf = {}; A.roster.forEach(function (r) { nameOf[r.seat] = r.name; });
+  var bugTitle = function (id) { for (var i = 0; i < A.bugs.length; i++) if (A.bugs[i].id === id) return A.bugs[i].title; return ''; };
+
+  var s1 = '<div class="frame"><h3>目前階段</h3><div class="radios" style="margin-top:10px">' + STAGES.map(function (n, i) {
+    return '<label><input type="radio" name="aStage" id="aStage' + i + '" value="' + (i + 1) + '"' + (st === i + 1 ? ' checked' : '') + '><span>EP.' + (i + 1) + ' ' + n + '</span></label>';
+  }).join('') + '</div><div class="row2" style="margin-top:12px"><label class="f">班級名稱<input type="text" id="aClass" maxlength="16" value="' + esc(A.settings.className) + '"></label>' +
+    '<div class="f" style="align-self:end"><button class="btn sm y" data-act="saveClass">更新班級名稱</button></div></div></div>';
+
+  var R = A.roster, withCode = R.filter(function (r) { return r.code; }).length;
+  var sumRep = R.filter(function (r) { return r.reports > 0; }).length, sumTeam = R.filter(function (r) { return r.team; }).length, sumVote = R.filter(function (r) { return r.voted; }).length;
+  var s0 = '<div class="frame"><h3>學生名單與參與總表（' + R.length + ' 人）</h3>' +
+    '<p class="muted small" style="margin:4px 0 8px">' + (DEMO ? '示範名單是虛構的。' : '名單來自試算表「名單」工作表，新增或改名請直接改試算表。') + '底色標示的是還沒回報、也沒有隊伍的同學。</p>' +
+    '<div class="stats" style="margin:0 0 10px"><span><b>' + sumRep + '</b>人有回報</span><span><b>' + sumTeam + '</b>人有隊伍</span><span><b>' + sumVote + '</b>人已投票</span></div>' +
+    '<div class="btn-row">' + (withCode < R.length || !R.length ? '<button class="btn sm y" data-act="genCodes">產生個人代碼（補齊空白）</button>' : '') +
+    (withCode ? '<button class="btn sm alt" data-act="copyRoster">複製「座號／姓名／代碼」</button>' : '') + '</div>' +
+    (R.length ? '<div class="tablewrap"><table class="roster"><thead><tr><th>座號</th><th>姓名</th><th>代碼</th><th>回報</th><th>隊伍</th><th>投票</th><th>試辦紀錄</th></tr></thead><tbody>' +
+      R.map(function (r) {
+        return '<tr class="' + (!r.reports && !r.team ? 'low' : '') + '"><td>' + esc(r.seat) + '</td><td>' + esc(r.name) + '</td><td class="code">' + esc(r.code || '—') + '</td><td>' + (r.reports || '') + '</td><td>' + esc(r.team) + '</td><td>' + (r.voted ? '<span class="ok">✓</span>' : '') + '</td><td>' + (r.logs || '') + '</td></tr>';
+      }).join('') + '</tbody></table></div>' : '<p class="small" style="font-weight:700">名單是空的：請先在試算表「名單」工作表貼上 A 欄座號、B 欄姓名，再按「產生個人代碼」。</p>') + '</div>';
+
+  var s2 = '<div class="frame"><h3>待審回報（' + pend.length + '）</h3><p class="muted small" style="margin:4px 0 10px">有點名、人身攻擊或不適合公開的，按「不採用」。回報不顯示作者。</p><div class="adm-list">' +
+    (pend.length ? pend.map(function (r) {
+      return '<div class="adm-item"><div class="chips"><span class="chip">' + esc(r.category) + '</span><span class="chip yellow">' + esc(r.frequency) + '</span></div><p><b>' + esc(r.situation) + '</b></p>' +
+        (r.impact ? '<p class="muted">影響：' + esc(r.impact) + '</p>' : '') +
+        '<div class="btn-row" style="margin-top:8px"><button class="btn sm c" data-review="' + r.id + '" data-status="approved">公開</button><button class="btn sm alt" data-review="' + r.id + '" data-status="rejected">不採用</button></div></div>';
+    }).join('') : '<p class="muted small">目前沒有待審的回報。</p>') + '</div></div>';
+
+  var eb = pending.editBug ? A.bugs.filter(function (b) { return b.id === pending.editBug; })[0] : null;
+  var s3 = '<div class="frame"><h3>建立 Bug 卡</h3><p class="muted small" style="margin:4px 0 10px">勾選相似的已公開回報，合併成一張 Bug 卡（建議 5～7 張）。</p>' +
+    '<div class="adm-list" style="max-height:340px;overflow:auto">' + (appr.length ? appr.map(function (r) {
+      return '<label class="check adm-item" style="font-weight:500"><input type="checkbox" data-sel="' + r.id + '"' + (sel[r.id] ? ' checked' : '') + '><span><span class="chip">' + esc(r.category) + '</span> ' + esc(r.situation) + ' <b>(+' + (r.plus || 0) + ')</b></span></label>';
+    }).join('') : '<p class="muted small">還沒有已公開的回報。</p>') + '</div>' +
+    '<form id="fBug" style="margin-top:12px"><input type="hidden" id="bId" value="' + (eb ? eb.id : '') + '"><label class="f">Bug 卡標題<input type="text" id="bTitle" maxlength="30" required value="' + esc(eb ? eb.title : '') + '" placeholder="例：垃圾沒人倒，堆到隔天"></label>' +
+    '<label class="f">一句說明<input type="text" id="bDesc" maxlength="200" value="' + esc(eb ? eb.desc : '') + '"></label>' +
+    '<label class="f">分類<select id="bCat">' + CATS.map(function (c) { return '<option' + (eb && eb.category === c ? ' selected' : '') + '>' + c + '</option>'; }).join('') + '</select></label>' +
+    '<div class="btn-row"><button class="btn" type="submit">' + (eb ? '更新 Bug 卡' : '建立 Bug 卡') + '</button>' + (eb ? '<button class="btn alt" type="button" data-act="cancelBug">取消修改</button>' : '') + '</div></form>' +
+    '<div class="adm-list" style="margin-top:14px">' + A.bugs.map(function (b) {
+      return '<div class="adm-item"><b>' + esc(b.title) + '</b><span class="muted small">（' + (b.reportIds || []).length + ' 則回報）</span><div class="btn-row" style="margin-top:6px"><button class="btn sm alt" data-editbug="' + b.id + '">修改</button>' +
+        delBtn('deleteBug', b.id, '刪除') + '</div>' + confirmBox('deleteBug', b.id, '刪除這張 Bug 卡？已認領的隊伍會失去對應卡片。') + '</div>';
+    }).join('') + '</div></div>';
+
+  var used = sumVote;
+  var s4 = '<div class="frame"><h3>投票（已投 ' + used + ' / ' + withCode + '）</h3><p class="muted small" style="margin:4px 0 10px">學生用個人代碼投票，每人一票、不能投自己的隊。這裡只看得到各隊總票數，看不到誰投給誰。</p>' +
+    '<label class="check"><input type="checkbox" id="aRes"' + (A.settings.showResults ? ' checked' : '') + '>公開開票結果給全班看</label>' +
+    '<div class="bars" style="margin-top:12px">' + A.teams.map(function (t) {
+      return '<div class="bar"><span class="nm">' + esc(t.name) + '</span><span class="track"><span class="fill" style="display:block;width:' + (used ? Math.round((A.counts[t.id] || 0) / used * 100) : 0) + '%"></span></span><span class="n">' + (A.counts[t.id] || 0) + '</span></div>';
+    }).join('') + '</div><div class="btn-row" style="margin-top:12px">' + delBtn('resetVotes', 'all', '清除全部投票，重新投') + '</div>' +
+    confirmBox('resetVotes', 'all', '清除後所有票數歸零，每個人都可以重新投一次。確定嗎？') + '</div>';
+
+  var s5 = '<div class="frame"><h3>隊伍、試辦與結案</h3><div class="adm-list" style="margin-top:10px">' + (A.teams.length ? A.teams.map(function (t) {
+    return '<div class="adm-item"><b>' + esc(t.name) + '</b><span class="muted small">｜' + esc(bugTitle(t.bugId)) + '｜' + (A.counts[t.id] || 0) + ' 票</span>' +
+      '<div class="chips" style="margin-top:6px">' + (t.members.length ? t.members.map(function (m) {
+        return '<span class="chip">' + esc(m) + ' ' + esc(nameOf[m] || '') + ' <button data-ask="removeMember|' + t.id + ':' + esc(m) + '" style="border:0;background:none;cursor:pointer;font-weight:900;padding:0 0 0 2px" aria-label="把 ' + esc(m) + ' 號移出隊伍">×</button></span>';
+      }).join('') : '<span class="muted small">沒有成員</span>') + '</div>' +
+      t.members.map(function (m) { return confirmBox('removeMember', t.id + ':' + m, '把 ' + esc(m) + ' 號 ' + esc(nameOf[m] || '') + ' 移出「' + esc(t.name) + '」？'); }).join('') +
+      '<label class="check" style="margin-top:6px"><input type="checkbox" data-trial="' + t.id + '"' + (t.trial.on ? ' checked' : '') + '>進入試辦</label>' +
+      '<label class="f" style="margin-top:6px">結案判定<select data-verdict="' + t.id + '">' + VERDICTS.map(function (v) { return '<option value="' + v + '"' + (t.trial.verdict === v ? ' selected' : '') + '>' + (v || '尚未判定') + '</option>'; }).join('') + '</select></label>' +
+      '<div class="btn-row" style="margin-top:8px">' + delBtn('deleteTeam', t.id, '刪除隊伍') + '</div>' +
+      confirmBox('deleteTeam', t.id, '刪除「' + esc(t.name) + '」？這隊的票數會一起刪除，投給它的同學不能重投。') + '</div>';
+  }).join('') : '<p class="muted small">還沒有隊伍。</p>') + '</div></div>';
+
+  return '<div class="sec-head"><h2>老師面板</h2><span class="sfx">GM MODE</span></div>' +
+    '<div class="btn-row" style="margin-bottom:14px"><button class="btn sm alt" data-act="logout">登出老師面板</button><button class="btn sm alt" data-act="refresh">重新整理資料</button>' +
+    (DEMO ? delBtn('resetDemo', 'all', '還原示範資料') : '') + '</div>' + (DEMO ? confirmBox('resetDemo', 'all', '把這台裝置的示範資料還原成初始狀態？') : '') +
+    s1 + s0 + s2 + s3 + s4 + s5;
+}
+function delBtn(op, id, label) { return '<button class="btn sm alt" data-ask="' + op + '|' + id + '">' + label + '</button>'; }
+function confirmBox(op, id, msg) {
+  if (pending.ask !== op + '|' + id) return '';
+  return '<div class="confirm">' + msg + '<div class="btn-row" style="margin-top:8px"><button class="btn sm" data-do="' + op + '|' + id + '">確定</button><button class="btn sm alt" data-act="cancelAsk">取消</button></div></div>';
+}
+
+// ===== 動作 =====
+function refresh() {
+  return api('state').then(function (d) {
+    S = d;
+    if (S.badCode) { myCode = ''; LS.del(CODE_KEY); }
+    if (adminPass) return api('adminState', { pass: adminPass }).then(function (a) { A = a; }, function () { A = null; adminPass = ''; });
+  });
+}
+function adminDo(p) {
+  p.pass = adminPass;
+  return api('admin', p).then(function (a) { A = a; return refresh(); }).then(render).catch(function (e) { toast(e.message, true); throw e; });
+}
+function stuDo(action, p, msg, btn) {
+  if (btn) btn.disabled = true;
+  return api(action, p).then(function () { return refresh(); }).then(function () { render(); toast(msg); })
+    .catch(function (e) { if (btn) btn.disabled = false; toast(e.message, true); });
+}
+
+document.addEventListener('click', function (e) {
+  if (e.target.id === 'tReset') { pending.editTeam = null; return render(); }
+  var el = e.target.closest('[data-tab],[data-ep],[data-plus],[data-cat],[data-editteam],[data-join],[data-act],[data-review],[data-editbug],[data-ask],[data-do]');
+  if (!el) return;
+  var d = el.dataset;
+  if (d.tab) return go(d.tab);
+  if (d.ep) return go(STAGE_TAB[d.ep] || 'report');
+  if (d.cat) { pending.cat = d.cat; return render(); }
+  if (d.plus) return stuDo('plus', { id: d.plus }, '+1 收到！', el);
+  if (d.join) return stuDo('join', { teamId: d.join }, '加入成功！', el);
+  if (d.editteam) {
+    pending.editTeam = d.editteam; TAB = 'teams'; render();
+    var box = $('#teamFormBox'); if (box) box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+  if (d.review) return adminDo({ op: 'review', id: d.review, status: d.status }).then(function () { toast('已更新'); }, function () {});
+  if (d.editbug) { pending.editBug = d.editbug; var bb = A.bugs.filter(function (b) { return b.id === d.editbug; })[0]; pending.sel = {}; (bb.reportIds || []).forEach(function (id) { pending.sel[id] = 1; }); return render(); }
+  if (d.ask) { pending.ask = d.ask; return render(); }
+  if (d.do) {
+    var parts = d.do.split('|'); pending.ask = null;
+    if (parts[0] === 'resetDemo') { LS.del('debugthon-demo2'); return refresh().then(render).then(function () { toast('示範資料已還原'); }); }
+    if (parts[0] === 'leave') return stuDo('leave', {}, '已退出隊伍');
+    var map = {
+      deleteBug: { op: 'deleteBug', id: parts[1] }, deleteTeam: { op: 'deleteTeam', id: parts[1] }, resetVotes: { op: 'resetVotes' },
+      removeMember: { op: 'removeMember', teamId: (parts[1] || '').split(':')[0], seat: (parts[1] || '').split(':')[1] }
+    };
+    return adminDo(map[parts[0]]).then(function () { toast('已完成'); }, function () {});
+  }
+  if (d.act) {
+    switch (d.act) {
+      case 'logout': A = null; adminPass = ''; return render();
+      case 'logoutStu': myCode = ''; LS.del(CODE_KEY); pending.editTeam = null; return refresh().then(render).then(function () { toast('已登出'); });
+      case 'refresh': return refresh().then(render).then(function () { toast('資料已更新'); });
+      case 'cancelAsk': pending.ask = null; return render();
+      case 'cancelBug': pending.editBug = null; pending.sel = {}; return render();
+      case 'saveClass': return adminDo({ op: 'setClass', name: $('#aClass').value }).then(function () { toast('班級名稱已更新'); }, function () {});
+      case 'genCodes': return adminDo({ op: 'genCodes' }).then(function () { toast('個人代碼已產生' + (DEMO ? '' : '，也寫回試算表了')); }, function () {});
+      case 'copyRoster':
+        var txt = '座號\t姓名\t個人代碼\n' + A.roster.map(function (r) { return r.seat + '\t' + r.name + '\t' + (r.code || ''); }).join('\n');
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(function () { toast('已複製，可以貼到試算表或文件印出來剪條'); }, function () { toast('複製失敗，請直接選取表格', true); });
+        else toast('請直接選取表格複製', true);
+        return;
+    }
+  }
+});
+
+document.addEventListener('keydown', function (e) {
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.dataset && e.target.dataset.ep) { e.preventDefault(); go(STAGE_TAB[e.target.dataset.ep]); }
+});
+
+document.addEventListener('change', function (e) {
+  var t = e.target, ok = function () {};
+  if (t.name === 'aStage') return adminDo({ op: 'setStage', stage: Number(t.value) }).then(function () { toast('已切換到 EP.' + t.value); }, ok);
+  if (t.id === 'aRes') return adminDo({ op: 'setResults', on: t.checked }).catch(ok);
+  if (t.dataset.trial) return adminDo({ op: 'setTrial', teamId: t.dataset.trial, on: t.checked }).catch(ok);
+  if (t.dataset.verdict) return adminDo({ op: 'verdict', teamId: t.dataset.verdict, verdict: t.value }).then(function () { toast('判定已更新'); }, ok);
+  if (t.dataset.sel) { pending.sel = pending.sel || {}; if (t.checked) pending.sel[t.dataset.sel] = 1; else delete pending.sel[t.dataset.sel]; }
+});
+
+document.addEventListener('submit', function (e) {
+  e.preventDefault();
+  var f = e.target, btn = f.querySelector('button[type=submit]');
+  if (f.id === 'fCode') {
+    var c = normCode($('#stuCode').value);
+    if (btn) btn.disabled = true;
+    return api('state', { code: c }).then(function (d) {
+      if (!d.me) { if (btn) btn.disabled = false; toast('這組代碼查不到，請再核對一次', true); return; }
+      myCode = c; LS.set(CODE_KEY, c); S = d; render(); toast('嗨，' + d.me.seat + ' 號！');
+    }).catch(function (er) { if (btn) btn.disabled = false; toast(er.message, true); });
+  }
+  if (f.id === 'fReport') {
+    var fr = f.querySelector('input[name=rFreq]:checked');
+    return stuDo('report', { category: $('#rCat').value, situation: $('#rSit').value, frequency: fr ? fr.value : '', impact: $('#rImp').value, agree: $('#rAgree').checked },
+      'Bug 已送出，老師審核後會出現在看板上', btn);
+  }
+  if (f.id === 'fTeam') {
+    var id = $('#tId').value;
+    var p = { id: id, name: $('#tName').value, bugId: $('#tBug').value, steps: $('#tSteps').value, cause: $('#tCause').value, mvp: $('#tMvp').value,
+      how: $('#tHow').value, metric: $('#tMetric').value, baseline: $('#tBase').value, target: $('#tTarget').value, unit: $('#tUnit').value };
+    if (btn) btn.disabled = true;
+    return api('team', p).then(function () { pending.editTeam = null; return refresh(); }).then(function () { render(); toast(id ? '報告卡已更新' : '開隊成功！把隊名告訴隊友，請他們按「加入這一隊」'); })
+      .catch(function (er) { if (btn) btn.disabled = false; toast(er.message, true); });
+  }
+  if (f.id === 'fVote') {
+    var vt = f.querySelector('input[name=vTeam]:checked');
+    return stuDo('vote', { teamId: vt ? vt.value : '' }, '投票成功，謝謝你！', btn);
+  }
+  if (f.classList.contains('fEntry')) {
+    var tid = f.dataset.team;
+    var q = { teamId: tid, week: $('#w-' + tid).value, value: $('#v-' + tid).value, note: $('#n-' + tid).value };
+    if (A && !inTeam(teamById(tid))) q.pass = adminPass;
+    return stuDo('trialEntry', q, '這週數據已記錄', btn);
+  }
+  if (f.id === 'fLogin') {
+    var pw = $('#aPass').value;
+    if (btn) btn.disabled = true;
+    return api('adminState', { pass: pw }).then(function (a) { A = a; adminPass = pw; render(); toast('歡迎回來，老師'); })
+      .catch(function (er) { if (btn) btn.disabled = false; toast(er.message, true); });
+  }
+  if (f.id === 'fBug') {
+    if (btn) btn.disabled = true;
+    return adminDo({ op: 'saveBug', id: $('#bId').value, title: $('#bTitle').value, desc: $('#bDesc').value, category: $('#bCat').value, reportIds: Object.keys(pending.sel || {}) })
+      .then(function () { pending.editBug = null; pending.sel = {}; render(); toast('Bug 卡已儲存'); }, function () { if (btn) btn.disabled = false; });
+  }
+});
+
+// ===== 開始 =====
+(function start() {
+  if (DEMO) $('#demoBar').hidden = false;
+  var h = (location.hash || '').slice(1);
+  $('#main').innerHTML = '<div class="frame empty"><span class="sfx">LOADING…</span>正在讀取班級資料</div>';
+  refresh().then(function () {
+    TAB = TABS.some(function (t) { return t.id === h; }) ? h : STAGE_TAB[S.settings.stage];
+    render();
+  }).catch(function (e) {
+    $('#main').innerHTML = '<div class="frame empty"><span class="sfx">ERROR</span>' + esc(e.message) + '<div class="btn-row" style="justify-content:center;margin-top:12px"><button class="btn" onclick="location.reload()">重新載入</button></div></div>';
+  });
+  setInterval(function () { if (!document.hidden && (TAB === 'board' || TAB === 'trial' || TAB === 'vote') && !document.activeElement.matches('input,textarea,select')) refresh().then(render).catch(function () {}); }, 45000);
+})();
+</script>
+
+<a href="../" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:9999;background:#2F86D6;color:#fff;font:700 13px/1 system-ui,sans-serif;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.2)">← 回群島</a>
+</body></html>

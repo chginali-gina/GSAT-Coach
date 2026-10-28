@@ -1,0 +1,528 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>兩段式作文衝刺課</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FDF8F1; --bg-warm:#F7EFE3; --card:#FFFFFF;
+    --amber:#D97706; --amber-deep:#B45309; --amber-dark:#92400E;
+    --teal:#0F766E; --teal-soft:#5EAEA6;
+    --ink:#2E2419; --ink-soft:#6B5D4F;
+    --line:#E8DCCB; --shadow:0 4px 20px rgba(146,64,14,.08); --shadow-lg:0 12px 40px rgba(146,64,14,.12);
+    --band-bg:#92400E; --on-accent:#FFFFFF;
+    --radius:18px; --radius-sm:12px; --max:1080px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#1B140C; --bg-warm:#241B10; --card:#2B2013;
+      --amber:#DB8A3C; --amber-deep:#EFA855; --amber-dark:#F3C88A;
+      --teal:#4FBFB3; --teal-soft:#7FD4C9;
+      --ink:#EFE4D3; --ink-soft:#BBA98A;
+      --line:#3B2C1A; --shadow:0 4px 20px rgba(0,0,0,.4); --shadow-lg:0 12px 40px rgba(0,0,0,.5);
+      --band-bg:#7A3B0F; --on-accent:#241708;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#1B140C; --bg-warm:#241B10; --card:#2B2013;
+    --amber:#DB8A3C; --amber-deep:#EFA855; --amber-dark:#F3C88A;
+    --teal:#4FBFB3; --teal-soft:#7FD4C9;
+    --ink:#EFE4D3; --ink-soft:#BBA98A;
+    --line:#3B2C1A; --shadow:0 4px 20px rgba(0,0,0,.4); --shadow-lg:0 12px 40px rgba(0,0,0,.5);
+    --band-bg:#7A3B0F; --on-accent:#241708;
+  }
+  *{box-sizing:border-box;}
+  body{font-family:'Noto Serif TC',serif;color:var(--ink);background:var(--bg);margin:0;line-height:1.85;}
+  .display{font-family:'Playfair Display',serif;}
+  h1,h2,h3,h4{font-family:'Noto Serif TC',serif;line-height:1.4;margin:0;}
+  p{margin:0 0 .9em;}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 24px;}
+  .narrow{max-width:820px;margin:0 auto;padding:0 24px;}
+  a{color:var(--amber-deep);}
+  img{max-width:100%;}
+
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+  .reveal.in{opacity:1;transform:none;}
+
+  /* Hero */
+  .hero{background:linear-gradient(180deg,#FBF1DE 0%,var(--bg) 100%);padding:76px 24px 56px;text-align:center;}
+  .eyebrow{font-family:'Playfair Display',serif;color:var(--amber);letter-spacing:.08em;font-size:.95rem;display:inline-block;margin-bottom:14px;}
+  .hero-title{font-size:clamp(2rem,6vw,3.4rem);color:var(--amber-dark);font-weight:700;}
+  .hero-sub{max-width:640px;margin:18px auto 0;color:var(--ink-soft);font-size:1.08rem;}
+  .badge-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px;}
+  .badge{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 18px;font-size:.92rem;color:var(--ink-soft);box-shadow:var(--shadow);}
+  .badge b{color:var(--amber-dark);}
+
+  section{padding:56px 0;}
+  .alt{background:var(--bg-warm);}
+
+  .section-head{margin-bottom:34px;text-align:center;}
+  .section-title{font-size:clamp(1.5rem,4vw,2.1rem);color:var(--amber-dark);font-weight:700;}
+  .section-title::after{content:'';display:block;width:48px;height:3px;background:var(--amber);margin:14px auto 0;border-radius:2px;}
+  .section-desc{color:var(--ink-soft);max-width:640px;margin:14px auto 0;font-size:1rem;}
+
+  /* Diagnostic panel */
+  .diag{display:grid;grid-template-columns:1.1fr 1.4fr;gap:28px;align-items:stretch;}
+  @media (max-width:760px){.diag{grid-template-columns:1fr;}}
+  .score-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:34px 28px;text-align:center;display:flex;flex-direction:column;justify-content:center;}
+  .score-num{font-family:'Playfair Display',serif;font-size:4.2rem;color:var(--amber);font-weight:700;line-height:1;font-variant-numeric:tabular-nums;}
+  .score-den{color:var(--ink-soft);font-size:1.2rem;}
+  .score-tag{margin-top:10px;display:inline-block;background:var(--bg-warm);color:var(--amber-dark);border-radius:999px;padding:6px 16px;font-weight:600;font-size:.92rem;}
+  .score-note{margin-top:16px;color:var(--ink-soft);font-size:.95rem;}
+  .gap-list{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:30px 28px;}
+  .gap-list h3{color:var(--amber-dark);font-size:1.15rem;margin-bottom:14px;}
+  .gap-list ul{margin:0;padding-left:1.2em;color:var(--ink);}
+  .gap-list li{margin-bottom:8px;}
+
+  /* Grade band bar */
+  .band-bar{display:flex;border-radius:999px;overflow:hidden;height:38px;box-shadow:var(--shadow);margin:26px 0 10px;position:relative;}
+  .band{flex:1;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--on-accent);font-weight:600;position:relative;font-variant-numeric:tabular-nums;}
+  .band.b1{background:#C9BBA6;flex:5;} .band.b2{background:#D9986B;flex:5;} .band.b3{background:var(--amber);flex:5;} .band.b4{background:var(--amber-deep);flex:4;} .band.b5{background:var(--amber-dark);flex:2;}
+  .marker{position:absolute;top:-30px;transform:translateX(-50%);font-size:.85rem;color:var(--amber-dark);font-weight:700;white-space:nowrap;}
+  .marker::after{content:'▼';display:block;text-align:center;font-size:.7rem;margin-top:2px;}
+  .band-labels{display:flex;justify-content:space-between;font-size:.78rem;color:var(--ink-soft);margin-top:4px;}
+
+  /* Rubric table */
+  .rubric-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);}
+  .rubric-table th,.rubric-table td{padding:14px 16px;text-align:left;border-bottom:1px solid var(--line);font-size:.95rem;vertical-align:top;}
+  .rubric-table th{background:var(--bg-warm);color:var(--amber-dark);font-weight:600;}
+  .rubric-table tr:last-child td{border-bottom:none;}
+  .scroll-x{overflow-x:auto;}
+  .tag-good{color:var(--teal);font-weight:600;}
+  .tag-bad{color:var(--amber-deep);font-weight:600;}
+
+  /* Module timeline */
+  .timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+  @media (max-width:900px){.timeline{grid-template-columns:repeat(2,1fr);}}
+  @media (max-width:600px){.timeline{grid-template-columns:1fr;}}
+  .tcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px;box-shadow:var(--shadow);transition:transform .3s ease,box-shadow .3s ease;}
+  .tcard:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);}
+  .tnum{font-family:'Playfair Display',serif;color:var(--amber);font-size:1.5rem;font-weight:700;}
+  .tcard h4{color:var(--amber-dark);margin:8px 0 8px;font-size:1.05rem;}
+  .tcard p{color:var(--ink-soft);font-size:.92rem;margin:0;}
+
+  /* Accordion */
+  .accordion{display:flex;flex-direction:column;gap:14px;}
+  .acc-item{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+  .acc-head{width:100%;text-align:left;background:none;border:none;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-family:'Noto Serif TC',serif;color:var(--amber-dark);font-size:1.08rem;font-weight:600;gap:16px;}
+  .acc-head .num{font-family:'Playfair Display',serif;color:var(--amber);margin-right:10px;}
+  .acc-head .plus{font-size:1.3rem;color:var(--amber);transition:transform .3s ease;flex-shrink:0;}
+  .acc-item.open .plus{transform:rotate(45deg);}
+  .acc-body{max-height:0;overflow:hidden;transition:max-height .4s ease;}
+  .acc-item.open .acc-body{max-height:2400px;}
+  .acc-inner{padding:0 24px 26px;color:var(--ink);}
+  .acc-inner h5{color:var(--teal);font-size:.98rem;margin:16px 0 8px;}
+  .acc-inner h5:first-child{margin-top:0;}
+  .acc-inner ul{margin:0 0 4px;padding-left:1.3em;}
+  .acc-inner li{margin-bottom:6px;font-size:.96rem;}
+  .pill-row{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px;}
+  .pill{background:var(--bg-warm);color:var(--amber-dark);border-radius:999px;padding:5px 14px;font-size:.85rem;}
+
+  /* Week table */
+  .week-table{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);font-size:.92rem;}
+  .week-table th,.week-table td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left;}
+  .week-table th{background:var(--bg-warm);color:var(--amber-dark);}
+  .week-table tr:last-child td{border-bottom:none;}
+  .week-table td:first-child{color:var(--amber-dark);font-weight:600;white-space:nowrap;}
+  .stage-tag{display:inline-block;font-size:.78rem;background:var(--bg-warm);color:var(--teal);border-radius:6px;padding:2px 8px;margin-right:6px;}
+
+  /* Resource tabs */
+  .tabs{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:28px;}
+  .tab-btn{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:10px 20px;font-family:'Noto Serif TC',serif;font-size:.92rem;color:var(--ink-soft);cursor:pointer;transition:all .25s ease;}
+  .tab-btn.active{background:var(--amber);color:var(--on-accent);border-color:var(--amber);}
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;}
+
+  .bank-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
+  @media (max-width:700px){.bank-grid{grid-template-columns:1fr;}}
+  .bank-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:20px 22px;box-shadow:var(--shadow);}
+  .bank-card h4{color:var(--teal);font-size:1rem;margin-bottom:10px;}
+  .bank-card ul{margin:0;padding-left:1.1em;font-size:.92rem;}
+  .bank-card li{margin-bottom:6px;}
+
+  .vocab-table{width:100%;border-collapse:collapse;font-size:.9rem;background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);}
+  .vocab-table th,.vocab-table td{padding:11px 14px;border-bottom:1px solid var(--line);text-align:left;}
+  .vocab-table th{background:var(--bg-warm);color:var(--amber-dark);}
+  .strike{text-decoration:line-through;color:#B0A492;}
+
+  .check-list{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px 26px;}
+  .check-list label{display:flex;gap:10px;align-items:flex-start;margin-bottom:12px;font-size:.95rem;cursor:pointer;}
+  .check-list input{margin-top:4px;accent-color:var(--amber);}
+
+  .cta-band{background:var(--band-bg);color:var(--on-accent);text-align:center;padding:48px 24px;border-radius:var(--radius);margin:0 24px;}
+  .cta-band h3{color:var(--on-accent);font-size:1.4rem;margin-bottom:10px;}
+  .cta-band p{color:var(--on-accent);opacity:.88;max-width:560px;margin:0 auto;}
+
+  footer{padding:40px 24px;text-align:center;color:var(--ink-soft);font-size:.88rem;}
+  footer .brand{color:var(--amber-dark);font-weight:600;font-family:'Playfair Display',serif;letter-spacing:.03em;}
+
+  .top-btn{position:fixed;right:22px;bottom:22px;width:46px;height:46px;border-radius:50%;background:var(--amber);color:var(--on-accent);border:none;display:flex;align-items:center;justify-content:center;font-size:1.2rem;cursor:pointer;box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:opacity .3s ease,transform .2s ease;z-index:50;}
+  .top-btn.show{opacity:1;pointer-events:auto;}
+  .top-btn:hover{transform:translateY(-3px);}
+</style>
+
+<div class="hero reveal">
+  <p class="eyebrow">From 14 to 優 — A GSAT Writing Sprint</p>
+  <h1 class="display hero-title">學測英文作文衝刺課程</h1>
+  <p class="hero-sub">給全民英檢中高級程度、目前 14 分的孩子——一套以「兩段式寫作」為核心，10 週把分數從「可」推進到「優」的完整教學設計。</p>
+  <div class="badge-row">
+    <span class="badge">現況 <b>14 / 20 分</b></span>
+    <span class="badge">程度 <b>全民英檢中高級</b></span>
+    <span class="badge">目標 <b>17–20 分</b></span>
+    <span class="badge">週期 <b>10 週</b></span>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2 class="section-title">現況診斷：14 分卡在哪裡</h2>
+      <p class="section-desc">依大考中心公告之評分原則，英文作文（第二部分，20 分）分為五個等級。14 分正好落在「可」等級的最高分，代表基本架構已經到位，但還不足以跨進「優」等級。</p>
+    </div>
+
+    <div class="diag reveal">
+      <div class="score-card">
+        <div><span class="score-num">14</span><span class="score-den"> / 20</span></div>
+        <span class="score-tag">等級：可（10–14 分）</span>
+        <p class="score-note">只差 1 分就能跨進「優」等級（15–18 分）。這是最值得投資、也最容易看見成效的一段路。</p>
+      </div>
+      <div class="gap-list">
+        <h3>停在「可」等級的孩子，通常卡在這幾點</h3>
+        <ul>
+          <li><b>內容籠統</b>：有回應題目，但細節不夠具體，例子偏空泛（例如只寫 "It is good for us." 卻沒有說明如何、為什麼）。</li>
+          <li><b>轉承語單一</b>：整篇高頻率重複 and / but / so，段落之間邏輯要靠讀者自己腦補。</li>
+          <li><b>句型偏簡單句</b>：很少出現複合句、分詞構句或關係子句，文法句構評分不容易拿高分。</li>
+          <li><b>用字普通、重複</b>：核心字彙用來用去都是 good / important / a lot of，缺少精準、多樣的字彙表現。</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="reveal" style="margin-top:38px;">
+      <div class="band-bar">
+        <span class="marker" style="left:8%;">14 分（現在）</span>
+        <div class="band b1">劣 0–4</div>
+        <div class="band b2">差 5–9</div>
+        <div class="band b3">可 10–14</div>
+        <div class="band b4">優 15–18</div>
+        <div class="band b5">特優 19–20</div>
+      </div>
+      <div class="band-labels"><span>0 分</span><span>20 分</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2 class="section-title">評分規準：四個面向，決定分數</h2>
+      <p class="section-desc">大考中心以「內容、組織、文法句構、字彙拼字」四個面向綜合評分，再對照級距給出總分。字數明顯不足或未依題意分段，各扣總分 1 分——這是最不該丟的分數。</p>
+    </div>
+    <div class="scroll-x reveal">
+      <table class="rubric-table">
+        <tr><th>評分面向</th><th class="tag-good">優等表現</th><th class="tag-bad">待加強表現</th></tr>
+        <tr><td><b>內容</b></td><td>主題清楚，提供充分、具體、相關的細節與例子</td><td>內容空泛、離題或細節不足</td></tr>
+        <tr><td><b>組織</b></td><td>結構完整、段落分工清楚，轉承語使用得當、前後連貫</td><td>段落堆疊零散，轉承語缺乏或誤用</td></tr>
+        <tr><td><b>文法句構</b></td><td>句構、格式、標點幾無錯誤，句型有變化</td><td>文法、格式、標點錯誤多，句型單一</td></tr>
+        <tr><td><b>字彙拼字</b></td><td>用字精確得宜，拼字、大小寫幾無錯誤</td><td>拼字、大小寫錯誤多，明顯影響文意</td></tr>
+      </table>
+    </div>
+    <p class="reveal" style="text-align:center;color:var(--ink-soft);font-size:.9rem;margin-top:16px;">＊依大考中心近年學測英文考科非選擇題評分原則整理。作文須為兩段式寫作，至少 120 字；字數明顯不足或未分段，各扣總分 1 分。</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2 class="section-title">課程總覽：7 個教學模組</h2>
+      <p class="section-desc">每個模組對應一項評分規準的具體突破口，模組 0 診斷定調，模組 6 收斂成考場實戰力。</p>
+    </div>
+    <div class="timeline reveal">
+      <div class="tcard"><span class="tnum">0</span><h4>診斷與目標設定</h4><p>用學生近作逐項評分，找出個人化弱點，設定 10 週分數目標。</p></div>
+      <div class="tcard"><span class="tnum">1</span><h4>內容深化</h4><p>從「有寫到」進化到「寫得具體」，練習細節化與個人化例子。</p></div>
+      <div class="tcard"><span class="tnum">2</span><h4>組織強化</h4><p>吃透兩段式段落分工，建立轉承語銀行，告別 and / but / so。</p></div>
+      <div class="tcard"><span class="tnum">3</span><h4>文法句構升級</h4><p>簡單句進化成複合句，掌握自我校對清單，減少文法失分。</p></div>
+      <div class="tcard"><span class="tnum">4</span><h4>字彙拼字精準化</h4><p>用精準字取代空泛字，累積學測常考主題字彙庫。</p></div>
+      <div class="tcard"><span class="tnum">5</span><h4>整合實戰</h4><p>限時模擬考、四項規準自評＋教師回饋，建立錯誤追蹤表。</p></div>
+      <div class="tcard"><span class="tnum">6</span><h4>考前衝刺</h4><p>拆解優等範文、建立萬用句型庫、審題與時間分配演練。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2 class="section-title">模組詳解</h2>
+      <p class="section-desc">點開每個模組，看教學重點、具體技巧與課堂練習活動。</p>
+    </div>
+
+    <div class="accordion reveal">
+
+      <div class="acc-item open">
+        <button class="acc-head"><span><span class="num">00</span>診斷與目標設定（第 1 週）</span><span class="plus">+</span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <h5>教學重點</h5>
+          <ul>
+            <li>請學生帶 2–3 篇近期作文，依「內容、組織、文法句構、字彙拼字」四項規準逐項標記優缺點。</li>
+            <li>講解兩段式寫作的段落分工：第一段回應情境／選擇＋原因；第二段延伸做法／看法＋結尾收束。</li>
+            <li>與學生一起設定 10 週後的目標分數與各模組檢核點。</li>
+          </ul>
+          <h5>課堂活動</h5>
+          <ul>
+            <li>「四色螢光筆」標記法：內容＝黃、組織＝綠、文法＝藍、字彙＝橘，直接在舊作文上標出問題句。</li>
+            <li>填寫「起點診斷表」（見下方教學資源），作為 10 週後對照進步的基準。</li>
+          </ul>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-head"><span><span class="num">01</span>內容深化（第 2–3 週）</span><span class="plus">+</span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <h5>教學重點</h5>
+          <ul>
+            <li>破除空泛句：禁止句子只停在 "It is good/important." 之類的結論，一定要追問「怎麼好？對誰好？為什麼？」。</li>
+            <li>用 5W1H（Who／What／When／Where／Why／How）把一句抽象敘述拆成 2–3 句具體細節。</li>
+            <li>教導「感官細節」與「個人化例子」：把泛泛的 "many students" 換成一個具體情境或畫面。</li>
+          </ul>
+          <div class="pill-row"><span class="pill">情境＋原因＋具體細節＝一段的黃金結構</span></div>
+          <h5>課堂活動</h5>
+          <ul>
+            <li>「一句變三句」練習：給一句空泛句，限時改寫成三句有細節的版本。</li>
+            <li>先列大綱再下筆：每篇作文動筆前，先寫下至少 3 個具體細節或例子，通過老師檢核才能開始寫作文。</li>
+          </ul>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-head"><span><span class="num">02</span>組織強化（第 3–4 週）</span><span class="plus">+</span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <h5>教學重點</h5>
+          <ul>
+            <li>兩段式寫作段落分工口訣：<b>第一段「破題＋原因」，第二段「延伸＋結尾」</b>。</li>
+            <li>建立分類轉承語銀行（見下方教學資源），依功能（舉例、因果、對比、遞進、結論）分類記憶，取代重複使用 and / but / so。</li>
+            <li>強調開頭句不要直接照抄題目，結尾句要能回扣主題、避免虎頭蛇尾。</li>
+          </ul>
+          <h5>課堂活動</h5>
+          <ul>
+            <li>「轉承語改寫」練習：拿舊作文，把所有 and / but / so 換成更精準的轉承語。</li>
+            <li>段落拆解遊戲：打亂一篇範文的句子順序，讓學生依邏輯重新排序，訓練組織敏感度。</li>
+          </ul>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-head"><span><span class="num">03</span>文法句構升級（第 4–5 週）</span><span class="plus">+</span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <h5>教學重點</h5>
+          <ul>
+            <li>句子合併（sentence combining）：把兩個簡單句合併成一個含 although / since / when / which 的複合句。</li>
+            <li>時態一致性：全文維持同一敘事時態，避免過去式、現在式混用。</li>
+            <li>建立「常見錯誤自我校對清單」（見下方教學資源）：主詞動詞一致、可數／不可數名詞、介係詞搭配。</li>
+          </ul>
+          <h5>課堂活動</h5>
+          <ul>
+            <li>句型升級挑戰：同一個意思，分別用簡單句、複合句、分詞構句各寫一次，比較語感差異。</li>
+            <li>「校對官」互改：兩人一組交換作文，只用校對清單抓文法錯誤，不改內容。</li>
+          </ul>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-head"><span><span class="num">04</span>字彙拼字精準化（第 4–5 週）</span><span class="plus">+</span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <h5>教學重點</h5>
+          <ul>
+            <li>用精準字取代萬用字：good、bad、a lot of、important 這類字每篇最多出現一次，其餘用同義詞升級表替換。</li>
+            <li>建立學測常考主題字彙庫：科技與 AI、環境永續、人際與家庭、學習與自我成長、社會議題。</li>
+            <li>拼字與大小寫習慣：句首大寫、專有名詞大寫、易錯字定期複習。</li>
+          </ul>
+          <h5>課堂活動</h5>
+          <ul>
+            <li>同義詞升級練習：給一篇舊作文，圈出所有萬用字並替換成更精準的詞彙。</li>
+            <li>主題字彙卡：每週吸收 10–15 個主題字彙，隔週小考＋造句應用。</li>
+          </ul>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-head"><span><span class="num">05</span>整合實戰（第 6–8 週）</span><span class="plus">+</span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <h5>教學重點</h5>
+          <ul>
+            <li>比照大考中心作答時間，限時 20–25 分鐘完成一篇 120 字以上的兩段式作文。</li>
+            <li>每篇練習寫完後，先用四項規準自評，再交由教師依大考中心標準評分並給出等級。</li>
+            <li>建立「錯誤追蹤表」：每次寫作記錄本次犯的錯誤類型，下次動筆前先複習前一次的紀錄，避免重複犯錯。</li>
+          </ul>
+          <h5>課堂活動</h5>
+          <ul>
+            <li>每週一次全真模擬題（可取材歷屆學測或仿真圖片引導題），計時作答。</li>
+            <li>回饋會議：師生對照評分表逐項討論，具體標出「這次進步的一項＋下次要突破的一項」。</li>
+          </ul>
+        </div></div>
+      </div>
+
+      <div class="acc-item">
+        <button class="acc-head"><span><span class="num">06</span>考前衝刺（第 9–10 週）</span><span class="plus">+</span></button>
+        <div class="acc-body"><div class="acc-inner">
+          <h5>教學重點</h5>
+          <ul>
+            <li>拆解「優」等級範文：帶學生逐句分析佳作的開頭、轉承、結尾寫法，抓出可複製的具體技巧。</li>
+            <li>建立個人化「萬用句型庫」：開頭句、轉承句、結尾句各準備 3–5 句，套用不同題目都能快速調整使用。</li>
+            <li>審題與時間分配演練：拿到圖片／情境引導題，先花 2 分鐘圈出關鍵詞、列大綱，再動筆。</li>
+          </ul>
+          <h5>課堂活動</h5>
+          <ul>
+            <li>最終模擬考：完整比照考場流程（審題、限時、無草稿謄寫時間）跑一次全真模擬。</li>
+            <li>心態與檢查清單複習：考前最後檢查段落數、字數、大小寫、拼字，避免規則性失分。</li>
+          </ul>
+        </div></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2 class="section-title">10 週課程規劃表</h2>
+      <p class="section-desc">建議每週 1–2 次課、每次 60–90 分鐘，可依學生時間彈性調整週數。</p>
+    </div>
+    <div class="scroll-x reveal">
+      <table class="week-table">
+        <tr><th>週次</th><th>模組</th><th>本週重點</th><th>回家練習</th></tr>
+        <tr><td>第 1 週</td><td><span class="stage-tag">診斷</span></td><td>四項規準診斷舊作、解析兩段式架構、設定目標分數</td><td>填寫起點診斷表</td></tr>
+        <tr><td>第 2 週</td><td><span class="stage-tag">內容</span></td><td>5W1H 細節化、破除空泛句</td><td>一句變三句練習 × 5 題</td></tr>
+        <tr><td>第 3 週</td><td><span class="stage-tag">內容／組織</span></td><td>先列大綱再寫作、兩段式段落分工口訣</td><td>用大綱完成一篇短作文</td></tr>
+        <tr><td>第 4 週</td><td><span class="stage-tag">組織</span></td><td>轉承語銀行、段落拆解排序遊戲</td><td>轉承語改寫舊作文一篇</td></tr>
+        <tr><td>第 5 週</td><td><span class="stage-tag">文法句構</span></td><td>句子合併練習、時態一致性</td><td>句型升級挑戰三組</td></tr>
+        <tr><td>第 6 週</td><td><span class="stage-tag">文法句構／字彙</span></td><td>自我校對清單、同義詞升級練習</td><td>互改校對一篇＋主題字彙卡 10 個</td></tr>
+        <tr><td>第 7 週</td><td><span class="stage-tag">字彙</span></td><td>主題字彙庫（科技／環境）、拼字複習</td><td>主題字彙小考＋造句</td></tr>
+        <tr><td>第 8 週</td><td><span class="stage-tag">整合實戰</span></td><td>限時模擬考 1 ＋ 四項規準自評與教師回饋</td><td>填寫錯誤追蹤表</td></tr>
+        <tr><td>第 9 週</td><td><span class="stage-tag">整合實戰</span></td><td>限時模擬考 2 ＋ 針對前次錯誤複習</td><td>複習錯誤追蹤表、更新萬用句型庫</td></tr>
+        <tr><td>第 10 週</td><td><span class="stage-tag">考前衝刺</span></td><td>佳作拆解、萬用句型庫定稿、最終全真模擬考</td><td>考前檢查清單自我測驗</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2 class="section-title">教學資源包</h2>
+      <p class="section-desc">課程中直接可用的教材：轉承語銀行、萬用句型庫、主題字彙升級表、自我校對檢查清單。</p>
+    </div>
+
+    <div class="tabs reveal">
+      <button class="tab-btn active" data-tab="t1">轉承語銀行</button>
+      <button class="tab-btn" data-tab="t2">萬用句型庫</button>
+      <button class="tab-btn" data-tab="t3">字彙升級表</button>
+      <button class="tab-btn" data-tab="t4">自我校對清單</button>
+    </div>
+
+    <div class="tab-panel active reveal" id="t1">
+      <div class="bank-grid">
+        <div class="bank-card"><h4>舉例</h4><ul><li>for example / for instance</li><li>such as</li><li>to illustrate this</li></ul></div>
+        <div class="bank-card"><h4>因果</h4><ul><li>as a result / therefore</li><li>because of this</li><li>this is why</li></ul></div>
+        <div class="bank-card"><h4>對比</h4><ul><li>however / on the other hand</li><li>although / even though</li><li>while + 子句</li></ul></div>
+        <div class="bank-card"><h4>遞進</h4><ul><li>moreover / in addition</li><li>furthermore</li><li>not only... but also...</li></ul></div>
+        <div class="bank-card"><h4>結論</h4><ul><li>in conclusion / overall</li><li>all in all</li><li>to sum up</li></ul></div>
+        <div class="bank-card"><h4>時間順序</h4><ul><li>first / next / then</li><li>after that</li><li>in the end</li></ul></div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="t2">
+      <div class="bank-grid">
+        <div class="bank-card"><h4>開頭句（破題）</h4><ul><li>Looking at the three pictures, I would choose... because...</li><li>If I could have a robot assistant, I would want it to help me with...</li><li>Among the many challenges I face in daily life, ... is the one that troubles me most.</li></ul></div>
+        <div class="bank-card"><h4>轉承句（承接段落）</h4><ul><li>To make this happen, the robot should be able to...</li><li>In order to solve this problem, I believe...</li><li>Besides this ability, it also needs to...</li></ul></div>
+        <div class="bank-card"><h4>結尾句（收束）</h4><ul><li>With this kind of support, I believe my daily life would become much easier.</li><li>In this way, we could work together to overcome the problem.</li><li>Overall, this experience would make a real difference in my life.</li></ul></div>
+        <div class="bank-card"><h4>個人化銜接語</h4><ul><li>From my own experience, ...</li><li>Speaking from personal experience, ...</li><li>What matters most to me is...</li></ul></div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="t3">
+      <div class="scroll-x">
+        <table class="vocab-table">
+          <tr><th>萬用字（避免重複使用）</th><th>依語境可替換為</th></tr>
+          <tr><td class="strike">good</td><td>beneficial／rewarding／valuable／helpful</td></tr>
+          <tr><td class="strike">bad</td><td>harmful／problematic／frustrating／unpleasant</td></tr>
+          <tr><td class="strike">important</td><td>essential／crucial／significant／meaningful</td></tr>
+          <tr><td class="strike">a lot of</td><td>numerous／a wide range of／plenty of</td></tr>
+          <tr><td class="strike">think</td><td>believe／consider／find that／realize</td></tr>
+          <tr><td class="strike">happy</td><td>delighted／grateful／fulfilled／at ease</td></tr>
+          <tr><td class="strike">problem</td><td>challenge／issue／difficulty／obstacle</td></tr>
+        </table>
+      </div>
+      <div class="bank-card" style="margin-top:20px;"><h4>主題字彙庫方向（依學測常見題材）</h4><ul><li>科技與 AI：artificial intelligence, automation, convenience, efficiency</li><li>環境永續：sustainability, eco-friendly, reduce waste, renewable energy</li><li>人際與家庭：companionship, communication, support system, understanding</li><li>學習與自我成長：self-discipline, motivation, time management, perseverance</li></ul></div>
+    </div>
+
+    <div class="tab-panel" id="t4">
+      <div class="check-list">
+        <label><input type="checkbox"><span>全文兩段，且有明確分段（段落間空一行或縮排）</span></label>
+        <label><input type="checkbox"><span>總字數達 120 字以上</span></label>
+        <label><input type="checkbox"><span>全文動詞時態一致，沒有中途切換</span></label>
+        <label><input type="checkbox"><span>每個句子都有主詞、動詞，主詞動詞單複數一致</span></label>
+        <label><input type="checkbox"><span>句首與專有名詞已大寫，句尾有標點</span></label>
+        <label><input type="checkbox"><span>至少使用 3 種不同類別的轉承語（非全部 and / but / so）</span></label>
+        <label><input type="checkbox"><span>萬用字（good／bad／important／a lot of）全文最多各出現一次</span></label>
+        <label><input type="checkbox"><span>內容至少包含 2–3 個具體細節或例子，不是空泛結論句</span></label>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2 class="section-title">評量與回饋機制</h2>
+      <p class="section-desc">進步要看得見，回饋要有節奏。</p>
+    </div>
+    <div class="timeline reveal" style="grid-template-columns:repeat(3,1fr);">
+      <div class="tcard"><span class="tnum">①</span><h4>每次寫作雙評</h4><p>學生先依四項規準自評，再由教師依大考中心標準給出等級與具體建議，兩相對照找出認知落差。</p></div>
+      <div class="tcard"><span class="tnum">②</span><h4>錯誤追蹤表</h4><p>每次寫作記錄犯錯類型（內容／組織／文法／字彙），下次動筆前先複習，避免同一個錯誤反覆出現。</p></div>
+      <div class="tcard"><span class="tnum">③</span><h4>進步曲線紀錄</h4><p>每 2–3 週用同一份四項規準表為近作打分，畫成簡單的分數曲線，讓學生具體看見自己的成長。</p></div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-band reveal">
+  <h3>10 週後的目標</h3>
+  <p>不是僥倖多拿 1 分，而是讓孩子真正掌握「可」到「優」之間的差距——具體的內容、清楚的組織、多樣的句型、精準的用字，這些能力會一直跟著他，不只是這次考試。</p>
+</div>
+
+<footer>
+  <p class="brand">Gina教室的AI奇蹟</p>
+  <p>為每一個孩子，設計看得見進步的學習路徑。</p>
+</footer>
+
+<button class="top-btn" id="topBtn" aria-label="回到頂端">↑</button>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  document.querySelectorAll('.acc-head').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.parentElement.classList.toggle('open');
+    });
+  });
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  const topBtn = document.getElementById('topBtn');
+  window.addEventListener('scroll', () => {
+    topBtn.classList.toggle('show', window.scrollY > 500);
+  });
+  topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+</script>
+
+<a href="../" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:9999;background:#2F86D6;color:#fff;font:700 13px/1 system-ui,sans-serif;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.2)">← 回群島</a>
+</body></html>

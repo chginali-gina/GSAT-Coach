@@ -1,0 +1,832 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>普羅米修斯拼字競技場</title>
+<style>
+  :root {
+    --bg: #FDF8F1;
+    --bg-warm: #F7EFE3;
+    --card: #FFFFFF;
+    --amber: #D97706;
+    --amber-strong: #92400E;
+    --ink: #2E2419;
+    --ink-soft: #6B5D4F;
+    --line: #E8DCCB;
+    --success: #0F766E;
+    --success-bg: #E3F1EE;
+    --danger: #B3261E;
+    --danger-bg: #FBE9E7;
+    --shadow: 0 4px 20px rgba(146, 64, 14, 0.10);
+    --shadow-lg: 0 14px 40px rgba(146, 64, 14, 0.16);
+    --radius: 18px;
+    --radius-sm: 12px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #221A12;
+      --bg-warm: #2C2216;
+      --card: #2E2418;
+      --amber: #F0A93B;
+      --amber-strong: #FCD34D;
+      --ink: #F5EEE1;
+      --ink-soft: #C7B49A;
+      --line: #4A3A26;
+      --success: #5EAEA6;
+      --success-bg: #1E3330;
+      --danger: #F2837A;
+      --danger-bg: #3A2220;
+      --shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+      --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.55);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #221A12;
+    --bg-warm: #2C2216;
+    --card: #2E2418;
+    --amber: #F0A93B;
+    --amber-strong: #FCD34D;
+    --ink: #F5EEE1;
+    --ink-soft: #C7B49A;
+    --line: #4A3A26;
+    --success: #5EAEA6;
+    --success-bg: #1E3330;
+    --danger: #F2837A;
+    --danger-bg: #3A2220;
+    --shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+    --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.55);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Noto Serif TC', serif;
+    padding-inline: 18px;
+    padding-block: 28px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .display { font-family: 'Playfair Display', serif; }
+  .mono {
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, 'Roboto Mono', monospace;
+  }
+
+  .app {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .brand {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    font-size: clamp(1.05rem, 4vw, 1.3rem);
+    color: var(--amber-strong);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .stats {
+    display: flex;
+    gap: 14px;
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+  }
+  .stats b {
+    font-family: 'Playfair Display', serif;
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .progress-track {
+    height: 6px;
+    border-radius: 999px;
+    background: var(--line);
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--amber);
+    border-radius: 999px;
+    transition: width .45s ease;
+    width: 0%;
+  }
+
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: clamp(22px, 5vw, 34px);
+  }
+
+  /* ---- start screen ---- */
+  .eyebrow {
+    font-family: 'Playfair Display', serif;
+    color: var(--amber);
+    letter-spacing: .08em;
+    font-size: .88rem;
+    margin: 0 0 6px;
+  }
+  .start-title {
+    font-size: clamp(1.6rem, 6vw, 2.1rem);
+    margin: 0 0 10px;
+    text-wrap: balance;
+  }
+  .start-sub {
+    color: var(--ink-soft);
+    line-height: 1.85;
+    margin: 0 0 22px;
+  }
+  .howto {
+    background: var(--bg-warm);
+    border-radius: var(--radius-sm);
+    padding: 16px 18px;
+    margin-bottom: 24px;
+    display: grid;
+    gap: 10px;
+  }
+  .howto-row {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    font-size: .95rem;
+    line-height: 1.7;
+  }
+  .howto-row span.ic { flex-shrink: 0; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--amber);
+    color: #fff;
+    font-weight: 600;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 1rem;
+    padding: 14px 30px;
+    border: none;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background .25s ease, transform .2s ease;
+    width: 100%;
+  }
+  .btn:hover { background: var(--amber-strong); transform: translateY(-2px); }
+  .btn:active { transform: translateY(0); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+  }
+  .btn-secondary:hover { background: var(--bg-warm); color: var(--ink); }
+  .btn-row { display: flex; gap: 10px; }
+  .btn-row .btn { flex: 1; width: auto; padding: 12px 14px; font-size: .95rem; }
+
+  /* ---- play screen ---- */
+  .clue-card {
+    background: var(--bg-warm);
+    border-radius: var(--radius-sm);
+    padding: 20px 20px;
+    margin-bottom: 22px;
+    position: relative;
+    min-height: 92px;
+  }
+  .clue-label {
+    margin: 0 0 6px;
+    font-size: .82rem;
+    letter-spacing: .04em;
+    color: var(--amber-strong);
+    font-weight: 600;
+  }
+  .clue-text {
+    margin: 0;
+    font-size: clamp(1.02rem, 3.6vw, 1.18rem);
+    line-height: 1.7;
+  }
+  .success-banner {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    color: var(--success);
+  }
+  .success-banner.show { display: flex; }
+  .clue-text.hide { display: none; }
+
+  .blanks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    justify-content: center;
+    margin: 24px 0 20px;
+    min-height: 56px;
+  }
+  .blank {
+    width: clamp(30px, 8vw, 44px);
+    height: clamp(38px, 9vw, 50px);
+    border-bottom: 3px solid var(--amber);
+    border-radius: 6px 6px 3px 3px;
+    background: var(--bg-warm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-weight: 700;
+    font-size: clamp(1rem, 4vw, 1.3rem);
+    text-transform: uppercase;
+    color: var(--ink);
+    cursor: pointer;
+    transition: transform .15s ease, background .2s ease, border-color .2s ease;
+    user-select: none;
+  }
+  .blank.hover { background: var(--success-bg); border-color: var(--success); transform: scale(1.08); }
+  .blank.filled { background: var(--card); border-color: var(--amber-strong); box-shadow: var(--shadow); }
+  .blank.locked { background: var(--success-bg); border-color: var(--success); color: var(--success); cursor: default; }
+  .blank.hint { background: var(--danger-bg); border-color: var(--amber); color: var(--amber-strong); cursor: default; }
+  .blank.shake { animation: shake .38s ease; }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+  }
+
+  .tray {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    padding: 18px 10px;
+    background: var(--bg-warm);
+    border-radius: var(--radius-sm);
+    margin-bottom: 20px;
+    min-height: 66px;
+  }
+  .tile {
+    width: clamp(32px, 8.5vw, 46px);
+    height: clamp(38px, 9vw, 50px);
+    background: var(--card);
+    border: 2px solid var(--amber);
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-weight: 700;
+    font-size: clamp(1rem, 4vw, 1.3rem);
+    text-transform: uppercase;
+    color: var(--amber-strong);
+    box-shadow: var(--shadow);
+    cursor: grab;
+    touch-action: none;
+    transition: opacity .15s ease, transform .12s ease;
+  }
+  .tile.ghosted { opacity: .25; }
+  .tile.used { display: none; }
+  .tile.dragging { cursor: grabbing; box-shadow: var(--shadow-lg); transform: scale(1.08); }
+  .tile:active { transform: scale(.96); }
+
+  .controls { display: flex; gap: 10px; }
+  .ctrl-btn {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    font-family: 'Noto Serif TC', serif;
+    font-size: .92rem;
+    padding: 12px 8px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: background .2s ease, border-color .2s ease;
+  }
+  .ctrl-btn:hover { background: var(--bg-warm); border-color: var(--amber); }
+  .ctrl-btn:disabled { opacity: .4; cursor: not-allowed; }
+  .ctrl-btn.primary {
+    background: var(--amber);
+    color: #fff;
+    border-color: var(--amber);
+    font-weight: 600;
+  }
+  .ctrl-btn.primary:hover { background: var(--amber-strong); border-color: var(--amber-strong); }
+
+  .skip-link {
+    display: block;
+    text-align: center;
+    margin-top: 14px;
+    font-size: .85rem;
+    color: var(--ink-soft);
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .feedback {
+    text-align: center;
+    min-height: 22px;
+    margin: 14px 0 0;
+    font-size: .92rem;
+    color: var(--danger);
+  }
+
+  /* ---- end screen ---- */
+  .end-emoji { font-size: 3rem; text-align: center; margin-bottom: 6px; animation: pop .5s ease; }
+  @keyframes pop { from { transform: scale(.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .end-title {
+    text-align: center;
+    font-size: clamp(1.6rem, 6vw, 2.1rem);
+    margin: 0 0 6px;
+  }
+  .end-sub { text-align: center; color: var(--ink-soft); margin: 0 0 26px; }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 26px;
+  }
+  .stat-tile {
+    background: var(--bg-warm);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    text-align: center;
+  }
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--amber-strong);
+  }
+  .stat-label { font-size: .82rem; color: var(--ink-soft); margin-top: 2px; }
+
+  footer {
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: .82rem;
+    margin-top: 26px;
+    letter-spacing: .02em;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+  }
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<div class="app">
+  <div class="topbar">
+    <div class="brand">🔥 普羅米修斯拼字競技場</div>
+    <div class="stats">
+      <span id="stat-progress">— / 16</span>
+      <span>分數 <b id="stat-score">0</b></span>
+    </div>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+
+  <main id="game">
+    <section id="start-screen" class="panel">
+      <p class="eyebrow">Lesson 3 · Prometheus: The Champion of Humankind</p>
+      <h1 class="display start-title">拼出普羅米修斯的 16 個關鍵字</h1>
+      <p class="start-sub">每一題會給你一個英文釋義，請把下方打散的字母拖曳（或點擊）進正確的格子裡，拼出符合意思的單字。拼對愈快、提示用愈少，分數愈高。</p>
+      <div class="howto">
+        <div class="howto-row"><span class="ic">🖱️</span><span>用滑鼠拖曳字母到空格，或直接點一下字母，它會自動跳進下一個空格。</span></div>
+        <div class="howto-row"><span class="ic">✅</span><span>格子全部填滿後會自動檢查；拼對的字母會保留，拼錯的會退回字母區讓你重排。</span></div>
+        <div class="howto-row"><span class="ic">💡</span><span>卡住了可以按「提示」，但每次會扣 2 分；也可以直接「跳過」這一題。</span></div>
+      </div>
+      <button class="btn" id="btn-start">🔥 開始挑戰</button>
+    </section>
+
+    <section id="play-screen" class="panel" hidden>
+      <div class="clue-card">
+        <p class="clue-label" id="clue-label">這個字的意思是⋯</p>
+        <p class="clue-text" id="clue-text"></p>
+        <div class="success-banner" id="success-banner">✅ 拼對了！<span id="success-word"></span></div>
+      </div>
+
+      <div class="blanks" id="blanks"></div>
+      <div class="tray" id="tray"></div>
+
+      <div class="controls" id="controls">
+        <button class="ctrl-btn" id="btn-hint">💡 提示 −2</button>
+        <button class="ctrl-btn" id="btn-clear">↺ 清空</button>
+        <button class="ctrl-btn primary" id="btn-check">✓ 檢查</button>
+      </div>
+      <button class="ctrl-btn primary" id="btn-next" style="display:none; width:100%;">下一題 →</button>
+      <span class="skip-link" id="btn-skip">跳過這一題</span>
+
+      <p class="feedback" id="feedback"></p>
+    </section>
+
+    <section id="end-screen" class="panel" hidden>
+      <div class="end-emoji">🏆</div>
+      <h1 class="display end-title">挑戰完成！</h1>
+      <p class="end-sub" id="end-sub"></p>
+      <div class="stat-grid">
+        <div class="stat-tile"><div class="stat-num" id="end-score">0</div><div class="stat-label">總分（滿分 160）</div></div>
+        <div class="stat-tile"><div class="stat-num" id="end-perfect">0</div><div class="stat-label">一次拼對（滿分 16）</div></div>
+        <div class="stat-tile"><div class="stat-num" id="end-hints">0</div><div class="stat-label">使用提示次數</div></div>
+        <div class="stat-tile"><div class="stat-num" id="end-time">0:00</div><div class="stat-label">花費時間</div></div>
+      </div>
+      <div class="btn-row">
+        <button class="btn" id="btn-restart">🔁 再玩一次</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>Gina教室的AI奇蹟 · 龍騰 Lesson 3 Prometheus 字彙拼字挑戰</footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var WORDS = [
+    { word: "distribution", clue: "How something is spread or shared among a group." },
+    { word: "slaughter", clue: "To kill an animal for its meat." },
+    { word: "conflict", clue: "A serious argument, fight, or war." },
+    { word: "miserable", clue: "Very sad or unhappy due to mental or physical suffering." },
+    { word: "victim", clue: "A person who suffers or dies because of an accident, crime, or disease." },
+    { word: "furious", clue: "Extremely angry; in a rage." },
+    { word: "universe", clue: "Everything that exists in space, including stars, planets, and moons." },
+    { word: "theft", clue: "The action of stealing something from someone." },
+    { word: "banish", clue: "To force someone to leave a place and never come back." },
+    { word: "torture", clue: "To force someone to suffer a lot of pain, often on purpose." },
+    { word: "civilization", clue: "An advanced, well-developed, and well-organized human society." },
+    { word: "humankind", clue: "The human race; all people as a whole." },
+    { word: "generous", clue: "Taking pleasure in giving freely; not stingy or selfish." },
+    { word: "benefit", clue: "A good, useful, or helpful effect; an advantage or gain." },
+    { word: "upright", clue: "Standing straight; vertically." },
+    { word: "enable", clue: "To make someone able to do something." }
+  ];
+
+  var els = {};
+  ["start-screen","play-screen","end-screen","btn-start","btn-hint","btn-clear","btn-check",
+   "btn-next","btn-skip","btn-restart","clue-text","success-banner","success-word","blanks",
+   "tray","controls","feedback","stat-progress","stat-score","progress-fill",
+   "end-score","end-perfect","end-hints","end-time","end-sub"].forEach(function (id) {
+    els[id] = document.getElementById(id);
+  });
+
+  var state, tileSeq, dragState, timerHandle;
+
+  function shuffled(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function makeOrder() {
+    return shuffled(WORDS.map(function (_, i) { return i; }));
+  }
+
+  function freshState() {
+    return {
+      screen: "start",
+      order: makeOrder(),
+      currentIndex: 0,
+      score: 0,
+      perfectCount: 0,
+      hintsTotal: 0,
+      startTime: null,
+      wordWrongAttempts: 0,
+      wordHints: 0
+    };
+  }
+
+  function fmtTime(ms) {
+    var s = Math.floor(ms / 1000);
+    var m = Math.floor(s / 60);
+    s = s % 60;
+    return m + ":" + (s < 10 ? "0" : "") + s;
+  }
+
+  function currentWordObj() {
+    return WORDS[state.order[state.currentIndex]];
+  }
+
+  function renderTopbar() {
+    els["stat-progress"].textContent = (state.currentIndex + (state.screen === "end" ? 0 : (state.screen === "start" ? 0 : 1))) + " / " + WORDS.length;
+    if (state.screen === "start") els["stat-progress"].textContent = "— / " + WORDS.length;
+    els["stat-score"].textContent = state.score;
+    var pct = state.screen === "end" ? 100 : Math.round((state.currentIndex / WORDS.length) * 100);
+    els["progress-fill"].style.width = pct + "%";
+  }
+
+  function showScreen(name) {
+    state.screen = name;
+    els["start-screen"].hidden = name !== "start";
+    els["play-screen"].hidden = name !== "play";
+    els["end-screen"].hidden = name !== "end";
+    renderTopbar();
+  }
+
+  // ---------- gameplay ----------
+  function renderWord() {
+    var w = currentWordObj();
+    tileSeq = 0;
+    state.wordWrongAttempts = 0;
+    state.wordHints = 0;
+
+    els["clue-text"].classList.remove("hide");
+    els["success-banner"].classList.remove("show");
+    els["controls"].style.display = "flex";
+    els["btn-next"].style.display = "none";
+    els["btn-skip"].style.display = "block";
+    els["feedback"].textContent = "";
+    els["clue-text"].textContent = w.clue;
+
+    // blanks
+    els["blanks"].innerHTML = "";
+    for (var i = 0; i < w.word.length; i++) {
+      var b = document.createElement("div");
+      b.className = "blank";
+      b.dataset.index = i;
+      b.addEventListener("click", onBlankClick);
+      els["blanks"].appendChild(b);
+    }
+
+    // tray tiles, shuffled distinct from original order
+    var letters = w.word.split("");
+    var order;
+    var tries = 0;
+    do {
+      order = shuffled(letters.map(function (_, i) { return i; }));
+      tries++;
+    } while (tries < 5 && letters.length > 1 && order.every(function (v, i) { return v === i; }));
+
+    els["tray"].innerHTML = "";
+    order.forEach(function (letterIndex) {
+      var tile = document.createElement("div");
+      tile.className = "tile";
+      tile.dataset.id = String(tileSeq++);
+      tile.dataset.letter = letters[letterIndex];
+      tile.textContent = letters[letterIndex];
+      tile.addEventListener("pointerdown", onTilePointerDown);
+      els["tray"].appendChild(tile);
+    });
+
+    updateHintButton();
+    renderTopbar();
+  }
+
+  function blanksArr() { return Array.prototype.slice.call(els["blanks"].children); }
+
+  function allFilled() {
+    return blanksArr().every(function (b) { return b.classList.contains("filled") || b.classList.contains("locked") || b.classList.contains("hint"); });
+  }
+
+  function placeTileInBlank(tile, blank) {
+    tile.classList.add("used");
+    blank.classList.add("filled");
+    blank.textContent = tile.dataset.letter;
+    blank.dataset.tileId = tile.dataset.id;
+    if (allFilled()) {
+      setTimeout(checkWord, 260);
+    }
+  }
+
+  function unplaceBlank(blank) {
+    if (!blank.classList.contains("filled")) return;
+    var tileId = blank.dataset.tileId;
+    var tile = els["tray"].querySelector('.tile[data-id="' + tileId + '"]');
+    if (tile) tile.classList.remove("used");
+    blank.classList.remove("filled");
+    blank.textContent = "";
+    delete blank.dataset.tileId;
+  }
+
+  function placeInFirstEmpty(tile) {
+    var target = blanksArr().find(function (b) {
+      return !b.classList.contains("filled") && !b.classList.contains("locked") && !b.classList.contains("hint");
+    });
+    if (target) placeTileInBlank(tile, target);
+  }
+
+  function onBlankClick(e) {
+    var b = e.currentTarget;
+    if (b.classList.contains("locked") || b.classList.contains("hint")) return;
+    unplaceBlank(b);
+  }
+
+  function onTilePointerDown(e) {
+    var tile = e.currentTarget;
+    if (tile.classList.contains("used")) return;
+    e.preventDefault();
+    var rect = tile.getBoundingClientRect();
+    dragState = {
+      tile: tile,
+      startX: e.clientX,
+      startY: e.clientY,
+      offsetX: e.clientX - rect.left,
+      offsetY: e.clientY - rect.top,
+      moved: false
+    };
+    try { tile.setPointerCapture(e.pointerId); } catch (err) {}
+    document.addEventListener("pointermove", onTilePointerMove);
+    document.addEventListener("pointerup", onTilePointerUp, { once: true });
+  }
+
+  function onTilePointerMove(e) {
+    if (!dragState) return;
+    var dx = e.clientX - dragState.startX;
+    var dy = e.clientY - dragState.startY;
+    if (!dragState.moved && Math.hypot(dx, dy) > 6) {
+      dragState.moved = true;
+      dragState.tile.classList.add("dragging");
+      dragState.tile.style.position = "fixed";
+      dragState.tile.style.zIndex = "1000";
+    }
+    if (dragState.moved) {
+      dragState.tile.style.left = (e.clientX - dragState.offsetX) + "px";
+      dragState.tile.style.top = (e.clientY - dragState.offsetY) + "px";
+      var el = document.elementFromPoint(e.clientX, e.clientY);
+      blanksArr().forEach(function (b) { b.classList.remove("hover"); });
+      var blank = el && el.closest(".blank");
+      if (blank && !blank.classList.contains("filled") && !blank.classList.contains("locked") && !blank.classList.contains("hint")) {
+        blank.classList.add("hover");
+      }
+    }
+  }
+
+  function onTilePointerUp(e) {
+    document.removeEventListener("pointermove", onTilePointerMove);
+    if (!dragState) return;
+    var tile = dragState.tile;
+    var moved = dragState.moved;
+    blanksArr().forEach(function (b) { b.classList.remove("hover"); });
+
+    if (moved) {
+      tile.style.position = "";
+      tile.style.left = "";
+      tile.style.top = "";
+      tile.style.zIndex = "";
+      tile.classList.remove("dragging");
+      var el = document.elementFromPoint(e.clientX, e.clientY);
+      var blank = el && el.closest(".blank");
+      if (blank && !blank.classList.contains("filled") && !blank.classList.contains("locked") && !blank.classList.contains("hint")) {
+        placeTileInBlank(tile, blank);
+      }
+    } else {
+      placeInFirstEmpty(tile);
+    }
+    dragState = null;
+  }
+
+  function updateHintButton() {
+    var hasEmpty = blanksArr().some(function (b) {
+      return !b.classList.contains("filled") && !b.classList.contains("locked") && !b.classList.contains("hint");
+    });
+    els["btn-hint"].disabled = !hasEmpty;
+  }
+
+  function checkWord() {
+    var w = currentWordObj();
+    var target = w.word;
+    var blanks = blanksArr();
+    var guess = blanks.map(function (b) { return (b.textContent || "").toLowerCase(); }).join("");
+
+    if (guess === target) {
+      blanks.forEach(function (b) { if (!b.classList.contains("hint")) b.classList.add("locked"); });
+      finishWord(true);
+      return;
+    }
+
+    // wordle-style: keep correct-position letters, return the rest to tray
+    var anyWrong = false;
+    blanks.forEach(function (b, i) {
+      if (b.classList.contains("locked") || b.classList.contains("hint")) return;
+      var ch = (b.textContent || "").toLowerCase();
+      if (ch && ch === target[i]) {
+        b.classList.add("locked");
+      } else if (ch) {
+        anyWrong = true;
+        b.classList.add("shake");
+        setTimeout(function () { b.classList.remove("shake"); }, 400);
+        unplaceBlank(b);
+      }
+    });
+    if (anyWrong) {
+      state.wordWrongAttempts++;
+      els["feedback"].textContent = "還沒完全正確，拼對的字母已保留，再試試看！";
+    }
+    updateHintButton();
+  }
+
+  function finishWord(solved) {
+    var wordScore = Math.max(0, 10 - state.wordWrongAttempts * 2 - state.wordHints * 2);
+    state.score += wordScore;
+    if (state.wordWrongAttempts === 0 && state.wordHints === 0) state.perfectCount++;
+
+    els["clue-text"].classList.add("hide");
+    els["success-banner"].classList.add("show");
+    els["success-word"].textContent = currentWordObj().word.toUpperCase() + "（+" + wordScore + " 分）";
+    els["controls"].style.display = "none";
+    els["btn-skip"].style.display = "none";
+    els["feedback"].textContent = "";
+    els["btn-next"].style.display = "block";
+    els["btn-next"].textContent = (state.currentIndex + 1 >= WORDS.length) ? "查看結果 🎉" : "下一題 →";
+    renderTopbar();
+  }
+
+  function goNext() {
+    state.currentIndex++;
+    if (state.currentIndex >= WORDS.length) {
+      endGame();
+    } else {
+      showScreen("play");
+      renderWord();
+    }
+  }
+
+  function useHint() {
+    var w = currentWordObj();
+    var blanks = blanksArr();
+    var idx = blanks.findIndex(function (b) {
+      return !b.classList.contains("filled") && !b.classList.contains("locked") && !b.classList.contains("hint");
+    });
+    if (idx === -1) return;
+    var letter = w.word[idx];
+    var tile = els["tray"].querySelector('.tile[data-letter="' + letter + '"]:not(.used)');
+    var blank = blanks[idx];
+    if (tile) {
+      tile.classList.add("used");
+    }
+    blank.classList.add("hint");
+    blank.textContent = letter;
+    state.wordHints++;
+    state.hintsTotal++;
+    if (allFilled()) setTimeout(checkWord, 260);
+    updateHintButton();
+  }
+
+  function clearUnlocked() {
+    blanksArr().forEach(function (b) {
+      if (!b.classList.contains("locked") && !b.classList.contains("hint")) unplaceBlank(b);
+    });
+    els["feedback"].textContent = "";
+  }
+
+  function skipWord() {
+    goNext();
+  }
+
+  function endGame() {
+    showScreen("end");
+    clearInterval(timerHandle);
+    var elapsed = Date.now() - state.startTime;
+    els["end-score"].textContent = state.score;
+    els["end-perfect"].textContent = state.perfectCount;
+    els["end-hints"].textContent = state.hintsTotal;
+    els["end-time"].textContent = fmtTime(elapsed);
+    var pct = Math.round((state.perfectCount / WORDS.length) * 100);
+    var msg;
+    if (pct >= 80) msg = "拼字力媲美普羅米修斯偷火的膽識，太厲害了！";
+    else if (pct >= 50) msg = "已經掌握大部分核心字彙，再挑戰一次挑戰全對吧！";
+    else msg = "多練幾次，這些字就會變成你自己的字彙庫。";
+    els["end-sub"].textContent = msg;
+  }
+
+  function startGame() {
+    state = freshState();
+    state.startTime = Date.now();
+    showScreen("play");
+    renderWord();
+    clearInterval(timerHandle);
+    timerHandle = setInterval(renderTopbar, 1000);
+  }
+
+  els["btn-start"].addEventListener("click", startGame);
+  els["btn-restart"].addEventListener("click", startGame);
+  els["btn-hint"].addEventListener("click", useHint);
+  els["btn-clear"].addEventListener("click", clearUnlocked);
+  els["btn-check"].addEventListener("click", checkWord);
+  els["btn-next"].addEventListener("click", goNext);
+  els["btn-skip"].addEventListener("click", skipWord);
+
+  // ---------- boot / hot state ----------
+  function boot() {
+    state = freshState();
+    showScreen("start");
+  }
+
+  if (window.claude && window.claude.hot && window.claude.hot.snapshot) {
+    window.claude.hot.snapshot(function () {
+      return { score: state.score, perfectCount: state.perfectCount, hintsTotal: state.hintsTotal };
+    });
+  }
+  boot();
+})();
+</script>
+
+<a href="../" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:9999;background:#2F86D6;color:#fff;font:700 13px/1 system-ui,sans-serif;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.2)">← 回群島</a>
+</body></html>

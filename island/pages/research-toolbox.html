@@ -1,0 +1,689 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>專題研究工具箱</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FDF8F1; --bg-warm:#F7EFE3; --card:#FFFFFF;
+  --amber:#D97706; --amber-deep:#B45309; --amber-dark:#92400E; --amber-tint:#FDF0DC;
+  --teal:#0F766E; --teal-soft:#5EAEA6; --teal-tint:#E3F2EF;
+  --ink:#2E2419; --ink-soft:#6B5D4F; --line:#E8DCCB; --on-amber:#FFFFFF;
+  --bad:#B91C1C; --bad-tint:#FDECEC;
+  --shadow:0 4px 20px rgba(146,64,14,.08); --shadow-lg:0 12px 40px rgba(146,64,14,.12);
+  --radius:18px; --radius-sm:12px;
+  --serif:'Noto Serif TC','Songti TC','PMingLiU',serif;
+  --display:'Playfair Display',Georgia,'Noto Serif TC',serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#1B1611; --bg-warm:#231C15; --card:#2A221A;
+    --amber:#F59E0B; --amber-deep:#FBBF24; --amber-dark:#FCD34D; --amber-tint:#3A2A14;
+    --teal:#5EC4B8; --teal-soft:#5EAEA6; --teal-tint:#17332F;
+    --ink:#F3E9DC; --ink-soft:#BFAF9C; --line:#3E3228; --on-amber:#1B1611;
+    --bad:#F87171; --bad-tint:#3A1C1C;
+    --shadow:0 4px 20px rgba(0,0,0,.35); --shadow-lg:0 12px 40px rgba(0,0,0,.45);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#1B1611; --bg-warm:#231C15; --card:#2A221A;
+  --amber:#F59E0B; --amber-deep:#FBBF24; --amber-dark:#FCD34D; --amber-tint:#3A2A14;
+  --teal:#5EC4B8; --teal-soft:#5EAEA6; --teal-tint:#17332F;
+  --ink:#F3E9DC; --ink-soft:#BFAF9C; --line:#3E3228; --on-amber:#1B1611;
+  --bad:#F87171; --bad-tint:#3A1C1C;
+  --shadow:0 4px 20px rgba(0,0,0,.35); --shadow-lg:0 12px 40px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.8;padding:0 16px}
+.wrap{max-width:900px;margin:0 auto}
+h1,h2,h3,h4{text-wrap:balance;line-height:1.35;margin:0}
+p{margin:0}
+button,input,textarea,select{font-family:inherit;font-size:1rem;color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+a{color:var(--amber-dark)}
+
+.hero{padding-block:36px 18px;display:grid;gap:10px}
+.eyebrow{font-family:var(--display);font-style:italic;color:var(--amber);letter-spacing:.06em;font-size:.95rem}
+.hero h1{font-size:clamp(1.9rem,6vw,2.8rem);font-weight:700}
+.hero p{color:var(--ink-soft);max-width:38em}
+
+.btn{display:inline-flex;align-items:center;gap:6px;border:0;background:var(--amber);color:var(--on-amber);font-weight:600;padding:10px 22px;border-radius:999px;cursor:pointer;transition:background .2s,transform .2s;text-decoration:none}
+.btn:hover{background:var(--amber-deep);transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--amber-dark);border:1.5px solid var(--line)}
+.btn.ghost:hover{border-color:var(--amber);background:var(--amber-tint)}
+.btn.teal{background:var(--teal);color:var(--card)}
+.btn.sm{padding:6px 14px;font-size:.9rem}
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none}
+.linkbtn{background:none;border:0;color:var(--amber-dark);cursor:pointer;font-size:.9rem;text-decoration:underline;padding:2px 4px}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
+.ctx{display:grid;gap:10px;margin-bottom:26px}
+.ctx .k,.k{font-size:.8rem;letter-spacing:.08em;color:var(--ink-soft);font-weight:600;display:block}
+.ctx .rq{font-size:1.12rem;font-weight:700;line-height:1.6}
+.tag{display:inline-block;background:var(--bg-warm);border-radius:6px;padding:1px 8px;margin:2px 4px 2px 0;font-size:.88rem}
+.tag.teal{background:var(--teal-tint);color:var(--teal)}
+.tag.amber{background:var(--amber-tint);color:var(--amber-dark)}
+.mini{font-size:.9rem;color:var(--ink-soft);line-height:1.65}
+.empty{color:var(--ink-soft);font-style:italic}
+
+.mods{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-bottom:20px}
+.mod{text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:20px;cursor:pointer;display:grid;gap:8px;align-content:start;position:relative;transition:transform .25s,box-shadow .25s,border-color .25s}
+.mod:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:var(--amber)}
+.mod .num{font-family:var(--display);font-size:2.2rem;font-weight:700;color:var(--amber);line-height:1}
+.mod h3{font-size:1.2rem}
+.mod .en{font-family:var(--display);font-style:italic;color:var(--ink-soft);font-size:.85rem}
+.mod p{font-size:.92rem;color:var(--ink-soft);line-height:1.65}
+.mod .stuck{font-size:.85rem;border-top:1px dashed var(--line);padding-top:8px;color:var(--amber-dark)}
+.mod .use{position:absolute;top:16px;right:16px;background:var(--teal);color:var(--card);font-size:.75rem;padding:2px 10px;border-radius:99px;font-weight:600}
+
+.mhead{display:grid;gap:6px;margin-block:8px 16px}
+.mhead h2{font-size:clamp(1.5rem,4.5vw,2.1rem)}
+.mhead h2::after{content:'';display:block;width:48px;height:3px;background:var(--amber);border-radius:2px;margin-top:12px}
+.ctxbar{background:var(--bg-warm);border-radius:var(--radius-sm);padding:10px 14px;font-size:.92rem;margin-bottom:18px;line-height:1.6}
+.ctxbar b{color:var(--amber-dark)}
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:10px;border-bottom:1px solid var(--line);margin-bottom:22px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:6px 16px;cursor:pointer;white-space:nowrap;font-size:.94rem;color:var(--ink-soft)}
+.tab.on{border-color:var(--amber);background:var(--amber);color:var(--on-amber);font-weight:600}
+.tab.home{color:var(--amber-dark);font-weight:600}
+
+.sec{display:grid;gap:16px;margin-bottom:32px}
+.stitle{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;font-size:1.15rem;font-weight:700;padding-bottom:8px;border-bottom:1px dashed var(--line)}
+.stitle small{font-weight:400;color:var(--ink-soft);font-size:.88rem}
+.lead{color:var(--ink-soft);font-size:.95rem}
+.q{display:grid;gap:6px}
+.q label,.qlabel{font-weight:600;font-size:.95rem}
+textarea,input[type=text],input[type=number],input[type=url]{width:100%;background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius-sm);padding:9px 13px;line-height:1.7}
+textarea{min-height:80px;resize:vertical}
+textarea:focus,input:focus{border-color:var(--amber);outline:none}
+::placeholder{color:var(--ink-soft);opacity:.7}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:620px){.grid2,.grid3{grid-template-columns:1fr}}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:5px 14px;cursor:pointer;font-size:.92rem}
+.chip:hover{border-color:var(--amber)}
+.chip.on{background:var(--amber);border-color:var(--amber);color:var(--on-amber);font-weight:600}
+.chip.teal.on{background:var(--teal);border-color:var(--teal);color:var(--card)}
+.seg{display:inline-flex;flex-wrap:wrap;gap:6px}
+.seg button{border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:4px 13px;font-size:.88rem;cursor:pointer;color:var(--ink-soft)}
+.seg button.on{background:var(--amber);border-color:var(--amber);color:var(--on-amber);font-weight:600}
+
+.res{border-radius:var(--radius-sm);padding:12px 16px;font-size:.94rem;line-height:1.7}
+.res b.h{display:block;font-size:.8rem;letter-spacing:.08em}
+.res ul{margin:4px 0 0;padding-left:1.2em}
+.res li+li{margin-top:4px}
+.res.warn{background:var(--amber-tint);color:var(--amber-dark)}
+.res.ok{background:var(--teal-tint);color:var(--teal)}
+.res.bad{background:var(--bad-tint);color:var(--bad)}
+.res.neutral{background:var(--bg-warm);color:var(--ink)}
+.out{background:var(--card);border:2px dashed var(--amber);border-radius:var(--radius-sm);padding:14px 16px;display:grid;gap:8px}
+.out pre{white-space:pre-wrap;word-break:break-word;margin:0;font-family:var(--serif);font-size:.93rem;line-height:1.75}
+.code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88rem;background:var(--bg-warm);border-radius:8px;padding:8px 12px;word-break:break-all}
+
+.list{display:grid;gap:8px}
+.item{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 14px}
+.item .n{font-family:var(--display);color:var(--amber);font-weight:700;min-width:1.5em;font-variant-numeric:tabular-nums}
+.item .t{font-weight:600;line-height:1.6}
+.xbtn{border:0;background:transparent;color:var(--ink-soft);cursor:pointer;font-size:1.2rem;line-height:1;padding:6px}
+.xbtn:hover{color:var(--bad)}
+
+table.tb{width:100%;border-collapse:collapse;font-size:.92rem}
+.tbwrap{overflow-x:auto}
+.tb th,.tb td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.tb th{font-size:.8rem;letter-spacing:.06em;color:var(--ink-soft);font-weight:600}
+.tb td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar{height:10px;background:var(--bg-warm);border-radius:99px;overflow:hidden;min-width:80px}
+.bar i{display:block;height:100%;background:var(--amber);border-radius:99px}
+
+.checkrow{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 14px}
+.checkrow.on{background:var(--teal-tint);border-color:var(--teal-soft)}
+.box{width:28px;height:28px;border-radius:8px;border:2px solid var(--line);background:var(--card);cursor:pointer;color:var(--card);font-weight:700;display:grid;place-items:center;padding:0}
+.checkrow.on .box{background:var(--teal);border-color:var(--teal)}
+.checkrow p{font-size:.9rem;color:var(--ink-soft);line-height:1.6}
+
+.credrow{display:grid;grid-template-columns:1fr auto;gap:8px 14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 14px}
+@media (max-width:560px){.credrow{grid-template-columns:1fr}}
+
+.compare{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}
+.cmp{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 14px;display:grid;gap:6px;font-size:.92rem}
+.cmp .bad s{text-decoration-color:var(--bad);text-decoration-thickness:2px;color:var(--ink-soft)}
+.cmp .good{font-weight:600;border-left:3px solid var(--teal);padding-left:10px}
+
+.seg-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 14px;display:grid;gap:6px}
+.seg-card .quote{line-height:1.7}
+.seg-card .quote::before{content:'「';color:var(--amber)}
+.seg-card .quote::after{content:'」';color:var(--amber)}
+.seg-card input{padding:6px 12px}
+
+.chartpick{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.cp{border:1.5px solid var(--line);background:var(--card);border-radius:var(--radius-sm);padding:12px;cursor:pointer;text-align:left;font-size:.92rem;line-height:1.55}
+.cp.on{border-color:var(--amber);background:var(--amber-tint);font-weight:600}
+.rec{display:grid;grid-template-columns:180px 1fr;gap:18px;align-items:center}
+@media (max-width:560px){.rec{grid-template-columns:1fr}}
+.rec svg{width:100%;max-width:180px;height:auto}
+svg .axis{stroke:var(--ink-soft);stroke-width:1}
+svg .grid{stroke:var(--line);stroke-width:1}
+svg .dot{fill:var(--amber);fill-opacity:.8}
+svg .trend{stroke:var(--teal);stroke-width:2;stroke-dasharray:5 4}
+svg .lbl{fill:var(--ink-soft);font-size:11px;font-family:var(--serif)}
+svg .f1{fill:var(--amber)} svg .f2{fill:var(--teal)} svg .f3{fill:var(--amber-tint);stroke:var(--amber);stroke-width:1.5} svg .f4{fill:var(--line)}
+svg .ln{fill:none;stroke:var(--amber);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.scatter{width:100%;max-width:440px;height:auto;display:block}
+.stat{display:flex;flex-wrap:wrap;gap:10px}
+.stat div{background:var(--bg-warm);border-radius:var(--radius-sm);padding:8px 14px}
+.stat b{display:block;font-family:var(--display);font-size:1.5rem;color:var(--amber-dark);font-variant-numeric:tabular-nums;line-height:1.2}
+.stat span{font-size:.8rem;color:var(--ink-soft)}
+
+.quiz{display:grid;gap:8px}
+.qz{display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 14px}
+.qz .fb{grid-column:1/-1;font-size:.88rem}
+@media (max-width:560px){.qz{grid-template-columns:1fr}}
+
+.ai{background:var(--card);border:2px solid var(--teal-soft);border-radius:var(--radius);padding:20px;display:grid;gap:12px;margin-top:10px}
+.ai h3{font-size:1.1rem;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+.ai textarea{min-height:160px;font-size:.88rem;line-height:1.65;background:var(--bg)}
+.ai .note{font-size:.85rem;color:var(--ink-soft);border-left:3px solid var(--amber);padding-left:10px}
+
+.banner{background:var(--teal-tint);border:1px solid var(--teal-soft);border-radius:var(--radius-sm);padding:12px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;font-size:.95rem;margin-bottom:16px}
+.reply{background:var(--teal-tint);border-radius:var(--radius-sm);padding:10px 14px;font-size:.93rem}
+.reply b{color:var(--teal)}
+.plan{display:grid;gap:4px;font-size:.92rem}
+.plan div{display:grid;grid-template-columns:110px 1fr;gap:10px;border-bottom:1px dotted var(--line);padding-block:4px}
+.plan span:first-child{color:var(--amber-dark);font-weight:600;font-variant-numeric:tabular-nums}
+
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:10px 20px;border-radius:99px;opacity:0;pointer-events:none;transition:all .25s;font-size:.92rem;z-index:20;max-width:90vw;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+footer{text-align:center;color:var(--ink-soft);font-size:.85rem;padding-block:40px 30px;border-top:1px solid var(--line);margin-top:30px}
+footer .brand{font-family:var(--display);font-style:italic;color:var(--amber)}
+.fade{animation:fade .35s ease}
+@keyframes fade{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+  <main id="app"></main>
+  <footer><span class="brand">Gina教室的AI奇蹟</span> · 你的內容只存在這台裝置的瀏覽器裡。AI 會出錯，重要資訊一定要自己查證。</footer>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ===== 老師設定：和「自主學習選題羅盤」用同一個 Apps Script 網址 ===== */
+const SCRIPT_URL='';
+/* ===================================================================== */
+const KEY='gina-sdl-toolbox-v1', COMPASS_KEY='gina-sdl-compass-v1';
+const METHODS=['文獻閱讀','問卷調查','訪談','實驗','實地觀察','製作原型','數據分析','比較案例'];
+const MODS=[
+ {id:1,en:'Literature Detective',name:'文獻偵探',desc:'拆出搜尋關鍵字、查資料庫、判斷來源可不可信、做文獻筆記與引用。',stuck:'找不到資料、看不懂論文、不會寫引用',tabs:[['kw','關鍵字拆解'],['cred','來源可信度'],['card','文獻筆記卡']],m:['文獻閱讀','比較案例']},
+ {id:2,en:'Survey Workshop',name:'問卷工作坊',desc:'逐題健檢、檢查選項、整理成問卷、估算要發幾份。',stuck:'題目有誘導性、一題問兩件事、選項重疊、份數不夠',tabs:[['chk','題目健檢'],['list','我的問卷'],['n','樣本數']],m:['問卷調查']},
+ {id:3,en:'Interview & Observation',name:'訪談與觀察',desc:'設計訪談大綱、練習追問、把逐字稿編碼歸納成主題、寫觀察紀錄。',stuck:'只問是非題、不會追問、逐字稿不知道怎麼整理',tabs:[['guide','訪談大綱'],['code','逐字稿編碼'],['obs','觀察紀錄']],m:['訪談','實地觀察']},
+ {id:4,en:'Reading Results',name:'看懂結果',desc:'選對圖表、算比例、算相關，檢查結論有沒有說過頭。',stuck:'選錯圖表、把相關說成因果、過度推論',tabs:[['chart','選圖表'],['pct','比例計算'],['corr','相關分析'],['concl','結論檢查']],m:['數據分析','問卷調查','實驗']},
+ {id:5,en:'Ethics & Check-in',name:'倫理與進度',desc:'研究倫理檢核、產生問卷說明與訪談同意書、每週進度回報給老師。',stuck:'忘了取得同意、蒐集太多個資、進度落後',tabs:[['eth','倫理檢核'],['consent','同意書'],['prog','進度回報']],m:[]}
+];
+
+function blank(){return{
+ ctx:{name:'',cls:'',seat:'',code:'',title:'',rq:'',scope:'',sub:'',methods:[],weeks:'',plan:[]},
+ lit:{con:[{zh:'',syn:'',en:''},{zh:'',syn:'',en:''},{zh:'',syn:'',en:''}],cred:{src:'',v:['','','','','']},card:{au:'',yr:'',ti:'',so:'',url:'',find:'',rel:''},cards:[]},
+ q:{type:'單選',text:'',opts:'',list:[],N:'',e:'0.05',rate:'70'},
+ iv:{phase:'核心',text:'',outline:{'暖身':[],'核心':[],'結尾':[]},tr:'',segs:[],themes:'',quiz:{}},
+ rs:{goal:'',cats:'',multi:'',xy:'',xn:'',yn:'',concl:''},
+ et:{checks:[],c:{teacher:'',ways:[],mins:'',contact:''}},
+ pg:{week:'',done:'',next:'',stuck:'',help:'',history:[]},replies:[]
+}}
+function load(){try{const r=localStorage.getItem(KEY);return r?JSON.parse(r):null}catch(e){return null}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function deepMerge(b,o){for(const k in o){if(o[k]&&typeof o[k]==='object'&&!Array.isArray(o[k])&&b[k]&&typeof b[k]==='object'&&!Array.isArray(b[k]))deepMerge(b[k],o[k]);else b[k]=o[k]}return b}
+let S=deepMerge(blank(),load()||{});
+const ui={mod:0,tab:{},editCtx:false,importOpen:false,backup:false,aiPick:{},sending:false};
+const hm=(location.hash||'').match(/^#m([1-5])$/);if(hm)ui.mod=+hm[1];
+
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function getP(p){return p.split('.').reduce((o,k)=>o==null?o:o[k],S)}
+function setP(p,v){const ks=p.split('.');let o=S;ks.slice(0,-1).forEach(k=>{if(o[k]==null)o[k]={};o=o[k]});o[ks[ks.length-1]]=v}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2000)}
+function nl(s){return esc(s).replace(/\n/g,'<br>')}
+async function copy(text,msg){try{await navigator.clipboard.writeText(text);toast(msg||'已複製')}catch(e){
+ const t=document.createElement('textarea');t.value=text;t.setAttribute('readonly','');t.style.cssText='position:fixed;left:16px;right:16px;bottom:80px;width:auto;height:160px;z-index:30';document.body.appendChild(t);t.focus();t.select();
+ toast('請按 Ctrl+C（手機長按）複製選取的文字');setTimeout(()=>t.remove(),12000)}}
+
+/* ---------- 共用元件 ---------- */
+function inp(path,ph,id,type='text'){return`<input type="${type}" id="${id||path.replace(/\./g,'-')}" data-path="${path}" value="${esc(getP(path))}" placeholder="${esc(ph)}">`}
+function ta(path,ph,h,id){return`<textarea id="${id||path.replace(/\./g,'-')}" data-path="${path}" placeholder="${esc(ph)}" ${h?`style="min-height:${h}px"`:''}>${esc(getP(path))}</textarea>`}
+function seg(path,opts,vals){const v=getP(path);vals=vals||opts;return`<div class="seg" role="group">${opts.map((o,i)=>`<button data-set="${path}" data-val="${esc(vals[i])}" class="${String(v)===String(vals[i])?'on':''}" aria-pressed="${String(v)===String(vals[i])}">${esc(o)}</button>`).join('')}</div>`}
+function chips(path,list,cls=''){const a=getP(path)||[];return`<div class="chips">${list.map(v=>`<button class="chip ${cls} ${a.includes(v)?'on':''}" data-toggle="${path}" data-val="${esc(v)}" aria-pressed="${a.includes(v)}">${esc(v)}</button>`).join('')}</div>`}
+function sec(t,sm,body){return`<section class="sec"><div class="stitle">${t}${sm?`<small>${sm}</small>`:''}</div>${body}</section>`}
+function resBox(kind,head,items){return`<div class="res ${kind}"><b class="h">${head}</b>${Array.isArray(items)?`<ul>${items.map(x=>`<li>${x}</li>`).join('')}</ul>`:items}</div>`}
+
+/* ---------- 研究脈絡 ---------- */
+function encode(o){try{return btoa(unescape(encodeURIComponent(JSON.stringify(o||S))))}catch(e){return''}}
+function backupForSheet(){let c=encode();if(c.length>45000){const o=JSON.parse(JSON.stringify(S));o.iv.tr='';o.replies=[];c=encode(o)}return c.length>45000?'（內容太多，請學生用「備份工具箱」自行備份）':c}
+function decodeCode(v){return JSON.parse(decodeURIComponent(escape(atob(v.trim()))))}
+function importCompass(o){
+ const fin=(o.ideas||[]).find(x=>x.id===o.final);const rf=o.refine&&o.refine.forId===o.final;
+ Object.assign(S.ctx,{name:o.name||S.ctx.name,cls:o.student?.cls||S.ctx.cls,seat:o.student?.seat||S.ctx.seat,code:o.code||S.ctx.code,
+  title:fin?.title||'',rq:(rf&&o.refine.rq)||(o.focus&&o.focus[o.final]?.rq)||'',scope:rf?o.refine.scope||'':'',sub:rf?o.refine.sub||'':'',
+  methods:o.methods||[],weeks:o.profile?.weeks||'',plan:o.plan||[]});
+ save();}
+function compassLocal(){try{const r=localStorage.getItem(COMPASS_KEY);if(!r)return null;const o=JSON.parse(r);return o.sample?null:o}catch(e){return null}}
+const RQ=()=>S.ctx.rq||'（還沒填研究問題）';
+
+function ctxCard(){const c=S.ctx;
+ if(ui.editCtx)return`<div class="card ctx"><div class="stitle">我的研究</div>
+  <div class="grid2"><div class="q"><label for="c-name">姓名</label>${inp('ctx.name','你的名字','c-name')}</div><div class="q"><label for="c-title">主題</label>${inp('ctx.title','例如：高中生的手搖飲購買動機','c-title')}</div></div>
+  <div class="q"><label for="c-rq">研究問題</label>${ta('ctx.rq','例如：本校高一學生每週購買手搖飲的杯數，與他們對含糖量的認知有關嗎？',70,'c-rq')}</div>
+  <div class="q"><label for="c-scope">研究範圍</label>${inp('ctx.scope','例如：2026 年 11 月，本校高一 3 個班，約 90 人','c-scope')}</div>
+  <div class="q"><span class="qlabel">研究方法</span>${chips('ctx.methods',METHODS,'teal')}</div>
+  <div class="toolbar"><button class="btn sm" data-act="ctxdone">完成</button></div></div>`;
+ const loc=compassLocal();
+ const imp=`<div class="toolbar">${loc?`<button class="btn sm teal" data-act="impLocal">讀入這台裝置的選題羅盤資料</button>`:''}<button class="btn sm ${loc?'ghost':''}" data-act="impToggle">貼上進度碼</button><button class="btn ghost sm" data-act="ctxedit">${c.rq?'修改':'自己輸入'}</button>${c.rq?'<button class="btn ghost sm" data-act="bkToggle">備份工具箱</button>':''}</div>
+  ${ui.importOpen?`<textarea id="impcode" placeholder="貼上「選題羅盤」的進度碼（帶入研究問題），或之前備份的「工具箱」進度碼（還原全部內容）" style="min-height:90px"></textarea><div class="toolbar"><button class="btn sm" data-act="impCode">讀入</button></div>`:''}
+  ${ui.backup?`<div class="out"><span class="k">工具箱進度碼</span><p class="mini">文獻筆記、問卷、訪談編碼、回報紀錄都在這串文字裡。換手機或電腦時，複製下來傳給自己，到新裝置按「貼上進度碼」讀入。每週送出進度回報時，老師那邊也會自動存一份。</p><textarea id="bkOut" readonly style="min-height:90px">${esc(encode())}</textarea><div class="toolbar"><button class="btn sm" data-act="copyBk">複製進度碼</button></div></div>`:''}`;
+ if(!c.rq)return`<div class="card ctx"><span class="k">我的研究</span><p>先帶入你的研究問題，各模組的提示和 AI 提示詞都會依你的題目調整。</p>${imp}</div>`;
+ return`<div class="card ctx"><span class="k">我的研究${c.name?'　·　'+esc(c.name):''}</span>${c.title?`<p class="mini">${esc(c.title)}</p>`:''}<p class="rq">${esc(c.rq)}</p>
+  ${c.scope?`<p class="mini">範圍：${esc(c.scope)}</p>`:''}<div>${c.methods.map(m=>`<span class="tag teal">${esc(m)}</span>`).join('')}</div>${imp}</div>`;
+}
+function ctxBar(){return`<div class="ctxbar"><b>研究問題：</b>${esc(RQ())}　<button class="linkbtn" data-act="home">修改</button></div>`}
+
+/* ---------- 首頁 ---------- */
+function hub(){const ms=S.ctx.methods;
+ return`<header class="hero"><p class="eyebrow">Research Toolkit</p><h1>專題研究工具箱</h1><p>選好題目之後，做研究最容易卡住的五個地方，都在這裡。卡在哪裡，就打開哪一個模組；每個模組最後都有一段 AI 助手提示詞，可以貼到 Claude（免費帳號就可以）請它陪你檢查。</p></header>
+ ${ctxCard()}
+ <div class="mods">${MODS.map(m=>{const use=m.id===5||m.m.some(x=>ms.includes(x));return`<button class="mod" data-mod="${m.id}">${use&&ms.length?'<span class="use">你會用到</span>':''}<span class="num">${m.id}</span><span class="en">${m.en}</span><h3>${m.name}</h3><p>${m.desc}</p><span class="stuck">解決：${m.stuck}</span></button>`}).join('')}</div>`}
+
+/* ---------- 模組 1：文獻偵探 ---------- */
+const CRED=[['作者是誰？','看得出作者或機構，而且和這個主題相關。'],['什麼時候發表？','近 5–10 年內，或主題不太會隨時間改變。'],['有引用來源嗎？','數據和說法都有附出處。'],['目的是什麼？','在說明或研究，不是在賣東西或煽動情緒。'],['找得到原始資料嗎？','能追到原始研究、官方統計或原始報導。']];
+function kwQuery(lang){const cs=S.lit.con.filter(c=>c[lang==='en'?'en':'zh'].trim());
+ return cs.map(c=>{if(lang==='en')return c.en.includes(' ')?`"${c.en.trim()}"`:c.en.trim();const syn=c.syn.split(/[、,，]/).map(x=>x.trim()).filter(Boolean);return syn.length?`(${[c.zh.trim(),...syn].join(' OR ')})`:c.zh.trim()}).join(' ')}
+function kwOut(){const zh=kwQuery('zh'),en=kwQuery('en');if(!zh&&!en)return'<p class="mini">填好至少一個概念，這裡會組出搜尋字串和資料庫連結。</p>';
+ const L=(u,t)=>`<a class="btn sm ghost" href="${u}" target="_blank" rel="noopener">${t} ↗</a>`;
+ return`<div class="out">${zh?`<span class="k">中文搜尋字串</span><div class="code">${esc(zh)}</div>`:''}${en?`<span class="k">英文搜尋字串</span><div class="code">${esc(en)}</div>`:''}
+ <div class="toolbar">${zh?L('https://scholar.google.com/scholar?q='+encodeURIComponent(zh),'Google 學術（中文）'):''}${en?L('https://scholar.google.com/scholar?q='+encodeURIComponent(en),'Google 學術（英文）'):''}${zh?L('https://www.google.com/search?q='+encodeURIComponent(zh+' site:gov.tw'),'政府網站資料'):''}</div>
+ <p class="mini">下面這些資料庫不能直接帶入搜尋，請複製上面的中文字串貼進去：</p>
+ <div class="toolbar">${L('https://ndltd.ncl.edu.tw','臺灣博碩士論文')}${L('https://www.shs.edu.tw','中學生網站（小論文）')}${L('https://www.airitilibrary.com','華藝線上圖書館')}${L('https://data.gov.tw','政府資料開放平臺')}</div></div>`}
+function credOut(){const v=S.lit.cred.v,yes=v.filter(x=>x==='是').length,ans=v.filter(Boolean).length;if(ans<5)return`<p class="mini">五題都回答後，這裡會給你判斷。（已回答 ${ans} / 5）</p>`;
+ if(yes===5)return resBox('ok','判斷','五項都符合，可以放心引用。');
+ if(yes>=3)return resBox('warn','判斷',`符合 ${yes} 項。可以使用，但重要的數據最好再找第二個來源核對。`);
+ return resBox('bad','判斷',`只符合 ${yes} 項，建議換一個來源，或追到它引用的原始資料。`)}
+function apa(c){if(!c.au&&!c.ti)return'';const zh=/[一-鿿]/.test(c.ti+c.au);
+ return zh?`${c.au||'作者'}（${c.yr||'n.d.'}）。${c.ti||'標題'}。${c.so?c.so+'。':''}${c.url||''}`:`${c.au||'Author'} (${c.yr||'n.d.'}). ${c.ti||'Title'}. ${c.so?c.so+'. ':''}${c.url||''}`}
+const T={};
+T['1kw']=()=>sec('關鍵字拆解','把研究問題拆成可以搜尋的詞',`<p class="lead">從研究問題挑出 2–3 個<b>核心概念</b>，每個概念寫下同義詞和英文。用一組關鍵字搜尋找不到時，換同義詞再試。</p>
+ <div class="ctxbar"><b>研究問題：</b>${esc(RQ())}</div>
+ ${S.lit.con.map((c,i)=>`<div class="grid3"><div class="q"><label for="k${i}a">概念 ${i+1}</label>${inp(`lit.con.${i}.zh`,['例如：手搖飲','例如：含糖量','例如：高中生'][i],`k${i}a`)}</div><div class="q"><label for="k${i}b">同義詞（用、分隔）</label>${inp(`lit.con.${i}.syn`,['例如：含糖飲料、珍奶','例如：糖分、甜度','例如：青少年'][i],`k${i}b`)}</div><div class="q"><label for="k${i}c">英文</label>${inp(`lit.con.${i}.en`,['例如：sugar-sweetened beverages','例如：sugar content','例如：adolescents'][i],`k${i}c`)}</div></div>`).join('')}
+ <div class="toolbar"><button class="btn ghost sm" data-act="kwSample">填入範例看看</button></div>
+ <div id="kwout">${kwOut()}</div>`)+
+ sec('讀一篇論文的順序','不用從頭讀到尾',`<div class="compare">${[['1 摘要','先判斷這篇和你的題目有沒有關係'],['2 結論','看它最後發現了什麼'],['3 圖表','看數據長什麼樣子'],['4 研究方法','看它怎麼做，可以借來參考']].map(([a,b])=>`<div class="cmp"><b>${a}</b><span class="mini">${b}</span></div>`).join('')}</div>`);
+T['1cred']=()=>sec('來源可信度檢核','網路文章、新聞、懶人包都適用',`<div class="q"><label for="crs">你要檢查的資料</label>${inp('lit.cred.src','例如：某健康網站〈手搖飲含糖量排行〉','crs')}</div>
+ ${CRED.map(([t,d],i)=>`<div class="credrow"><div><b>${t}</b><p class="mini">${d}</p></div>${seg(`lit.cred.v.${i}`,['是','否','不確定'])}</div>`).join('')}
+ <div id="credout">${credOut()}</div>
+ <p class="mini">AI 的回答、懶人包、內容農場都不能直接當作文獻；要追到它說的原始來源，引用原始來源。</p>`);
+T['1card']=()=>{const c=S.lit.card;return sec('新增文獻筆記','每讀一篇就寫一張卡',`<div class="grid2"><div class="q"><label for="lc1">作者／機構</label>${inp('lit.card.au','例如：王小明、衛生福利部國民健康署','lc1')}</div><div class="q"><label for="lc2">年份</label>${inp('lit.card.yr','例如：2023','lc2')}</div></div>
+ <div class="q"><label for="lc3">標題</label>${inp('lit.card.ti','文章或報告的完整標題','lc3')}</div>
+ <div class="grid2"><div class="q"><label for="lc4">出處</label>${inp('lit.card.so','期刊、網站或出版社名稱','lc4')}</div><div class="q"><label for="lc5">網址</label>${inp('lit.card.url','https://…','lc5')}</div></div>
+ <div class="q"><label for="lc6">重點發現（用自己的話寫）</label>${ta('lit.card.find','這篇研究發現了什麼？有哪些數據？',70,'lc6')}</div>
+ <div class="q"><label for="lc7">和我的研究的關係</label>${ta('lit.card.rel','支持我的想法？提供研究方法參考？還是結果和我預期的不同？',70,'lc7')}</div>
+ <div class="out"><span class="k">引用格式預覽（APA 格式）</span><p id="apaout">${esc(apa(c))||'<span class="mini">填寫後顯示</span>'}</p></div>
+ <div class="toolbar"><button class="btn" data-act="addCard">加入筆記</button></div>`)+
+ sec('我的文獻筆記',`${S.lit.cards.length} 篇`,S.lit.cards.length?`<div class="list">${S.lit.cards.map((x,i)=>`<div class="item"><span class="n">${i+1}</span><div><div class="t">${esc(x.ti)}</div><p class="mini">${esc(apa(x))}</p>${x.find?`<p style="font-size:.93rem"><b>重點：</b>${nl(x.find)}</p>`:''}${x.rel?`<p style="font-size:.93rem"><b>關係：</b>${nl(x.rel)}</p>`:''}</div><button class="xbtn" data-act="delCard" data-i="${i}" aria-label="刪除">×</button></div>`).join('')}</div>
+ <div class="toolbar"><button class="btn ghost sm" data-act="copyRefs">複製參考文獻清單</button></div>`:'<p class="empty">還沒有筆記。</p>')};
+
+/* ---------- 模組 2：問卷工作坊 ---------- */
+function qIssues(text,type,opts){const t=(text||'').trim(),is=[];if(!t)return null;
+ if(type!=='開放'&&/[和與及跟或]|、/.test(t))is.push('出現「和／與／或」，可能一題問了兩件事。如果是兩件事，拆成兩題。');
+ if(/(難道|是不是應該|不覺得|大家都|應該要|明明|不是嗎)/.test(t))is.push('句子帶有立場，會引導填答者往某個答案走（誘導性問題）。改成中立的問法。');
+ if((t.match(/[不沒]/g)||[]).length>=2)is.push('有兩個否定詞，容易看錯。改成肯定句。');
+ if(/(常常|經常|偶爾|很少|有時|一陣子|最近)/.test(t))is.push('「常常」「最近」這類詞，每個人理解不同。改成具體的次數或時間，例如「過去 7 天」。');
+ if(/(姓名|電話|地址|身分證|學號|生日|LINE)/i.test(t))is.push('涉及個人資料。除非研究一定需要，否則不要問。');
+ if(t.length>45)is.push('句子太長，填答者容易看漏。試著縮短到 30 字以內。');
+ if(type==='量表'&&/[？?]$/.test(t))is.push('量表題通常寫成陳述句，例如「我會注意飲料的含糖量標示」，再請填答者勾選同意程度。');
+ if(type!=='量表'&&!/[？?]$/.test(t))is.push('結尾加上問號，讓填答者知道這是問題。');
+ if(type==='單選'||type==='複選'){const L=(opts||'').split('\n').map(x=>x.trim()).filter(Boolean);
+  if(L.length<2)is.push('選項至少要 2 個，一行寫一個。');
+  else{const rg=L.map(x=>{const m=x.match(/(\d+(?:\.\d+)?)\s*[-~～–至到]\s*(\d+(?:\.\d+)?)/);if(m)return[+m[1],+m[2],x];const u=x.match(/(\d+(?:\.\d+)?)\D{0,3}以上/);if(u)return[+u[1],Infinity,x];const e=x.match(/^\D{0,2}(\d+(?:\.\d+)?)\D{0,3}$/);return e?[+e[1],+e[1],x]:null}).filter(Boolean).sort((a,b)=>a[0]-b[0]);
+   for(let i=1;i<rg.length;i++){if(rg[i][0]<=rg[i-1][1])is.push(`選項「${esc(rg[i-1][2])}」和「${esc(rg[i][2])}」數字重疊，剛好是 ${rg[i][0]} 的人不知道選哪個。`);else if(rg[i][0]>rg[i-1][1]+1)is.push(`選項「${esc(rg[i-1][2])}」和「${esc(rg[i][2])}」之間有缺口，有些人找不到可以選的選項。`)}
+   if(new Set(L).size<L.length)is.push('有重複的選項。');
+   if(type==='單選'&&!rg.length&&!L.some(x=>/(其他|以上皆非|不知道|沒有)/.test(x)))is.push('沒有「其他」或「不知道」選項，答案不在選項裡的人會被迫亂選。');}}
+ return is}
+function qResult(){const q=S.q,is=qIssues(q.text,q.type,q.opts);if(is===null)return'<p class="mini">輸入題目後，這裡會即時檢查。</p>';
+ const lik=q.type==='量表'?`<p class="mini" style="margin-top:6px">量表選項建議：非常不同意／不同意／普通／同意／非常同意（5 點）</p>`:'';
+ return(is.length?resBox('warn',`發現 ${is.length} 個可以改的地方`,is.map(esc)):resBox('ok','健檢結果','沒有發現常見問題。最後還是要找 3–5 位同學試填，看他們會不會看不懂。'))+lik}
+const QBAD=[['一題問兩件事','你喜歡喝手搖飲和咖啡嗎？','你喜歡喝手搖飲嗎？（另一題再問咖啡）'],['誘導性','你不覺得手搖飲太甜了嗎？','你覺得手搖飲的甜度如何？'],['頻率模糊','你常常喝手搖飲嗎？','過去 7 天內，你喝了幾杯手搖飲？'],['選項重疊','0–1 杯／1–3 杯／3 杯以上','0 杯／1–2 杯／3–4 杯／5 杯以上']];
+T['2chk']=()=>sec('題目健檢','一題一題檢查',`<div class="q"><span class="qlabel">題型</span>${seg('q.type',['單選','複選','量表','開放'])}</div>
+ <div class="q"><label for="qt">題目</label>${ta('q.text',S.q.type==='量表'?'例如：我會注意飲料的含糖量標示。':'例如：過去 7 天內，你喝了幾杯手搖飲？',60,'qt')}</div>
+ ${S.q.type==='單選'||S.q.type==='複選'?`<div class="q"><label for="qo">選項（一行一個）</label>${ta('q.opts','0 杯\n1–2 杯\n3–4 杯\n5 杯以上',100,'qo')}</div>`:''}
+ <div id="qres">${qResult()}</div>
+ <div class="toolbar"><button class="btn" data-act="addQ">加入我的問卷</button><button class="btn ghost sm" data-act="qSample">試試有問題的範例</button></div>`)+
+ sec('常見錯誤對照','',`<div class="compare">${QBAD.map(([a,b,c])=>`<div class="cmp"><b>${a}</b><span class="bad"><s>${esc(b)}</s></span><span class="good">${esc(c)}</span></div>`).join('')}</div>`);
+T['2list']=()=>{const L=S.q.list;return sec('我的問卷',`${L.length} 題`,L.length?`<div class="list">${L.map((x,i)=>{const n=(qIssues(x.text,x.type,x.opts)||[]).length;return`<div class="item"><span class="n">${i+1}</span><div><div class="t">${esc(x.text)}</div><div><span class="tag teal">${esc(x.type)}</span>${n?`<span class="tag amber">還有 ${n} 個提醒</span>`:'<span class="tag">健檢通過</span>'}</div>${x.opts&&(x.type==='單選'||x.type==='複選')?`<p class="mini">${esc(x.opts.split('\n').filter(Boolean).join('／'))}</p>`:''}</div><div class="toolbar" style="flex-direction:column;gap:2px"><button class="xbtn" data-act="upQ" data-i="${i}" aria-label="上移">↑</button><button class="xbtn" data-act="delQ" data-i="${i}" aria-label="刪除">×</button></div></div>`}).join('')}</div>
+ <div class="toolbar"><button class="btn ghost sm" data-act="copyQs">複製全部題目（貼到 Google 表單）</button></div>`:'<p class="empty">在「題目健檢」檢查過的題目，按「加入我的問卷」就會出現在這裡。</p>')+
+ sec('排列問卷的原則','',`<div class="compare">${[['開頭先說明','研究目的、匿名、大約幾分鐘。到「倫理與進度 → 同意書」可以產生說明文字。'],['由淺入深','先問簡單的行為題，再問看法和感受。'],['基本資料放最後','年級、性別等只問分析需要的。'],['控制長度','高中生填問卷，5 分鐘、15 題以內最好。'],['先試填','找 3–5 位同學試填，問他們哪題看不懂，再修改。']].map(([a,b])=>`<div class="cmp"><b>${a}</b><span class="mini">${b}</span></div>`).join('')}</div>`)};
+function nOut(){const N=+S.q.N,e=+S.q.e,r=(+S.q.rate||100)/100;if(!N)return'<p class="mini">輸入母群體人數，例如「本校高一學生 480 人」就填 480。</p>';
+ const n=Math.ceil(N/(1+N*e*e)),d=Math.ceil(n/Math.max(r,.05));
+ return`<div class="stat"><div><b>${n}</b><span>至少要回收的份數</span></div><div><b>${d}</b><span>建議發出的份數</span></div></div>
+ ${resBox('neutral','怎麼解讀',`母群體 ${N} 人、誤差 ±${e*100}% 時，至少需要 ${n} 份有效問卷；預估回收率 ${Math.round(r*100)}%，所以要發 ${d} 份。${n>200?'<br>份數太多做不完時，可以縮小研究對象（例如只研究一個年級），或接受 ±10% 的誤差。':''}`)}`}
+T['2n']=()=>sec('樣本數估算','要發幾份問卷才夠？',`<div class="grid3"><div class="q"><label for="qN">母群體人數</label>${inp('q.N','例如：480','qN','number')}</div><div class="q"><span class="qlabel">可以接受的誤差</span>${seg('q.e',['±5%','±10%'],['0.05','0.1'])}</div><div class="q"><label for="qr">預估回收率（%）</label>${inp('q.rate','例如：70','qr','number')}</div></div>
+ <div id="nout">${nOut()}</div>
+ <p class="mini">「母群體」是你的研究想說明的那群人，例如「本校高一學生」。這裡用的是 Yamane 公式：n = N ÷（1 + N × 誤差²）。如果要比較兩群人（例如高一和高三），每一群最好都有 30 份以上。</p>`);
+
+/* ---------- 模組 3：訪談與觀察 ---------- */
+const PROBES=['可以舉一個例子嗎？','那時候你的感受是什麼？','你剛剛說的「___」是指什麼？','後來呢？','還有其他原因嗎？','為什麼會這樣想？','如果重來一次，你會怎麼做？','可以多說一點嗎？'];
+function ivCheck(){const t=(S.iv.text||'').trim();if(!t)return'<p class="mini">輸入訪談問題後，這裡會檢查是不是開放式問題。</p>';const is=[];
+ const closed=/(嗎[？?]?$|是不是|有沒有|會不會|對不對|好不好|要不要|能不能)/.test(t);
+ if(closed)is.push('這是是非題，受訪者回答「是」或「不是」就結束了。改成開放式問法，例如「可以說說你…的經驗嗎？」「你通常怎麼…？」「你覺得…的原因是什麼？」');
+ if(/(難道|不覺得|應該|是不是因為)/.test(t))is.push('句子裡已經放了你的猜測，受訪者容易順著你的話說。改成中立的問法。');
+ if((t.match(/[？?]/g)||[]).length>1)is.push('一次問了不只一個問題，受訪者通常只會回答最後一個。拆開來問。');
+ if(/(為什麼你不|你怎麼會)/.test(t))is.push('「為什麼你不…」聽起來像在責備。改成「什麼原因讓你…？」');
+ return is.length?resBox('warn','可以改進',is.map(esc)):resBox('ok','檢查結果','是開放式問題，受訪者可以自由描述。')}
+T['3guide']=()=>{const O=S.iv.outline;return sec('訪談大綱','開放式問題＋追問',`<p class="lead">好的訪談大綱分三段：<b>暖身</b>（2–3 題輕鬆的問題）、<b>核心</b>（4–6 題，直接回答研究問題）、<b>結尾</b>（1–2 題，例如「還有什麼想補充的嗎？」）。</p>
+ <div class="q"><span class="qlabel">要加到哪一段？</span>${seg('iv.phase',['暖身','核心','結尾'])}</div>
+ <div class="q"><label for="ivt">訪談問題</label>${ta('iv.text','例如：可以說說你最近一次買手搖飲的經驗嗎？',60,'ivt')}</div>
+ <div id="ivres">${ivCheck()}</div>
+ <div class="toolbar"><button class="btn" data-act="addIv">加入大綱</button><button class="btn ghost sm" data-act="ivSample">試試是非題範例</button></div>`)+
+ sec('我的訪談大綱','',['暖身','核心','結尾'].map(p=>`<div><span class="k">${p}（${O[p].length} 題）</span>${O[p].length?`<div class="list">${O[p].map((x,i)=>`<div class="item"><span class="n">${i+1}</span><div class="t">${esc(x)}</div><button class="xbtn" data-act="delIv" data-p="${p}" data-i="${i}" aria-label="刪除">×</button></div>`).join('')}</div>`:'<p class="empty">還沒有題目</p>'}</div>`).join('')+
+ `<div class="toolbar"><button class="btn ghost sm" data-act="copyIv">複製訪談大綱</button></div>`)+
+ sec('追問句庫','點一下就複製，訪談時放在手邊',`<div class="chips">${PROBES.map(p=>`<button class="chip" data-act="copyText" data-t="${esc(p)}">${esc(p)}</button>`).join('')}</div>
+ <p class="mini">訪談前先取得受訪者同意，錄音也要先問（到「倫理與進度 → 同意書」產生）。訪談後 24 小時內整理逐字稿，記憶還清楚。</p>`)};
+const SAMPLE_TR='我通常放學會跟同學一起去買，一個人比較少買。\n其實我知道很甜，但喝了心情會變好。\n考試那幾週買得最多，大概一天一杯。\n如果杯子上有寫幾顆方糖，我可能會選少糖。\n我媽一直唸，所以我都在學校附近喝完才回家。\n價格的話，有第二杯半價我就會揪人一起買。';
+function codeSummary(){const m={};S.iv.segs.forEach(s=>(s.code||'').split(/[、,，]/).map(x=>x.trim()).filter(Boolean).forEach(c=>{(m[c]=m[c]||[]).push(s.t)}));
+ const ks=Object.keys(m).sort((a,b)=>m[b].length-m[a].length);if(!ks.length)return'<p class="mini">幫片段加上代碼後，這裡會整理出每個代碼出現幾次。</p>';
+ return`<div class="tbwrap"><table class="tb"><thead><tr><th>代碼</th><th>次數</th><th>代表性的話</th></tr></thead><tbody>${ks.map(k=>`<tr><td><b>${esc(k)}</b></td><td class="num">${m[k].length}</td><td>${m[k].slice(0,2).map(q=>'「'+esc(q)+'」').join('<br>')}</td></tr>`).join('')}</tbody></table></div>`}
+T['3code']=()=>sec('步驟 1　貼上逐字稿','一次貼一段就好',`${ta('iv.tr','把訪談逐字稿貼在這裡，一句或一行一個想法',120,'ivtr')}
+ <div class="toolbar"><button class="btn" data-act="cut">切成片段</button><button class="btn ghost sm" data-act="trSample">用範例逐字稿練習</button></div>`)+
+ sec('步驟 2　幫每個片段加上代碼','用 2–6 個字的短詞描述「這句話在講什麼」',S.iv.segs.length?`<p class="lead">同樣的意思用同一個代碼，一個片段可以有兩個代碼（用、分隔）。例如「同儕影響」「情緒調節」「價格促銷」。</p>
+ <div class="list">${S.iv.segs.map((s,i)=>`<div class="seg-card"><span class="quote">${esc(s.t)}</span><input type="text" id="sg${i}" data-path="iv.segs.${i}.code" value="${esc(s.code)}" placeholder="代碼" aria-label="片段 ${i+1} 的代碼"></div>`).join('')}</div>`:'<p class="empty">先在步驟 1 按「切成片段」。</p>')+
+ sec('步驟 3　歸納成主題','',`<div id="codesum">${codeSummary()}</div>
+ <div class="q"><label for="ivth">把相關的代碼合併成 2–4 個主題</label>${ta('iv.themes','例如：\n主題一「社交需求」：同儕影響、價格促銷\n主題二「情緒與壓力」：情緒調節、考試壓力',90,'ivth')}</div>
+ <p class="mini">主題要能回答你的研究問題。寫報告時，每個主題引用 1–2 句受訪者的原話當證據。</p>`);
+const OBSQ=[['他看起來很無聊。','詮釋'],['他在 10 分鐘內看了手機 6 次。','事實'],['這家店很受學生歡迎。','詮釋'],['下午 4:10–4:30，排隊的 12 人中有 9 人穿高中制服。','事實']];
+T['3obs']=()=>sec('練習：事實還是詮釋？','觀察紀錄要把兩者分開寫',`<p class="lead"><b>事實</b>是任何人在現場都會看到的（時間、人數、動作、說的話）；<b>詮釋</b>是你對事實的解讀。紀錄時先寫事實，詮釋另外寫。</p>
+ <div class="quiz">${OBSQ.map(([q,a],i)=>{const v=S.iv.quiz[i];return`<div class="qz"><span>${esc(q)}</span>${seg(`iv.quiz.${i}`,['事實','詮釋'])}${v?`<span class="fb" style="color:${v===a?'var(--teal)':'var(--bad)'}">${v===a?'答對了！':'再想想：'}${a==='事實'?'這是可以數、可以記錄的具體行為。':'這是你的判斷，別人可能看到不同的東西。'}</span>`:''}</div>`}).join('')}</div>`)+
+ sec('觀察紀錄表範本','複製後印出或存在手機',`<div class="out"><pre id="obsTpl">${esc(OBS_TPL())}</pre><div class="toolbar"><button class="btn ghost sm" data-act="copyObs">複製範本</button></div></div>`);
+const OBS_TPL=()=>`【觀察紀錄】研究問題：${RQ()}
+日期：＿＿＿＿　時間：＿＿：＿＿～＿＿：＿＿　地點：＿＿＿＿＿＿
+觀察對象與人數：＿＿＿＿＿＿＿＿
+
+時間｜看到的事實（行為、人數、說的話）｜我的詮釋
+＿＿｜＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿｜＿＿＿＿＿＿＿＿
+＿＿｜＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿｜＿＿＿＿＿＿＿＿
+
+今天最意外的發現：
+下次要特別注意：`;
+
+/* ---------- 模組 4：看懂結果 ---------- */
+const CHARTS={
+ '比較不同類別的數量':['長條圖','例如：各年級每週平均喝幾杯。類別名稱太長時改用橫條圖。','長條從 0 開始畫，不要截斷，否則差距會被誇大。','bar'],
+ '看各部分占整體的比例':['圓餅圖（5 類以內）','例如：最常購買手搖飲的原因。超過 5 類或是複選題，改用長條圖。','所有比例加起來要是 100%；複選題不能畫圓餅圖。','pie'],
+ '看數字隨時間的變化':['折線圖','例如：連續 4 週每天的購買杯數。','橫軸的時間間隔要一樣。','line'],
+ '看兩個數字之間的關係':['散布圖','例如：每週杯數和含糖量認知分數。搭配「相關分析」計算 r 值。','散布圖只能顯示「有關係」，不能證明誰造成誰。','scatter'],
+ '看大家的分數分布':['直方圖','例如：全班的含糖量認知分數集中在哪裡。','組距要一樣寬。','hist']};
+function miniChart(k){const s={bar:'<rect class="f1" x="18" y="40" width="22" height="70"/><rect class="f2" x="50" y="20" width="22" height="90"/><rect class="f1" x="82" y="60" width="22" height="50"/><rect class="f2" x="114" y="30" width="22" height="80"/>',
+ pie:'<circle class="f4" cx="80" cy="64" r="48"/><path class="f1" d="M80 64 L80 16 A48 48 0 0 1 125 80 Z"/><path class="f2" d="M80 64 L125 80 A48 48 0 0 1 50 101 Z"/>',
+ line:'<polyline class="ln" points="14,96 44,70 74,78 104,40 138,28"/>',
+ scatter:[[20,96],[34,88],[48,80],[56,84],[70,62],[84,66],[96,48],[110,44],[124,30],[136,36]].map(([x,y])=>`<circle class="dot" cx="${x}" cy="${y}" r="5"/>`).join(''),
+ hist:'<rect class="f3" x="14" y="88" width="24" height="22"/><rect class="f3" x="38" y="58" width="24" height="52"/><rect class="f1" x="62" y="26" width="24" height="84"/><rect class="f3" x="86" y="48" width="24" height="62"/><rect class="f3" x="110" y="84" width="24" height="26"/>'}[k];
+ return`<svg viewBox="0 0 160 120" role="img" aria-label="圖表示意"><line class="axis" x1="8" y1="110" x2="152" y2="110"/><line class="axis" x1="8" y1="10" x2="8" y2="110"/>${s}</svg>`}
+T['4chart']=()=>{const g=S.rs.goal,c=CHARTS[g];return sec('你想呈現什麼？','選一個',`<div class="chartpick">${Object.keys(CHARTS).map(k=>`<button class="cp ${g===k?'on':''}" data-set="rs.goal" data-val="${esc(k)}">${esc(k)}</button>`).join('')}</div>
+ ${c?`<div class="card rec">${miniChart(c[3])}<div style="display:grid;gap:8px"><span class="k">建議使用</span><h3>${c[0]}</h3><p>${c[1]}</p>${resBox('warn','注意',c[2])}</div></div>`:'<p class="mini">選好之後，這裡會建議圖表類型和要注意的地方。</p>'}`)+
+ sec('每張圖都要有','',`<div class="compare">${[['標題','一句話說出這張圖在講什麼'],['軸的名稱與單位','例如「每週杯數（杯）」'],['樣本數','例如「n = 86」'],['資料來源','例如「本研究問卷，2026 年 11 月」']].map(([a,b])=>`<div class="cmp"><b>${a}</b><span class="mini">${b}</span></div>`).join('')}</div>`)};
+function parseCats(){return(S.rs.cats||'').split('\n').map(l=>{const m=l.trim().match(/^(.+?)[\s,，:：\t]+(\d+(?:\.\d+)?)$/);return m?[m[1].trim(),+m[2]]:null}).filter(Boolean)}
+function pctOut(){const C=parseCats();if(!C.length)return'<p class="mini">一行一個選項，格式「選項 次數」，例如「口味好喝 34」。也可以從試算表直接複製兩欄貼上。</p>';
+ const multi=S.rs.multi==='複選',sum=C.reduce((a,b)=>a+b[1],0),base=multi?(+S.rs.n||0):sum;
+ if(multi&&!base)return'<p class="mini">複選題請填「填答人數」，百分比要用人數當分母。</p>';const mx=Math.max(...C.map(c=>c[1]));
+ return`<div class="tbwrap"><table class="tb"><thead><tr><th>選項</th><th>次數</th><th>百分比</th><th></th></tr></thead><tbody>${C.sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<tr><td>${esc(k)}</td><td class="num">${v}</td><td class="num">${(v/base*100).toFixed(1)}%</td><td style="width:40%"><div class="bar"><i style="width:${v/mx*100}%"></i></div></td></tr>`).join('')}</tbody></table></div>
+ <p class="mini">${multi?`複選題：分母是填答人數 ${base} 人，百分比加起來會超過 100%，所以不能畫圓餅圖。`:`總數 n = ${sum}。百分比後面記得寫出 n，例如「34.0%（n = ${sum}）」。`}${base<30?' 樣本少於 30，解讀時要保守。':''}</p>`}
+T['4pct']=()=>sec('比例計算','把問卷的次數變成百分比',`<div class="q"><span class="qlabel">題型</span>${seg('rs.multi',['單選','複選'])}</div>
+ ${S.rs.multi==='複選'?`<div class="q"><label for="rsn">填答人數</label>${inp('rs.n','例如：86','rsn','number')}</div>`:''}
+ <div class="q"><label for="rsc">選項與次數</label>${ta('rs.cats','口味好喝 34\n和朋友一起 28\n紓解壓力 15\n其他 9',110,'rsc')}</div>
+ <div class="toolbar"><button class="btn ghost sm" data-act="pctSample">填入範例</button></div>
+ <div id="pctout">${pctOut()}</div>`);
+function parseXY(){return(S.rs.xy||'').split('\n').map(l=>{const m=l.trim().split(/[\s,，\t]+/).map(Number);return m.length>=2&&!isNaN(m[0])&&!isNaN(m[1])?[m[0],m[1]]:null}).filter(Boolean)}
+function corr(P){const n=P.length,mx=P.reduce((a,p)=>a+p[0],0)/n,my=P.reduce((a,p)=>a+p[1],0)/n;let sxy=0,sxx=0,syy=0;P.forEach(([x,y])=>{sxy+=(x-mx)*(y-my);sxx+=(x-mx)**2;syy+=(y-my)**2});
+ return{n,r:sxx&&syy?sxy/Math.sqrt(sxx*syy):NaN,b:sxx?sxy/sxx:0,mx,my}}
+function scatter(P,xl,yl,c){const W=440,H=280,L=52,R=14,T0=14,B=44;const xs=P.map(p=>p[0]),ys=P.map(p=>p[1]);
+ let x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);if(x0===x1){x0-=1;x1+=1}if(y0===y1){y0-=1;y1+=1}
+ const px=x=>L+(x-x0)/(x1-x0)*(W-L-R),py=y=>H-B-(y-y0)/(y1-y0)*(H-B-T0),f=v=>Math.abs(v)>=100?Math.round(v):+v.toFixed(1);
+ const tk=[0,.5,1];let g='';tk.forEach(t=>{const xv=x0+t*(x1-x0),yv=y0+t*(y1-y0);g+=`<line class="grid" x1="${L}" x2="${W-R}" y1="${py(yv)}" y2="${py(yv)}"/><text class="lbl" x="${L-6}" y="${py(yv)+4}" text-anchor="end">${f(yv)}</text><text class="lbl" x="${px(xv)}" y="${H-B+16}" text-anchor="middle">${f(xv)}</text>`});
+ const ya=c.my+c.b*(x0-c.mx),yb=c.my+c.b*(x1-c.mx);const cl=(y)=>Math.max(T0,Math.min(H-B,y));
+ return`<svg class="scatter" viewBox="0 0 ${W} ${H}" role="img" aria-label="散布圖">${g}<line class="axis" x1="${L}" y1="${H-B}" x2="${W-R}" y2="${H-B}"/><line class="axis" x1="${L}" y1="${T0}" x2="${L}" y2="${H-B}"/>
+ ${isNaN(c.r)?'':`<line class="trend" x1="${px(x0)}" y1="${cl(py(ya))}" x2="${px(x1)}" y2="${cl(py(yb))}"/>`}${P.map(([x,y])=>`<circle class="dot" cx="${px(x)}" cy="${py(y)}" r="5"/>`).join('')}
+ <text class="lbl" x="${(L+W-R)/2}" y="${H-8}" text-anchor="middle">${esc(xl)}</text><text class="lbl" x="14" y="${(T0+H-B)/2}" text-anchor="middle" transform="rotate(-90 14 ${(T0+H-B)/2})">${esc(yl)}</text></svg>`}
+function corrOut(){const P=parseXY();if(P.length<3)return'<p class="mini">至少貼上 3 組數字。一行一組，兩個數字用空白、逗號或 Tab 分開（從試算表複製兩欄貼上就可以）。</p>';
+ const c=corr(P),xl=S.rs.xn||'X',yl=S.rs.yn||'Y';if(isNaN(c.r))return resBox('warn','無法計算','其中一欄的數字全部一樣，算不出相關。');
+ const a=Math.abs(c.r),st=a<.1?'幾乎沒有':a<.3?'弱':a<.5?'中等':'強',dir=c.r>0?'正':'負';
+ const say=a<.1?`「${xl}」和「${yl}」幾乎沒有直線關係。`:`「${xl}」越${c.r>0?'高':'高'}，「${yl}」${c.r>0?'也傾向越高':'傾向越低'}（${st}的${dir}相關）。`;
+ return`<div class="stat"><div><b>${c.r.toFixed(2)}</b><span>相關係數 r</span></div><div><b>${c.n}</b><span>樣本數 n</span></div><div><b>${st}</b><span>相關強度</span></div></div>${scatter(P,xl,yl,c)}
+ ${resBox('neutral','怎麼解讀',`${esc(say)}<br>可以這樣寫：「在本研究的 ${c.n} 位受試者中，${esc(xl)}與${esc(yl)}呈${st}${a<.1?'相關':dir+'相關'}（r = ${c.r.toFixed(2)}）。」`)}
+ ${resBox('warn','要小心',[`相關不等於因果：r = ${c.r.toFixed(2)} 只代表兩者一起變化，不能說「${esc(xl)}造成${esc(yl)}」。可能有第三個因素同時影響兩者。`,...(c.n<30?[`樣本只有 ${c.n} 組，結果可能不穩定，結論要寫得保守。`]:[]),'先看散布圖：如果有一兩個點特別遠，它們可能讓 r 值變得不準。'])}`}
+T['4corr']=()=>sec('相關分析','兩個數字之間有沒有關係？',`<div class="grid2"><div class="q"><label for="xn">第一欄是什麼（X）</label>${inp('rs.xn','例如：每週杯數','xn')}</div><div class="q"><label for="yn">第二欄是什麼（Y）</label>${inp('rs.yn','例如：含糖量認知分數','yn')}</div></div>
+ <div class="q"><label for="xy">數據（一行一組）</label>${ta('rs.xy','0 9\n1 8\n2 8\n3 6\n…',120,'xy')}</div>
+ <div class="toolbar"><button class="btn ghost sm" data-act="corrSample">填入範例數據</button></div>
+ <div id="corrout">${corrOut()}</div>
+ <p class="mini">r 介於 −1 到 1 之間：越接近 1 或 −1，關係越強；接近 0 表示幾乎沒有直線關係。強度參考：0.1–0.3 弱、0.3–0.5 中等、0.5 以上強。</p>`);
+function conclCheck(){const t=(S.rs.concl||'').trim();if(!t)return'<p class="mini">寫下你的結論，這裡會檢查常見的過度推論。</p>';const is=[];
+ if(/(導致|造成|使得|害|讓.{0,8}(變|增加|減少|下降|上升)|因此證明|是因為)/.test(t))is.push('用了因果的說法（導致、造成、使得）。問卷和相關分析只能說「有關」，要做實驗並控制其他因素，才能說「造成」。');
+ if(/(所有|全台灣|全國|一定|必定|大家|每個人|都會|所有人|青少年都)/.test(t))is.push('推論太廣。你的樣本只有你調查的那群人，結論要說明「在本研究的樣本中」。');
+ if(/(證明|確定|毫無疑問|肯定)/.test(t))is.push('語氣太肯定。改用「顯示」「可能」「傾向」。');
+ if(!/\d/.test(t))is.push('沒有數據。加上百分比、平均數或 r 值，讓結論有證據。');
+ if(!/(位|人|份|名|家|樣本|n\s*=)/.test(t))is.push('沒有說明樣本是誰、有多少人。');
+ if(/(應該|必須|要少|呼籲)/.test(t))is.push('建議和結論混在一起。先寫「發現了什麼」，建議放到另一段。');
+ return is.length?resBox('warn',`有 ${is.length} 個地方說過頭了`,is.map(esc)):resBox('ok','檢查結果','沒有發現常見的過度推論。最後再確認每一句都有數據支持。')}
+T['4concl']=()=>sec('結論檢查','有沒有說過頭？',`<div class="q"><label for="cc">我的結論</label>${ta('rs.concl','寫下你的研究結論',100,'cc')}</div>
+ <div id="conclout">${conclCheck()}</div><div class="toolbar"><button class="btn ghost sm" data-act="conclSample">試試有問題的範例</button></div>`)+
+ sec('結論句型','填空就能寫出不說過頭的結論',`<div class="list">${['在本研究的＿＿位＿＿中，＿＿％的人＿＿。','本研究發現，＿＿與＿＿呈＿＿相關（r = ＿＿），但這不代表＿＿造成＿＿。','＿＿組的平均＿＿（＿＿）高於＿＿組（＿＿），可能的原因是＿＿，仍需進一步研究。','由於本研究只調查＿＿，結果不一定能推論到＿＿。'].map((x,i)=>`<div class="item"><span class="n">${i+1}</span><div class="t">${x}</div><button class="xbtn" data-act="copyText" data-t="${esc(x)}" aria-label="複製">⧉</button></div>`).join('')}</div>`);
+
+/* ---------- 模組 5：倫理與進度 ---------- */
+const ETH=[['知情同意','參與者知道研究目的、要做什麼、大約多久，並且同意參加。'],['可以隨時退出','告訴參與者可以不回答某題，或中途停止，不會有任何影響。'],['未成年參與者','訪談或錄音的對象未滿 18 歲時，要先讓指導老師知道，必要時取得家長同意。'],['匿名與保密','報告裡不出現真實姓名，用「受訪者 A」或「同學 1」代替。'],['只蒐集必要的資料','不問和研究問題無關的個資，例如電話、住址、身分證字號。'],['錄音、拍照先問','錄音、拍照前取得同意；照片要公開時，遮住臉或另外取得同意。'],['不造成傷害','避免讓人難堪或不舒服的題目；敏感議題先和老師討論。'],['資料保存與刪除','原始資料只用在這個研究，研究結束後刪除錄音和個資。'],['誠實引用','引用別人的文字、圖表、數據都要標出處；AI 協助的部分要說明。']];
+function consentOut(){const c=S.et.c,x=S.ctx,ws=c.ways,who=x.name||'＿＿＿',title=x.title||x.rq||'＿＿＿';
+ const s=`【問卷開頭說明】
+親愛的同學您好：
+我是${x.cls?x.cls+'班的':''}${who}，正在進行自主學習專題「${title}」。這份問卷想了解＿＿＿，大約需要 ${c.mins||'5'} 分鐘。
+本問卷採匿名填寫，資料只用於這次專題研究，研究結束後會刪除。您可以跳過不想回答的題目，也可以隨時停止填寫。
+如果有任何問題，歡迎聯絡我：${c.contact||'＿＿＿'}${c.teacher?`（指導老師：${c.teacher}）`:''}
+謝謝您的協助！`;
+ const iv=`【訪談同意書】
+研究題目：${title}
+研究者：${who}${x.cls?`（${x.cls}班）`:''}${c.teacher?`　指導老師：${c.teacher}`:''}
+進行方式：${ws.length?ws.join('、'):'訪談'}，大約 ${c.mins||'30'} 分鐘。
+
+我了解：
+1. 這次訪談的內容只用於上述專題研究。
+2. 報告中不會出現我的真實姓名，會以代號呈現。
+3. 我可以拒絕回答任何問題，也可以隨時停止，不會有任何影響。
+${ws.includes('錄音')?'4. 我同意訪談過程錄音，錄音只供整理逐字稿使用，研究結束後刪除。\n':''}${ws.includes('拍照')?`${ws.includes('錄音')?5:4}. 我同意拍照；照片公開時會遮住臉部，或另外徵求我的同意。\n`:''}
+受訪者簽名：＿＿＿＿＿＿　日期：＿＿＿＿
+（未滿 18 歲）家長簽名：＿＿＿＿＿＿
+研究者聯絡方式：${c.contact||'＿＿＿'}`;
+ return{s,iv}}
+T['5eth']=()=>sec('研究倫理檢核','開始蒐集資料前逐項確認',`<p class="lead">已完成 ${S.et.checks.length} / ${ETH.length} 項。沒把握的項目，先和指導老師討論。</p>
+ <div class="list">${ETH.map(([t,d],i)=>{const on=S.et.checks.includes(String(i));return`<div class="checkrow ${on?'on':''}"><button class="box" data-toggle="et.checks" data-val="${i}" aria-pressed="${on}" aria-label="${t}">${on?'✓':''}</button><div><b>${t}</b><p>${d}</p></div></div>`}).join('')}</div>`);
+T['5consent']=()=>{const o=consentOut();return sec('同意書產生器','填一次，產生兩種文字',`<div class="grid3"><div class="q"><label for="ct">指導老師</label>${inp('et.c.teacher','例如：Gina 老師','ct')}</div><div class="q"><label for="cm">所需時間（分鐘）</label>${inp('et.c.mins','例如：5','cm','number')}</div><div class="q"><label for="cc2">你的聯絡方式</label>${inp('et.c.contact','例如：學校信箱','cc2')}</div></div>
+ <div class="q"><span class="qlabel">訪談時會用到</span>${chips('et.c.ways',['訪談','錄音','拍照','觀察'],'teal')}</div>
+ <p class="mini">研究題目和你的名字會從「我的研究」自動帶入。需要改的地方，複製後再修改。</p>
+ <div class="out"><pre>${esc(o.s)}</pre><div class="toolbar"><button class="btn ghost sm" data-act="copyConsent" data-k="s">複製問卷說明</button></div></div>
+ <div class="out"><pre>${esc(o.iv)}</pre><div class="toolbar"><button class="btn ghost sm" data-act="copyConsent" data-k="iv">複製訪談同意書</button></div></div>`)};
+function progText(){const p=S.pg;return`【第 ${p.week||'?'} 週進度回報】${S.ctx.name?'　'+S.ctx.name:''}
+研究問題：${RQ()}
+本週完成：${p.done||'（未填）'}
+下週計畫：${p.next||'（未填）'}
+卡關的地方：${p.stuck||'（沒有）'}
+需要老師協助：${p.help||'（未填）'}`}
+T['5prog']=()=>{const p=S.pg,x=S.ctx;return(x.plan.length?sec('我的進度計畫','從選題羅盤帶入',`<div class="plan">${x.plan.map(r=>`<div><span>${esc(r.w)}</span><span>${esc(r.task)}</span></div>`).join('')}</div>`):'')+
+ sec('本週進度回報','每週寫一次，三分鐘就好',`<div class="grid2"><div class="q"><label for="pw">第幾週</label>${inp('pg.week','例如：5','pw','number')}</div><div class="q"><span class="qlabel">需要老師協助嗎？</span>${seg('pg.help',['需要','暫時不用'])}</div></div>
+ <div class="q"><label for="pd">本週完成了什麼？</label>${ta('pg.done','具體寫：例如「發出問卷 60 份，回收 41 份」',70,'pd')}</div>
+ <div class="q"><label for="pn">下週要做什麼？</label>${ta('pg.next','例如：再發 30 份；開始整理第 1–5 題的數據',70,'pn')}</div>
+ <div class="q"><label for="ps">卡在哪裡？</label>${ta('pg.stuck','沒有就留白',60,'ps')}</div>
+ ${SCRIPT_URL?`<div class="grid3"><div class="q"><label for="xc">班級</label>${inp('ctx.cls','例如 205','xc')}</div><div class="q"><label for="xs">座號</label>${inp('ctx.seat','例如 12','xs')}</div><div class="q"><label for="xk">班級代碼</label>${inp('ctx.code','老師給的代碼','xk')}</div></div>`:''}
+ <div class="toolbar">${SCRIPT_URL?'<button class="btn" data-act="sendProg">送出給老師</button>':''}<button class="btn ${SCRIPT_URL?'ghost':''} sm" data-act="copyProg">複製回報文字</button>${SCRIPT_URL?'<button class="btn ghost sm" data-act="getReplies">查看老師回覆</button>':''}</div>
+ <p class="mini" id="progStatus">${SCRIPT_URL?'送出後，老師的回覆會出現在下面。':'老師還沒設定送出網址，可以先複製回報文字交給老師。'}</p>`)+
+ sec('回報紀錄',`${p.history.length} 次`,p.history.length?`<div class="list">${p.history.slice().reverse().map(h=>{const r=S.replies.find(r=>String(r.week)===String(h.week)&&r.reply);return`<div class="item"><span class="n">${esc(h.week||'?')}</span><div><p class="mini">${esc(h.at)}</p><p style="font-size:.93rem"><b>完成：</b>${nl(h.done)}</p>${h.stuck?`<p style="font-size:.93rem"><b>卡關：</b>${nl(h.stuck)}</p>`:''}${r?`<div class="reply"><b>老師回覆：</b>${nl(r.reply)}</div>`:''}</div><span></span></div>`}).join('')}</div>`:'<p class="empty">還沒有回報紀錄。</p>')};
+
+/* ---------- AI 提示詞 ---------- */
+function base(){const x=S.ctx;return`我是高中生，正在做自主學習專題。
+研究問題：${RQ()}${x.scope?`\n研究範圍：${x.scope}`:''}${x.methods.length?`\n研究方法：${x.methods.join('、')}`:''}
+
+請遵守：只用提問、檢查和舉例的方式幫我，不要直接替我寫好；不確定的地方請直接說不確定；絕對不要編造文獻、作者、數據或受訪者說的話。`}
+const AI={
+ 1:[['找關鍵字',()=>`${base()}
+
+請幫我：
+1. 從研究問題找出 3 個核心概念，每個概念給我 3 個中文同義詞和 2 個英文搜尋關鍵字。
+2. 建議我可以到哪些「類型」的資料庫或網站找資料。不要列出具體的文章、作者或網址，我會自己去查。
+3. 最後問我一個問題，幫我確認哪個概念最重要。`],
+  ['讀懂一篇文獻',()=>`${base()}
+
+我會貼上一篇文獻的摘要。請你：
+1. 用高中生聽得懂的話，說明它的研究問題、方法和主要發現（只根據我貼的內容）。
+2. 問我 2 個問題，幫我想清楚這篇和我的研究有什麼關係。
+3. 提醒我引用時要注意什麼。
+
+以下是摘要：
+（貼在這裡）`]],
+ 2:[['逐題健檢',()=>`${base()}
+
+以下是我的問卷題目。請逐題檢查：是否一題問兩件事、是否有誘導性、用詞是否模糊、選項是否互斥且涵蓋所有情況。每題先指出問題在哪裡，再問我想怎麼改，不要直接幫我全部重寫。
+
+${S.q.list.length?S.q.list.map((q,i)=>`${i+1}.（${q.type}）${q.text}${q.opts&&(q.type==='單選'||q.type==='複選')?'\n   選項：'+q.opts.split('\n').filter(Boolean).join('／'):''}`).join('\n'):'（請貼上你的題目）'}`],
+  ['從研究問題設計問卷',()=>`${base()}
+
+我想用問卷回答研究問題。請一次只問我一個問題，引導我想清楚：
+1. 我需要蒐集哪些資料（變項）？
+2. 每個變項適合用什麼題型測量（單選、量表、開放題）？
+3. 哪些資料其實不需要問？
+等我回答完再問下一題。`]],
+ 3:[['檢查訪談大綱',()=>`${base()}
+
+以下是我的訪談大綱。請檢查：有沒有是非題、誘導性問題、一次問兩件事的問題；順序是否由淺入深。每個問題建議 1–2 句追問。不要幫我新增大綱以外的核心問題，先問我想不想加。
+
+${['暖身','核心','結尾'].map(p=>`【${p}】\n${S.iv.outline[p].map((q,i)=>`${i+1}. ${q}`).join('\n')||'（尚未填寫）'}`).join('\n')}`],
+  ['檢查我的編碼',()=>`${base()}
+
+以下是我自己整理的訪談逐字稿片段，以及我給每個片段的代碼。請你：
+1. 檢查同樣意思的片段，代碼是否一致。
+2. 指出可能被我忽略的地方，用提問的方式提醒我。
+3. 問我可以把哪些代碼合併成主題。
+只根據下面的內容，不要新增逐字稿裡沒有的話。
+
+${S.iv.segs.length?S.iv.segs.map((s,i)=>`${i+1}.「${s.t}」→ ${s.code||'（未編碼）'}`).join('\n'):'（請貼上片段與代碼）'}`]],
+ 4:[['檢查結論',()=>`${base()}
+
+以下是我的數據摘要和結論。請檢查：結論有沒有超出數據、有沒有把相關說成因果、有沒有推論到樣本以外的人、語氣是否太肯定。用提問的方式讓我自己修改。
+
+數據摘要：
+（例如：n = 86；每週杯數與含糖量認知 r = −0.42；最常見的購買原因是口味好喝 39.5%）
+
+我的結論：
+${S.rs.concl||'（貼上你的結論）'}`],
+  ['選圖表',()=>`${base()}
+
+我想呈現的是：${S.rs.goal||'＿＿＿'}
+我的數據長這樣：（簡單描述，或貼上幾行數據）
+
+請問我 2–3 個問題，幫我決定用哪一種圖表，並提醒我這種圖表常見的錯誤。`]],
+ 5:[['每週進度教練',()=>`${base()}
+
+${progText()}
+
+我的進度計畫：
+${S.ctx.plan.map(r=>`${r.w}　${r.task}`).join('\n')||'（未提供）'}
+
+請幫我：
+1. 判斷我的進度有沒有落後計畫。
+2. 針對卡關的地方，給我 2 個可以試試看的下一步。
+3. 問我一個反思問題。`],
+  ['倫理檢查',()=>`${base()}
+
+我打算這樣蒐集資料：（描述對象、方式、會問哪些個人資料、會不會錄音拍照）
+
+請從研究倫理的角度檢查：知情同意、未成年參與者、匿名與保密、個資、可能造成的不舒服。指出需要注意的地方，並提醒我哪些要先和指導老師討論。`]]};
+function aiCard(m){const L=AI[m],k=Math.min(ui.aiPick[m]||0,L.length-1);return`<section class="ai"><h3><span class="eyebrow">AI Assistant</span>AI 助手提示詞</h3>
+ <p class="mini">複製後貼到 Claude（免費帳號就可以）或其他 AI 的新對話。提示詞已經放進你的研究問題，並要求 AI 只提問和檢查，不代寫。</p>
+ <div class="seg">${L.map((x,i)=>`<button class="${i===k?'on':''}" data-act="aiPick" data-m="${m}" data-i="${i}">${x[0]}</button>`).join('')}</div>
+ <textarea id="aiText" readonly aria-label="AI 提示詞">${esc(L[k][1]())}</textarea>
+ <div class="toolbar"><button class="btn teal" data-act="copyAI" data-m="${m}">複製提示詞</button></div>
+ <p class="note">AI 會出錯，也可能編造看起來很真的文獻。AI 給的任何資料來源，都要自己到資料庫查到原文才能引用。</p></section>`}
+
+/* ---------- 版面 ---------- */
+function modulePage(){const m=MODS[ui.mod-1],tab=ui.tab[m.id]||m.tabs[0][0];
+ return`<nav class="tabs" aria-label="工具"><button class="tab home" data-act="home">← 工具箱</button>${m.tabs.map(([k,n])=>`<button class="tab ${k===tab?'on':''}" data-tab="${k}">${n}</button>`).join('')}</nav>
+ <div class="mhead"><p class="eyebrow">Module ${m.id} · ${m.en}</p><h2>${m.name}</h2></div>${ctxBar()}
+ <div class="fade">${T[m.id+tab]()}</div>${aiCard(m.id)}`}
+function render(){document.getElementById('app').innerHTML=ui.mod?modulePage():hub()}
+const LIVE=[['kwout',kwOut],['credout',credOut],['qres',qResult],['nout',nOut],['ivres',ivCheck],['codesum',codeSummary],['pctout',pctOut],['corrout',corrOut],['conclout',conclCheck]];
+function refresh(){LIVE.forEach(([id,f])=>{const el=document.getElementById(id);if(el)el.innerHTML=f()});
+ const a=document.getElementById('apaout');if(a)a.textContent=apa(S.lit.card)||'填寫後顯示';
+ const ai=document.getElementById('aiText');if(ai&&ui.mod){const L=AI[ui.mod];ai.value=L[Math.min(ui.aiPick[ui.mod]||0,L.length-1)][1]()}}
+
+/* ---------- 後台 ---------- */
+async function post(payload){const r=await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify(payload)});return r.json()}
+function idOK(){const x=S.ctx;return x.cls&&x.seat&&x.name&&x.code}
+async function sendProg(){const st=document.getElementById('progStatus'),say=(m,b)=>{st.textContent=m;st.style.color=b?'var(--bad)':'var(--teal)'};
+ if(ui.sending)return;const p=S.pg,x=S.ctx;
+ if(!idOK()){say('請填寫班級、座號、班級代碼，並在「我的研究」填上姓名。',true);return}
+ if(!p.week||!p.done.trim()){say('請至少填寫第幾週和本週完成了什麼。',true);return}
+ const entry={week:p.week,done:p.done,next:p.next,stuck:p.stuck,at:new Date().toLocaleString('zh-TW',{hour12:false})};
+ S.pg.history.push(entry);const bk=backupForSheet();S.pg.history.pop();
+ ui.sending=true;say('送出中…');
+ try{const j=await post({action:'progress',code:x.code.trim(),cls:String(x.cls).trim(),seat:String(x.seat).trim(),name:x.name.trim(),week:p.week,rq:x.rq,done:p.done,next:p.next,stuck:p.stuck,help:p.help,backup:bk});
+  if(!j.ok){say(j.msg||'送出失敗，請再試一次。',true);return}
+  S.pg.history.push(entry);
+  Object.assign(S.pg,{week:String((+p.week||0)+1),done:'',next:'',stuck:'',help:''});save();render();toast('已送出給老師');
+ }catch(e){say('送不出去。請確認網路連線，並用老師發的正式網址開啟這個工具。',true)}finally{ui.sending=false}}
+async function getReplies(silent){if(!SCRIPT_URL||!idOK())return silent?0:toast('請先填好班級、座號、班級代碼和姓名');
+ try{const x=S.ctx,j=await post({action:'replies',code:x.code.trim(),cls:String(x.cls).trim(),seat:String(x.seat).trim(),name:x.name.trim()});
+  if(!j.ok){if(!silent)toast(j.msg||'暫時查不到');return}S.replies=j.replies||[];save();if(ui.mod===5)render();
+  if(!silent)toast(S.replies.some(r=>r.reply)?'已更新老師回覆':'老師還沒有回覆')}catch(e){if(!silent)toast('連不上，請確認網路後再試')}}
+
+/* ---------- 事件 ---------- */
+document.addEventListener('input',e=>{const t=e.target,p=t.dataset.path;if(!p)return;setP(p,t.type==='number'?(t.value===''?'':t.value):t.value);save();refresh()});
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const d=b.dataset;
+ if(d.mod){ui.mod=+d.mod;render();scrollTo({top:0});return}
+ if(d.tab){ui.tab[ui.mod]=d.tab;render();document.querySelector('.tabs').scrollIntoView({block:'start'});return}
+ if(d.toggle){const a=getP(d.toggle)||[];const i=a.indexOf(d.val);i>=0?a.splice(i,1):a.push(d.val);setP(d.toggle,a);save();render();return}
+ if(d.set!=null){let v=d.val;if(String(getP(d.set))===v&&!['q.type','iv.phase','rs.multi','q.e'].includes(d.set))v='';setP(d.set,v);save();render();return}
+ const L=S.q,I=S.iv;
+ switch(d.act){
+  case'home':ui.mod=0;ui.editCtx=d.act==='home'&&e.target.textContent==='修改';render();scrollTo({top:0});break;
+  case'ctxedit':ui.editCtx=true;render();break;
+  case'ctxdone':ui.editCtx=false;render();break;
+  case'impToggle':ui.importOpen=!ui.importOpen;ui.backup=false;render();break;
+  case'bkToggle':ui.backup=!ui.backup;ui.importOpen=false;render();break;
+  case'copyBk':copy(encode(),'已複製工具箱進度碼');break;
+  case'impLocal':{const o=compassLocal();if(o){importCompass(o);render();toast('已讀入選題羅盤的資料')}break}
+  case'impCode':{try{const o=decodeCode(document.getElementById('impcode').value);if(o.lit&&o.ctx){S=deepMerge(blank(),o);save();ui.importOpen=false;render();toast('已還原工具箱的全部內容');break}if(!o.profile)throw 0;importCompass(o);ui.importOpen=false;render();toast('已讀入研究問題')}catch(err){toast('進度碼不完整，請重新複製整串再貼上')}break}
+  case'aiPick':ui.aiPick[+d.m]=+d.i;render();break;
+  case'copyAI':copy(document.getElementById('aiText').value,'已複製，貼到 AI 新對話就能開始');break;
+  case'copyText':copy(d.t,'已複製');break;
+  case'kwSample':S.lit.con=[{zh:'手搖飲',syn:'含糖飲料、珍珠奶茶',en:'sugar-sweetened beverages'},{zh:'含糖量',syn:'糖分、甜度',en:'sugar content'},{zh:'高中生',syn:'青少年',en:'adolescents'}];save();render();break;
+  case'addCard':{const c=S.lit.card;if(!c.ti.trim()){toast('至少填寫標題');return}S.lit.cards.push({...c});S.lit.card={au:'',yr:'',ti:'',so:'',url:'',find:'',rel:''};save();render();toast('已加入筆記');break}
+  case'delCard':S.lit.cards.splice(+d.i,1);save();render();break;
+  case'copyRefs':copy(S.lit.cards.map(apa).sort((a,b)=>a.localeCompare(b,'zh-TW')).join('\n'),'已複製參考文獻');break;
+  case'qSample':Object.assign(L,{type:'單選',text:'你是不是常常喝手搖飲和咖啡？',opts:'0-1杯\n1-3杯\n5杯以上'});save();render();break;
+  case'addQ':if(!L.text.trim()){toast('先寫題目');return}L.list.push({type:L.type,text:L.text.trim(),opts:L.opts});L.text='';L.opts='';save();render();toast(`已加入第 ${L.list.length} 題`);break;
+  case'delQ':L.list.splice(+d.i,1);save();render();break;
+  case'upQ':{const i=+d.i;if(i>0){[L.list[i-1],L.list[i]]=[L.list[i],L.list[i-1]];save();render()}break}
+  case'copyQs':copy(L.list.map((q,i)=>`${i+1}. ${q.text}${q.opts&&(q.type==='單選'||q.type==='複選')?'\n'+q.opts.split('\n').filter(Boolean).map(o=>'   □ '+o).join('\n'):q.type==='量表'?'\n   非常不同意／不同意／普通／同意／非常同意':''}`).join('\n\n'),'已複製全部題目');break;
+  case'ivSample':S.iv.text='你會不會因為朋友買手搖飲，所以也跟著買？';save();render();break;
+  case'addIv':if(!I.text.trim()){toast('先寫訪談問題');return}I.outline[I.phase].push(I.text.trim());I.text='';save();render();toast('已加入'+I.phase);break;
+  case'delIv':I.outline[d.p].splice(+d.i,1);save();render();break;
+  case'copyIv':copy(`【訪談大綱】${RQ()}\n\n`+['暖身','核心','結尾'].map(p=>`${p}\n${I.outline[p].map((q,i)=>`${i+1}. ${q}`).join('\n')}`).join('\n\n')+`\n\n追問句：${PROBES.join('／')}`,'已複製訪談大綱');break;
+  case'trSample':I.tr=SAMPLE_TR;save();render();toast('這是虛構的範例逐字稿');break;
+  case'cut':{const segs=(I.tr||'').replace(/([。！？!?])/g,'$1\n').split(/\n+/).map(x=>x.trim()).filter(x=>x.length>1);if(!segs.length){toast('先貼上逐字稿');return}
+   I.segs=segs.map(t=>({t,code:(I.segs.find(s=>s.t===t)||{}).code||''}));save();render();toast(`切成 ${segs.length} 個片段`);break}
+  case'copyObs':copy(OBS_TPL(),'已複製範本');break;
+  case'pctSample':Object.assign(S.rs,{multi:'單選',cats:'口味好喝 34\n和朋友一起 28\n紓解壓力 15\n價格優惠 9'});save();render();toast('這是虛構的範例數據');break;
+  case'corrSample':Object.assign(S.rs,{xn:'每週杯數',yn:'含糖量認知分數',xy:'0 9\n0 8\n1 9\n1 7\n2 8\n2 6\n3 7\n3 5\n4 6\n4 4\n5 5\n6 4\n6 3\n7 4\n8 2'});save();render();toast('這是虛構的範例數據');break;
+  case'conclSample':S.rs.concl='研究證明喝手搖飲會導致高中生睡不好，所以大家都應該少喝。';save();render();break;
+  case'copyConsent':copy(consentOut()[d.k],'已複製');break;
+  case'copyProg':copy(progText(),'已複製回報文字');break;
+  case'sendProg':sendProg();break;
+  case'getReplies':getReplies(false);break;
+ }});
+render();getReplies(true);
+</script>
+
+<a href="../" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:9999;background:#2F86D6;color:#fff;font:700 13px/1 system-ui,sans-serif;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.2)">← 回群島</a>
+</body></html>

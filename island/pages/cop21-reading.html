@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>COP21 到今日：氣候高峰會地理×英文閱讀課堂活動</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Noto+Serif+TC:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FDF8F1; --bg-warm: #F7EFE3; --card: #FFFFFF;
+  --amber: #D97706; --amber-deep: #B45309; --amber-dark: #92400E;
+  --teal: #0F766E; --teal-soft: #E8F3F1;
+  --ink: #2E2419; --ink-soft: #6B5D4F; --line: #E8DCCB;
+  --shadow: 0 4px 20px rgba(146,64,14,.08); --shadow-lg: 0 12px 40px rgba(146,64,14,.12);
+  --radius: 18px; --radius-sm: 12px; --max: 1080px;
+}
+* { box-sizing:border-box; }
+body { margin:0; font-family:'Noto Serif TC', serif; color:var(--ink); background:var(--bg); line-height:1.85; }
+.display { font-family:'Playfair Display', serif; }
+.mono { font-family:'DM Mono', monospace; }
+.wrap { max-width:var(--max); margin:0 auto; padding:0 24px; }
+section { padding:52px 0; }
+.alt { background:var(--bg-warm); }
+.eyebrow { font-family:'Playfair Display', serif; color:var(--amber); letter-spacing:.08em; font-size:.9rem; }
+h2.section-title { font-size:clamp(1.4rem,4vw,2.1rem); margin:6px 0 0; }
+.section-title::after { content:''; display:block; width:48px; height:3px; background:var(--amber); margin-top:12px; border-radius:2px; }
+.hero { text-align:center; background:linear-gradient(180deg,#FBF2E2,var(--bg)); padding:68px 0 44px; }
+.hero-title { font-size:clamp(1.8rem,5.5vw,3rem); margin:14px 0; color:var(--amber-dark); }
+.hero-sub { color:var(--ink-soft); max-width:640px; margin:0 auto; font-size:1.02rem; }
+.tags { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:22px; }
+.tag { background:var(--card); border:1px solid var(--line); border-radius:999px; padding:6px 16px; font-size:.85rem; color:var(--ink-soft); }
+.grid { display:grid; gap:18px; margin-top:24px; }
+.grid.cols-2 { grid-template-columns:repeat(2,1fr); }
+.grid.cols-3 { grid-template-columns:repeat(3,1fr); }
+.grid.cols-4 { grid-template-columns:repeat(4,1fr); }
+@media (max-width:760px){ .grid.cols-2,.grid.cols-3,.grid.cols-4{ grid-template-columns:1fr; } }
+.card { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:22px; box-shadow:var(--shadow); transition:transform .3s ease, box-shadow .3s ease; }
+.card:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); }
+.card h3 { margin-top:0; color:var(--amber-dark); font-size:1.05rem; }
+p.small { color:var(--ink-soft); font-size:.92rem; }
+.eng { font-style:italic; color:var(--teal); }
+/* lesson tabs */
+.lesson-tabs { display:flex; gap:10px; margin-top:10px; flex-wrap:wrap; }
+.lesson-btn { flex:1; min-width:200px; background:var(--card); border:2px solid var(--line); border-radius:var(--radius-sm); padding:16px 18px; cursor:pointer; text-align:left; font-family:'Noto Serif TC',serif; transition:border-color .25s ease; }
+.lesson-btn.active { border-color:var(--amber); background:#FBF2E2; }
+.lesson-btn .lnum { font-family:'Playfair Display',serif; color:var(--amber); font-size:1.3rem; }
+.lesson-btn .ltime { display:block; font-size:.8rem; color:var(--ink-soft); font-family:'DM Mono',monospace; margin-top:2px; }
+.lesson-panel { display:none; margin-top:26px; }
+.lesson-panel.active { display:block; }
+/* accordion (steps) */
+.acc-item { border:1px solid var(--line); border-radius:var(--radius-sm); margin-bottom:12px; overflow:hidden; background:var(--card); }
+.acc-head { padding:15px 20px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-weight:600; }
+.acc-head .mins { font-family:'DM Mono',monospace; font-size:.78rem; color:var(--teal); font-weight:400; margin-left:8px; }
+.acc-head .arrow { transition:transform .3s ease; color:var(--amber); }
+.acc-item.open .arrow { transform:rotate(90deg); }
+.acc-body { max-height:0; overflow:hidden; transition:max-height .5s ease; padding:0 20px; }
+.acc-item.open .acc-body { max-height:800px; padding:0 20px 18px; }
+.step-num { font-family:'Playfair Display',serif; color:var(--amber); font-size:1.2rem; margin-right:6px; }
+.teacher-tag { font-family:'DM Mono',monospace; font-size:.68rem; font-weight:400; padding:2px 9px; border-radius:999px; margin-left:8px; white-space:nowrap; }
+.teacher-tag.geo { background:var(--teal-soft); color:var(--teal); }
+.teacher-tag.eng { background:#FBE8D2; color:var(--amber-deep); }
+.teacher-tag.both { background:linear-gradient(90deg, var(--teal-soft) 50%, #FBE8D2 50%); color:var(--ink); }
+/* map timeline */
+.map-timeline { display:flex; overflow-x:auto; gap:14px; padding:6px 2px 14px; margin-top:20px; }
+.flip-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:24px; }
+@media (max-width:760px){ .flip-grid{ grid-template-columns:repeat(2,1fr); } }
+.flip { perspective:1000px; height:150px; cursor:pointer; }
+.flip-inner { position:relative; width:100%; height:100%; transition:transform .6s; transform-style:preserve-3d; }
+.flip.is-flipped .flip-inner { transform:rotateY(180deg); }
+.flip-face { position:absolute; inset:0; backface-visibility:hidden; border-radius:var(--radius-sm); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:10px; border:1px solid var(--line); }
+.flip-front { background:var(--card); }
+.flip-front .eng-word { font-family:'Playfair Display',serif; color:var(--amber-dark); font-weight:600; }
+.flip-back { background:var(--amber); color:#fff; transform:rotateY(180deg); font-size:.85rem; }
+.map-stop { flex:0 0 170px; background:var(--card); border:1px solid var(--line); border-radius:var(--radius-sm); padding:14px; box-shadow:var(--shadow); }
+.map-stop .year { font-family:'Playfair Display',serif; color:var(--amber-dark); font-size:1.3rem; }
+.map-stop .city { font-weight:600; margin:4px 0 2px; }
+.map-stop .region { font-size:.75rem; color:var(--teal); font-family:'DM Mono',monospace; }
+.map-stop p { font-size:.82rem; color:var(--ink-soft); margin:8px 0 0; }
+table { width:100%; border-collapse:collapse; margin-top:14px; background:var(--card); border-radius:var(--radius-sm); overflow:hidden; box-shadow:var(--shadow); }
+th,td { padding:11px 13px; text-align:left; border-bottom:1px solid var(--line); font-size:.9rem; }
+th { background:var(--bg-warm); color:var(--amber-dark); }
+tr:last-child td { border-bottom:none; }
+.note-box { background:var(--bg-warm); border-left:4px solid var(--teal); border-radius:0 var(--radius-sm) var(--radius-sm) 0; padding:15px 20px; margin-top:16px; }
+.reveal { opacity:0; transform:translateY(26px); transition:opacity .7s ease, transform .7s ease; }
+.reveal.in { opacity:1; transform:none; }
+.role-preview { display:flex; gap:12px; flex-wrap:wrap; margin-top:16px; }
+.role-chip { background:var(--card); border:1px solid var(--line); border-radius:999px; padding:8px 16px; font-size:.85rem; display:flex; align-items:center; gap:6px; }
+footer { text-align:center; padding:32px 0; color:var(--ink-soft); font-size:.88rem; }
+.top-btn { position:fixed; bottom:24px; right:24px; width:46px; height:46px; border-radius:50%; background:var(--amber); color:#fff; display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-lg); cursor:pointer; opacity:0; pointer-events:none; transition:opacity .3s ease; border:none; font-size:1.2rem; }
+.top-btn.show { opacity:1; pointer-events:auto; }
+</style>
+</head>
+<body>
+
+<section class="hero reveal">
+  <div class="wrap">
+    <p class="eyebrow">From Paris to Belém</p>
+    <h1 class="display hero-title">COP21 到今日：氣候高峰會怎麼談？</h1>
+    <p class="hero-sub">用「地理知識找出各國的立場」＋「英文閱讀讀懂真實協議內容」，讓學生在兩堂課內完成一場模擬談判。</p>
+    <div class="tags">
+      <span class="tag">CEFR B1–B2</span>
+      <span class="tag">地理 × 英文協同教學</span>
+      <span class="tag">2 節課 × 50 分鐘</span>
+      <span class="tag">SDG 13 氣候行動</span>
+    </div>
+  </div>
+</section>
+
+<section class="reveal">
+  <div class="wrap">
+    <p class="eyebrow">Why Geography + Reading</p>
+    <h2 class="section-title">設計理念</h2>
+    <p>COP（Conference of the Parties，締約方大會）年年換主辦國，這不是巧合——地理位置、氣候脆弱度、能源結構，決定了每個國家在談判桌上的立場。這個單元刻意把「地理知識」當成解讀英文文本的鑰匙：學生要先看懂地圖上的線索（誰靠海？誰產石油？誰在赤道帶？），才有辦法讀懂英文新聞裡「為什麼某個國家反對某條款」，最後親自扮演一個國家代表團，用英文寫出並捍衛自己的立場。</p>
+    <div class="grid cols-3">
+      <div class="card">
+        <h3>🌍 地理知識</h3>
+        <p class="small">主辦城市地圖定位、氣候脆弱度、能源／經濟結構如何影響一國的談判立場。</p>
+      </div>
+      <div class="card">
+        <h3>📖 英文閱讀</h3>
+        <p class="small">B1–B2 改寫版新聞式文本，讀懂協議的關鍵條款與爭議點。</p>
+      </div>
+      <div class="card">
+        <h3>🗣️ 任務完成</h3>
+        <p class="small">以代表團身分寫出並發表一段英文談判聲明，銜接地理理由與語言表達。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt reveal">
+  <div class="wrap">
+    <p class="eyebrow">The Big Picture</p>
+    <h2 class="section-title">COP 主辦城市地圖時間軸</h2>
+    <p class="small">上課第一步：讓學生看著這條時間軸，自己發現「主辦地點會在各洲之間輪替」這個模式——不要直接告訴他們。</p>
+    <div class="map-timeline">
+      <div class="map-stop"><span class="year">2015</span><div class="city">COP21 · Paris</div><span class="region">🇫🇷 Western Europe</span><p>Paris Agreement：1.5°C / 2°C 升溫控制目標首次全球入法承諾。</p></div>
+      <div class="map-stop"><span class="year">2021</span><div class="city">COP26 · Glasgow</div><span class="region">🇬🇧 Western Europe</span><p>首次寫入「逐步減少（phase down）」煤炭字眼；甲烷減排承諾。</p></div>
+      <div class="map-stop"><span class="year">2022</span><div class="city">COP27 · Sharm El-Sheikh</div><span class="region">🇪🇬 North Africa</span><p>成立「損失與損害基金 Loss and Damage Fund」，補償氣候脆弱國家。</p></div>
+      <div class="map-stop"><span class="year">2023</span><div class="city">COP28 · Dubai</div><span class="region">🇦🇪 Middle East</span><p>首次全球盤點；首次寫入「轉型脫離化石燃料」，但主辦國本身是產油國，引發爭議。</p></div>
+      <div class="map-stop"><span class="year">2024</span><div class="city">COP29 · Baku</div><span class="region">🇦🇿 West Asia</span><p>聚焦氣候資金：已開發國家承諾每年至少 3000 億美元協助開發中國家。</p></div>
+      <div class="map-stop"><span class="year">2025</span><div class="city">COP30 · Belém</div><span class="region">🇧🇷 South America</span><p>首次在亞馬遜雨林入口城市舉辦，森林保護與原住民權益成為焦點。</p></div>
+    </div>
+    <div class="note-box"><strong>地理提問示範：</strong> "Why might it matter that COP28 was hosted by an oil-producing country?" "Why does hosting COP30 in the Amazon send a different message than hosting it in Paris?"</div>
+  </div>
+</section>
+
+<section class="reveal">
+  <div class="wrap">
+    <p class="eyebrow">Key Terms</p>
+    <h2 class="section-title">COP 關鍵字彙（中英對照）</h2>
+    <p class="small">上課前可先讓學生兩兩配對翻牌，猜中文意思再翻面對答案——這些詞彙背後的概念通常比字彙本身更抽象，先破冰再進入閱讀，能減少任務時卡關。</p>
+    <div class="flip-grid" id="copFlipGrid">
+      <div class="flip"><div class="flip-inner">
+        <div class="flip-face flip-front"><span class="eng-word">COP</span></div>
+        <div class="flip-face flip-back">締約方大會：聯合國氣候變化綱要公約（UNFCCC）締約國每年召開一次的氣候協商會議</div>
+      </div></div>
+      <div class="flip"><div class="flip-inner">
+        <div class="flip-face flip-front"><span class="eng-word">NDC</span></div>
+        <div class="flip-face flip-back">國家自定貢獻：各國依巴黎協定架構，自行提交的減碳目標與行動計畫</div>
+      </div></div>
+      <div class="flip"><div class="flip-inner">
+        <div class="flip-face flip-front"><span class="eng-word">Paris Agreement</span></div>
+        <div class="flip-face flip-back">巴黎協定：2015 年 COP21 簽署，目標將升溫控制在「遠低於 2°C」，並努力限制在 1.5°C</div>
+      </div></div>
+      <div class="flip"><div class="flip-inner">
+        <div class="flip-face flip-front"><span class="eng-word">phase down / phase out</span></div>
+        <div class="flip-face flip-back">逐步減少／完全淘汰：COP26 最終協議選用較溫和的「逐步減少」煤炭用量，而非「完全淘汰」</div>
+      </div></div>
+      <div class="flip"><div class="flip-inner">
+        <div class="flip-face flip-front"><span class="eng-word">Loss and Damage Fund</span></div>
+        <div class="flip-face flip-back">損失與損害基金：COP27 成立，用來補償氣候脆弱國家已經發生的實際損害</div>
+      </div></div>
+      <div class="flip"><div class="flip-inner">
+        <div class="flip-face flip-front"><span class="eng-word">Global Stocktake</span></div>
+        <div class="flip-face flip-back">全球盤點：COP28 完成的正式檢視，評估全球距離巴黎協定目標還有多遠</div>
+      </div></div>
+      <div class="flip"><div class="flip-inner">
+        <div class="flip-face flip-front"><span class="eng-word">climate finance</span></div>
+        <div class="flip-face flip-back">氣候資金：已開發國家提供給開發中國家，用於減碳與調適氣候變遷的資金</div>
+      </div></div>
+      <div class="flip"><div class="flip-inner">
+        <div class="flip-face flip-front"><span class="eng-word">vulnerable countries</span></div>
+        <div class="flip-face flip-back">氣候脆弱國家：對氣候變遷衝擊承受能力低的國家，如低窪島國、低度開發國家</div>
+      </div></div>
+      <div class="flip"><div class="flip-inner">
+        <div class="flip-face flip-front"><span class="eng-word">developed / developing nations</span></div>
+        <div class="flip-face flip-back">已開發／開發中國家：聯合國氣候公約中用來分配減碳與出資責任的身分分類，但分類本身常引發爭議（如中國的身分辯論）</div>
+      </div></div>
+      <div class="flip"><div class="flip-inner">
+        <div class="flip-face flip-front"><span class="eng-word">Copenhagen Accord</span></div>
+        <div class="flip-face flip-back">哥本哈根協議：COP15（2009）產出的不具約束力聲明，被視為談判失敗的代表案例</div>
+      </div></div>
+      <div class="flip"><div class="flip-inner">
+        <div class="flip-face flip-front"><span class="eng-word">non-binding</span></div>
+        <div class="flip-face flip-back">不具法律約束力：協議內容沒有強制執行機制，違反或未達成目標也沒有懲罰</div>
+      </div></div>
+      <div class="flip"><div class="flip-inner">
+        <div class="flip-face flip-front"><span class="eng-word">transitioning away from fossil fuels</span></div>
+        <div class="flip-face flip-back">轉型脫離化石燃料：COP28 首次在正式協議文字中納入的表述，用來取代更直接的「淘汰化石燃料」</div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<section class="alt reveal">
+  <div class="wrap">
+    <p class="eyebrow">Two 50-Minute Lessons</p>
+    <h2 class="section-title">課堂總覽</h2>
+    <div class="lesson-tabs" id="lessonTabs">
+      <button class="lesson-btn active" data-lesson="l1"><span class="lnum">Lesson 1</span><span class="ltime">50 min · 讀懂 COP21</span></button>
+      <button class="lesson-btn" data-lesson="l2"><span class="lnum">Lesson 2</span><span class="ltime">50 min · 模擬 COP 談判</span></button>
+    </div>
+
+    <!-- LESSON 1 -->
+    <div class="lesson-panel active" data-panel="l1">
+      <div class="acc-item open">
+        <div class="acc-head"><span><span class="step-num">01</span>暖身：氣候會議知多少<span class="mins">5 min</span><span class="teacher-tag both">地理＋英文 共同帶</span></span><span class="arrow">▶</span></div>
+        <div class="acc-body"><p>快問快答：「你聽過哪些國際氣候相關的新聞或名詞？」不急著糾正，先蒐集學生的先備知識（可能包含誤解），作為對照組。</p></div>
+      </div>
+      <div class="acc-item">
+        <div class="acc-head"><span><span class="step-num">02</span>What is COP？基礎輸入<span class="mins">8 min</span><span class="teacher-tag both">地理＋英文 共同帶</span></span><span class="arrow">▶</span></div>
+        <div class="acc-body"><p>簡短講解：COP＝Conference of the Parties，1995 年起每年召開一次，是全球近 200 國協商氣候行動的場合。強調「每年換國家主辦」這個規則，為地圖任務鋪梗。</p></div>
+      </div>
+      <div class="acc-item">
+        <div class="acc-head"><span><span class="step-num">03</span>地理任務：主辦城市地圖定位<span class="mins">12 min</span><span class="teacher-tag geo">地理老師主責</span></span><span class="arrow">▶</span></div>
+        <div class="acc-body">
+          <p>發下空白世界地圖，學生依上方時間軸標出六個主辦城市的位置，並回答：</p>
+          <ol>
+            <li>這六個城市分別在哪個洲？哪個氣候帶？</li>
+            <li>你觀察到什麼規律（例如：已開發國家 vs 開發中國家輪流主辦）？</li>
+            <li>猜猜看：主辦國家的地理位置，可能如何影響那一年的談判重點？</li>
+          </ol>
+        </div>
+      </div>
+      <div class="acc-item">
+        <div class="acc-head"><span><span class="step-num">04</span>英文閱讀：The Paris Agreement in Plain English<span class="mins">18 min</span><span class="teacher-tag eng">英文老師主責</span></span><span class="arrow">▶</span></div>
+        <div class="acc-body">
+          <div class="card">
+            <p>In December 2015, representatives from 196 countries met in Paris for COP21. After two weeks of negotiation, they signed an agreement with one clear goal: to keep global warming "well below 2°C" above pre-industrial levels, and to try for 1.5°C if possible.</p>
+            <p>What made the Paris Agreement different from earlier climate deals was its structure. Instead of forcing every country to cut emissions by the same amount, each country submitted its own plan, called an NDC (Nationally Determined Contribution). A small island nation like Tuvalu and a large industrial country like Germany could both join — but their promises looked very different, based on their size, wealth, and geography.</p>
+            <p>Critics pointed out a weakness from the start: the agreement had no real punishment for countries that missed their targets. Supporters argued that getting almost every country in the world to agree on anything was already historic.</p>
+          </div>
+          <div class="note-box">
+            <strong>理解提問：</strong>
+            <ol>
+              <li>What is an NDC, and why might a small island nation's NDC look different from Germany's?</li>
+              <li>What is the main criticism of the Paris Agreement mentioned in the text?</li>
+              <li>Using what you found in the map task, explain why nearly 200 countries with very different geography could still agree on the same treaty.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+      <div class="acc-item">
+        <div class="acc-head"><span><span class="step-num">05</span>結尾 Exit Ticket<span class="mins">7 min</span><span class="teacher-tag both">地理＋英文 共同帶</span></span><span class="arrow">▶</span></div>
+        <div class="acc-body"><p>用一句英文完成："A country's geography can affect its climate policy because ___." 收回作為 Lesson 2 分組依據的先備資料。</p></div>
+      </div>
+    </div>
+
+    <!-- LESSON 2 -->
+    <div class="lesson-panel" data-panel="l2">
+      <div class="acc-item open">
+        <div class="acc-head"><span><span class="step-num">01</span>暖身回顧<span class="mins">3 min</span><span class="teacher-tag both">地理＋英文 共同帶</span></span><span class="arrow">▶</span></div>
+        <div class="acc-body"><p>快速複習 Lesson 1 的 exit ticket 佳句，銜接到「今天我們要實際扮演一個國家」。</p></div>
+      </div>
+      <div class="acc-item">
+        <div class="acc-head"><span><span class="step-num">02</span>拼圖閱讀：COP15–COP29 發生了什麼<span class="mins">15 min</span><span class="teacher-tag eng">英文老師主責</span></span><span class="arrow">▶</span></div>
+        <div class="acc-body">
+          <p>Jigsaw reading：全班分成 6 個「專家組」，各組只讀一段（<strong>COP15 哥本哈根的失敗</strong>／<strong>COP21 巴黎協定的突破</strong>／COP26 煤炭承諾／COP27 損失與損害基金／COP28 化石燃料轉型／COP29 氣候資金），讀完後重組成新小組，每人向組員口頭轉述自己那段的重點（英文）。新增的 COP15、COP21 兩段刻意形成「失敗→突破」的對照，COP21 也與 Lesson 1 的巴黎協定閱讀文本互相呼應，加深理解。</p>
+        </div>
+      </div>
+      <div class="acc-item">
+        <div class="acc-head"><span><span class="step-num">03</span>任務：模擬國家代表團談判<span class="mins">22 min</span><span class="teacher-tag both">地理＋英文 分區巡場</span></span><span class="arrow">▶</span></div>
+        <div class="acc-body">
+          <p>六人一組，各組抽一張「國家卡」（見下方預覽，共 6 張、6 組剛好不重複），卡片上有真實地理與經濟資訊，今年的議題是：<em>"Should wealthy countries pay more into the Loss and Damage Fund?"</em></p>
+          <p>小組須完成一份英文<strong>立場聲明（position statement）</strong>，必須包含：</p>
+          <ol>
+            <li>你的國家立場（支持 / 部分支持 / 反對）</li>
+            <li>至少一項<strong>地理或經濟理由</strong>（例如海平面上升、石油出口收入、森林覆蓋率）</li>
+            <li>對另一個可能持相反立場國家的回應</li>
+          </ol>
+          <div class="role-preview">
+            <span class="role-chip">🏝️ Tuvalu（低窪島國）</span>
+            <span class="role-chip">🌊 Bangladesh（三角洲大國）</span>
+            <span class="role-chip">🛢️ Saudi Arabia（石油輸出國）</span>
+            <span class="role-chip">🏗️ China（開發中排放大國）</span>
+            <span class="role-chip">🌳 Brazil（雨林大國）</span>
+            <span class="role-chip">🏭 Germany（工業化已開發國）</span>
+          </div>
+          <div class="note-box"><strong>兩位老師分區巡場：</strong>地理老師巡場時檢查「這個理由的事實基礎站得住腳嗎？」，英文老師巡場時檢查「這句話的表達方式，對方聽得懂你的立場嗎？」，兩人各帶一半教室同時給即時鷹架，任務時間不用單靠一人跑完全班。</div>
+        </div>
+      </div>
+      <div class="acc-item">
+        <div class="acc-head"><span><span class="step-num">04</span>模擬峰會發表<span class="mins">7 min</span><span class="teacher-tag both">地理＋英文 雙重檢核</span></span><span class="arrow">▶</span></div>
+        <div class="acc-body"><p>每組 60 秒宣讀立場聲明（6 組 × 60 秒 ≈ 6 分鐘，較 4 組時的 90 秒略微縮短以維持時間），其他組可提出一個「外交詰問」（diplomatic challenge question）。<strong>地理老師</strong>扮演大會主席，挑戰論點的事實基礎（"Is that claim actually true?"）；<strong>英文老師</strong>扮演語言觀察員，挑戰表達是否清楚（"Did that sentence actually communicate your position?"）。學生同時被兩個角度檢驗。</p></div>
+      </div>
+      <div class="acc-item">
+        <div class="acc-head"><span><span class="step-num">05</span>反思 Exit Ticket<span class="mins">3 min</span><span class="teacher-tag both">地理＋英文 共同帶</span></span><span class="arrow">▶</span></div>
+        <div class="acc-body"><p>"What geographic fact most shaped your country's position today?" 用 1–2 句英文回答，銜接回 Lesson 1 的地理任務。</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt reveal">
+  <div class="wrap">
+    <p class="eyebrow">Assessment</p>
+    <h2 class="section-title">評量規準</h2>
+    <table>
+      <tr><th>向度</th><th>優（4）</th><th>可（2–3）</th><th>待加強（1）</th></tr>
+      <tr><td>地理推理</td><td>能具體連結國家地理／經濟特徵與其立場</td><td>有提及地理因素但較籠統</td><td>未使用地理理由</td></tr>
+      <tr><td>閱讀理解</td><td>能正確摘要並比較不同 COP 的重點</td><td>能理解主要內容，比較稍弱</td><td>理解有明顯落差</td></tr>
+      <tr><td>英語表達（B1–B2）</td><td>句型正確、能清楚陳述立場與回應</td><td>能表達但文法／字彙略顯不足</td><td>表達不足以支撐論點</td></tr>
+      <tr><td>小組協作與發表</td><td>分工清楚、發表流暢有自信</td><td>大致分工，發表略生澀</td><td>單人主導或未準備</td></tr>
+    </table>
+  </div>
+</section>
+
+<section class="reveal">
+  <div class="wrap">
+    <p class="eyebrow">Teacher Notes</p>
+    <h2 class="section-title">教師備課筆記</h2>
+    <div class="grid cols-2">
+      <div class="card">
+        <h3>需要準備的教材</h3>
+        <p class="small">空白世界地圖（A4）、Lesson 1 閱讀文本列印本、COP26–29 拼圖閱讀四段文字、國家卡 4 張（含地理／經濟數據）、立場聲明學習單。</p>
+      </div>
+      <div class="card">
+        <h3>差異化建議</h3>
+        <p class="small">B1 較弱的班級可提供句型鷹架："Our country believes ___ because ___. We understand your concern about ___, but ___." B2 班級可加入真實排放數據要求量化論證。</p>
+      </div>
+    </div>
+    <div class="note-box"><strong>與先前單元銜接：</strong>此單元的「國家代表團」任務結構與都市微森林的角色卡設計挑戰相同邏輯（真實限制 + 立場捍衛 + 交叉詰問），可延續學生已經熟悉的討論規範與發表節奏。</div>
+
+    <h3 style="margin-top:32px; color:var(--amber-dark);">協同教學分工表</h3>
+    <p class="small">地理老師與英文老師同時在場時，建議依下表分工，避免任一方獨自承擔所有認知負荷段落。</p>
+    <table>
+      <tr><th>段落</th><th>主責老師</th><th>原因</th></tr>
+      <tr><td>地圖任務、國家地理／經濟資料解讀</td><td>地理老師</td><td>學生問「為什麼沙烏地阿拉伯會這樣做」時，能給出更準確的背景判斷</td></tr>
+      <tr><td>英文閱讀理解、句型鷹架</td><td>英文老師</td><td>抓文本理解與語言表達的問題</td></tr>
+      <tr><td>立場聲明「預期反方論點」</td><td>兩人共同帶</td><td>地理老師確認論點的事實基礎，英文老師確認表達方式（先肯定再反駁）到位</td></tr>
+      <tr><td>模擬峰會發表</td><td>地理老師任大會主席（挑戰事實）／英文老師任語言觀察員（挑戰表達）</td><td>學生同時被事實與語言兩個角度檢驗</td></tr>
+    </table>
+  </div>
+</section>
+
+<footer>#Gina & 宏孝的SDGs多元選修課 · COP21 到今日 地理×英文閱讀課堂活動</footer>
+<button class="top-btn" id="topBtn">↑</button>
+
+<script>
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+document.querySelectorAll('.flip').forEach(f => {
+  f.addEventListener('click', () => f.classList.toggle('is-flipped'));
+});
+
+document.querySelectorAll('.lesson-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.lesson-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.lesson-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelector('.lesson-panel[data-panel="' + btn.dataset.lesson + '"]').classList.add('active');
+  });
+});
+
+document.querySelectorAll('.acc-head').forEach(h => {
+  h.addEventListener('click', () => h.parentElement.classList.toggle('open'));
+});
+
+const topBtn = document.getElementById('topBtn');
+window.addEventListener('scroll', () => { topBtn.classList.toggle('show', window.scrollY > 400); });
+topBtn.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+</script>
+<a href="../" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:9999;background:#2F86D6;color:#fff;font:700 13px/1 system-ui,sans-serif;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.2)">← 回群島</a>
+</body>
+</html>

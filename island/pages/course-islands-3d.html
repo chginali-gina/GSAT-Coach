@@ -1,0 +1,830 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>課程群島 3D</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+/* 版面：淺藍清新手機 App＋3D 低多邊形群島——每一站是一座六角島，沿學期航線排成一圈；地圖頁上方是可拖曳的 3D 舞台，下方保留清單。 */
+:root{
+  --bg:#F5F9FD; --bg-2:#EAF3FB; --card:#FFFFFF;
+  --accent:#2F86D6; --accent-deep:#1F6FB8; --accent-ink:#155A96; --tint:#DCEBFA;
+  --second:#0E9A9A; --second-tint:#D7F2F0;
+  --ink:#17324D; --ink-soft:#557089; --line:#D3E2EF; --on-accent:#FFFFFF;
+  --good:#3F7A3A; --good-tint:#E3EFDD; --bad:#A63D2A; --bad-tint:#F8E1DA;
+  --scrim:rgba(15,30,50,.42);
+  --shadow:0 6px 22px rgba(31,111,184,.10);
+  --radius:16px;
+  --sky:#E4F0FB; --sea:#9CCBEB; --shallow:#C9E6F5; --sand:#F1E3C4; --leaf:#5FA67A; --wall:#FFFFFF; --route:#FFFFFF; --scene-dark:0;
+  --font:'Nunito','Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1A26; --bg-2:#132233; --card:#182A3D;
+  --accent:#6CB4F0; --accent-deep:#4A9BE0; --accent-ink:#A6D2F8; --tint:#1C3550;
+  --second:#4FD1C5; --second-tint:#173A3A;
+  --ink:#E6EFF8; --ink-soft:#9FB3C8; --line:#26394D; --on-accent:#0F1A26;
+  --good:#8CC983; --good-tint:#22321F; --bad:#F09A84; --bad-tint:#3B231C;
+  --scrim:rgba(0,0,0,.6);
+  --shadow:0 6px 22px rgba(0,0,0,.35);
+  --sky:#0E1B2A; --sea:#173A5C; --shallow:#21507A; --sand:#8C7B5E; --leaf:#3F7A5A; --wall:#D9E2EC; --route:#6CB4F0; --scene-dark:1;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0F1A26; --bg-2:#132233; --card:#182A3D;
+  --accent:#6CB4F0; --accent-deep:#4A9BE0; --accent-ink:#A6D2F8; --tint:#1C3550;
+  --second:#4FD1C5; --second-tint:#173A3A;
+  --ink:#E6EFF8; --ink-soft:#9FB3C8; --line:#26394D; --on-accent:#0F1A26;
+  --good:#8CC983; --good-tint:#22321F; --bad:#F09A84; --bad-tint:#3B231C;
+  --scrim:rgba(0,0,0,.6);
+  --shadow:0 6px 22px rgba(0,0,0,.35);
+  --sky:#0E1B2A; --sea:#173A5C; --shallow:#21507A; --sand:#8C7B5E; --leaf:#3F7A5A; --wall:#D9E2EC; --route:#6CB4F0; --scene-dark:1;
+  color-scheme:dark;
+}
+html{font-size:106.25%}
+html.big{font-size:118.75%}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.8;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--card)}
+h1,h2,h3{margin:0;text-wrap:balance;font-weight:800;line-height:1.35}
+p{margin:0}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:8px}
+svg.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
+.num{font-variant-numeric:lining-nums tabular-nums}
+.en{display:block;font-size:.86em;line-height:1.6;color:var(--ink-soft);margin-top:2px}
+.en.in{display:inline;margin-left:.45em;font-size:.82em}
+.btn .en,.on .en,.tab.on .en{color:inherit;opacity:.82}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* 標題列 */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--card);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:12px;padding-block:10px}
+.brand{flex:1;min-width:0;line-height:1.3}
+.brand b{display:block;font-weight:800;font-size:1.02rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand .en{margin:0;font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.big-num{font-weight:800;font-size:1.25rem;color:var(--accent);text-align:right;line-height:1.1}
+.big-num small{display:block;font-size:.68rem;color:var(--ink-soft);font-weight:600}
+.pill-btn{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--bg);cursor:pointer;font-weight:700;font-size:.88rem}
+.pill-btn:hover{border-color:var(--accent)}
+
+/* 頁面 */
+main{padding-block:20px calc(96px + env(safe-area-inset-bottom,0px))}
+.page{display:flex;flex-direction:column;gap:16px}
+.phead{display:flex;flex-direction:column;gap:6px}
+.stepline{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.stepno{font-weight:800;font-size:2.2rem;line-height:1;color:var(--accent)}
+.steplbl{font-size:.82rem;color:var(--ink-soft);font-weight:700}
+.lvl{font-size:.75rem;font-weight:700;background:var(--second-tint);color:var(--second);padding:2px 10px;border-radius:999px}
+.phead h1{font-size:clamp(1.45rem,5.6vw,1.95rem)}
+.get{background:var(--tint);color:var(--accent-ink);border-radius:12px;padding:10px 14px;font-size:.95rem;font-weight:600}
+.get .en{color:inherit;opacity:.8}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+.sub{color:var(--ink-soft);font-size:.95rem}
+.sample{align-self:flex-start;font-size:.78rem;font-weight:700;background:var(--second-tint);color:var(--second);padding:2px 10px;border-radius:999px}
+
+/* 分段控制、搜尋 */
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+.chip{flex:0 0 auto;min-height:40px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);cursor:pointer;font-weight:700;font-size:.88rem;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.chip .dot{width:9px;height:9px;border-radius:50%}
+.chip.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.search{display:flex;align-items:center;gap:8px;background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:0 14px;min-height:46px;color:var(--ink-soft)}
+.search:focus-within{border-color:var(--accent)}
+.search input{flex:1;min-width:0;border:none;background:transparent;outline:none;color:var(--ink);font-size:1rem}
+
+/* 站點清單 */
+.list{display:flex;flex-direction:column;gap:12px;list-style:none;margin:0;padding:0}
+.st{width:100%;text-align:left;display:grid;grid-template-columns:auto 1fr auto;gap:4px 14px;align-items:center;background:var(--card);border:1.5px solid var(--line);border-left:6px solid var(--c);border-radius:var(--radius);padding:14px 14px 14px 12px;cursor:pointer;box-shadow:var(--shadow);min-height:52px}
+.st:hover{border-color:var(--accent);border-left-color:var(--c)}
+.st .n{grid-row:1/3;font-weight:800;font-size:1.5rem;color:var(--c);line-height:1}
+.st .nm{font-weight:800;font-size:1.05rem;min-width:0}
+.st .meta{grid-column:2;font-size:.84rem;color:var(--ink-soft);min-width:0}
+.st .tg{grid-column:2/4;font-size:.92rem;color:var(--ink-soft);line-height:1.65;min-width:0}
+.stamp{grid-row:1/3;grid-column:3;width:30px;height:30px;border-radius:50%;border:2px dashed var(--line);display:grid;place-items:center;color:var(--on-accent)}
+.stamp.done{border:2px solid var(--accent);background:var(--accent)}
+.stamp svg.ic{width:16px;height:16px}
+.empty{text-align:center;color:var(--ink-soft);padding:24px 8px}
+
+/* 週次 */
+.weeks{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:8px}
+.wk{min-height:46px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);cursor:pointer;font-weight:800;font-size:1rem;position:relative}
+.wk::after{content:"";position:absolute;left:50%;bottom:6px;width:6px;height:6px;border-radius:50%;transform:translateX(-50%);background:var(--c,transparent)}
+.wk.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.wk.off{color:var(--ink-soft);opacity:.6}
+.wkout{display:flex;flex-direction:column;gap:12px}
+
+/* 護照 */
+.pass{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.pass button{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 8px;border-radius:var(--radius);border:1.5px solid var(--line);background:var(--card);cursor:pointer;text-align:center;font-weight:700;font-size:.9rem;min-height:110px}
+.pass button .stamp{width:42px;height:42px}
+.pass button .stamp svg.ic{width:22px;height:22px}
+.progress{height:10px;border-radius:999px;background:var(--bg-2);overflow:hidden}
+.progress i{display:block;height:100%;background:var(--accent);border-radius:999px;transition:width .3s}
+.bignum{font-weight:800;font-size:2.4rem;color:var(--accent);line-height:1}
+.confirm{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+
+/* 按鈕 */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 22px;border-radius:999px;border:none;background:var(--accent);color:var(--on-accent);font-weight:800;cursor:pointer;text-decoration:none}
+.btn:hover{background:var(--accent-deep)}
+.btn.sec{background:var(--card);color:var(--accent-ink);border:1.5px solid var(--accent)}
+.btn.sec:hover{background:var(--tint)}
+.btn.danger{background:var(--bad)}
+.navrow{display:flex;gap:10px;margin-top:8px}
+.navrow .btn{flex:1}
+
+/* 分頁列 */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+.tabs .row{max-width:760px;margin:0 auto;display:grid;grid-auto-flow:column;grid-auto-columns:1fr}
+.tab{min-height:64px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;color:var(--ink-soft);font-weight:700;font-size:.85rem;border-top:3px solid transparent;line-height:1.25;padding:4px 2px}
+.tab .tn{font-weight:800;font-size:.95rem}
+.tab .en{font-size:.68rem;margin:0}
+.tab.on{color:var(--accent);border-top-color:var(--accent)}
+
+/* 底部面板 */
+.scrim{position:fixed;inset:0;background:var(--scrim);z-index:40}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;max-height:88vh;overflow-y:auto;background:var(--bg);border-radius:22px 22px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,.18);padding:10px max(16px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.sheet .in{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.grab{width:44px;height:5px;border-radius:3px;background:var(--line);margin:4px auto 6px}
+.sheet-head{display:flex;align-items:flex-start;gap:12px}
+.sheet-head h2{flex:1;font-size:1.4rem}
+.x{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);cursor:pointer;display:grid;place-items:center;flex:0 0 auto}
+.blk{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.blk h3{font-size:.82rem;color:var(--accent-ink);letter-spacing:.04em;margin-bottom:4px}
+.blk ul{margin:0;padding-left:1.2em}
+.units{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.units li{display:grid;grid-template-columns:28px 1fr;gap:2px 10px}
+.units .un{font-weight:800;color:var(--second);font-size:1.05rem}
+.units .ut{font-weight:700}
+.units .ud{grid-column:2;font-size:.9rem;color:var(--ink-soft);line-height:1.65}
+.story{border:1.5px dashed var(--line);background:transparent}
+.story h3{color:var(--ink-soft)}
+.links{display:flex;flex-wrap:wrap;gap:8px}
+.seg-ctl{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--bg-2);border-radius:999px;padding:4px;gap:4px}
+.seg-ctl button{min-height:42px;border-radius:999px;border:none;background:transparent;cursor:pointer;font-weight:700;font-size:.9rem}
+.seg-ctl button.on{background:var(--accent);color:var(--on-accent)}
+.field{display:flex;flex-direction:column;gap:6px}
+.field>span{font-weight:700;font-size:.9rem}
+
+.howto{background:var(--second-tint);border-radius:14px;padding:12px 14px;font-size:.92rem}
+.howto code{font-family:ui-monospace,Menlo,Consolas,monospace;background:var(--card);padding:1px 6px;border-radius:6px;font-size:.85em}
+footer{text-align:center;color:var(--ink-soft);font-size:.82rem;padding-top:16px;line-height:1.7}
+footer b{color:var(--accent-ink)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* 3D 舞台 */
+.stage{position:relative;height:clamp(340px,62vh,640px);max-width:100%;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);background:var(--sky);touch-action:none}
+.stage canvas{display:block;width:100%;height:100%;cursor:grab}
+.stage canvas:active{cursor:grabbing}
+.labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.lbl{position:absolute;left:0;top:0;pointer-events:auto;display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 4px;border-radius:999px;background:var(--card);color:var(--ink);border:1.5px solid var(--line);box-shadow:var(--shadow);font-weight:800;font-size:.8rem;white-space:nowrap;cursor:pointer;min-height:36px;transition:opacity .2s,background .2s}
+.lbl .ln{background:var(--c);color:#fff;border-radius:999px;padding:1px 8px;font-size:.75rem}
+.lbl .lk{display:inline-flex;color:var(--accent)}
+.lbl .lk svg.ic{width:15px;height:15px}
+.lbl.dim{opacity:.35}
+.lbl.sel{border-color:var(--accent);background:var(--tint);color:var(--accent-ink)}
+.hud{position:absolute;top:10px;right:10px;display:flex;gap:8px;z-index:2000}
+.hud-btn{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);cursor:pointer;font-weight:700;font-size:.85rem;box-shadow:var(--shadow)}
+.hud-btn:hover{border-color:var(--accent)}
+.stage-hint{position:absolute;left:10px;bottom:10px;margin:0;font-size:.75rem;line-height:1.5;background:var(--card);color:var(--ink-soft);padding:3px 10px;border-radius:999px;opacity:.92;pointer-events:none;z-index:2000;max-width:calc(100% - 20px)}
+</style>
+
+<header class="top"><div class="wrap" id="top"></div></header>
+<main><div class="wrap" id="main"></div></main>
+<nav class="tabs" aria-label="分頁"><div class="row" id="tabs"></div></nav>
+<div id="overlay"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+/* ==========================================================
+   老師只要改這一段：COURSE
+   文字可以寫成 "中文"，或寫成 ["中文","English"] 支援雙語切換。
+   - segments：學期分段（例如三次段考），color 用色票
+   - stations：每一站＝一個主題／單元群；weeks 填週次陣列
+       units 是站內子單元；story 是故事設定（虛構），會用虛線框標示
+       links 填相關的站 id
+   ========================================================== */
+const COURSE = {
+  isSample: true,
+  title: ["SDGs 永續行動家", "SDGs Action Lab"],
+  subtitle: ["高一多元選修・每週 2 節、一學期 18 週：從看懂全球目標，到在校園提出一個做得到的永續行動。",
+             "Grade 10 elective, 2 periods a week for 18 weeks: understand the global goals, then plan one real action for our school."],
+  totalWeeks: 18,
+  segments: [
+    { id: "s1", name: ["看見問題", "Spot the problem"],  weeks: "1–6",   color: "#2F86D6" },
+    { id: "s2", name: ["拆解與研究", "Dig deeper"],      weeks: "7–12",  color: "#0E9A9A" },
+    { id: "s3", name: ["行動與發表", "Act and share"],   weeks: "13–18", color: "#7A5CC2" }
+  ],
+  stations: [
+    { id: "a", name: ["啟航港", "Launch Harbor"], seg: "s1", weeks: [1],
+      tagline: ["看懂整學期地圖，學會用同一個框架寫反思", "See the whole semester and learn one way to reflect"],
+      learn: ["認識 17 項目標的全貌，說明每週交付物與評量方式；練習用「事實—感受—發現—未來」寫第一則反思。",
+              "Meet all 17 goals, learn what to hand in each week, and write a first reflection: Facts, Feelings, Findings, Future."],
+      assess: ["課堂反思單 1 則（看完整度，不看文筆）。", "One reflection sheet (we check completeness, not writing style)."],
+      skills: [["說出課程要走到哪裡", "Explain where the course is going"], ["用固定框架寫反思", "Reflect with a fixed frame"]],
+      units: [
+        { t: ["地圖導覽", "Map tour"], d: ["用 10 分鐘走完整學期，標出自己最好奇的一站。", "Walk the semester in 10 minutes and mark the stop you are most curious about."] },
+        { t: ["反思框架", "Reflection frame"], d: ["四格反思練習，寫一件這週真的發生的事。", "Use the four boxes on one real event from this week."] }
+      ], story: "", links: ["b"] },
+    { id: "b", name: ["目標群島", "Goal Islands"], seg: "s1", weeks: [2,3,4],
+      tagline: ["把 17 項目標分成人、地球、繁榮、和平、夥伴", "Sort the 17 goals into People, Planet, Prosperity, Peace, Partnership"],
+      learn: ["用 5P 分類理解目標之間的關係，找出一個和自己生活有關的目標。", "Use the 5Ps to see how goals connect, and pick one goal linked to your own life."],
+      assess: ["5P 分類海報（小組）＋個人「我的目標」卡。", "A 5P poster (group) and a personal My Goal card."],
+      skills: [["分類與歸納", "Sorting and grouping"], ["把全球議題連到自己生活", "Link global issues to daily life"]],
+      units: [
+        { t: ["5P 分類賽", "5P sorting game"], d: ["小組把 17 張目標卡分類並說明理由。", "Groups sort 17 goal cards and explain why."] },
+        { t: ["生活掃描", "Life scan"], d: ["記錄一天裡碰到的 3 個永續議題。", "Note 3 sustainability issues you meet in one day."] },
+        { t: ["我的目標卡", "My Goal card"], d: ["選一個目標，寫下為什麼選它。", "Choose one goal and write why."] }
+      ], story: "", links: ["a","c"] },
+    { id: "c", name: ["數據燈塔", "Data Lighthouse"], seg: "s1", weeks: [5,6],
+      tagline: ["用數據說話，不用口號", "Let the data talk, not slogans"],
+      learn: ["讀懂簡單圖表，分辨數據與意見；找出所選目標在台灣的一項真實數據。", "Read simple charts, tell data from opinion, and find one real Taiwan figure for your goal."],
+      assess: ["數據卡 1 張：來源、數字、我的解讀。", "One data card: source, number, your reading."],
+      skills: [["讀圖表", "Read charts"], ["查證來源", "Check sources"]],
+      units: [
+        { t: ["圖表偵探", "Chart detective"], d: ["找出三張誤導圖表的問題。", "Find what is wrong with three misleading charts."] },
+        { t: ["數據卡", "Data card"], d: ["為自己的目標找一筆可信數據。", "Find one trustworthy number for your goal."] }
+      ], story: "", links: ["b","d"] },
+    { id: "d", name: ["問題拆解站", "Problem Station"], seg: "s2", weeks: [7,8,9],
+      tagline: ["把大問題拆成校園做得到的小問題", "Break a big problem into one our school can tackle"],
+      learn: ["用問題樹找出根本原因，縮小到校園範圍，寫出可以研究的問題。", "Use a problem tree to find root causes, zoom in on school, and write a research question."],
+      assess: ["問題樹 1 張＋研究問題 1 句（小組）。", "One problem tree and one research question (group)."],
+      skills: [["因果分析", "Cause and effect"], ["聚焦問題", "Narrow the focus"]],
+      units: [
+        { t: ["問題樹", "Problem tree"], d: ["根是原因、幹是問題、葉是影響。", "Roots are causes, trunk is the problem, leaves are effects."] },
+        { t: ["校園踏查", "Campus walk"], d: ["拍下 3 個和問題有關的現場。", "Photograph 3 places linked to the problem."] },
+        { t: ["一句研究問題", "One-line question"], d: ["用「誰、在哪、做什麼」寫成一句。", "Write it with who, where and what."] }
+      ], story: "", links: ["c","e"] },
+    { id: "e", name: ["訪談工坊", "Interview Studio"], seg: "s2", weeks: [10,11,12],
+      tagline: ["先聽懂利害關係人，再想解法", "Listen to the people involved before you solve"],
+      learn: ["設計 5 題訪談題目，訪問校內 2 位相關人員，整理出需求。", "Write 5 interview questions, talk to 2 people at school, and list their needs."],
+      assess: ["訪談紀錄與需求整理表。", "Interview notes and a needs table."],
+      skills: [["提問與傾聽", "Ask and listen"], ["整理需求", "Sum up needs"]],
+      units: [
+        { t: ["題目設計", "Question design"], d: ["開放式題目練習，避免引導式問題。", "Practise open questions and avoid leading ones."] },
+        { t: ["實地訪談", "Field interviews"], d: ["兩人一組，一人問、一人記。", "In pairs: one asks, one takes notes."] }
+      ], story: "", links: ["d","f"] },
+    { id: "f", name: ["行動實驗場", "Action Lab"], seg: "s3", weeks: [13,14,15],
+      tagline: ["做一個兩週內能完成的小行動", "Run one small action you can finish in two weeks"],
+      learn: ["把解法縮成最小可行行動，訂成功指標，執行並記錄。", "Shrink your idea to the smallest action, set a success measure, then do it and record it."],
+      assess: ["行動計畫表＋執行紀錄（做不到但誠實記錄一樣得分）。", "Action plan and log (an honest record still scores, even if it did not work)."],
+      skills: [["規劃與執行", "Plan and carry out"], ["用指標檢視成效", "Check results with a measure"]],
+      units: [
+        { t: ["最小行動", "Smallest action"], d: ["一張表寫清楚：做什麼、誰做、怎麼算成功。", "One table: what, who, and what counts as success."] },
+        { t: ["兩週實驗", "Two-week trial"], d: ["每週回報一次數據與困難。", "Report numbers and problems once a week."] }
+      ], story: "", links: ["e","g"] },
+    { id: "g", name: ["發表灣", "Showcase Bay"], seg: "s3", weeks: [16,17,18],
+      tagline: ["三分鐘說清楚你做了什麼、學到什麼", "Three minutes on what you did and what you learned"],
+      learn: ["整理成一頁成果與三分鐘口頭發表，給同學具體回饋；期末寫給下一屆的一封信。", "Make a one-page summary and a 3-minute talk, give classmates clear feedback, and write a letter to next year's class."],
+      assess: ["一頁成果、口頭發表、同儕回饋單。", "One-page summary, talk, and peer feedback sheet."],
+      skills: [["簡報表達", "Present clearly"], ["給具體回饋", "Give useful feedback"]],
+      units: [
+        { t: ["一頁成果", "One-page summary"], d: ["問題、行動、數據、反思四格。", "Four boxes: problem, action, data, reflection."] },
+        { t: ["成果發表", "Showcase"], d: ["每組三分鐘，台下用回饋單。", "Three minutes per group; the audience fills in feedback sheets."] },
+        { t: ["給下一屆的信", "Letter to next year"], d: ["寫下最想提醒學弟妹的一件事。", "Write the one thing you most want them to know."] }
+      ], story: "", links: ["f","a"] }
+  ]
+};
+</script>
+
+<script>
+(function(){
+  const C = COURSE;
+  const KEY = "cmap-3d:" + (Array.isArray(C.title) ? C.title[0] : C.title);
+  const state = { lang: "bi", big: false, page: 0, seg: null, q: "", week: 1, sheet: null, resetAsk: false, motion: true };
+  let stamps = new Set();
+  try {
+    const s = JSON.parse(localStorage.getItem(KEY) || "{}");
+    if (["zh","bi","en"].includes(s.lang)) state.lang = s.lang;
+    state.big = !!s.big;
+    if (Number.isInteger(s.page)) state.page = s.page;
+    if (typeof s.motion === "boolean") state.motion = s.motion;
+    stamps = new Set(s.stamps || []);
+  } catch(e) {}
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) state.motion = false;
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify({ lang: state.lang, big: state.big, page: state.page, motion: state.motion, stamps: [...stamps] })); } catch(e) {} };
+
+  const T = v => Array.isArray(v) ? v : [v == null ? "" : String(v), ""];
+  function L(zh,en,inline){const f=document.createDocumentFragment();
+    if(state.lang==='en'&&en)f.append(en);
+    else if(state.lang==='zh'||!en)f.append(zh);
+    else{f.append(zh);const s=document.createElement('span');s.className=inline?'en in':'en';s.lang='en';s.textContent=en;f.append(s);}
+    return f;}
+  function S(zh,en){return state.lang==='en'?(en||zh):state.lang==='zh'?zh:(en?zh+' / '+en:zh);}
+  const Lx = (v,inline) => L(...T(v), inline);
+  const Sx = v => S(...T(v));
+  const Zx = v => T(v)[state.lang==="en" && T(v)[1] ? 1 : 0];
+
+  function h(t,a,...c){const e=document.createElement(t);
+    if(a)for(const k in a){const v=a[k];if(v==null||v===false)continue;
+      if(k==='class')e.className=v;else if(k.startsWith('on'))e.addEventListener(k.slice(2),v);
+      else if(k==='style')e.style.cssText=v;else e.setAttribute(k,v===true?'':v);}
+    for(const x of c.flat(Infinity)){if(x==null||x===false)continue;e.append(x instanceof Node?x:String(x));}
+    return e;}
+  const P = {
+    gear:'<line x1="4" y1="6" x2="20" y2="6"/><circle cx="9" cy="6" r="2.2"/><line x1="4" y1="12" x2="20" y2="12"/><circle cx="15" cy="12" r="2.2"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="8" cy="18" r="2.2"/>',
+    x:'<line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/>',
+    search:'<circle cx="11" cy="11" r="6.5"/><line x1="16" y1="16" x2="20.5" y2="20.5"/>',
+    check:'<polyline points="5 12.5 10 17 19 7.5"/>',
+    left:'<polyline points="15 5 8 12 15 19"/>', right:'<polyline points="9 5 16 12 9 19"/>',
+    home:'<path d="M4 11l8-7 8 7"/><path d="M6 10v10h12V10"/>',
+    pin:'<path d="M12 21s-6-5.5-6-10a6 6 0 0 1 12 0c0 4.5-6 10-6 10z"/><circle cx="12" cy="11" r="2.2"/>'
+  };
+  const icon = n => { const s=document.createElementNS('http://www.w3.org/2000/svg','svg'); s.setAttribute('viewBox','0 0 24 24'); s.setAttribute('class','ic'); s.setAttribute('aria-hidden','true'); s.innerHTML=P[n]; return s; };
+
+  const segById = Object.fromEntries(C.segments.map(s => [s.id, s]));
+  const stById = Object.fromEntries(C.stations.map(s => [s.id, s]));
+  const colorOf = s => (segById[s.seg] || {}).color || "#2F86D6";
+  const wkLabel = w => {
+    const run = w.length > 1 && w[w.length-1]-w[0] === w.length-1;
+    const r = run ? `${w[0]}–${w[w.length-1]}` : w.join("、");
+    const re = run ? `${w[0]}–${w[w.length-1]}` : w.join(", ");
+    return [`第 ${r} 週`, (w.length > 1 ? "Weeks " : "Week ") + re];
+  };
+
+  /* ================= 3D 世界 ================= */
+  const W = { ok:false, failed:false, stage:null, labelsEl:null, islands:[], running:false };
+  const tok = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim() || "#888";
+  function rng(seed){ return function(){ seed|=0; seed=seed+0x6D2B79F5|0; let t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+
+  function buildStage(){
+    W.stage = h("div",{class:"stage"});
+    W.labelsEl = h("div",{class:"labels"});
+    W.hud = h("div",{class:"hud"},
+      h("button",{class:"hud-btn",type:"button",onclick:()=>resetView()},icon("home"),h("span",{class:"hud-t"},"")),
+    );
+    W.hint = h("p",{class:"stage-hint"});
+    W.stage.append(W.labelsEl, W.hud, W.hint);
+    if (!window.THREE || !THREE.OrbitControls) { W.failed = true; return; }
+    let renderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias:true, powerPreference:"low-power" });
+      if (!renderer.getContext()) throw new Error("no gl");
+    } catch(e) { W.failed = true; return; }
+    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    W.stage.prepend(renderer.domElement);
+    renderer.domElement.setAttribute("aria-hidden","true");
+
+    const scene = new THREE.Scene();
+    const n = C.stations.length;
+    const R = Math.max(7.5, n * 1.75);
+    W.R = R;
+    scene.fog = new THREE.Fog(0xffffff, R*2.2, R*5);
+    const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 400);
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true; controls.dampingFactor = 0.08;
+    controls.minDistance = 6; controls.maxDistance = R * 3.2;
+    controls.maxPolarAngle = 1.28; controls.minPolarAngle = 0.25;
+    controls.screenSpacePanning = false;
+    controls.addEventListener("start", () => { W.fly = null; });
+
+    const hemi = new THREE.HemisphereLight(0xffffff, 0x8899aa, 0.75);
+    const sun = new THREE.DirectionalLight(0xffffff, 0.85);
+    sun.position.set(R*0.8, R*1.6, R*0.6);
+    sun.castShadow = true;
+    sun.shadow.mapSize.set(1024,1024);
+    const sc = sun.shadow.camera; sc.left=-R*1.6; sc.right=R*1.6; sc.top=R*1.6; sc.bottom=-R*1.6; sc.far=R*5;
+    scene.add(hemi, sun);
+
+    const mats = {
+      sea: new THREE.MeshLambertMaterial({ color:0xffffff }),
+      shallow: new THREE.MeshLambertMaterial({ color:0xffffff, transparent:true, opacity:.55 }),
+      sand: new THREE.MeshPhongMaterial({ color:0xffffff, flatShading:true, shininess:0 }),
+      leaf: new THREE.MeshPhongMaterial({ color:0xffffff, flatShading:true, shininess:0 }),
+      trunk: new THREE.MeshPhongMaterial({ color:0x8a6a4a, flatShading:true, shininess:0 }),
+      wall: new THREE.MeshPhongMaterial({ color:0xffffff, flatShading:true, shininess:0 }),
+      route: new THREE.MeshBasicMaterial({ color:0xffffff }),
+      flagOff: new THREE.MeshLambertMaterial({ color:0xffffff, side:THREE.DoubleSide }),
+      flagOn: new THREE.MeshLambertMaterial({ color:0xffffff, side:THREE.DoubleSide }),
+      pole: new THREE.MeshLambertMaterial({ color:0xdddddd })
+    };
+    W.mats = mats; W.scene = scene; W.hemi = hemi;
+
+    const sea = new THREE.Mesh(new THREE.CircleGeometry(R*6, 64), mats.sea);
+    sea.rotation.x = -Math.PI/2; sea.position.y = -0.45; sea.receiveShadow = true;
+    scene.add(sea);
+
+    const segMat = {};
+    const matFor = hex => segMat[hex] || (segMat[hex] = new THREE.MeshPhongMaterial({ color:new THREE.Color(hex), flatShading:true, shininess:0 }));
+    const roofFor = hex => { const k = hex+":roof"; if (!segMat[k]) { const c = new THREE.Color(hex); c.offsetHSL(0,0,-0.08); segMat[k] = new THREE.MeshPhongMaterial({ color:c, flatShading:true, shininess:0 }); } return segMat[k]; };
+
+    const pts = [];
+    C.stations.forEach((s, i) => {
+      const r = rng(i * 977 + 13);
+      const a = -Math.PI/2 + (i / n) * Math.PI * 2;
+      const x = Math.cos(a) * R + (r()-.5) * 1.2;
+      const z = Math.sin(a) * R * 0.78 + (r()-.5) * 1.2;
+      const g = new THREE.Group();
+      g.position.set(x, 0, z);
+      const hex = colorOf(s);
+      const size = 1.9 + Math.min((s.units||[]).length, 4) * 0.12;
+
+      const shallow = new THREE.Mesh(new THREE.CylinderGeometry(size+0.9, size+0.9, 0.05, 6), mats.shallow);
+      shallow.position.y = -0.4; g.add(shallow);
+      const base = new THREE.Mesh(new THREE.CylinderGeometry(size, size+0.25, 1, 6), matFor(hex));
+      base.position.y = -0.3; base.castShadow = true; base.receiveShadow = true; g.add(base);
+      const top = new THREE.Mesh(new THREE.CylinderGeometry(size+0.04, size+0.04, 0.18, 6), mats.sand);
+      top.position.y = 0.29; top.receiveShadow = true; g.add(top);
+      const Y = 0.38;
+
+      const nb = Math.max(1, Math.min((s.units||[]).length, 4));
+      for (let k = 0; k < nb; k++) {
+        const ang = (k / nb) * Math.PI * 2 + r() * 0.6;
+        const d = size * 0.48 + r() * 0.25;
+        const hgt = 0.45 + r() * 0.35;
+        const house = new THREE.Group();
+        const body = new THREE.Mesh(new THREE.BoxGeometry(0.55, hgt, 0.55), mats.wall);
+        body.position.y = hgt/2; body.castShadow = true;
+        const roof = new THREE.Mesh(new THREE.ConeGeometry(0.48, 0.38, 4), roofFor(hex));
+        roof.position.y = hgt + 0.19; roof.rotation.y = Math.PI/4; roof.castShadow = true;
+        house.add(body, roof);
+        house.position.set(Math.cos(ang)*d, Y, Math.sin(ang)*d);
+        house.rotation.y = r() * Math.PI;
+        g.add(house);
+      }
+      const nt = 3 + Math.floor(r() * 3);
+      for (let k = 0; k < nt; k++) {
+        const ang = r() * Math.PI * 2, d = size * (0.55 + r() * 0.3);
+        const tree = new THREE.Group();
+        const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.06, 0.22, 5), mats.trunk);
+        trunk.position.y = 0.11;
+        const leaf = new THREE.Mesh(new THREE.ConeGeometry(0.24 + r()*0.08, 0.55 + r()*0.25, 6), mats.leaf);
+        leaf.position.y = 0.45; leaf.castShadow = true;
+        tree.add(trunk, leaf);
+        tree.position.set(Math.cos(ang)*d, Y, Math.sin(ang)*d);
+        g.add(tree);
+      }
+      const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 1.5, 6), mats.pole);
+      pole.position.set(0, Y + 0.75, 0); g.add(pole);
+      const flag = new THREE.Mesh(new THREE.PlaneGeometry(0.6, 0.38), mats.flagOff);
+      flag.position.set(0.3, Y + 1.3, 0); flag.castShadow = true; g.add(flag);
+
+      g.traverse(o => { o.userData.id = s.id; });
+      scene.add(g);
+      const label = h("button",{class:"lbl",type:"button",style:`--c:${hex}`,onclick:()=>{ flyTo(s.id); openSheet("station", s.id); }});
+      W.labelsEl.append(label);
+      W.islands.push({ s, g, base: new THREE.Vector3(x,0,z), flag, label, lift:0, scale:1, phase:r()*6.28 });
+      pts.push(new THREE.Vector3(x, 0, z));
+    });
+
+    // 航線：沿站點順序的點點虛線
+    if (pts.length > 1) {
+      const curve = new THREE.CatmullRomCurve3(pts.map(p => p.clone().setY(-0.32)), true, "centripetal", 0.5);
+      W.curve = curve;
+      const len = curve.getLength();
+      const count = Math.floor(len / 0.55);
+      const dot = new THREE.InstancedMesh(new THREE.SphereGeometry(0.07, 6, 4), mats.route, count);
+      const m = new THREE.Matrix4();
+      let placed = 0;
+      for (let k = 0; k < count; k++) {
+        const p = curve.getPointAt(k / count);
+        if (W.islands.some(I => Math.hypot(I.base.x - p.x, I.base.z - p.z) < 2.6)) continue;
+        m.makeTranslation(p.x, p.y, p.z); dot.setMatrixAt(placed++, m);
+      }
+      dot.count = placed;
+      scene.add(dot);
+
+      const boat = new THREE.Group();
+      const hull = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.18, 0.28), mats.trunk);
+      hull.position.y = 0.09;
+      const sail = new THREE.Mesh(new THREE.ConeGeometry(0.22, 0.6, 3), mats.wall);
+      sail.position.y = 0.45;
+      boat.add(hull, sail); boat.traverse(o => o.castShadow = true);
+      scene.add(boat); W.boat = boat;
+    }
+
+    // 中央小燈塔（裝飾）
+    const lh = new THREE.Group();
+    const rock = new THREE.Mesh(new THREE.CylinderGeometry(1.1, 1.3, 0.8, 6), mats.sand);
+    rock.position.y = -0.2; rock.receiveShadow = true;
+    const tower = new THREE.Mesh(new THREE.CylinderGeometry(0.25, 0.38, 1.8, 8), mats.wall);
+    tower.position.y = 1.1; tower.castShadow = true;
+    const cap = new THREE.Mesh(new THREE.ConeGeometry(0.36, 0.45, 8), roofFor("#D35F4A"));
+    cap.position.y = 2.25;
+    lh.add(rock, tower, cap); scene.add(lh);
+
+    Object.assign(W, { ok:true, renderer, camera, controls, sun });
+    applyColors();
+
+    // 點選島
+    const ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
+    let down = null;
+    renderer.domElement.addEventListener("pointerdown", e => { down = [e.clientX, e.clientY]; });
+    renderer.domElement.addEventListener("pointerup", e => {
+      if (!down || Math.hypot(e.clientX-down[0], e.clientY-down[1]) > 6) { down = null; return; }
+      down = null;
+      const rect = renderer.domElement.getBoundingClientRect();
+      ptr.set(((e.clientX-rect.left)/rect.width)*2-1, -((e.clientY-rect.top)/rect.height)*2+1);
+      ray.setFromCamera(ptr, camera);
+      const hit = ray.intersectObjects(W.islands.map(I => I.g), true).find(x => x.object.userData.id);
+      if (hit) { flyTo(hit.object.userData.id); openSheet("station", hit.object.userData.id); }
+    });
+
+    new ResizeObserver(() => resize()).observe(W.stage);
+    new MutationObserver(() => applyColors()).observe(document.documentElement, { attributes:true, attributeFilter:["data-theme"] });
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change", applyColors);
+    document.addEventListener("visibilitychange", () => { if (document.hidden) stop(); else if (W.stage.isConnected) start(); });
+  }
+
+  function applyColors(){
+    if (!W.ok) return;
+    const m = W.mats, col = c => new THREE.Color(c);
+    const sky = col(tok("--sky"));
+    W.scene.background = sky; W.scene.fog.color = sky;
+    m.sea.color = col(tok("--sea")); m.shallow.color = col(tok("--shallow"));
+    m.sand.color = col(tok("--sand")); m.leaf.color = col(tok("--leaf"));
+    m.wall.color = col(tok("--wall")); m.route.color = col(tok("--route"));
+    m.flagOff.color = col(tok("--wall")); m.flagOn.color = col(tok("--accent"));
+    const dark = tok("--scene-dark") === "1";
+    W.hemi.intensity = dark ? 0.5 : 0.75; W.sun.intensity = dark ? 0.45 : 0.85;
+  }
+
+  function resize(){
+    if (!W.ok) return;
+    if (!W.viewSet && W.stage.clientWidth) { W.viewSet = true; const w0 = W.stage.clientWidth, h0 = W.stage.clientHeight; W.renderer.setSize(w0, h0, false); W.camera.aspect = w0 / h0; W.camera.updateProjectionMatrix(); resetView(true); }
+    const w = W.stage.clientWidth, hgt = W.stage.clientHeight;
+    if (!w || !hgt) return;
+    W.renderer.setSize(w, hgt, false);
+    W.camera.aspect = w / hgt; W.camera.updateProjectionMatrix();
+  }
+
+  function resetView(instant){
+    if (!W.ok) return;
+    const R = W.R, cam = W.camera;
+    const vf = THREE.MathUtils.degToRad(cam.fov), hf = 2 * Math.atan(Math.tan(vf/2) * (cam.aspect || 1));
+    const need = Math.max((R + 2.8) / Math.tan(hf/2), (R * 0.78 + 3.5) / Math.tan(vf/2)) * 1.05;
+    const phi = 0.8;
+    W.controls.maxDistance = Math.max(R * 3.2, need * 1.3);
+    const pos = new THREE.Vector3(0, need * Math.cos(phi), need * Math.sin(phi));
+    const tgt = new THREE.Vector3(0, 0, 0);
+    W.sel = null;
+    if (instant) { W.camera.position.copy(pos); W.controls.target.copy(tgt); W.controls.update(); W.fly = null; }
+    else W.fly = { pos, tgt, t0: performance.now(), from: W.camera.position.clone(), fromT: W.controls.target.clone() };
+  }
+
+  function flyTo(id){
+    if (!W.ok) return;
+    const I = W.islands.find(x => x.s.id === id); if (!I) return;
+    W.sel = id;
+    const dir = W.camera.position.clone().sub(W.controls.target).setY(0);
+    if (dir.lengthSq() < 0.01) dir.set(0,0,1);
+    dir.normalize();
+    const tgt = I.base.clone().setY(0.4);
+    const pos = tgt.clone().add(dir.multiplyScalar(8.5)).setY(7.5);
+    if (!state.motion) { W.camera.position.copy(pos); W.controls.target.copy(tgt); W.fly = null; return; }
+    W.fly = { pos, tgt, t0: performance.now(), from: W.camera.position.clone(), fromT: W.controls.target.clone() };
+  }
+
+  const v3 = window.THREE ? new THREE.Vector3() : null, UP = window.THREE ? new THREE.Vector3(0, 2.3, 0) : null;
+  function frame(now){
+    if (!W.running) return;
+    W.raf = requestAnimationFrame(frame);
+    const t = now / 1000;
+    if (W.fly) {
+      const k = Math.min(1, (now - W.fly.t0) / 900), e = k < .5 ? 2*k*k : 1 - Math.pow(-2*k+2, 2)/2;
+      W.camera.position.lerpVectors(W.fly.from, W.fly.pos, e);
+      W.controls.target.lerpVectors(W.fly.fromT, W.fly.tgt, e);
+      if (k >= 1) W.fly = null;
+    }
+    W.controls.update();
+    const filtering = !!(state.seg || state.q);
+    const rect = W.stage.getBoundingClientRect();
+    for (const I of W.islands) {
+      const hit = !filtering || matches(I.s);
+      const wantLift = W.sel === I.s.id ? 0.45 : 0;
+      I.lift += (wantLift - I.lift) * 0.12;
+      const wantScale = hit ? 1 : 0.82;
+      I.scale += (wantScale - I.scale) * 0.12;
+      const bob = state.motion ? Math.sin(t * 0.8 + I.phase) * 0.05 : 0;
+      I.g.position.y = bob + I.lift - (hit ? 0 : 0.25);
+      I.g.scale.setScalar(I.scale);
+      I.flag.material = stamps.has(I.s.id) ? W.mats.flagOn : W.mats.flagOff;
+      if (state.motion) I.flag.rotation.y = Math.sin(t * 2.2 + I.phase) * 0.25;
+      v3.copy(I.g.position).add(UP).project(W.camera);
+      const vis = v3.z < 1 && Math.abs(v3.x) < 1.15 && Math.abs(v3.y) < 1.15;
+      I.label.hidden = !vis;
+      if (vis) {
+        I.label.style.transform = `translate(${((v3.x+1)/2*rect.width).toFixed(1)}px, ${((1-v3.y)/2*rect.height).toFixed(1)}px) translate(-50%,-100%)`;
+        I.label.classList.toggle("dim", !hit);
+        I.label.classList.toggle("sel", W.sel === I.s.id);
+        I.label.style.zIndex = String(1000 - Math.round(v3.z * 500));
+      }
+    }
+    if (W.boat && W.curve) {
+      const u = state.motion ? (t * 0.012) % 1 : 0.02;
+      const p = W.curve.getPointAt(u), q = W.curve.getPointAt((u + 0.002) % 1);
+      W.boat.position.set(p.x, -0.3 + (state.motion ? Math.sin(t*2)*0.03 : 0), p.z);
+      W.boat.lookAt(q.x, W.boat.position.y, q.z);
+      W.boat.rotateY(Math.PI/2);
+    }
+    W.renderer.render(W.scene, W.camera);
+  }
+  function start(){ if (!W.ok || W.running) return; W.running = true; resize(); if (!W.viewSet && W.stage.clientWidth) { resetView(true); W.viewSet = true; } W.raf = requestAnimationFrame(frame); }
+  function stop(){ W.running = false; if (W.raf) cancelAnimationFrame(W.raf); }
+
+  function refreshLabels(){
+    W.islands.forEach((I, i) => {
+      I.label.replaceChildren(h("span",{class:"ln num"},String(i+1).padStart(2,"0")), h("span",{class:"lt"},Zx(I.s.name)),
+        stamps.has(I.s.id) ? h("span",{class:"lk"},icon("check")) : null);
+      I.label.setAttribute("aria-label", `${Sx(I.s.name)}，${Sx(wkLabel(I.s.weeks))}`);
+    });
+    if (W.hud) {
+      W.hud.querySelector(".hud-t").replaceChildren(L("全景","Overview",true));
+      W.hint.replaceChildren(L("拖曳旋轉、雙指或滾輪縮放，點島看內容","Drag to rotate, pinch or scroll to zoom, tap an island",true));
+    }
+  }
+
+  /* ================= 頁面 ================= */
+  const PAGES = [
+    { key:"map", tab:["地圖","Map"], lvl:["總覽","Overview"], title:["這學期的群島","This semester's islands"],
+      get:["轉一轉地圖，點一座島，就看到那一站學什麼、怎麼評量。","Turn the map and tap an island to see what it teaches and how it is graded."], render: pageMap },
+    { key:"week", tab:["週次","Weeks"], lvl:["進度","Schedule"], title:["這週上什麼？","What's on this week?"],
+      get:["點一個週次，馬上看到那週在哪座島、要交什麼。","Tap a week to see the island and what to hand in."], render: pageWeek },
+    { key:"pass", tab:["護照","Passport"], lvl:["紀錄","Progress"], title:["我的課程護照","My course passport"],
+      get:["打開一座島就插上旗子，看自己逛完了多少。","Every island you open gets a flag."], render: pagePass }
+  ];
+  if (state.page < 0 || state.page >= PAGES.length) state.page = 0;
+
+  function renderTop(){
+    document.getElementById("top").replaceChildren(
+      h("div",{class:"brand"}, h("b",null,Sx(C.title)), state.lang==="bi" && T(C.title)[1] ? h("span",{class:"en",lang:"en"},T(C.title)[1]) : null),
+      h("div",{class:"big-num num"}, String(C.totalWeeks), h("small",null, S("週","weeks"))),
+      h("button",{class:"pill-btn",type:"button","aria-label":S("設定","Settings"),onclick:()=>openSheet("settings")}, icon("gear"), L("設定","Settings",true)));
+  }
+  function renderTabs(){
+    document.getElementById("tabs").replaceChildren(...PAGES.map((p,i) =>
+      h("button",{class:"tab"+(i===state.page?" on":""),type:"button","aria-current":i===state.page?"page":null,onclick:()=>go(i)},
+        h("span",{class:"tn num"},String(i+1)), h("span",null,T(p.tab)[state.lang==="en"?1:0]),
+        state.lang==="bi" ? h("span",{class:"en",lang:"en"},T(p.tab)[1]) : null)));
+  }
+  function pageHead(i){
+    const p = PAGES[i];
+    return h("div",{class:"phead"},
+      h("div",{class:"stepline"}, h("span",{class:"stepno num"},String(i+1)), h("span",{class:"steplbl num"},`Step ${i+1} / ${PAGES.length}`), h("span",{class:"lvl"},Lx(p.lvl,true))),
+      h("h1",{id:"ptitle"},Lx(p.title)), h("p",{class:"get"},Lx(p.get)));
+  }
+  function navRow(i){
+    return h("div",{class:"navrow"},
+      i>0 ? h("button",{class:"btn sec",type:"button",onclick:()=>go(i-1)}, icon("left"), L("上一步","Back",true)) : null,
+      i<PAGES.length-1 ? h("button",{class:"btn",type:"button",onclick:()=>go(i+1)}, L("下一步","Next",true), icon("right")) : null);
+  }
+  function stationButton(s, idx, onTap){
+    return h("li",null, h("button",{class:"st",type:"button",style:`--c:${colorOf(s)}`,onclick:onTap || (()=>{ flyTo(s.id); openSheet("station",s.id); }),
+        "aria-label":`${Sx(s.name)}，${Sx(wkLabel(s.weeks))}`},
+      h("span",{class:"n num"},String(idx+1).padStart(2,"0")), h("span",{class:"nm"},Lx(s.name,true)),
+      h("span",{class:"stamp"+(stamps.has(s.id)?" done":"")},stamps.has(s.id)?icon("check"):null),
+      h("span",{class:"meta num"},Sx(wkLabel(s.weeks)),"・",Sx((segById[s.seg]||{}).name)),
+      h("span",{class:"tg"},Lx(s.tagline))));
+  }
+  function matches(s){
+    if (state.seg && s.seg !== state.seg) return false;
+    if (state.q) {
+      const all = [s.name,s.tagline,s.learn,s.assess,...(s.skills||[]),...(s.units||[]).flatMap(u=>[u.t,u.d])].flatMap(T).join(" ").toLowerCase();
+      if (!all.includes(state.q)) return false;
+    }
+    return true;
+  }
+  function renderList(){
+    const ul = document.getElementById("list"); if (!ul) return;
+    const hits = C.stations.map((s,i)=>[s,i]).filter(([s])=>matches(s));
+    ul.replaceChildren(...(hits.length ? hits.map(([s,i])=>stationButton(s,i)) : [h("li",{class:"empty"},L("沒有符合的島，換個關鍵字或選「全部」。","No islands match. Try another word or pick All."))]));
+  }
+
+  function pageMap(){
+    if (!W.stage) buildStage();
+    refreshLabels();
+    const segChips = [{id:null,name:["全部","All"]},...C.segments].map(s =>
+      h("button",{class:"chip"+(state.seg===s.id?" on":""),type:"button","aria-pressed":String(state.seg===s.id),onclick:()=>{state.seg=s.id;renderMain();}},
+        s.color ? h("span",{class:"dot",style:`background:${s.color}`}) : null, Lx(s.name,true),
+        s.weeks ? h("span",{class:"num",style:"opacity:.75;font-weight:600"}, ` ${s.weeks}`) : null));
+    const input = h("input",{id:"q",type:"search",value:state.q,placeholder:S("搜尋島名、單元、能力","Search islands, units, skills"),"aria-label":S("搜尋","Search"),
+      oninput:e=>{state.q=e.target.value.trim().toLowerCase();renderList();}});
+    return [
+      h("p",{class:"sub"},Lx(C.subtitle)),
+      C.isSample ? h("span",{class:"sample"},L("範例資料・請換成你的課","Sample data — replace with your course",true)) : null,
+      W.failed
+        ? h("p",{class:"card sub"},L("這台裝置無法顯示 3D 地圖，請用下方清單瀏覽。","This device cannot show the 3D map. Use the list below."))
+        : W.stage,
+      h("div",{class:"chips",role:"group","aria-label":S("段落","Segments")},segChips),
+      h("label",{class:"search"},icon("search"),input),
+      h("ul",{class:"list",id:"list"})
+    ];
+  }
+
+  function pageWeek(){
+    const btns = [];
+    for (let w=1; w<=C.totalWeeks; w++){
+      const st = C.stations.find(s=>s.weeks.includes(w));
+      btns.push(h("button",{class:"wk num"+(w===state.week?" on":"")+(st?"":" off"),type:"button",style:st?`--c:${colorOf(st)}`:null,
+        "aria-pressed":String(w===state.week),"aria-label":S(`第 ${w} 週`,`Week ${w}`),onclick:()=>{state.week=w;renderMain();}},String(w)));
+    }
+    const hits = C.stations.map((s,i)=>[s,i]).filter(([s])=>s.weeks.includes(state.week));
+    const out = h("div",{class:"wkout"},
+      h("h2",{style:"font-size:1.15rem"},L(`第 ${state.week} 週`,`Week ${state.week}`,true)),
+      hits.length
+        ? [h("ul",{class:"list"},hits.map(([s,i])=>stationButton(s,i,()=>openSheet("station",s.id)))),
+           ...hits.map(([s]) => h("div",{class:"blk"},h("h3",null,L("要交什麼","What to hand in",true)),h("p",null,Lx(s.assess)))),
+           !W.failed ? h("button",{class:"btn sec",type:"button",onclick:()=>{ go(0); requestAnimationFrame(()=>flyTo(hits[0][0].id)); }},icon("pin"),L("在地圖上看這座島","Show it on the map",true)) : null]
+        : h("p",{class:"card sub"},L("這週沒有安排島，可能是段考週或彈性週。","Nothing is planned this week. It may be an exam or flexible week.")));
+    return [h("div",{class:"weeks",role:"group","aria-label":S("週次","Weeks")},btns), out];
+  }
+
+  function pagePass(){
+    const n = stamps.size, total = C.stations.length;
+    const grid = C.stations.map(s => h("button",{type:"button",onclick:()=>openSheet("station",s.id)},
+      h("span",{class:"stamp"+(stamps.has(s.id)?" done":"")},stamps.has(s.id)?icon("check"):null), Lx(s.name)));
+    const reset = state.resetAsk
+      ? h("div",{class:"confirm"},h("span",null,L("確定清除所有旗子？","Clear all flags?",true)),
+          h("button",{class:"btn danger",type:"button",onclick:()=>{stamps.clear();state.resetAsk=false;save();renderMain();}},L("清除","Clear",true)),
+          h("button",{class:"btn sec",type:"button",onclick:()=>{state.resetAsk=false;renderMain();}},L("取消","Cancel",true)))
+      : h("button",{class:"btn sec",type:"button",onclick:()=>{state.resetAsk=true;renderMain();}},L("清除我的紀錄","Clear my progress",true));
+    return [
+      h("div",{class:"card",style:"display:flex;flex-direction:column;gap:10px"},
+        h("div",{style:"display:flex;align-items:baseline;gap:8px"},h("span",{class:"bignum num"},String(n)),h("span",{class:"sub num"},`/ ${total} `,S("座島","islands"))),
+        h("div",{class:"progress",role:"progressbar","aria-valuemin":"0","aria-valuemax":String(total),"aria-valuenow":String(n)},h("i",{style:`width:${total?n/total*100:0}%`}))),
+      h("div",{class:"pass"},grid),
+      h("p",{class:"howto"},L("紀錄只存在你自己的瀏覽器，不會傳到任何地方。","Your progress stays in your own browser and is never sent anywhere.")),
+      reset
+    ];
+  }
+
+  function renderMain(){
+    const i = state.page, main = document.getElementById("main");
+    const focusQ = document.activeElement && document.activeElement.id === "q";
+    main.replaceChildren(h("section",{class:"page","aria-labelledby":"ptitle"},
+      pageHead(i), PAGES[i].render(), navRow(i),
+      h("p",{class:"howto"},L("老師怎麼改成自己的課：用記事本打開這個檔案，找到 COURSE 那一段，換成自己的課名、段落與每一座島，存檔後用瀏覽器打開。島的數量和位置會自動排好。",
+        "Teachers: open this file in a text editor, replace the COURSE block with your course, save, and open it. Islands are placed automatically.")),
+      h("footer",null,h("b",null,"Gina教室的AI奇蹟"),h("br"),"鳳新高中英文科李姬慧老師 X AI 彙整製作")));
+    renderList();
+    if (PAGES[i].key === "map" && W.ok) start(); else stop();
+    if (focusQ) { const q = document.getElementById("q"); if (q){ q.focus(); q.setSelectionRange(q.value.length,q.value.length);} }
+  }
+  function go(i){ state.page=i; state.resetAsk=false; save(); render(); scrollTo({top:0,behavior:"instant"}); }
+
+  let lastFocus = null;
+  function openSheet(kind, id){
+    if (kind==="station"){ stamps.add(id); save(); refreshLabels(); }
+    lastFocus = document.activeElement;
+    state.sheet = {kind,id}; renderOverlay();
+    if (state.page !== 0) renderMain(); else renderList();
+  }
+  function closeSheet(){ state.sheet=null; renderOverlay(); if (lastFocus && document.contains(lastFocus)) lastFocus.focus(); }
+
+  function renderOverlay(){
+    const ov = document.getElementById("overlay");
+    if (!state.sheet){ ov.replaceChildren(); return; }
+    let head, body;
+    if (state.sheet.kind==="settings"){
+      head = L("設定","Settings",true);
+      const seg = (opts,cur,set) => h("div",{class:"seg-ctl",role:"group"},opts.map(([v,lab]) =>
+        h("button",{class:cur===v?"on":"",type:"button","aria-pressed":String(cur===v),onclick:()=>{set(v);save();render();}},lab)));
+      body = [
+        h("div",{class:"field"},h("span",null,L("語言","Language",true)), seg([["zh","中文"],["bi","雙語"],["en","English"]],state.lang,v=>state.lang=v)),
+        h("div",{class:"field"},h("span",null,L("字級","Text size",true)), seg([[false,S("標準","Normal")],[true,S("放大","Large")]],state.big,v=>state.big=v)),
+        h("div",{class:"field"},h("span",null,L("地圖動畫","Map animation",true)), seg([[true,S("開","On")],[false,S("關","Off")]],state.motion,v=>state.motion=v))
+      ];
+    } else {
+      const s = stById[state.sheet.id], seg = segById[s.seg] || {};
+      head = Lx(s.name);
+      body = [
+        h("p",{class:"sub num",style:`color:${colorOf(s)};font-weight:700`},Sx(wkLabel(s.weeks)),"・",Sx(seg.name)),
+        h("p",{class:"get"},Lx(s.tagline)),
+        h("div",{class:"blk"},h("h3",null,L("學生學什麼","What students learn",true)),h("p",null,Lx(s.learn))),
+        h("div",{class:"blk"},h("h3",null,L("怎麼評量","How it is graded",true)),h("p",null,Lx(s.assess))),
+        s.skills?.length ? h("div",{class:"blk"},h("h3",null,L("學到什麼能力","Skills",true)),h("ul",null,s.skills.map(k=>h("li",null,Lx(k))))) : null,
+        s.units?.length ? h("div",{class:"blk"},h("h3",null,L("島上單元","Units on this island",true)),
+          h("ol",{class:"units"},s.units.map((u,i)=>h("li",null,h("span",{class:"un num"},String(i+1)),h("span",{class:"ut"},Lx(u.t,true)),h("span",{class:"ud"},Lx(u.d)))))) : null,
+        Sx(s.story) ? h("div",{class:"blk story"},h("h3",null,L("故事設定（虛構）","Story (fiction)",true)),h("p",null,Lx(s.story))) : null,
+        s.links?.length ? h("div",{class:"field"},h("span",null,L("相關的島","Related islands",true)),
+          h("div",{class:"links"},s.links.filter(l=>stById[l]).map(l=>h("button",{class:"chip",type:"button",onclick:()=>{ flyTo(l); openSheet("station",l); }},Lx(stById[l].name,true))))) : null
+      ];
+    }
+    ov.replaceChildren(
+      h("div",{class:"scrim",onclick:closeSheet}),
+      h("div",{class:"sheet",role:"dialog","aria-modal":"true","aria-labelledby":"shead"},
+        h("div",{class:"in"},h("div",{class:"grab"}),
+          h("div",{class:"sheet-head"},h("h2",{id:"shead"},head),
+            h("button",{class:"x",type:"button","aria-label":S("關閉","Close"),onclick:closeSheet},icon("x"))),
+          body)));
+    ov.querySelector(".sheet").scrollTop = 0;
+    ov.querySelector(".x").focus();
+  }
+  document.addEventListener("keydown", e => { if (e.key==="Escape" && state.sheet) closeSheet(); });
+
+  function render(){
+    document.documentElement.classList.toggle("big", state.big);
+    document.documentElement.lang = state.lang==="en" ? "en" : "zh-Hant";
+    document.title = Sx(C.title);
+    renderTop(); renderTabs(); renderMain();
+    if (state.sheet) renderOverlay();
+  }
+  render();
+})();
+
+</script>
+
+<a href="../" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:9999;background:#2F86D6;color:#fff;font:700 13px/1 system-ui,sans-serif;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.2)">← 回群島</a>
+</body></html>

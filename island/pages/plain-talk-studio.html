@@ -1,0 +1,477 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>白話拆解教室</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Layout: 淺藍清新——老師的課堂口條手冊。底部三格：手冊／練習／備課卡；手冊依「一堂課的時間順序」排 8 個時刻 */
+:root{
+  --bg:#F5F9FD;--bg-2:#EAF3FB;--card:#FFFFFF;
+  --accent:#2F86D6;--accent-deep:#1F6FB8;--accent-ink:#155A96;--tint:#DCEBFA;
+  --second:#0E9A9A;--second-tint:#D7F2F0;
+  --ink:#17324D;--ink-soft:#557089;--line:#D3E2EF;--on-accent:#FFFFFF;
+  --good:#3F7A3A;--good-tint:#E3EFDD;--bad:#A63D2A;--bad-tint:#F8E1DA;
+  --shadow:0 6px 22px rgba(31,111,184,.10);
+  --radius:16px;--bar-h:64px;
+  --f-body:'Nunito','Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;
+  --f-ui:system-ui,-apple-system,'PingFang TC','Microsoft JhengHei',sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1A26;--bg-2:#132233;--card:#182A3D;
+  --accent:#6CB4F0;--accent-deep:#4A9BE0;--accent-ink:#A6D2F8;--tint:#1C3550;
+  --second:#4FD1C5;--second-tint:#173A3A;
+  --ink:#E6EFF8;--ink-soft:#9FB3C8;--line:#26394D;--on-accent:#0F1A26;
+  --good:#8CC983;--good-tint:#22321F;--bad:#F09A84;--bad-tint:#3B231C;
+  --shadow:0 6px 22px rgba(0,0,0,.35);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0F1A26;--bg-2:#132233;--card:#182A3D;
+  --accent:#6CB4F0;--accent-deep:#4A9BE0;--accent-ink:#A6D2F8;--tint:#1C3550;
+  --second:#4FD1C5;--second-tint:#173A3A;
+  --ink:#E6EFF8;--ink-soft:#9FB3C8;--line:#26394D;--on-accent:#0F1A26;
+  --good:#8CC983;--good-tint:#22321F;--bad:#F09A84;--bad-tint:#3B231C;
+  --shadow:0 6px 22px rgba(0,0,0,.35);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{font-size:106.25%}
+html[data-size="lg"]{font-size:118.75%}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);line-height:1.8;-webkit-text-size-adjust:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3,h4{text-wrap:balance;line-height:1.35;margin:0;font-weight:800}
+p{margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:6px}
+svg.i{width:1.15em;height:1.15em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto;vertical-align:-.18em}
+
+.appbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.appbar .wrap{display:flex;align-items:center;gap:10px;min-height:56px}
+.brand{flex:1;min-width:0;display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.brand b{font-weight:800;font-size:1.1rem}
+.brand small{color:var(--ink-soft);font-size:.8rem;font-family:var(--f-ui)}
+.iconbtn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;min-width:44px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);font-family:var(--f-ui);font-size:.88rem}
+
+main{padding-bottom:calc(var(--bar-h) + 24px + env(safe-area-inset-bottom,0px))}
+.page{padding-block:20px 12px}
+.page-head{margin-bottom:16px}
+.eyebrow{font-family:var(--f-ui);font-size:.78rem;letter-spacing:.08em;color:var(--second);font-weight:700;text-transform:uppercase}
+.page-head h2{font-size:clamp(1.45rem,5.6vw,1.95rem);margin-top:2px}
+.page-head .get{color:var(--ink-soft);margin-top:6px;font-size:.98rem}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow)}
+.stack{display:grid;gap:12px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.muted{color:var(--ink-soft);font-size:.92rem}
+.btn{display:inline-flex;align-items:center;gap:6px;min-height:46px;background:var(--accent);color:var(--on-accent);border:1.5px solid var(--accent);font-weight:800;padding:8px 20px;border-radius:999px;font-family:var(--f-ui);font-size:.95rem;line-height:1.3;justify-content:center}
+.btn:hover{background:var(--accent-deep)}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.ghost{background:var(--card);color:var(--accent-ink);border-color:var(--accent)}
+.btn.ghost:hover{background:var(--tint)}
+.btn.small{min-height:40px;padding:6px 14px;font-size:.86rem}
+
+.hero{background:var(--bg-2);border-radius:var(--radius);padding:18px 16px;margin-bottom:18px}
+.hero h3{font-size:1.08rem;margin-bottom:8px}
+.why{margin:0;padding-left:1.2em}
+.why li+li{margin-top:6px}
+.why b{color:var(--accent-ink)}
+.src{font-size:.8rem;color:var(--ink-soft);line-height:1.7;margin-top:10px}
+.src a{color:var(--second)}
+
+.timeline{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;margin-bottom:12px;position:sticky;top:calc(56px + env(safe-area-inset-top,0px));z-index:10;background:var(--bg);padding-top:8px}
+.timeline::-webkit-scrollbar{display:none}
+.timeline button{flex:0 0 auto;min-height:40px;border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:4px 12px;font-family:var(--f-ui);font-size:.84rem;display:flex;gap:6px;align-items:center}
+.timeline button b{color:var(--accent);font-variant-numeric:lining-nums}
+.timeline button.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.timeline button.on b{color:var(--on-accent)}
+
+.moment{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;scroll-margin-top:120px}
+.m-head{padding:16px 16px 12px;border-bottom:1px solid var(--line)}
+.m-when{font-family:var(--f-ui);font-size:.8rem;color:var(--second);font-weight:700}
+.m-head h3{font-size:1.25rem;margin-top:2px}
+.m-head .move{margin-top:6px;color:var(--ink-soft);font-size:.94rem}
+.m-body{padding:14px 16px 16px;display:grid;gap:14px}
+.lbl{font-family:var(--f-ui);font-size:.76rem;letter-spacing:.06em;color:var(--ink-soft);font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.frame{background:var(--tint);border-radius:12px;padding:12px 14px}
+.frame .zh{font-size:1.08rem;font-weight:700;color:var(--accent-ink)}
+.frame .en{font-size:.98rem;color:var(--ink);margin-top:4px}
+.ba{display:grid;gap:8px}
+.ba div{border-radius:12px;padding:10px 12px;font-size:.96rem}
+.ba .b{background:var(--bad-tint)}
+.ba .a{background:var(--good-tint)}
+.ba .b .lbl{color:var(--bad)}
+.ba .a .lbl{color:var(--good)}
+.shen{font-size:.92rem;color:var(--ink-soft);border-left:3px solid var(--second);padding-left:10px}
+.trap{font-size:.92rem;display:flex;gap:6px;color:var(--ink)}
+.trap svg.i{color:var(--bad);margin-top:5px}
+
+.tips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media (max-width:560px){.tips{grid-template-columns:1fr}}
+.tips div{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.tips b{display:block}
+.tips span{font-size:.9rem;color:var(--ink-soft)}
+.skel{display:grid;gap:10px}
+.skel h4{font-size:1rem}
+.flow{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0}
+.flow span{font-size:.82rem;background:var(--bg-2);border-radius:8px;padding:2px 8px}
+.flow i{font-style:normal;color:var(--ink-soft)}
+
+.pick{display:grid;gap:8px}
+.seg-ctl{display:flex;background:var(--bg-2);border-radius:999px;padding:4px;gap:4px}
+.seg-ctl button{flex:1;min-height:42px;border:none;background:transparent;border-radius:999px;font-family:var(--f-ui);font-size:.88rem;line-height:1.25}
+.seg-ctl .on{background:var(--accent);color:var(--on-accent);font-weight:700}
+select,input[type=text],textarea{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;width:100%;font-size:1rem;min-height:46px;min-width:0}
+select:focus,input[type=text]:focus,textarea:focus{border-color:var(--accent);outline:none}
+.stage{text-align:center}
+.task{font-size:1.15rem;font-weight:800;line-height:1.6;margin:6px 0 10px}
+.clock{font-size:clamp(3.2rem,16vw,4.6rem);font-weight:800;line-height:1;color:var(--accent-ink);font-variant-numeric:lining-nums tabular-nums;margin:8px 0}
+.clock.warn{color:var(--bad)}
+.frame-mini{background:var(--tint);border-radius:12px;padding:8px 12px;color:var(--accent-ink);font-weight:700;margin:6px 0 12px;text-align:left}
+.checks{display:grid;gap:8px;text-align:left;margin-top:14px}
+.checks label{display:flex;gap:10px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;min-height:48px}
+.checks input{width:22px;height:22px;accent-color:var(--accent);flex:0 0 auto;margin-top:3px}
+.score{font-weight:800;color:var(--accent-ink);margin-top:10px}
+
+.field{display:grid;gap:6px}
+.field>label,.field>.flbl{font-weight:800;font-size:.95rem}
+.examples{display:flex;flex-wrap:wrap;gap:6px}
+.examples button{min-height:36px;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:2px 12px;font-size:.86rem}
+.out{display:grid;gap:10px}
+.oc{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;border-left:5px solid var(--c)}
+.oc .lbl{color:var(--c)}
+.oc p{font-size:1rem}
+.oc .sub{font-size:.94rem;color:var(--ink-soft);margin-top:4px}
+.oc ol{margin:4px 0 0;padding-left:1.3em}
+.thinking{display:flex;gap:10px;align-items:center;background:var(--tint);border-radius:12px;padding:12px 14px;font-weight:700;color:var(--accent-ink)}
+.thinking .dot{width:10px;height:10px;border-radius:50%;background:var(--accent);animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.status{font-family:var(--f-ui);font-size:.9rem;color:var(--ink-soft)}
+.status.err{color:var(--bad)}
+.exflag{background:var(--second-tint);border-radius:12px;padding:8px 12px;font-size:.9rem}
+.fallback pre{white-space:pre-wrap;background:var(--bg-2);border-radius:10px;padding:10px;font-size:.78rem;max-height:200px;overflow:auto;margin:8px 0}
+
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+.tabbar .in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.tabbar button{min-height:var(--bar-h);border:none;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-family:var(--f-ui);font-size:.8rem;color:var(--ink-soft);position:relative}
+.tabbar button svg.i{width:22px;height:22px}
+.tabbar button[aria-current="page"]{color:var(--accent-ink);font-weight:700}
+.tabbar button[aria-current="page"]::before{content:"";position:absolute;top:0;left:26%;right:26%;height:3px;border-radius:0 0 3px 3px;background:var(--accent)}
+footer{padding-block:24px 8px;text-align:center;color:var(--ink-soft);font-size:.84rem}
+footer b{color:var(--accent-ink)}
+</style>
+
+<header class="appbar"><div class="wrap">
+  <div class="brand"><b>白話拆解教室</b><small>老師的課堂口條手冊</small></div>
+  <button class="iconbtn" id="sizeBtn" type="button" aria-label="切換字級"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7V5h10v2M9 5v14M7 19h4M14 13v-1h6v1M17 12v7M15.5 19h3"/></svg><span id="sizeLbl">放大字</span></button>
+</div></header>
+
+<main>
+  <section class="page" id="book"></section>
+  <section class="page" id="practice" hidden></section>
+  <section class="page" id="prep" hidden></section>
+  <footer><div class="wrap"><b>Gina教室的AI奇蹟</b><br>鳳新高中英文科李姬慧老師 X AI 彙整製作</div></footer>
+</main>
+<nav class="tabbar" aria-label="主選單"><div class="in" id="tabbar"></div></nav>
+
+<script>
+(function(){
+'use strict';
+const $ = s => document.querySelector(s);
+function el(tag, props, ...kids){ const e = document.createElement(tag); if (props) for (const k in props){ const v = props[k]; if (v == null || v === false) continue; if (k === 'class') e.className = v; else if (k === 'text') e.textContent = v; else if (k === 'style') e.setAttribute('style', v); else if (k.startsWith('on')) e.addEventListener(k.slice(2), v); else e.setAttribute(k, v === true ? '' : v); } for (const c of kids) if (c != null && c !== false) e.append(c); return e; }
+const IC = {
+  book:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5V21h16"/>',
+  mic:'<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4M8 22h8"/>',
+  card:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h10M7 13h6"/>',
+  spark:'<path d="M12 3l1.9 5.8L20 11l-6.1 2.2L12 19l-1.9-5.8L4 11l6.1-2.2z"/>',
+  alert:'<path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>',
+  play:'<path d="M7 4l13 8-13 8z"/>', shuffle:'<path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/>', copy:'<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/>',
+  quote:'<path d="M7 7h4v4c0 3-2 5-4 6M15 7h4v4c0 3-2 5-4 6"/>'
+};
+const icon = n => { const s = document.createElementNS('http://www.w3.org/2000/svg','svg'); s.setAttribute('class','i'); s.setAttribute('viewBox','0 0 24 24'); s.setAttribute('aria-hidden','true'); s.innerHTML = IC[n]; return s; };
+
+const KEY = 'teacher-talk-v1';
+let state = {tab:'book', size:'md', moment:0, pm:0, ptopic:0, psec:30, concept:'', grade:'高二', lang:'zh', card:null, checks:{}};
+try { const raw = localStorage.getItem(KEY); if (raw){ const s = JSON.parse(raw); if (s && typeof s === 'object') state = Object.assign(state, s); } } catch(e){}
+let saveT; const save = () => { clearTimeout(saveT); saveT = setTimeout(() => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch(e){} }, 250); };
+
+/* ---------- 8 classroom moments ---------- */
+const M = [
+ {when:'開場 30 秒', t:'先丟結論，再說跟你有關', move:'結論先行＋跟你有關',
+  why:'學生在前 30 秒決定要不要聽。先給「今天只要記住的一件事」，後面的細節才有地方掛。',
+  shen:'節目一開始就把方向講完：「台北的體育要從金牌導向，轉成全民運動文化」，接著才談運動驛站、俱樂部。被問到雙城論壇時，也是先丟出「無限城論壇」這個方向。',
+  zh:'「今天只要記住一件事：＿＿。為什麼跟你有關？因為＿＿。」', en:'If you remember only one thing today, remember this: ___. Why should you care? Because ___.',
+  before:'「好，翻到第五課，我們先看單字，第一個是……」', after:'「今天只要記住一件事：被動語態，是把『被影響的人或事』放到句子最前面。為什麼跟你有關？因為學測閱讀的新聞和科學文章，最愛用這招。」',
+  trap:'先講十分鐘背景才說重點，學生在等重點的時候就分心了。',
+  checks:['第一句就講出今天的重點','有說「跟你有什麼關係」','30 秒內講完']},
+ {when:'講解抽象概念', t:'換個抽屜：放進學生熟悉的類別', move:'重新歸類',
+  why:'陌生的東西放進熟悉的抽屜，學生會自動用已有的經驗去理解，不用從零開始。',
+  shen:'重量訓練不是健身房的事，而是「長照前的預防醫學」；民防也可以看成一種「戰術體能訓練」。一換抽屜，原本不關心的人也聽得懂。',
+  zh:'「＿＿其實不是＿＿，它比較像是＿＿。」', en:'___ isn’t really ___. It’s more like ___.',
+  before:'「關係代名詞是用來引導形容詞子句、修飾先行詞的代名詞。」', after:'「關係代名詞其實不是新文法，它比較像一個『夾子』：把兩句話夾成一句，順便補充說明前面那個人或東西。」',
+  trap:'比喻講完一定要回到正式說法，不然學生只記得「夾子」，考試寫不出來。',
+  checks:['用了「它比較像是…」','比喻是學生生活裡的東西','最後回到正式說法']},
+ {when:'比較兩個易混概念', t:'給兩張畫面，讓學生用看的', move:'對比畫面',
+  why:'兩個並排的畫面比兩段定義好記。學生看得出差別，就不用硬背。',
+  shen:'體育產業像「金字塔」還是「方尖碑」：金字塔底部寬，高手自然浮現；方尖碑只拚頂端，選手退役後沒有出路。不用懂產業經濟，看圖就懂。',
+  zh:'「想像兩個畫面：A 是＿＿，B 是＿＿。你覺得哪一個比較像現在的你？」', en:'Picture two things: ___ and ___. Which one looks more like you right now?',
+  before:'「skimming 是略讀，scanning 是掃讀，兩個都是閱讀策略。」', after:'「想像兩個畫面：skimming 像在 Google Maps 看整個台北；scanning 像在地圖上只找一間 7-11。考主旨題用哪一個？找數字題用哪一個？」',
+  trap:'對比只放兩個。三個以上就變成清單，畫面感會消失。',
+  checks:['只有兩個畫面','畫面是看得到的東西','最後問學生選哪一個']},
+ {when:'講長內容', t:'分層編號，邊講邊報位置', move:'分層＋路標',
+  why:'學生最怕不知道還要聽多久。先說「有三層」，講到哪報到哪，他們就不會迷路。',
+  shen:'談運動產業時一層一層往上：先擴大基層參與，才有好看的比賽，最後企業願意投入。節目摘要也整理成條列的重點。',
+  zh:'「這件事分三層。第一……接著……最後……我們現在在第二層。」', en:'There are three layers. First… Then… Finally… Right now, we’re on layer two.',
+  before:'「英文作文要有主題句、支持句、例子，還要有結論，然後轉折語也很重要……」', after:'「英文作文分三層。第一層，主題句：告訴讀者要去哪。第二層，例子：帶他走過去。最後一層，結論：陪他回頭看。我們今天練第二層。」',
+  trap:'說了三點就要真的講三點；數字一變，學生就亂了。',
+  checks:['先說出「有幾層」','講的時候有用第一、接著、最後','有報「我們現在在第幾層」']},
+ {when:'把目標說具體', t:'術語變動作：今天就做得到', move:'術語變動作',
+  why:'「增進理解」「培養習慣」聽起來很對，但學生不知道要做什麼。換成一個看得到的動作，才會發生。',
+  shen:'「降低運動的摩擦力」翻成白話，就是社區健身小巴、跑者驛站：運動就在下樓走得到的地方。',
+  zh:'「用生活的話來說，就是＿＿（一個今天做得到的動作）。」', en:'In everyday words, that means ___.',
+  before:'「大家要多加強閱讀理解能力。」', after:'「用生活的話來說：每讀完一段，先用一句話告訴隔壁同學它在講什麼。講不出來，就是還沒讀懂。」',
+  trap:'動作要小到今天就能做，太大的動作等於沒說。',
+  checks:['說出一個看得到的動作','這個動作今天做得到','沒有用抽象名詞收尾']},
+ {when:'預防常見錯誤', t:'先講誤解，比事後訂正有效', move:'先預測，不是事後闢謠',
+  why:'學生犯過一次錯會記很久。先把最常見的錯說出來，等於幫他打預防針。',
+  shen:'談到認知作戰時強調：有效的方法不是事後闢謠，而是先「預測」對方會怎麼操作，提前告訴大家，民眾就比較不會上當。',
+  zh:'「很多人會以為＿＿，但其實＿＿。等一下你一定會想這樣寫，先別急。」', en:'Many people think ___, but actually ___. You’ll want to write it that way. Wait.',
+  before:'（改完作業才發現全班都寫 I am boring.）', after:'「很多人以為 I am boring 是『我好無聊』，其實是『我是個無趣的人』。等一下造句你一定會想寫它，先別急，想一想你要的是 bored。」',
+  trap:'只挑最常見的一個。一次講太多錯誤，反而會加深錯誤印象。',
+  checks:['先說出學生的想法（很多人以為…）','再說出正確的版本','只挑一個最常見的錯']},
+ {when:'被學生挑戰時', t:'先短答，再理由，再借力使力', move:'結論先講＋借力使力',
+  why:'被問「學這個有什麼用」時，長篇解釋會像在辯解。先給短答案，再把學生的話變成你的例子。',
+  shen:'被問「是不是 CIA 的人」，先說「我不是 CIA 的人」，再解釋研究經費從哪來。國台辦批評他時，他笑說自己是「天才小釣手」，把對方的攻擊變成自己論點的例子。',
+  zh:'「先講結論：＿＿。原因是＿＿。你剛好提到＿＿，這正好說明＿＿。」', en:'Short answer: ___. Here’s why: ___. Actually, what you just said shows ___.',
+  before:'「學文法當然有用啊，你們以後就知道了，而且考試會考……」', after:'「先講結論：有用。原因是你要看得出 AI 哪裡寫錯。你剛好提到 AI，這正好說明為什麼要學文法：會判斷的人，才用得好 AI。」',
+  trap:'幽默可以，嘲諷不行。先接住學生的情緒，再回答問題。',
+  checks:['第一句是短答案','有給一個理由','把學生的話接成自己的例子','語氣平穩、沒有嘲諷']},
+ {when:'下課前 2 分鐘', t:'一句話回收＋一個小行動', move:'回到開頭＋小行動',
+  why:'結尾回到開場那句話，學生腦中會形成一個完整的圈；再給一個小行動，課堂才會延伸到課外。',
+  shen:'訪談最後常回到同一句願景：「希望台北是讓大家悠閒生活、勇敢做夢的城市」，再搭配一個馬上能參與的行動，例如 LINE 的「市長你給我聽好了」意見平台。',
+  zh:'「回到一開始那句話：＿＿。今天回家只要做一件事：＿＿。」', en:'Back to where we started: ___. Tonight, just do one thing: ___.',
+  before:'（鐘響）「好，作業是習作第 5 到 8 頁，下課。」', after:'「回到一開始那句話：被動語態是把被影響的人放前面。今天回家只做一件事：找一則英文新聞標題，圈出一個被動語態。」',
+  trap:'等鐘響才收尾，學生已經在收書包。提早 2 分鐘開始收。',
+  checks:['重複了開場那句重點','給了一個小行動','在鐘響前講完']}
+];
+
+const DELIVERY = [
+ ['一句一個重點','長句拆短。每句只放一個訊息，學生來得及消化。'],
+ ['結論講完停兩秒','停頓讓重點有回音，也讓學生知道「這句要記」。'],
+ ['把數字說出來','「三個重點」「兩個畫面」，數字就是學生的地圖。'],
+ ['重複關鍵句','開場、中段、結尾各說一次同一句話，連用字都不要換。'],
+ ['被挑戰時放慢','語速越慢、音量越穩，聽起來越有把握。'],
+ ['自嘲比反擊好用','一句輕鬆的自嘲，能把對立的氣氛變成笑聲。']
+];
+const SKELETONS = [
+ {n:'講觀念：PREP', f:['結論','理由','例子','再說一次結論'], use:'文法觀念、閱讀策略，任何「是什麼」的問題。', ex:'被動語態是把受影響的放前面 → 因為新聞想強調結果 → 例如 The bridge was closed. → 所以讀新聞先找「誰受影響」。'},
+ {n:'講方法：問題—原因—解方', f:['學生的痛點','為什麼會這樣','一個做得到的方法'], use:'讀書方法、寫作技巧、考試策略。', ex:'作文寫不長 → 因為每段只有一個空泛的句子 → 每個論點加一個「我自己看過的例子」。'},
+ {n:'講爭議：正反合', f:['兩邊最強的理由','兩邊都在乎什麼','我們可以怎麼判斷'], use:'課文裡的價值議題、時事、學生意見分歧時，保持公平中立。', ex:'AI 寫作業 → 支持的人在乎效率，反對的人在乎學習 → 判斷標準：你能不能說明自己改了哪裡。'}
+];
+const TOPICS = ['被動語態','關係代名詞','現在完成式 vs 過去式','skimming 和 scanning','英文作文的段落結構','學測閱讀的主旨題','克漏字的轉折語','假設語氣','比較級與最高級','分詞構句','英文簡報開場','篇章結構題'];
+
+/* ---------- book ---------- */
+function renderBook(){
+  const sec = $('#book'); sec.textContent = ''; const w = el('div', {class:'wrap'});
+  w.append(el('div', {class:'page-head'}, el('p', {class:'eyebrow', text:'Teacher Talk Playbook'}), el('h2', {text:'一堂課的 8 個口條時刻'}), el('p', {class:'get', text:'把沈伯洋拆解複雜議題的說法，換成高中課堂的場景。每個時刻都有可以照唸的中英文句型、改寫前後對照，和一個 30 秒練習。'})));
+  w.append(el('div', {class:'hero'},
+    el('h3', {text:'他為什麼能把複雜主題講到人人聽懂？'}),
+    el('ol', {class:'why'},
+      el('li', null, el('b', {text:'先給方向：'}), '每一段都先說結論，聽眾知道細節要往哪裡放。'),
+      el('li', null, el('b', {text:'用畫面取代名詞：'}), '金字塔、方尖碑、摩擦力，都是看得到的東西。'),
+      el('li', null, el('b', {text:'換個抽屜：'}), '把陌生議題放進熟悉類別，例如「重訓是長照前的預防醫學」。'),
+      el('li', null, el('b', {text:'接到聽眾身上：'}), '長輩跌倒、肌少症，每個家庭都碰得到，所以願意聽下去。'),
+      el('li', null, el('b', {text:'被質疑時不辯解：'}), '先給短答案，再把對方的話變成自己的例子。')),
+    el('p', {class:'src'}, '依據：', el('a', {href:'https://youtu.be/SLJ-PuMcv-c', target:'_blank', rel:'noopener', text:'《邱個 Podcast 137》沈伯洋 × 何立安'}), ' 官方節目摘要，與沈伯洋 2026 年公開訪談（聯合報、少康戰情室）。影片沒有逐字稿，個別說法出自哪位來賓，以影片為準。')));
+  const tl = el('div', {class:'timeline', role:'tablist', 'aria-label':'課堂時刻'});
+  M.forEach((m, i) => tl.append(el('button', {type:'button', role:'tab', class: i === state.moment ? 'on' : '', 'aria-selected':String(i === state.moment), onclick:() => { state.moment = i; save(); tl.querySelectorAll('button').forEach((b, j) => { b.classList.toggle('on', j === i); b.setAttribute('aria-selected', String(j === i)); }); const c = $('#m' + i); if (c) c.scrollIntoView({block:'start', behavior:'smooth'}); }}, el('b', {text:String(i+1)}), m.when)));
+  w.append(tl);
+  const list = el('div', {class:'stack'});
+  M.forEach((m, i) => list.append(el('article', {class:'moment', id:'m' + i},
+    el('div', {class:'m-head'}, el('p', {class:'m-when', text:`時刻 ${i+1}／${m.when}`}), el('h3', {text:m.t}), el('p', {class:'move', text:m.why})),
+    el('div', {class:'m-body'},
+      el('div', {class:'frame'}, el('div', {class:'lbl'}, icon('quote'), '照著說'), el('p', {class:'zh', text:m.zh}), el('p', {class:'en', lang:'en', text:m.en})),
+      el('div', {class:'ba'}, el('div', {class:'b'}, el('div', {class:'lbl', text:'平常的說法'}), el('p', {text:m.before})), el('div', {class:'a'}, el('div', {class:'lbl', text:'換個說法'}), el('p', {text:m.after}))),
+      el('div', null, el('div', {class:'lbl', text:'借鏡：' + m.move}), el('p', {class:'shen', text:m.shen})),
+      el('p', {class:'trap'}, icon('alert'), el('span', {text:'小心：' + m.trap})),
+      el('div', {class:'row'}, el('button', {type:'button', class:'btn small', onclick:() => { state.pm = i; state.ptopic = Math.floor(Math.random() * TOPICS.length); setTab('practice'); }}, icon('mic'), '用這招練 30 秒'))))));
+  w.append(list);
+  w.append(el('h3', {style:'margin:28px 0 10px;font-size:1.15rem', text:'說話節奏：6 個小習慣'}));
+  w.append(el('div', {class:'tips'}, ...DELIVERY.map(d => el('div', null, el('b', {text:d[0]}), el('span', {text:d[1]})))));
+  w.append(el('h3', {style:'margin:28px 0 4px;font-size:1.15rem', text:'論述骨架：講解前先選一個'}));
+  w.append(el('p', {class:'muted', style:'margin-bottom:10px', text:'內容不同，骨架不同。先決定用哪一種，講解就不會東跳西跳。'}));
+  w.append(el('div', {class:'skel'}, ...SKELETONS.map(k => el('div', {class:'card'}, el('h4', {text:k.n}), el('div', {class:'flow'}, ...k.f.flatMap((x, j) => j ? [el('i', {text:'→'}), el('span', {text:x})] : [el('span', {text:x})])), el('p', {class:'muted', text:'適合：' + k.use}), el('p', {style:'font-size:.94rem;margin-top:4px', text:'例：' + k.ex})))));
+  sec.append(w);
+}
+
+/* ---------- practice ---------- */
+let tmr = null, left = 0;
+function renderPractice(){
+  const sec = $('#practice'); sec.textContent = ''; const w = el('div', {class:'wrap'});
+  w.append(el('div', {class:'page-head'}, el('p', {class:'eyebrow', text:'Practice'}), el('h2', {text:'30 秒口條練習'}), el('p', {class:'get', text:'選一個時刻、抽一個你常教的主題，對著手機大聲講一次，講完勾自評。每天一題，兩週就會變成習慣。'})));
+  const m = M[state.pm], ti = state.ptopic % TOPICS.length, topic = TOPICS[ti];
+  const sel = el('select', {id:'pmSel', 'aria-label':'選擇時刻'}); M.forEach((x, i) => { const o = el('option', {value:String(i), text:`${i+1}. ${x.when}：${x.t}`}); if (i === state.pm) o.selected = true; sel.append(o); });
+  sel.addEventListener('change', () => { state.pm = +sel.value; stopT(); save(); renderPractice(); });
+  const tsel = el('select', {id:'tpSel', 'aria-label':'選擇主題'}); TOPICS.forEach((x, i) => { const o = el('option', {value:String(i), text:x}); if (i === ti) o.selected = true; tsel.append(o); });
+  tsel.addEventListener('change', () => { state.ptopic = +tsel.value; stopT(); save(); renderPractice(); });
+  const secs = el('div', {class:'seg-ctl'}); [20,30,60].forEach(v => secs.append(el('button', {type:'button', class: v === state.psec ? 'on' : '', 'aria-pressed':String(v === state.psec), text:v + ' 秒', onclick:() => { state.psec = v; stopT(); save(); renderPractice(); }})));
+  const grade = el('div', {class:'seg-ctl'}); ['高一','高二','高三'].forEach(g => grade.append(el('button', {type:'button', class: g === state.grade ? 'on' : '', 'aria-pressed':String(g === state.grade), text:g, onclick:() => { state.grade = g; save(); renderPractice(); }})));
+  w.append(el('div', {class:'pick'}, sel, el('div', {class:'row', style:'flex-wrap:nowrap'}, tsel, el('button', {type:'button', class:'btn small ghost', 'aria-label':'隨機換一個主題', onclick:() => { state.ptopic = (ti + 1 + Math.floor(Math.random() * (TOPICS.length - 1))) % TOPICS.length; stopT(); save(); renderPractice(); }}, icon('shuffle'))), secs, grade));
+  const key = state.pm + '-' + ti, ck = state.checks[key] || [];
+  const checks = el('div', {class:'checks'}); m.checks.forEach((c, i) => { const inp = el('input', {type:'checkbox', id:'ck' + i}); inp.checked = !!ck[i]; inp.addEventListener('change', () => { const a = state.checks[key] || []; a[i] = inp.checked; state.checks[key] = a; save(); score(); }); checks.append(el('label', {for:'ck' + i}, inp, el('span', {text:c}))); });
+  w.append(el('div', {class:'card stage', style:'margin-top:14px'},
+    el('p', {class:'muted', text:`時刻 ${state.pm+1}：${m.t}`}),
+    el('p', {class:'task', text:`用「${m.move}」，向${state.grade}學生講「${topic}」`}),
+    el('p', {class:'frame-mini', text:m.zh}),
+    el('div', {class:'clock', id:'clock', role:'timer', text:fmt(state.psec)}),
+    el('div', {class:'row', style:'justify-content:center'}, el('button', {type:'button', class:'btn', id:'goBtn', onclick:toggleT}, icon('play'), '開始計時')),
+    el('p', {class:'muted', style:'margin-top:8px', text:'小提醒：可以用手機錄音，回放一次聽聽自己的版本。'}),
+    checks, el('p', {class:'score', id:'score'})));
+  w.append(el('div', {class:'card', style:'margin-top:12px'}, el('div', {class:'lbl', text:'參考說法（同一招，用在別的主題）'}), el('p', {text:m.after})));
+  sec.append(w); score();
+}
+function fmt(s){ return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`; }
+function score(){ const key = state.pm + '-' + (state.ptopic % TOPICS.length); const n = (state.checks[key] || []).filter(Boolean).length, t = M[state.pm].checks.length; const s = $('#score'); if (s) s.textContent = n === t ? `${n} / ${t}　全部做到！換一招或換主題再練。` : `${n} / ${t}　針對沒勾到的那一項，再講一次。`; }
+function stopT(){ clearInterval(tmr); tmr = null; }
+function toggleT(){
+  const b = $('#goBtn'), c = $('#clock');
+  if (tmr){ stopT(); b.textContent = ''; b.append(icon('play'), '重新開始'); return; }
+  left = state.psec; c.textContent = fmt(left); c.classList.remove('warn');
+  b.textContent = '停止';
+  tmr = setInterval(() => { left--; c.textContent = fmt(Math.max(0, left)); c.classList.toggle('warn', left <= 5); if (left <= 0){ stopT(); c.textContent = '時間到'; b.textContent = ''; b.append(icon('play'), '再講一次'); } }, 1000);
+}
+
+/* ---------- prep card ---------- */
+const SAMPLE_CARD = {concept:'被動語態', grade:'高二', lang:'bi',
+  oneline:'被動語態，是把「被影響的人或事」放到句子最前面。',
+  box:'它其實不是一種新時態，比較像是「換一台攝影機」：鏡頭從做事的人，轉到被影響的人身上。',
+  picture:'想像新聞畫面：A 鏡頭拍「卡車撞了橋」，B 鏡頭拍「橋被撞了」。記者想讓你先看見橋，就用 B 鏡頭。',
+  layers:['形式：be 動詞＋過去分詞，時態看 be 動詞。','時機：不知道是誰做的、不重要，或想強調被影響的人事物時。','閱讀：新聞和科學文章最常用，讀到時先找「誰受影響」。'],
+  myth:'很多人以為每個主動句都能改成被動；其實 happen、arrive 這類不及物動詞沒有被動語態。',
+  care:'學測閱讀的新聞和科普文章被動句非常多。看懂它，就看得懂作者想強調什麼。',
+  open:'今天只要記住一件事：被動語態，是換一台攝影機，把被影響的人放到前面。為什麼跟你有關？因為學測閱讀的新聞，最愛用這台攝影機。',
+  close:'回到一開始那句話：被動語態是換一台攝影機。今天回家只做一件事：找一則英文新聞標題，圈出一個被動語態。',
+  en:{oneline:'The passive voice puts the person or thing that is affected at the front of the sentence.', open:'If you remember only one thing today, remember this: the passive voice is like switching cameras. It puts the affected person or thing first. Why should you care? News articles on the exam love this camera.', close:'Back to where we started: the passive voice switches the camera. Tonight, just do one thing: find one English news headline and circle a passive verb.'}
+};
+let sample = null, ctl = null;
+function renderPrep(){
+  const sec = $('#prep'); sec.textContent = ''; const w = el('div', {class:'wrap'});
+  w.append(el('div', {class:'page-head'}, el('p', {class:'eyebrow', text:'Lesson Prep Card'}), el('h2', {text:'備課口條卡'}), el('p', {class:'get', text:'輸入下一節課要講的一個概念，一張卡片就幫你準備好一句話、比喻、三層拆解、常見誤解，還有開場和收尾的台詞。不用上傳檔案。'})));
+  const inp = el('input', {type:'text', id:'concept', placeholder:'例：分詞構句、篇章結構題、英文簡報開場', value:state.concept || ''});
+  inp.addEventListener('input', () => { state.concept = inp.value; save(); });
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter'){ e.preventDefault(); runCard(); } });
+  const grade = el('div', {class:'seg-ctl'}); ['高一','高二','高三'].forEach(g => grade.append(el('button', {type:'button', class: g === state.grade ? 'on' : '', 'aria-pressed':String(g === state.grade), text:g, onclick:() => { state.grade = g; save(); renderPrep(); }})));
+  const lang = el('div', {class:'seg-ctl'}); [['zh','中文講解'],['bi','中文＋英文台詞'],['en','全英文']].forEach(([v, t]) => lang.append(el('button', {type:'button', class: v === state.lang ? 'on' : '', 'aria-pressed':String(v === state.lang), text:t, onclick:() => { state.lang = v; save(); renderPrep(); }})));
+  const ex = el('div', {class:'examples'}); TOPICS.slice(0, 6).forEach(t => ex.append(el('button', {type:'button', text:t, onclick:() => { state.concept = t; save(); renderPrep(); }})));
+  w.append(el('div', {class:'card stack'},
+    el('div', {class:'field'}, el('label', {for:'concept', text:'下一節課要講的概念'}), inp, ex),
+    el('div', {class:'field'}, el('div', {class:'flbl', text:'學生'}), grade),
+    el('div', {class:'field'}, el('div', {class:'flbl', text:'台詞語言'}), lang),
+    el('div', {class:'row'}, el('button', {type:'button', class:'btn', id:'cardBtn', onclick:runCard}, icon('spark'), '做一張口條卡'), el('button', {type:'button', class:'btn ghost', id:'stopBtn', hidden:true, onclick:() => ctl && ctl.abort()}, '停止')),
+    el('div', {id:'cardStatus', 'aria-live':'polite'}), el('div', {id:'fallback', class:'fallback'})));
+  const c = state.card || SAMPLE_CARD;
+  const out = el('div', {class:'out', style:'margin-top:16px'});
+  if (!state.card) out.append(el('p', {class:'exflag', text:'目前顯示的是範例「被動語態」。輸入你的概念，按「做一張口條卡」就會換成你的版本。'}));
+  out.append(el('h3', {style:'font-size:1.15rem', text:`${c.concept}｜${c.grade}`}));
+  const blk = (color, label, node) => el('div', {class:'oc', style:`--c:var(${color})`}, el('div', {class:'lbl', text:label}), node);
+  const enLine = s => (s && c.lang === 'bi') ? el('p', {class:'sub', lang:'en', text:s}) : null;
+  out.append(
+    blk('--accent', '一句話講完', el('div', null, el('p', {text:c.oneline}), enLine(c.en && c.en.oneline))),
+    blk('--second', '換個抽屜', el('p', {text:c.box})),
+    blk('--second', '給一個畫面', el('p', {text:c.picture})),
+    blk('--accent', '分三層講', el('ol', null, ...(c.layers || []).map(x => el('li', {text:x})))),
+    blk('--bad', '先講常見誤解', el('p', {text:c.myth})),
+    blk('--good', '跟學生有關', el('p', {text:c.care})),
+    blk('--accent-deep', '開場 30 秒台詞', el('div', null, el('p', {text:c.open}), enLine(c.en && c.en.open))),
+    blk('--accent-deep', '收尾台詞', el('div', null, el('p', {text:c.close}), enLine(c.en && c.en.close))));
+  const st = el('p', {class:'status', id:'copyStatus', 'aria-live':'polite'});
+  out.append(el('div', {class:'row'}, el('button', {type:'button', class:'btn ghost', onclick:async () => { try { await navigator.clipboard.writeText(cardText(c)); st.textContent = '已複製，可以貼到備課筆記。'; } catch(e){ st.textContent = '無法自動複製，請長按文字手動複製。'; } }}, icon('copy'), '複製這張卡')), st);
+  w.append(out); sec.append(w);
+}
+function cardText(c){
+  const bi = c.lang === 'bi', L = [`【${c.concept}｜${c.grade}】`, `一句話：${c.oneline}`];
+  if (bi && c.en && c.en.oneline) L.push(`  EN: ${c.en.oneline}`);
+  L.push(`換個抽屜：${c.box}`, `畫面：${c.picture}`, '三層：', ...(c.layers || []).map((x, i) => `  ${i+1}. ${x}`), `常見誤解：${c.myth}`, `跟學生有關：${c.care}`, `開場：${c.open}`);
+  if (bi && c.en && c.en.open) L.push(`  EN: ${c.en.open}`);
+  L.push(`收尾：${c.close}`); if (bi && c.en && c.en.close) L.push(`  EN: ${c.en.close}`);
+  L.push('', '— 白話拆解教室｜Gina教室的AI奇蹟');
+  return L.join('\n');
+}
+function cardPrompt(){
+  const langRule = state.lang === 'zh' ? '所有欄位用繁體中文；en 物件的三個欄位留空字串。'
+    : state.lang === 'bi' ? '所有欄位用繁體中文；en 物件裡的 oneline、open、close 另外寫成 CEFR B1–B2 的口語英文，句子短、常用字。'
+    : '所有欄位都改用 CEFR B1–B2 的口語英文（短句、常用字）；en 物件的三個欄位留空字串。';
+  return `你是台灣高中的資深英文老師，也是很會把複雜概念講清楚的講者。你的說法借鏡沈伯洋拆解議題的方式：先講結論、換個熟悉的抽屜、給看得到的畫面、分層編號、先講誤解、接到聽眾身上、收在一個小行動。
+
+請為「${(state.concept || '').trim().slice(0, 200)}」做一張課堂口條卡，對象是台灣${state.grade}學生。
+規則：
+- 每句話要能直接在教室說出口：短句、口語、不要學術腔。
+- 比喻用高中生熟悉的東西（手機、遊戲、超商、捷運、社群、運動等），而且要準確，不能誤導概念。
+- 只寫正確的內容，不確定就不要寫；不要編造數據或考試題號。
+- ${langRule}
+
+只回傳 JSON：
+{"oneline":"一句話講完（25 字以內）","box":"它其實不是…，比較像是…","picture":"一個兩相對比或生活畫面","layers":["第一層","第二層","第三層"],"myth":"很多人以為…，其實…","care":"為什麼跟學生有關","open":"開場 30 秒台詞，含『今天只要記住一件事』與『為什麼跟你有關』","close":"收尾台詞：回到開場那句話，並給一個今天就能做的小行動","en":{"oneline":"","open":"","close":""}}`;
+}
+function setCardStatus(kind, msg){ const s = $('#cardStatus'); if (!s) return; s.textContent = ''; if (!kind) return; s.append(kind === 'think' ? el('div', {class:'thinking'}, el('span', {class:'dot'}), el('span', {text:msg})) : el('p', {class:'status' + (kind === 'err' ? ' err' : ''), text:msg})); }
+async function runCard(){
+  const concept = (state.concept || '').trim();
+  if (!concept){ setCardStatus('err', '請先輸入一個概念，例如「分詞構句」。'); $('#concept').focus(); return; }
+  const prompt = cardPrompt();
+  if (!sample){ showFallback(prompt); return; }
+  ctl = new AbortController(); $('#cardBtn').disabled = true; $('#stopBtn').hidden = false;
+  setCardStatus('think', 'AI 正在做口條卡，約 10–40 秒……');
+  try {
+    const j = await sample.json(prompt, {signal: ctl.signal, modelTier:'default'});
+    applyCard(j, concept);
+  } catch(e){
+    const code = e && e.code;
+    if (code === 'cancelled') setCardStatus('info', '已停止。');
+    else { setCardStatus('err', {rate_limited:'使用太頻繁，請稍等一下再試。', invalid_json:'AI 回覆不完整，請再按一次。', refused:'這個主題 AI 無法處理，換個說法試試。', session_expired:'登入已過期，請重新登入 Claude。'}[code] || '連線出了點問題，請再按一次。');
+      if (['not_granted','sampling_disabled','not_declared','capability_disabled','capability_removed'].includes(code)){ sample = null; showFallback(prompt); } }
+  } finally { const b = $('#cardBtn'); if (b) b.disabled = false; const s = $('#stopBtn'); if (s) s.hidden = true; }
+}
+function applyCard(j, concept){
+  if (!j || typeof j !== 'object' || !j.oneline) throw {code:'invalid_json'};
+  const S = v => (v == null ? '' : String(v));
+  state.card = {concept, grade:state.grade, lang:state.lang, oneline:S(j.oneline), box:S(j.box), picture:S(j.picture), layers:(Array.isArray(j.layers) ? j.layers : []).slice(0, 3).map(S), myth:S(j.myth), care:S(j.care), open:S(j.open), close:S(j.close), en:{oneline:S(j.en && j.en.oneline), open:S(j.en && j.en.open), close:S(j.en && j.en.close)}};
+  save(); renderPrep();
+  const o = $('#prep .out'); if (o) o.scrollIntoView({block:'start', behavior:'smooth'});
+}
+function showFallback(prompt){
+  const box = $('#fallback'); box.textContent = '';
+  const pre = el('pre', {text:prompt});
+  const cb = el('button', {type:'button', class:'btn small'}, icon('copy'), '複製提示詞');
+  cb.addEventListener('click', async () => { try { await navigator.clipboard.writeText(prompt); cb.textContent = '已複製'; } catch(e){ const r = document.createRange(); r.selectNodeContents(pre); const g = getSelection(); g.removeAllRanges(); g.addRange(r); } });
+  const ta = el('textarea', {rows:'4', placeholder:'把 AI 回覆的 JSON 貼在這裡', 'aria-label':'貼上 AI 回覆'});
+  const st = el('p', {class:'status err'});
+  box.append(el('p', {class:'exflag', text:'這個畫面無法直接呼叫 AI。請複製提示詞到 Claude、ChatGPT 或 Gemini，再把回覆貼回下方。'}), pre, cb, ta,
+    el('div', {class:'row', style:'margin-top:8px'}, el('button', {type:'button', class:'btn small ghost', text:'套用', onclick:() => { try { const r = ta.value; applyCard(JSON.parse(r.slice(r.indexOf('{'), r.lastIndexOf('}') + 1)), (state.concept || '').trim()); } catch(e){ st.textContent = '讀不到 JSON，請貼上完整的回覆。'; } }})), st);
+}
+
+/* ---------- shell ---------- */
+const TABS = [['book','book','口條手冊'],['practice','mic','30 秒練習'],['prep','card','備課口條卡']];
+function setTab(id){ state.tab = id; stopT(); save(); renderShell(); if (id === 'practice') renderPractice(); showTab(); window.scrollTo(0, 0); }
+function renderShell(){
+  document.documentElement.dataset.size = state.size;
+  $('#sizeLbl').textContent = state.size === 'lg' ? '標準字' : '放大字';
+  const tb = $('#tabbar'); tb.textContent = '';
+  TABS.forEach(([id, ic, n]) => tb.append(el('button', {type:'button', 'aria-current': state.tab === id ? 'page' : null, onclick:() => setTab(id)}, icon(ic), el('span', {text:n}))));
+}
+function showTab(){ TABS.forEach(([id]) => { $('#' + id).hidden = state.tab !== id; }); }
+function renderAll(){ renderShell(); renderBook(); renderPractice(); renderPrep(); showTab(); }
+$('#sizeBtn').addEventListener('click', () => { state.size = state.size === 'lg' ? 'md' : 'lg'; save(); renderShell(); });
+if (window.claude && typeof window.claude.use === 'function') window.claude.use('sample').then(s => { sample = s; }).catch(() => {});
+if (!TABS.some(t => t[0] === state.tab)) state.tab = 'book';
+if (!(state.moment >= 0 && state.moment < M.length)) state.moment = 0;
+if (!(state.pm >= 0 && state.pm < M.length)) state.pm = 0;
+renderAll();
+})();
+</script>
+
+<a href="../" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:9999;background:#2F86D6;color:#fff;font:700 13px/1 system-ui,sans-serif;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.2)">← 回群島</a>
+</body></html>

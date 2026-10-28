@@ -1,0 +1,2219 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>智慧記憶宮殿</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <!-- PDF.js for Client-side PDF Parsing -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <!-- Tone.js for Native Interactive Audio & Sensory Effects -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,500,0..1,0&display=block" rel="stylesheet">
+
+  <script>
+    // Initialize PDF.js worker
+    const PDF_WORKER_URL = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    pdfjsLib.GlobalWorkerOptions.workerSrc = PDF_WORKER_URL;
+    try {
+      // 跨網域 Worker 會被瀏覽器擋下，改用 blob Worker 載入
+      const blobUrl = URL.createObjectURL(new Blob([`importScripts("${PDF_WORKER_URL}");`], { type: 'text/javascript' }));
+      pdfjsLib.GlobalWorkerOptions.workerPort = new Worker(blobUrl);
+    } catch (e) { /* 退回 pdf.js 內建的主執行緒模式 */ }
+
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'Noto Sans TC', 'sans-serif'],
+          },
+          colors: {
+            cosmic: {
+              950: '#030712',
+              900: '#070b19',
+              850: '#0c1328',
+              800: '#111a36',
+              700: '#1e293b',
+              glow: '#6366f1',
+              accent: '#38bdf8',
+              cyber: '#06b6d4',
+              magic: '#a855f7',
+              gold: '#f59e0b',
+              emerald: '#10b981',
+              rose: '#f43f5e'
+            }
+          },
+          animation: {
+            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'float': 'float 4s ease-in-out infinite',
+            'glow-pulse': 'glow 2s ease-in-out infinite alternate',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-6px)' },
+            },
+            glow: {
+              '0%': { boxShadow: '0 0 15px rgba(99, 102, 241, 0.3)' },
+              '100%': { boxShadow: '0 0 30px rgba(99, 102, 241, 0.7)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root { color-scheme: dark; }
+    body { background: #030712; color: #f1f5f9; }
+    body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: #0c1328; }
+    @keyframes fadeIn { from { opacity: .4; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    .animate-fadeIn { animation: fadeIn .35s ease-out; }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+    .mi { font-family: 'Material Symbols Rounded', sans-serif; font-style: normal; font-weight: 500; line-height: 1; display: inline-block; letter-spacing: normal; text-transform: none; white-space: nowrap; direction: ltr; -webkit-font-smoothing: antialiased; vertical-align: -0.15em; font-size: 1.15em; }
+    .mi.fill { font-variation-settings: 'FILL' 1; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, label:focus-visible { outline: 2px solid #38bdf8; outline-offset: 2px; }
+    #mobile-nav { padding-bottom: env(safe-area-inset-bottom, 0px); }
+    @media (max-width: 767px) { main { padding-bottom: 6rem !important; } #toast-container { bottom: 5.5rem !important; left: 16px; right: 16px; } }
+    /* Premium Glassmorphism */
+    .glass-panel {
+      background: rgba(12, 19, 40, 0.78);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.55);
+    }
+    .glass-card {
+      background: rgba(22, 32, 60, 0.55);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+    .glass-card:hover {
+      border-color: rgba(99, 102, 241, 0.45);
+      box-shadow: 0 12px 30px -10px rgba(99, 102, 241, 0.3);
+    }
+    .glass-input {
+      background: rgba(7, 11, 25, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: #f8fafc;
+    }
+    .glass-input:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(7, 11, 25, 0.6);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(99, 102, 241, 0.45);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(99, 102, 241, 0.8);
+    }
+
+    /* Cosmic Background Grid */
+    .stars-bg {
+      background-color: #030712;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.16) 0px, transparent 45%),
+        radial-gradient(at 100% 0%, rgba(6, 182, 212, 0.14) 0px, transparent 45%),
+        radial-gradient(at 50% 100%, rgba(168, 85, 247, 0.14) 0px, transparent 50%);
+    }
+
+    .theme-cyber {
+      background-image: radial-gradient(at 10% 20%, rgba(6, 182, 212, 0.2) 0px, transparent 50%), radial-gradient(at 90% 80%, rgba(244, 63, 94, 0.2) 0px, transparent 50%);
+    }
+    .theme-magic {
+      background-image: radial-gradient(at 20% 20%, rgba(168, 85, 247, 0.22) 0px, transparent 50%), radial-gradient(at 80% 80%, rgba(245, 158, 11, 0.18) 0px, transparent 50%);
+    }
+  </style>
+<div class="stars-bg text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-indigo-500 selection:text-white">
+
+  <!-- TOP APP HEADER -->
+  <header style="top: env(safe-area-inset-top, 0px)" class="glass-panel sticky z-50 border-b border-white/10 px-4 lg:px-8 py-3 flex items-center justify-between">
+    <div class="flex items-center space-x-3 cursor-pointer" onclick="app.switchView('lobby')">
+      <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-500 via-purple-600 to-cyan-400 p-0.5 shadow-lg shadow-indigo-500/25 flex items-center justify-center">
+        <div class="w-full h-full bg-cosmic-950 rounded-[14px] flex items-center justify-center">
+          <i class="ph-bold ph-brain text-indigo-400 text-xl"></i>
+        </div>
+      </div>
+      <div>
+        <div class="flex items-center gap-1.5">
+          <h1 class="text-base sm:text-lg font-black tracking-tight bg-gradient-to-r from-white via-indigo-100 to-cyan-300 bg-clip-text text-transparent">
+            MEMORY PALACE AI
+          </h1>
+          <span class="text-[9px] px-2 py-0.5 rounded-full font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">極致友善版</span>
+        </div>
+        <p class="text-[10px] text-slate-400 tracking-wider">零門檻知識提煉 · 自動荒謬劇本 · 沉浸軌跡提取</p>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <nav class="hidden md:flex items-center space-x-1 bg-cosmic-950/70 p-1 rounded-2xl border border-white/10">
+      <button onclick="app.switchView('lobby')" id="nav-btn-lobby" class="px-4 py-2 rounded-xl text-xs font-semibold transition-all flex items-center space-x-2 text-white bg-indigo-600 shadow-sm">
+        <i class="ph-bold ph-sparkle text-base"></i>
+        <span>素材與提煉</span>
+      </button>
+      <button onclick="app.switchView('palaces')" id="nav-btn-palaces" class="px-4 py-2 rounded-xl text-xs font-semibold transition-all flex items-center space-x-2 text-slate-400 hover:text-white hover:bg-white/5">
+        <i class="ph-bold ph-castle-turret text-base"></i>
+        <span>空間場景庫</span>
+      </button>
+      <button onclick="app.switchView('review')" id="nav-btn-review" class="px-4 py-2 rounded-xl text-xs font-semibold transition-all flex items-center space-x-2 text-slate-400 hover:text-white hover:bg-white/5">
+        <i class="ph-bold ph-clock-countdown text-base"></i>
+        <span>間隔複習庫</span>
+      </button>
+      <button onclick="app.switchView('guide')" id="nav-btn-guide" class="px-4 py-2 rounded-xl text-xs font-semibold transition-all flex items-center space-x-2 text-slate-400 hover:text-white hover:bg-white/5">
+        <i class="ph-bold ph-book-bookmark text-base"></i>
+        <span>科學秘笈</span>
+      </button>
+    </nav>
+
+    <!-- Quick Audio Mute & Sound Effects Toggle -->
+    <div class="flex items-center space-x-2.5">
+      <button onclick="app.toggleSound()" id="btn-sound-toggle" class="p-2.5 rounded-xl glass-card text-slate-300 hover:text-cyan-300 transition text-sm flex items-center gap-1.5" title="音效反饋開關">
+        <i class="ph-bold ph-speaker-high" id="sound-icon"></i>
+        <span class="text-xs hidden sm:inline" id="sound-status-text">音效開</span>
+      </button>
+
+      <div class="hidden sm:flex items-center bg-indigo-500/10 border border-indigo-500/20 px-3 py-1.5 rounded-xl space-x-2">
+        <i class="ph-fill ph-fire text-amber-400 text-base"></i>
+        <div class="text-[11px]">
+          <span class="text-slate-400">大腦連續</span>
+          <span id="stat-streak" class="font-bold text-amber-300 ml-1">0 天</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN WRAPPER -->
+  <main class="flex-1 w-full max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 flex flex-col">
+
+    <!-- VIEW 1: LOBBY & ZERO-BARRIER INPUT LAYER -->
+    <section id="view-lobby" class="space-y-8 animate-fadeIn">
+      
+      <!-- Top Smart Hero -->
+      <div class="relative overflow-hidden rounded-3xl glass-panel p-6 sm:p-8 border border-white/10">
+        <div class="absolute -right-16 -top-16 w-80 h-80 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute right-1/4 -bottom-20 w-64 h-64 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none"></div>
+        
+        <div class="relative z-10 max-w-3xl">
+          <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-indigo-500/20 to-cyan-500/20 text-cyan-300 border border-cyan-500/30 mb-3">
+            <i class="ph-fill ph-magic-wand text-amber-300"></i> 極致友善 5 大核心引擎升級版
+          </div>
+          <h2 class="text-2xl sm:text-4xl font-black tracking-tight text-white mb-3 leading-snug">
+            丟入任何你想記的繁瑣知識，<br/>
+            自動轉化為<span class="bg-gradient-to-r from-indigo-400 via-cyan-300 to-purple-300 bg-clip-text text-transparent">荒謬好記的空間電影</span>。
+          </h2>
+          <p class="text-slate-300 text-xs sm:text-sm leading-relaxed mb-6 font-light">
+            不再需要痛苦地自己切詞、想家具和編故事。支援<strong>貼入課文、上傳 PDF 講義、或對著麥克風口述</strong>，系統一鍵為你提煉關鍵字並生成烙印劇本。
+          </p>
+        </div>
+
+        <!-- 3 Quick Preset Demo Buttons for Immediate Play -->
+        <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-white/10">
+          <span class="text-xs text-slate-400 mr-2 flex items-center gap-1">
+            <i class="ph-bold ph-lightning text-amber-400"></i> 1 秒載入範例實戰：
+          </span>
+          <button onclick="app.loadDemoPreset('law')" class="px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-indigo-600/40 text-slate-200 hover:text-white text-xs border border-white/5 transition flex items-center gap-1.5">
+            <span>⚖️ 憲法重要原則</span>
+          </button>
+          <button onclick="app.loadDemoPreset('med')" class="px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-purple-600/40 text-slate-200 hover:text-white text-xs border border-white/5 transition flex items-center gap-1.5">
+            <span>🩺 醫學抗生素藥理</span>
+          </button>
+          <button onclick="app.loadDemoPreset('speech')" class="px-3 py-1.5 rounded-xl bg-slate-800/80 hover:bg-cyan-600/40 text-slate-200 hover:text-white text-xs border border-white/5 transition flex items-center gap-1.5">
+            <span>🎤 經典面試五大優勢</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- WORKBENCH GRID: STEP 1 (INPUT) & STEP 2 (PALACE CONFIG) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- LEFT 7 COLS: ZERO-BARRIER MULTI-INPUT SYSTEM -->
+        <div class="lg:col-span-7 glass-panel p-6 rounded-3xl border border-white/10 flex flex-col justify-between">
+          <div>
+            <!-- Input Tabs Header -->
+            <div class="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-white/10">
+              <div class="flex items-center gap-2">
+                <span class="w-6 h-6 rounded-lg bg-indigo-500/20 text-indigo-400 font-bold text-xs flex items-center justify-center">1</span>
+                <h3 class="font-bold text-white text-sm sm:text-base">零門檻知識輸入層</h3>
+              </div>
+
+              <!-- Input Mode Buttons -->
+              <div class="flex items-center gap-1 bg-cosmic-950/80 p-1 rounded-xl border border-white/10 text-xs">
+                <button onclick="app.switchInputMode('text')" id="tab-in-text" class="px-3 py-1.5 rounded-lg font-semibold transition bg-indigo-600 text-white flex items-center gap-1">
+                  <i class="ph-bold ph-article"></i> 貼入長文
+                </button>
+                <button onclick="app.switchInputMode('pdf')" id="tab-in-pdf" class="px-3 py-1.5 rounded-lg font-semibold transition text-slate-400 hover:text-white flex items-center gap-1">
+                  <i class="ph-bold ph-file-pdf"></i> PDF 解析
+                </button>
+                <button onclick="app.switchInputMode('voice')" id="tab-in-voice" class="px-3 py-1.5 rounded-lg font-semibold transition text-slate-400 hover:text-white flex items-center gap-1">
+                  <i class="ph-bold ph-microphone"></i> 語音口述
+                </button>
+              </div>
+            </div>
+
+            <!-- MODE A: TEXT / NOTE PASTE -->
+            <div id="input-container-text" class="space-y-3">
+              <div class="flex items-center justify-between text-xs text-slate-400">
+                <span>貼入講義、論文重點或雜亂筆記：</span>
+                <button onclick="document.getElementById('raw-text-input').value = ''" class="hover:text-rose-400 text-[11px]">清空</button>
+              </div>
+              <textarea id="raw-text-input" rows="5" class="w-full px-4 py-3 rounded-2xl glass-input text-xs sm:text-sm leading-relaxed font-sans placeholder-slate-500 focus:outline-none" placeholder="將整段複雜的法律法條、醫學病理流程、演講要點或歷史清單貼在這裡... 系統將自動為你提煉最適合記憶宮殿的具象核心詞彙！"></textarea>
+            </div>
+
+            <!-- MODE B: PDF UPLOAD & EXTRACT -->
+            <div id="input-container-pdf" class="hidden space-y-3">
+              <label for="pdf-file-picker" class="border-2 border-dashed border-cyan-500/40 hover:border-cyan-400 bg-cyan-950/20 hover:bg-cyan-950/30 rounded-2xl p-6 text-center cursor-pointer transition flex flex-col items-center justify-center">
+                <i class="ph-bold ph-cloud-arrow-up text-3xl text-cyan-400 mb-2"></i>
+                <span class="text-xs sm:text-sm font-bold text-white">點擊上傳講義 PDF 文件</span>
+                <span class="text-[11px] text-slate-400 mt-1">在你的瀏覽器內解析，檔案不會上傳到任何伺服器（讀取前 5 頁）</span>
+                <input type="file" id="pdf-file-picker" accept=".pdf" class="hidden" onchange="app.handlePdfUpload(event)" />
+              </label>
+              <div id="pdf-parsing-status" class="hidden text-xs text-cyan-300 font-mono flex items-center gap-2">
+                <i class="ph-bold ph-spinner animate-spin"></i> <span>正在讀取與解析 PDF 內容...</span>
+              </div>
+            </div>
+
+            <!-- MODE C: VOICE DICTATION -->
+            <div id="input-container-voice" class="hidden space-y-4">
+              <div class="glass-card p-6 rounded-2xl text-center space-y-3">
+                <div class="w-16 h-16 mx-auto rounded-full bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400 text-2xl transition" id="voice-mic-glow">
+                  <i class="ph-fill ph-microphone"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm font-bold text-white" id="voice-status-title">點擊開始語音口述</h4>
+                  <p class="text-xs text-slate-400 mt-0.5">例如口述：「我今天要去超市買有機燕麥片、進口無花果、低脂優格和橄欖油」<br>需要 Chrome／Edge 並允許麥克風；嵌入檢視中可能無法使用</p>
+                </div>
+                <div class="flex justify-center gap-3">
+                  <button onclick="app.toggleSpeechRecording()" id="btn-toggle-voice" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-600 to-pink-600 text-white font-bold text-xs shadow-lg transition flex items-center gap-2">
+                    <i class="ph-bold ph-record"></i> <span id="voice-btn-label">開始錄製語音</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Smart Extract Action Button -->
+            <div class="pt-3">
+              <button onclick="app.triggerSmartExtraction()" id="btn-extract-keywords" class="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-cyan-500 hover:opacity-90 text-white font-bold text-xs shadow-lg shadow-indigo-600/30 transition flex items-center justify-center gap-2">
+                <i class="ph-fill ph-sparkle text-base"></i>
+                <span>智慧提煉核心記憶清單 (Smart Keyword Extractor)</span>
+              </button>
+            </div>
+
+            <!-- EXTRACTED KEYWORDS SELECTION & EDITING DRAWER -->
+            <div class="mt-4 pt-4 border-t border-white/10 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+                  <i class="ph-bold ph-list-checks text-emerald-400"></i>
+                  <span>待烙印目標清單（可自由勾選、增刪）</span>
+                </span>
+                <span class="text-[11px] text-cyan-400 font-mono" id="extracted-count-badge">已選取 5 項</span>
+              </div>
+
+              <!-- Keyword Chips Container -->
+              <div id="keyword-chips-container" class="flex flex-wrap gap-2 max-h-48 overflow-y-auto p-1">
+                <!-- Dynamically populated tags with checkbox & remove -->
+              </div>
+
+              <!-- Quick Add Item Field -->
+              <div class="flex gap-2 pt-1">
+                <input type="text" id="quick-add-keyword-input" placeholder="+ 手動添加一項目標詞彙..." class="flex-1 px-3 py-2 rounded-xl glass-input text-xs" onkeydown="if(event.key==='Enter') app.quickAddTarget();" />
+                <button onclick="app.quickAddTarget()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition">
+                  添加
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT 5 COLS: PALACE SELECTION & SCRIPT ENGINE CONFIG -->
+        <div class="lg:col-span-5 glass-panel p-6 rounded-3xl border border-white/10 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-4 pb-3 border-b border-white/10">
+              <div class="flex items-center gap-2">
+                <span class="w-6 h-6 rounded-lg bg-cyan-500/20 text-cyan-400 font-bold text-xs flex items-center justify-center">2</span>
+                <h3 class="font-bold text-white text-sm sm:text-base">選擇空間宮殿 (Palace Loci)</h3>
+              </div>
+              <button onclick="app.switchView('palaces')" class="text-xs text-indigo-400 hover:text-indigo-300 font-medium flex items-center gap-1">
+                <span>管理宮殿庫</span> <i class="ph-bold ph-caret-right"></i>
+              </button>
+            </div>
+
+            <!-- Palace Carousel / Selector Cards -->
+            <div class="space-y-3" id="active-palace-picker">
+              <!-- Dynamically populated -->
+            </div>
+
+            <!-- Engine Parameters -->
+            <div class="mt-5 pt-4 border-t border-white/10 space-y-3">
+              <span class="text-xs font-bold text-slate-300 block">荒謬劇本生成偏好：</span>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <label class="p-2.5 rounded-xl glass-card flex items-center gap-2 cursor-pointer border border-white/5">
+                  <input type="radio" name="script_style" value="bizarre" checked class="text-indigo-500 accent-indigo-500">
+                  <span class="text-slate-200">極度荒謬暴力</span>
+                </label>
+                <label class="p-2.5 rounded-xl glass-card flex items-center gap-2 cursor-pointer border border-white/5">
+                  <input type="radio" name="script_style" value="sensory" class="text-indigo-500 accent-indigo-500">
+                  <span class="text-slate-200">強烈多感官衝擊</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- LAUNCH TRAINING BIG CTA BUTTON -->
+          <div class="mt-6 pt-4 border-t border-white/10">
+            <button onclick="app.startFullTrainingJourney()" class="w-full py-4 rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-600 to-cyan-400 hover:opacity-95 text-white font-extrabold text-base shadow-xl shadow-indigo-600/30 transition transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2.5">
+              <i class="ph-fill ph-play-circle text-2xl"></i>
+              <span>生成荒謬劇本 · 踏入空間漫步</span>
+            </button>
+            <p class="text-[11px] text-center text-slate-400 mt-2">
+              💡 系統會將選取的關鍵字與各家具錨點自動融合生成劇本
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Real-time Stats Quick Ribbon -->
+      <div class="glass-panel p-5 rounded-2xl flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-lg">
+            <i class="ph-bold ph-chart-line-up"></i>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-white">你的訓練紀錄</div>
+            <div class="text-[11px] text-slate-400" id="mini-stat-summary">尚未完成任何訓練，挑一組範例試試看</div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-6 text-xs">
+          <div>
+            <span class="text-slate-400">綜合提取率</span>
+            <span class="font-bold text-emerald-400 ml-1.5" id="mini-stat-acc">—</span>
+          </div>
+          <div class="h-4 w-[1px] bg-white/10"></div>
+          <div>
+            <span class="text-slate-400">間隔待複習</span>
+            <span class="font-bold text-amber-300 ml-1.5" id="mini-stat-reviews">0 筆</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: FIRST-PERSON IMMERSIVE STUDY & VIGNETTE ENGINE -->
+    <section id="view-study" class="hidden space-y-6 animate-fadeIn">
+      
+      <!-- Top Status Header -->
+      <div class="glass-panel p-4 rounded-2xl flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <button onclick="app.abortStudySession()" class="w-9 h-9 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition">
+            <i class="ph-bold ph-arrow-left text-lg"></i>
+          </button>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-cyan-400 uppercase tracking-wider" id="study-active-palace-title">溫馨日光居所</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-mono" id="study-mode-badge">第一人稱空間烙印</span>
+            </div>
+            <h2 class="text-base sm:text-lg font-black text-white">漫步軌跡：在空間錨點看荒謬電影</h2>
+          </div>
+        </div>
+
+        <!-- Progress and Sound Trigger -->
+        <div class="flex items-center gap-4">
+          <div class="text-right">
+            <div class="text-[11px] text-slate-400">漫步進度</div>
+            <div class="text-xs sm:text-sm font-black text-cyan-300 font-mono" id="study-progress-text">1 / 5</div>
+          </div>
+          <div class="w-24 sm:w-32 h-2.5 bg-slate-800 rounded-full overflow-hidden p-0.5 border border-white/10">
+            <div id="study-progress-bar" class="h-full bg-gradient-to-r from-indigo-500 to-cyan-400 rounded-full transition-all duration-300" style="width: 20%;"></div>
+          </div>
+          <button onclick="app.speakCurrentScript()" class="px-3 py-1.5 rounded-xl bg-indigo-600/30 hover:bg-indigo-600 text-indigo-300 hover:text-white text-xs font-semibold transition flex items-center gap-1.5" title="朗讀荒謬劇本">
+            <i class="ph-bold ph-speaker-high"></i>
+            <span class="hidden sm:inline">朗讀劇本</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- MAIN FIRST-PERSON IMMERSIVE WORKSPACE -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+        <!-- LEFT 5 COLS: 3D / PHOTO SCENE VIEW & INTERACTIVE MAP NODES -->
+        <div class="lg:col-span-5 glass-panel p-6 rounded-3xl flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                <i class="ph-bold ph-compass text-cyan-400"></i>
+                <span>空間視野與漫步航道</span>
+              </h3>
+              <span class="text-[11px] text-slate-400">固定單向順時針</span>
+            </div>
+
+            <!-- Virtual / Photo Backdrop Viewport -->
+            <div id="study-viewport-box" class="relative w-full h-56 sm:h-64 rounded-2xl overflow-hidden border border-white/10 flex flex-col justify-end p-4 transition-all duration-500 bg-cover bg-center">
+              <div class="absolute inset-0 bg-gradient-to-t from-cosmic-950 via-cosmic-950/60 to-transparent"></div>
+              
+              <!-- Floating Visual Badge -->
+              <div class="relative z-10 flex items-end justify-between">
+                <div>
+                  <span class="px-2.5 py-1 rounded-lg bg-black/60 backdrop-blur-md text-[11px] font-bold text-cyan-300 border border-white/10 inline-block mb-1" id="viewport-locus-type">
+                    📍 當前視線錨點
+                  </span>
+                  <h4 class="text-lg font-black text-white drop-shadow" id="viewport-locus-name">
+                    大門玄關鞋櫃
+                  </h4>
+                </div>
+                <div class="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-3xl shadow-xl transform animate-float" id="viewport-item-emoji">
+                  🍰
+                </div>
+              </div>
+            </div>
+
+            <!-- Loci Route Map List -->
+            <div class="mt-4 space-y-2 max-h-48 overflow-y-auto pr-1" id="study-loci-track">
+              <!-- Dynamically populated nodes -->
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-white/5 flex items-center justify-between text-xs text-slate-400">
+            <span class="flex items-center gap-1"><i class="ph-bold ph-arrows-left-right"></i> 方向鍵 ← / → 切換</span>
+            <button onclick="app.jumpToTestMode()" class="text-cyan-400 hover:text-cyan-300 font-bold underline">烙印完畢，直接測驗</button>
+          </div>
+        </div>
+
+        <!-- RIGHT 7 COLS: AUTO-GENERATED BIZARRE VIGNETTE CARD -->
+        <div class="lg:col-span-7 glass-panel p-6 sm:p-8 rounded-3xl flex flex-col justify-between relative overflow-hidden">
+          <div class="absolute -top-10 -right-10 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div>
+            <!-- Station & Abstract-to-Concrete Mapping Ribbon -->
+            <div class="flex items-center justify-between mb-5">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-black text-xl flex items-center justify-center shadow-lg shadow-indigo-500/30" id="study-station-badge">
+                  1
+                </div>
+                <div>
+                  <span class="text-xs text-slate-400 uppercase tracking-wider font-semibold">目標資訊與具象轉化物</span>
+                  <div class="flex items-center gap-2 mt-0.5">
+                    <h3 class="text-xl sm:text-2xl font-black text-white" id="study-target-concept">
+                      平等原則
+                    </h3>
+                    <i class="ph-bold ph-arrow-right text-slate-500 text-xs"></i>
+                    <span class="px-2.5 py-0.5 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-xs font-bold" id="study-symbolic-object">
+                      黃金公平天平
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Re-roll Script Button -->
+              <button onclick="app.reGenerateCurrentScript()" class="p-2.5 rounded-xl glass-card text-slate-300 hover:text-white transition flex items-center gap-1.5 text-xs" title="不夠荒謬？重新生成劇本">
+                <i class="ph-bold ph-arrows-clockwise text-sm"></i>
+                <span class="hidden sm:inline">換個劇本</span>
+              </button>
+            </div>
+
+            <p id="study-target-detail" class="text-xs text-slate-400 -mt-2 mb-4 leading-relaxed"></p>
+
+            <!-- Script Main Stage (The Bizarre Movie Scene) -->
+            <div class="bg-gradient-to-br from-slate-950/90 to-indigo-950/40 border border-indigo-500/30 p-6 rounded-3xl relative mb-5 shadow-inner space-y-4">
+              <div class="flex items-center justify-between text-xs font-bold text-indigo-300 border-b border-white/5 pb-2">
+                <span class="flex items-center gap-1.5">
+                  <i class="ph-fill ph-film-slate text-amber-400"></i>
+                  <span>自動荒謬電影劇本 (Vivid Mental Script)</span>
+                </span>
+                <span class="text-[10px] text-slate-400 font-mono">閉眼沉浸 3 秒</span>
+              </div>
+
+              <!-- Vignette Paragraph -->
+              <p class="text-sm sm:text-base text-slate-100 leading-relaxed font-normal" id="study-vignette-script">
+                當你一拉開<strong>【大門玄關鞋櫃】</strong>，一座巨大的黃金天平突然像發瘋般劇烈擺動！天平兩端不是法碼，而是兩隻正在大口互噴番茄醬的巨型恐龍，番茄汁劈哩啪啦噴滿你的名牌球鞋，酸甜刺鼻的氣味直衝腦門！
+              </p>
+
+              <!-- Sensory Triad Breakdown (Perception cues) -->
+              <div class="grid grid-cols-3 gap-2 pt-2 border-t border-white/5 text-[11px]">
+                <div class="glass-card p-2 rounded-xl text-center">
+                  <span class="text-amber-400 block font-bold mb-0.5">👁️ 視覺誇張</span>
+                  <span class="text-slate-300" id="sensory-cue-visual">黃金反光、恐龍狂咬</span>
+                </div>
+                <div class="glass-card p-2 rounded-xl text-center">
+                  <span class="text-cyan-400 block font-bold mb-0.5">👂 劇烈聲響</span>
+                  <span class="text-slate-300" id="sensory-cue-audio">金屬巨響、恐龍尖叫</span>
+                </div>
+                <div class="glass-card p-2 rounded-xl text-center">
+                  <span class="text-rose-400 block font-bold mb-0.5">👃 觸覺嗅覺</span>
+                  <span class="text-slate-300" id="sensory-cue-feel">番茄醬酸味、黏膩感</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Method of Loci Principle Toast Card -->
+            <div class="p-3.5 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-xs text-indigo-200 flex items-center gap-3">
+              <i class="ph-fill ph-lightbulb text-amber-400 text-lg shrink-0"></i>
+              <span><strong>神經烙印法則：</strong>不要只是「看見」文字，想像自己真的被濺到番茄醬，大腦海馬體才會永久儲存！</span>
+            </div>
+          </div>
+
+          <!-- Bottom Navigation Controls -->
+          <div class="mt-8 pt-4 border-t border-white/10 flex items-center justify-between gap-3">
+            <button onclick="app.prevLocusStep()" id="study-btn-prev" class="px-5 py-2.5 rounded-xl glass-card hover:bg-white/10 text-slate-300 font-semibold text-xs transition flex items-center gap-1.5 disabled:opacity-40">
+              <i class="ph-bold ph-caret-left"></i> 上一站錨點
+            </button>
+            <div class="flex items-center gap-2">
+              <button onclick="app.nextLocusStep()" id="study-btn-next" class="px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-lg shadow-indigo-600/30 transition flex items-center gap-1.5">
+                <span>下一站錨點</span> <i class="ph-bold ph-caret-right"></i>
+              </button>
+              <button onclick="app.jumpToTestMode()" id="study-btn-test" class="hidden px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:opacity-95 text-white font-bold text-xs shadow-lg shadow-emerald-500/30 transition flex items-center gap-1.5">
+                <i class="ph-bold ph-check-circle text-base"></i>
+                <span>烙印完成！開始提取測驗</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- VIEW 3: SMART RETRIEVAL TEST & HINT LADDER -->
+    <section id="view-test" class="hidden space-y-6 animate-fadeIn">
+      
+      <!-- Top Test Nav -->
+      <div class="glass-panel p-4 rounded-2xl flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-purple-500/20 text-purple-300 flex items-center justify-center font-bold">
+            <i class="ph-bold ph-crosshair text-xl"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-purple-400 uppercase tracking-wider">智能提取檢驗</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 font-mono">容錯比對</span>
+            </div>
+            <h2 class="text-base sm:text-lg font-bold text-white">漫步重遊宮殿：你能看見什麼？</h2>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <div class="text-right">
+            <span class="text-[11px] text-slate-400">當前提取點</span>
+            <div class="text-sm font-mono font-bold text-purple-300" id="test-progress-indicator">1 / 5</div>
+          </div>
+          <div class="px-3 py-1.5 rounded-xl bg-slate-800 border border-white/10 font-mono text-xs text-cyan-300 flex items-center gap-1.5">
+            <i class="ph-bold ph-timer"></i>
+            <span id="test-timer-clock">00:00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Test Center Card -->
+      <div class="max-w-2xl mx-auto glass-panel p-6 sm:p-10 rounded-3xl border border-white/10 space-y-6">
+        
+        <!-- Target Locus Spotlight -->
+        <div class="text-center space-y-2">
+          <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-300 border border-purple-500/30" id="test-current-locus-num">
+            第 1 站錨點
+          </span>
+          <h3 class="text-2xl sm:text-3xl font-black text-white tracking-tight" id="test-current-locus-name">
+            大門玄關鞋櫃
+          </h3>
+          <p class="text-xs text-slate-400 max-w-md mx-auto">
+            閉上眼睛漫步到此處：這裡當初發生了什麼荒誕混亂的劇本？
+          </p>
+        </div>
+
+        <!-- Answer Input: Supports Text Typing and Speech Dictation -->
+        <div class="space-y-3">
+          <div class="relative">
+            <input type="text" id="test-answer-input" placeholder="輸入你想起來的概念或目標詞彙..." class="w-full pl-4 pr-12 py-3.5 rounded-2xl glass-input text-sm font-semibold tracking-wide focus:outline-none" onkeydown="if(event.key==='Enter') app.submitRetrievalAnswer();" />
+            
+            <!-- Voice Speech input trigger inside field -->
+            <button onclick="app.listenForTestAnswer()" class="absolute right-2.5 top-2.5 p-2 rounded-xl text-slate-400 hover:text-cyan-300 hover:bg-white/5 transition" title="用語音口述回答">
+              <i class="ph-bold ph-microphone text-lg" id="test-mic-icon"></i>
+            </button>
+          </div>
+
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-slate-400">💡 打錯一兩個字也算對，但要寫出大部分的關鍵詞</span>
+            <button onclick="app.submitRetrievalAnswer()" class="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold transition shadow-md">
+              提交提取 ➔
+            </button>
+          </div>
+        </div>
+
+        <!-- HINT LADDER: 3-TIER PROGRESSIVE CLUES -->
+        <div class="pt-4 border-t border-white/10 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-300 flex items-center gap-1.5">
+              <i class="ph-bold ph-ladder text-amber-400"></i>
+              <span>階梯式記憶線索 (Hint Ladder)</span>
+            </span>
+            <span class="text-[11px] text-slate-400" id="hint-penalty-status">想不起來？不用直接看答案</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+            <!-- Tier 1 -->
+            <button onclick="app.revealHint(1)" id="btn-hint-tier-1" class="p-3 rounded-xl glass-card hover:border-amber-400/40 text-left transition space-y-1">
+              <span class="text-[10px] text-amber-400 font-bold block">階梯 1 (感官特徵)</span>
+              <p class="text-xs text-slate-300 line-clamp-2" id="hint-text-1">點擊解鎖當初的氣味/聲音...</p>
+            </button>
+            <!-- Tier 2 -->
+            <button onclick="app.revealHint(2)" id="btn-hint-tier-2" class="p-3 rounded-xl glass-card hover:border-cyan-400/40 text-left transition space-y-1 opacity-70">
+              <span class="text-[10px] text-cyan-400 font-bold block">階梯 2 (首字/符號)</span>
+              <p class="text-xs text-slate-300 line-clamp-2" id="hint-text-2">點擊解鎖首字與符號提示...</p>
+            </button>
+            <!-- Tier 3 -->
+            <button onclick="app.revealHint(3)" id="btn-hint-tier-3" class="p-3 rounded-xl glass-card hover:border-rose-400/40 text-left transition space-y-1 opacity-70">
+              <span class="text-[10px] text-rose-400 font-bold block">階梯 3 (揭曉劇本)</span>
+              <p class="text-xs text-slate-300 line-clamp-2" id="hint-text-3">直接重看劇本並標註弱點</p>
+            </button>
+          </div>
+        </div>
+
+        <!-- Quick Multiple Choice Alternative -->
+        <div class="pt-4 border-t border-white/10">
+          <div class="text-[11px] font-semibold text-slate-400 mb-2">或直接從候選目標中挑選：</div>
+          <div class="grid grid-cols-2 gap-2" id="test-mc-options">
+            <!-- Populated dynamically with 4 options -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 4: SCORE, ANALYSIS & SPACED REPETITION ENROLL -->
+    <section id="view-results" class="hidden space-y-6 animate-fadeIn">
+      <div class="glass-panel p-6 sm:p-10 rounded-3xl border border-white/10 text-center relative overflow-hidden">
+        
+        <div class="w-20 h-20 mx-auto rounded-3xl bg-gradient-to-tr from-indigo-500 via-purple-600 to-cyan-400 p-1 shadow-2xl shadow-indigo-500/40 flex items-center justify-center mb-4">
+          <div class="w-full h-full bg-cosmic-950 rounded-[22px] flex items-center justify-center text-3xl text-amber-400">
+            <i class="ph-bold ph-trophy"></i>
+          </div>
+        </div>
+
+        <h2 class="text-2xl sm:text-3xl font-black text-white mb-2">記憶提取完成！</h2>
+        <p class="text-xs sm:text-sm text-slate-300 max-w-md mx-auto mb-6">
+          你的大腦剛剛順利漫步穿越了空間錨點。以下是本次提取的神經突觸強度報告：
+        </p>
+
+        <!-- Metric Cards -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto mb-8 text-left">
+          <div class="glass-card p-4 rounded-2xl border-white/5">
+            <span class="text-xs text-slate-400">正確提取率</span>
+            <div class="text-3xl font-black text-emerald-400 mt-1" id="res-acc-value">100%</div>
+            <span class="text-[10px] text-slate-400 mt-0.5 block" id="res-acc-detail">5 / 5 個錨點</span>
+          </div>
+
+          <div class="glass-card p-4 rounded-2xl border-white/5">
+            <span class="text-xs text-slate-400">平均提取耗時</span>
+            <div class="text-3xl font-black text-cyan-400 mt-1" id="res-speed-value">8.4s</div>
+            <span class="text-[10px] text-slate-400 mt-0.5 block">神經提取流暢</span>
+          </div>
+
+          <div class="glass-card p-4 rounded-2xl border-white/5">
+            <span class="text-xs text-slate-400">宮殿記憶強度</span>
+            <div class="text-3xl font-black text-indigo-400 mt-1" id="res-score-value">94</div>
+            <span class="text-[10px] text-emerald-400 mt-0.5 block">神經烙印穩固</span>
+          </div>
+
+          <div class="glass-card p-4 rounded-2xl border-white/5">
+            <span class="text-xs text-slate-400">下次間隔複習</span>
+            <div class="text-xl font-black text-amber-300 mt-2" id="res-next-review">20 分鐘後</div>
+            <span class="text-[10px] text-slate-400 mt-0.5 block" id="res-next-note">對抗第一波遺忘</span>
+          </div>
+        </div>
+
+        <!-- Loci Detail Breakdown -->
+        <div class="max-w-3xl mx-auto text-left mb-8">
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-3">各錨點提取明細：</h4>
+          <div class="space-y-2" id="res-loci-list">
+            <!-- Populated dynamically -->
+          </div>
+        </div>
+
+        <!-- Action CTAs -->
+        <div class="flex flex-wrap justify-center gap-3">
+          <button onclick="app.enrollSpacedRepetitionVault()" id="btn-enroll-review" class="px-6 py-3 rounded-2xl bg-gradient-to-r from-indigo-600 to-cyan-600 hover:opacity-95 text-white font-bold text-xs sm:text-sm shadow-lg shadow-indigo-600/30 transition flex items-center gap-2">
+            <i class="ph-bold ph-calendar-plus text-lg"></i>
+            <span>加入艾賓浩斯間隔複習提醒庫</span>
+          </button>
+          <button onclick="app.switchView('lobby')" class="px-6 py-3 rounded-2xl glass-card hover:bg-white/10 text-slate-300 hover:text-white font-semibold text-xs sm:text-sm transition flex items-center gap-2">
+            <i class="ph-bold ph-arrow-counter-clockwise text-base"></i>
+            <span>回到訓練大廳</span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- VIEW 5: PALACE MANAGEMENT & CUSTOM PHOTO PALACE -->
+    <section id="view-palaces" class="hidden space-y-6 animate-fadeIn">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl sm:text-2xl font-black text-white">空間場景庫 (Palace Hub)</h2>
+          <p class="text-xs text-slate-400">精美虛擬場景，或上傳自己房間的生活照片自訂專屬現實宮殿</p>
+        </div>
+        <button onclick="app.openPalaceModal()" class="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-cyan-500 text-white text-xs font-bold transition flex items-center gap-2 shadow-md">
+          <i class="ph-bold ph-camera-plus text-base"></i>
+          <span>照片/手動建立新宮殿</span>
+        </button>
+      </div>
+
+      <!-- Palace Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5" id="palaces-cards-grid">
+        <!-- Injected via JS -->
+      </div>
+    </section>
+
+    <!-- VIEW 6: SPACED REPETITION VAULT -->
+    <section id="view-review" class="hidden space-y-6 animate-fadeIn">
+      <div>
+        <h2 class="text-xl sm:text-2xl font-black text-white">艾賓浩斯間隔複習庫 (Spaced Vault)</h2>
+        <p class="text-xs text-slate-400">標準間隔排程：20分鐘 ➔ 1天 ➔ 3天 ➔ 7天 ➔ 30天，牢固長期記憶</p>
+      </div>
+
+      <div class="glass-panel p-6 rounded-3xl border border-white/10">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="font-bold text-white text-sm flex items-center gap-2">
+            <i class="ph-fill ph-hourglass-high text-amber-400"></i>
+            <span>待複習提取清單</span>
+          </h3>
+          <span class="text-xs text-slate-400" id="review-count-label">共 0 項待提取</span>
+        </div>
+
+        <div class="space-y-3" id="review-cards-container">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 7: METHOD OF LOCI GUIDE -->
+    <section id="view-guide" class="hidden space-y-6 animate-fadeIn max-w-4xl mx-auto">
+      <div class="glass-panel p-6 sm:p-10 rounded-3xl border border-white/10 space-y-6">
+        <div>
+          <span class="text-xs font-bold text-cyan-400 tracking-wider uppercase">認知心理學秘笈</span>
+          <h2 class="text-2xl sm:text-3xl font-black text-white mt-1">
+            為什麼「記憶宮殿」是人類大腦的極限外掛？
+          </h2>
+        </div>
+
+        <div class="text-slate-300 text-xs sm:text-sm leading-relaxed space-y-4">
+          <p>
+            人類大腦經過百萬年的狩獵採集演化，<strong>對抽象文字極不敏感</strong>，但對<strong>「空間方位（我住哪裡）」</strong>與<strong>「誇張危險（猛獸襲擊、食物中毒）」</strong>具備近乎永恆的記憶本能。
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 my-4">
+            <div class="glass-card p-4 rounded-2xl border-indigo-500/20">
+              <h4 class="font-bold text-white text-sm mb-1">1. 位置細胞 (Place Cells)</h4>
+              <p class="text-[11px] text-slate-400">海馬體內的特殊神經元，當你漫步於熟悉場景時會主動激發，賦予記憶穩定的物理「掛鉤」。</p>
+            </div>
+            <div class="glass-card p-4 rounded-2xl border-cyan-500/20">
+              <h4 class="font-bold text-white text-sm mb-1">2. 馮·雷斯托夫效應</h4>
+              <p class="text-[11px] text-slate-400">荒謬、血腥、劇烈活動、巨大的異常物體，會強迫注意力系統標記為「生死關鍵」而拒絕遺忘。</p>
+            </div>
+            <div class="glass-card p-4 rounded-2xl border-purple-500/20">
+              <h4 class="font-bold text-white text-sm mb-1">3. 主動提取效應</h4>
+              <p class="text-[11px] text-slate-400">測驗時主動回想（Active Recall），長期保留效果明顯優於反覆重讀講義，這就是「測驗效應」。</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-4 flex justify-center">
+          <button onclick="app.switchView('lobby')" class="px-6 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs sm:text-sm transition shadow-lg shadow-indigo-600/30">
+            立刻挑選一組知識開始訓練 ➔
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: ADD / PHOTO CUSTOM PALACE -->
+  <div id="modal-palace" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4">
+    <div class="glass-panel w-full max-w-lg p-6 sm:p-8 rounded-3xl border border-white/20 relative animate-fadeIn">
+      <button onclick="app.closePalaceModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white text-lg">
+        <i class="ph-bold ph-x"></i>
+      </button>
+
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-300 flex items-center justify-center">
+          <i class="ph-bold ph-camera-plus text-xl"></i>
+        </div>
+        <div>
+          <h3 class="text-base sm:text-lg font-bold text-white">新增自訂生活宮殿</h3>
+          <p class="text-xs text-slate-400">推薦使用自己的房間、辦公室或常去的咖啡館</p>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">宮殿名稱</label>
+          <input type="text" id="custom-palace-name" placeholder="例如：我的台北小套房、學校研究室" class="w-full px-3.5 py-2.5 rounded-xl glass-input text-xs" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">上傳實景照片背景（可選）</label>
+          <input type="file" id="custom-palace-photo" accept="image/*" class="w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500 cursor-pointer" onchange="app.handlePalacePhotoUpload(event)" />
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <label class="text-xs font-semibold text-slate-300">錨點家具清單（依行走視線順時針，每行一個）</label>
+            <span class="text-[11px] text-cyan-400" id="custom-loci-count-tag">目前 5 點</span>
+          </div>
+          <textarea id="custom-palace-loci-text" rows="5" class="w-full px-3.5 py-2.5 rounded-xl glass-input text-xs font-mono leading-relaxed" placeholder="1. 門口黑色落塵地墊&#10;2. 原木高鞋櫃&#10;3. 米色雙人皮沙發&#10;4. 玻璃小圓茶几&#10;5. 55吋電視螢幕"></textarea>
+        </div>
+
+        <div class="pt-2 flex gap-3">
+          <button onclick="app.saveNewCustomPalace()" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-cyan-500 text-white font-bold text-xs shadow-lg transition">
+            儲存專屬宮殿
+          </button>
+          <button onclick="app.closePalaceModal()" class="px-5 py-3 rounded-xl glass-card text-slate-300 text-xs font-medium hover:bg-white/5 transition">
+            取消
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATIONS -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- MOBILE BOTTOM NAV -->
+  <nav id="mobile-nav" class="md:hidden fixed bottom-0 inset-x-0 z-50 glass-panel border-t border-white/10 grid grid-cols-4 text-[11px] font-semibold" style="padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px);">
+    <button onclick="app.switchView('lobby')" id="mnav-lobby" class="py-2.5 flex flex-col items-center gap-0.5 text-cyan-300"><i class="ph-bold ph-sparkle text-lg"></i><span>素材提煉</span></button>
+    <button onclick="app.switchView('palaces')" id="mnav-palaces" class="py-2.5 flex flex-col items-center gap-0.5 text-slate-400"><i class="ph-bold ph-castle-turret text-lg"></i><span>宮殿庫</span></button>
+    <button onclick="app.switchView('review')" id="mnav-review" class="py-2.5 flex flex-col items-center gap-0.5 text-slate-400"><i class="ph-bold ph-clock-countdown text-lg"></i><span>複習庫</span></button>
+    <button onclick="app.switchView('guide')" id="mnav-guide" class="py-2.5 flex flex-col items-center gap-0.5 text-slate-400"><i class="ph-bold ph-book-bookmark text-lg"></i><span>科學秘笈</span></button>
+  </nav>
+  </div>
+
+  <!-- CORE LOGIC APPLICATION SCRIPT -->
+  <script>
+    /**
+     * ADVANCED MEMORY PALACE SYSTEM - CORE ENGINE
+     */
+    const STORAGE_KEY_PALACES = 'MP_V3_PALACES';
+    const esc = (str) => String(str ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const safeGet = (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+    const safeSet = (k, v) => { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } };
+    const REVIEW_INTERVALS = [0, 20*60*1000, 24*60*60*1000, 3*24*60*60*1000, 7*24*60*60*1000, 30*24*60*60*1000];
+    const formatWait = (ms) => {
+      const m = Math.round(ms / 60000);
+      if (m < 60) return `${m} 分鐘後`;
+      const h = Math.round(m / 60);
+      if (h < 24) return `${h} 小時後`;
+      return `${Math.round(h / 24)} 天後`;
+    };
+
+    // Phosphor 圖示字型被 CSP 擋下，改用 Google Fonts 的 Material Symbols
+    const ICON_MAP = {
+      'brain':'psychology','sparkle':'auto_awesome','castle-turret':'castle','clock-countdown':'timer','book-bookmark':'menu_book',
+      'speaker-high':'volume_up','speaker-slash':'volume_off','fire':'local_fire_department','magic-wand':'magic_button','lightning':'bolt',
+      'article':'article','file-pdf':'picture_as_pdf','microphone':'mic','cloud-arrow-up':'cloud_upload','spinner':'progress_activity',
+      'record':'radio_button_checked','list-checks':'checklist','x':'close','caret-right':'chevron_right','caret-left':'chevron_left',
+      'play-circle':'play_circle','chart-line-up':'trending_up','arrow-left':'arrow_back','compass':'explore','arrows-left-right':'swap_horiz',
+      'arrow-right':'arrow_forward','arrows-clockwise':'autorenew','film-slate':'movie','lightbulb':'lightbulb','check-circle':'check_circle',
+      'crosshair':'my_location','timer':'timer','ladder':'stairs','trophy':'emoji_events','calendar-plus':'calendar_add_on',
+      'arrow-counter-clockwise':'replay','camera-plus':'add_a_photo','hourglass-high':'hourglass_top','hourglass':'hourglass_empty',
+      'trash':'delete','house':'home','house-line':'cottage','books':'local_library','planet':'public','flower-lotus':'spa',
+      'bell-simple':'notifications'
+    };
+    function convertIcons(root) {
+      const nodes = (root.nodeType === 1 && root.matches && root.matches('i[class*="ph-"]')) ? [root] : [];
+      if (root.querySelectorAll) nodes.push(...root.querySelectorAll('i[class*="ph-"]'));
+      nodes.forEach(el => {
+        const cls = [...el.classList];
+        const nameCls = cls.find(c => c.startsWith('ph-') && c !== 'ph-bold' && c !== 'ph-fill');
+        if (!nameCls) return;
+        const name = nameCls.slice(3);
+        const fill = cls.includes('ph-fill');
+        cls.filter(c => c.startsWith('ph')).forEach(c => el.classList.remove(c));
+        el.classList.add('mi'); if (fill) el.classList.add('fill');
+        el.dataset.ph = name;
+        el.textContent = ICON_MAP[name] || 'circle';
+        el.setAttribute('aria-hidden', 'true');
+      });
+    }
+    new MutationObserver(muts => muts.forEach(m => {
+      m.addedNodes.forEach(n => { if (n.nodeType === 1) convertIcons(n); });
+      if (m.type === 'attributes' && m.target.className && String(m.target.className).includes('ph-')) convertIcons(m.target);
+    })).observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+
+    const STORAGE_KEY_REVIEWS = 'MP_V3_REVIEWS';
+    const STORAGE_KEY_HISTORY = 'MP_V3_HISTORY';
+
+    // Comprehensive Abstract-to-Concrete Concrete Symbolism Dictionary
+    const ABSTRACT_DICTIONARY = {
+      '平等': { obj: '黃金巨型天平', emoji: '⚖️', action: '瘋狂傾斜把人甩出去' },
+      '自由': { obj: '斷裂的巨型鋼鐵鎖鏈', emoji: '⛓️', action: '像鞭子一樣火花四射' },
+      '正義': { obj: '燃燒著藍色烈焰的審判之劍', emoji: '⚔️', action: '把整張桌子劈成兩半' },
+      '通貨膨脹': { obj: '充氣到快爆炸的巨型氣球熱狗', emoji: '🎈', action: '隨時要炸飛屋頂' },
+      '抗生素': { obj: '揮舞雷射光劍的巨型白血球騎士', emoji: '🛡️', action: '瘋狂劈砍綠色黏稠細菌怪' },
+      '青黴素': { obj: '長滿螢光綠色長毛的巨大發霉鋼筆', emoji: '🖋️', action: '噴出腐蝕性的劇毒墨水' },
+      '過敏': { obj: '全身插滿紅色炸彈的巨型火雞', emoji: '🦃', action: '發出刺耳警報並自爆' },
+      '誠信': { obj: '透明無瑕且發出刺眼金光的鑽石鏡', emoji: '💎', action: '照出人內心的醜陋骷髏' },
+      '隱私': { obj: '長滿百隻眼睛的黑鐵保險箱', emoji: '🔒', action: '瘋狂眨眼並射出紅外線' },
+      '效率': { obj: '噴射火箭推進器的狂暴獵豹', emoji: '🐆', action: '以超音速撞穿水泥牆' },
+      '凋亡': { obj: '自動碎裂成七彩粉末的水晶玫瑰', emoji: '🥀', action: '在無聲中化成一攤黏液' },
+      '折舊': { obj: '生鏽腐蝕到掉渣的巨型老爺鐘', emoji: '🕰️', action: '齒輪像子彈一樣四處飛射' },
+      '主權': { obj: '漂浮在空中的黃金皇冠', emoji: '👑', action: '射出雷電將地板電出焦黑印記' },
+      '比例': { obj: '會伸縮的巨型量尺', emoji: '📏', action: '啪一聲把東西剪成剛好的大小' },
+      '法律保留': { obj: '蓋著紅色大印的巨型法典', emoji: '📕', action: '重重砸下把門封住' },
+      '正當法律程序': { obj: '敲個不停的法官木槌', emoji: '🔨', action: '每敲一下就跳出一個發言麥克風' },
+      '萬古黴素': { obj: '穿盔甲的萬年古樹', emoji: '🌳', action: '用樹枝把金黃色葡萄球怪甩飛' },
+      '紅黴素': { obj: '全身通紅的工廠機器人', emoji: '🤖', action: '把蛋白質生產線一條條剪斷' },
+      '四環黴素': { obj: '套著四個鈣片圈圈的黃牙怪', emoji: '🦷', action: '咧嘴露出被染黃的大板牙' },
+      '頭孢': { obj: '戴著青黴素頭盔的雙胞胎', emoji: '👯', action: '同時打噴嚏引發過敏警報' },
+      '溝通': { obj: '有十張嘴的巨型對講機', emoji: '📢', action: '把吵架的人聲音調成和聲' },
+      '抗壓': { obj: '被壓扁又彈回來的超級彈簧人', emoji: '🪀', action: '一彈就撞上天花板' },
+      '敏捷': { obj: '穿溜冰鞋的便利貼大軍', emoji: '🗒️', action: '每兩分鐘換一次隊形' },
+      'AI': { obj: '頭頂冒著問號的機器人學生', emoji: '🤖', action: '狂翻書本發出嗶嗶聲' },
+      '目標導向': { obj: '射在靶心正中央的黃金飛鏢', emoji: '🎯', action: '一射中就噴出滿天數據彩帶' }
+    };
+
+    const FALLBACK_SYMBOLS = [
+      { obj: '狂噴岩漿的巨型金剛像', emoji: '🦍', action: '瘋狂捶胸咆哮' },
+      { obj: '發出藍光的巨大冰塊', emoji: '🧊', action: '釋放刺骨寒氣把東西凍裂' },
+      { obj: '插滿七彩羽毛的飛天掃帚', emoji: '🧹', action: '以超音速盤旋轉圈' },
+      { obj: '長滿尖牙的暴躁紅蘋果', emoji: '🍎', action: '狠狠咬碎木頭' },
+      { obj: '噴著火焰的黃金戰車', emoji: '🏎️', action: '把四周燒出火光' },
+      { obj: '會跳芭蕾舞的純金巨龍', emoji: '🐉', action: '一邊旋轉一邊噴出金幣' },
+      { obj: '十公尺高的充氣章魚', emoji: '🐙', action: '用八隻腳狂甩黑色墨汁' },
+      { obj: '冒著蒸氣的巨型鬧鐘', emoji: '⏰', action: '發出震耳欲聾的鈴聲' },
+      { obj: '全身發光的仙人掌巨人', emoji: '🌵', action: '把尖刺射滿牆壁' },
+      { obj: '會說話的巨大起司塊', emoji: '🧀', action: '融化成滾燙的黃色瀑布' }
+    ];
+    const AUDIO_CUES = ['金屬撞擊的巨響', '震耳的警報聲', '玻璃碎裂聲', '怪物低吼', '雷聲轟隆', '尖銳的哨音', '鼓聲狂敲', '嘶嘶的蒸氣聲'];
+    const FEEL_CUES = ['燒焦味撲鼻', '黏膩的觸感', '刺骨的冷風', '酸甜的番茄醬味', '滾燙的熱浪', '濃烈的咖啡香', '刺鼻的硫磺味', '濕滑的泥巴感'];
+
+    // Pre-built Immersive Palaces with High-res Visual Styling
+    const DEFAULT_PALACES = [
+      {
+        id: 'palace_sunlight',
+        name: '溫馨日光居所',
+        icon: 'ph-house',
+        desc: '採光極佳的現代家庭公寓，動線直覺且生活感極強。',
+        bg: 'linear-gradient(135deg,#7c2d12 0%,#b45309 45%,#1e293b 100%)',
+        loci: [
+          '大門玄關鞋櫃',
+          '客廳深灰色皮沙發',
+          '原木大茶几',
+          '55吋壁掛液晶電視',
+          '景觀落地窗陽台',
+          '廚房大雙門冰箱',
+          '瓦斯爐流理台',
+          '微波爐置物架',
+          '臥室雙人加大床鋪',
+          '浴室白瓷洗手槽'
+        ]
+      },
+      {
+        id: 'palace_magic',
+        name: '魔法學院圖書館',
+        icon: 'ph-books',
+        desc: '挑高胡桃木穹頂與金色擺鐘，沉浸奇幻氛圍。',
+        bg: 'linear-gradient(135deg,#3b2410 0%,#78350f 40%,#1e1b4b 100%)',
+        loci: [
+          '圖書館旋轉青銅大門',
+          '大理石諮詢服務台',
+          '古老黃銅大地球儀',
+          '第一排哲學類木質書架',
+          '靠窗綠色復古檯燈長桌',
+          '挑高木造螺旋階梯',
+          '彩繪鑲嵌玫瑰玻璃窗',
+          '古董皮質安樂閱讀椅',
+          '文獻微縮膠片終端機',
+          '古老落地大擺鐘'
+        ]
+      },
+      {
+        id: 'palace_cyber',
+        name: '賽博龐克太空艙',
+        icon: 'ph-planet',
+        desc: '霓虹藍紫光線與全息投影操控台，適合高難度科技概念。',
+        bg: 'linear-gradient(135deg,#312e81 0%,#7e22ce 45%,#0e7490 100%)',
+        loci: [
+          '太空艙氣密減壓閥門',
+          '全息星際導航地圖儀',
+          '機長重力懸浮操作椅',
+          '主冷卻核聚變反應爐',
+          '冷凍人體休眠睡眠艙',
+          '武器光子魚雷發射架',
+          '水耕植物維生溫室',
+          '醫療分析掃描艙',
+          '太空服加壓氣鎖架',
+          '全景觀星防護舷窗'
+        ]
+      },
+      {
+        id: 'palace_zen',
+        name: '京都禪風庭園',
+        icon: 'ph-flower-lotus',
+        desc: '日式木造緣側與枯山水，空間感開闊且寧靜清晰。',
+        bg: 'linear-gradient(135deg,#14532d 0%,#365314 45%,#1c1917 100%)',
+        loci: [
+          '木造玄關洗石地',
+          '榻榻米中央圍爐裏',
+          '枯山水白色細砂庭院',
+          '竹製敲石汲水器 (添水)',
+          '緣側木質長廊外緣',
+          '日式紙拉門 (障子)',
+          '茶道黑陶茶碗案台',
+          '石造青苔古老燈籠',
+          '老松樹修剪枝枒前',
+          '木造日式矮木橋'
+        ]
+      }
+    ];
+
+    // Demo Preset Knowledge Packages
+    const DEMO_PRESETS = {
+      law: {
+        text: '憲法平等原則禁止不合理的差別待遇；法律保留原則要求限制人民自由必須有法律授權；比例原則要求手段與目的合乎適當性與最小損害；誠信原則要求行使權利兼顧他人信賴；正當法律程序保障人民陳述意見與聽審權利。',
+        title: '憲法五大基本原則'
+      },
+      med: {
+        text: '青黴素主要破壞細菌細胞壁的胜肽聚醣；萬古黴素專門對抗抗藥性金黃色葡萄球菌；紅黴素抑制細菌蛋白質合成；四環黴素會與鈣結合導致牙齒永久變色變黃；頭孢菌素廣效殺菌且結構與青黴素類似需注意交叉過敏。',
+        title: '抗生素藥理與副作用'
+      },
+      speech: {
+        text: '具備跨領域溝通協調能力能化解團隊歧見；擁有高抗壓性與快速復原彈性；熟練掌握敏捷專案開發流程；對新興AI技術抱持極度主動學習熱忱；以終為始的商業數據目標導向思維。',
+        title: '經典面試五大關鍵競爭力'
+      }
+    };
+
+    class MemoryPalaceApp {
+      constructor() {
+        this.palaces = this.loadPalaces();
+        this.reviews = this.loadReviews();
+        this.history = this.loadHistory();
+
+        // Audio System State
+        this.soundEnabled = true;
+        this.synth = null;
+
+        // Current Config
+        this.activePalaceId = this.palaces[0].id;
+        this.extractedTargets = []; // [{ id, text, symbolObj, emoji }]
+        this.customUploadedPhoto = null;
+
+        // Active Session
+        this.activeSession = {
+          palace: null,
+          stations: [], // [{ locus, target, symbol, emoji, script, sensory, userRecall, isCorrect }]
+          currentIdx: 0,
+          startTime: 0,
+          timerInterval: null,
+          testIdx: 0,
+          hintTier: 0
+        };
+
+        // Speech Recognition
+        this.recognition = null;
+        this.isRecording = false;
+
+        this.init();
+      }
+
+      init() {
+        this.setupAudio();
+        this.setupSpeechRecognition();
+        this.renderPalacePicker();
+        this.renderPalacesView();
+        this.renderReviewsView();
+        this.currentView = 'lobby';
+        convertIcons(document.body);
+        this.loadDemoPreset('law', true); // Default preview
+        this.updateStatsDashboard();
+        document.addEventListener('keydown', (e) => {
+          if (this.currentView !== 'study' || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+          if (e.key === 'ArrowRight') this.nextLocusStep();
+          if (e.key === 'ArrowLeft') this.prevLocusStep();
+        });
+      }
+
+      /* TONE.JS AUDIO SYSTEM */
+      setupAudio() {
+        try {
+          this.synth = new Tone.PolySynth(Tone.Synth).toDestination();
+          this.synth.volume.value = -12;
+        } catch (e) {
+          console.log('Audio init postponed until user gesture');
+        }
+      }
+
+      playFeedbackSound(type) {
+        if (!this.soundEnabled) return;
+        try {
+          Tone.start();
+          if (!this.synth) this.synth = new Tone.PolySynth(Tone.Synth).toDestination();
+          
+          if (type === 'success') {
+            this.synth.triggerAttackRelease(['C5', 'E5', 'G5'], '8n');
+          } else if (type === 'step') {
+            this.synth.triggerAttackRelease(['G4'], '16n');
+          } else if (type === 'wrong') {
+            this.synth.triggerAttackRelease(['F3', 'C3'], '8n');
+          } else if (type === 'spark') {
+            this.synth.triggerAttackRelease(['E5', 'A5'], '16n');
+          }
+        } catch (e) {}
+      }
+
+      toggleSound() {
+        this.soundEnabled = !this.soundEnabled;
+        const icon = document.getElementById('sound-icon');
+        const text = document.getElementById('sound-status-text');
+        if (this.soundEnabled) {
+          icon.className = 'ph-bold ph-speaker-high';
+          text.innerText = '音效開';
+          this.toast('音效反饋已開啟', 'indigo');
+        } else {
+          icon.className = 'ph-bold ph-speaker-slash';
+          text.innerText = '靜音';
+          this.toast('已切換為靜音模式', 'slate');
+        }
+      }
+
+      /* BROWSER SPEECH RECOGNITION (WEB SPEECH API) */
+      setupSpeechRecognition() {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+          this.recognition = new SpeechRecognition();
+          this.recognition.lang = 'zh-TW';
+          this.recognition.continuous = false;
+          this.recognition.interimResults = false;
+
+          this.recognition.onresult = (e) => {
+            const transcript = e.results[0][0].transcript;
+            if (this.currentView === 'lobby') {
+              const cur = document.getElementById('raw-text-input').value;
+              document.getElementById('raw-text-input').value = cur ? `${cur}，${transcript}` : transcript;
+              this.toast(`🎤 已識別語音：「${transcript}」`, 'cyan');
+            } else if (this.currentView === 'test') {
+              document.getElementById('test-answer-input').value = transcript;
+              this.submitRetrievalAnswer();
+            }
+          };
+
+          this.recognition.onend = () => {
+            this.isRecording = false;
+            const btn = document.getElementById('voice-btn-label');
+            if (btn) btn.innerText = '開始錄製語音';
+            const micGlow = document.getElementById('voice-mic-glow');
+            if (micGlow) micGlow.classList.remove('animate-pulse');
+          };
+
+          this.recognition.onerror = (ev) => {
+            this.isRecording = false;
+            const msg = (ev && (ev.error === 'not-allowed' || ev.error === 'service-not-allowed'))
+              ? '麥克風權限被擋下了。請改用打字，或在獨立瀏覽器分頁開啟此頁'
+              : '沒有聽到聲音，請靠近麥克風再試一次';
+            this.toast(msg, 'rose');
+          };
+        }
+      }
+
+      toggleSpeechRecording() {
+        if (!this.recognition) {
+          this.toast('此瀏覽器不支援語音辨識，請使用 Chrome/Edge 或手動輸入', 'amber');
+          return;
+        }
+
+        if (this.isRecording) {
+          this.recognition.stop();
+          this.isRecording = false;
+        } else {
+          try {
+            this.recognition.start();
+            this.isRecording = true;
+            document.getElementById('voice-btn-label').innerText = '聆聽中... (請說話)';
+            document.getElementById('voice-mic-glow').classList.add('animate-pulse');
+            this.toast('🎙️ 麥克風已啟動，請口述想記憶的清單...', 'rose');
+          } catch (e) {
+            this.toast('語音辨識啟動異常', 'rose');
+          }
+        }
+      }
+
+      listenForTestAnswer() {
+        if (!this.recognition) {
+          this.toast('此瀏覽器未開放語音識別，請直接鍵盤輸入', 'amber');
+          return;
+        }
+        try {
+          this.recognition.start();
+          this.toast('🎙️ 請直接說出答案...', 'cyan');
+        } catch (e) {}
+      }
+
+      /* PDF PARSING (CLIENT-SIDE PDF.JS) */
+      async handlePdfUpload(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const statusEl = document.getElementById('pdf-parsing-status');
+        statusEl.classList.remove('hidden');
+
+        try {
+          const arrayBuffer = await file.arrayBuffer();
+          const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+          let fullText = '';
+
+          const maxPages = Math.min(pdf.numPages, 5); // Read first 5 pages for rapid study
+          for (let i = 1; i <= maxPages; i++) {
+            const page = await pdf.getPage(i);
+            const textContent = await page.getTextContent();
+            const pageText = textContent.items.map(item => item.str).join(' ');
+            fullText += pageText + '\n';
+          }
+
+          document.getElementById('raw-text-input').value = fullText.slice(0, 2000);
+          this.switchInputMode('text');
+          this.triggerSmartExtraction();
+          this.toast(`✅ 成功解析 PDF（前 ${maxPages} 頁）！已自動提煉重點。`, 'emerald');
+        } catch (err) {
+          console.error(err);
+          this.toast('讀取 PDF 失敗，請確認檔案格式是否正常', 'rose');
+        } finally {
+          statusEl.classList.add('hidden');
+        }
+      }
+
+      /* INPUT MODE SWITCH */
+      switchInputMode(mode) {
+        ['text', 'pdf', 'voice'].forEach(m => {
+          document.getElementById(`input-container-${m}`).classList.add('hidden');
+          const tab = document.getElementById(`tab-in-${m}`);
+          tab.className = 'px-3 py-1.5 rounded-lg font-semibold transition text-slate-400 hover:text-white flex items-center gap-1';
+        });
+
+        document.getElementById(`input-container-${mode}`).classList.remove('hidden');
+        const activeTab = document.getElementById(`tab-in-${mode}`);
+        activeTab.className = 'px-3 py-1.5 rounded-lg font-semibold transition bg-indigo-600 text-white flex items-center gap-1';
+      }
+
+      loadDemoPreset(key, silent = false) {
+        const preset = DEMO_PRESETS[key];
+        if (!preset) return;
+        document.getElementById('raw-text-input').value = preset.text;
+        this.switchInputMode('text');
+        this.triggerSmartExtraction(silent);
+        if (!silent) this.toast(`⚡ 已載入【${preset.title}】實戰範例！`, 'indigo');
+      }
+
+      /* SMART EXTRACTION & CONCRETE SYMBOL ENGINE */
+      // 從一句話中抽出「可回想的核心詞」：取主詞部分，去掉開頭動詞與後面的說明
+      extractCoreTerm(sentence) {
+        let t = sentence.replace(/^[\s\d一二三四五六七八九十]+[\.、．)）]\s*/, '').trim();
+        t = t.replace(/^(具備|具有|擁有|熟練掌握|熟練|需要|必須|要|對)/, '');
+        const markers = [/禁止/, /要求/, /主要/, /專門/, /抑制/, /保障/, /破壞/, /導致/, /廣效/, /抱持/, /會(?!議|計|員)/, /能(?!力|量|源)/, /是指/, /是/, /指(?!標|數|南)/, /[：:]/];
+        let cut = t.length;
+        markers.forEach(mk => {
+          const m = mk.exec(t);
+          if (m && m.index >= 2 && m.index < cut) cut = m.index;
+        });
+        let core = t.slice(0, cut).trim();
+        if (core.length < 2) core = t;
+        if (core.length > 16) core = core.slice(0, 16) + '…';
+        return core;
+      }
+
+      triggerSmartExtraction(silent = false) {
+        const raw = document.getElementById('raw-text-input').value.trim();
+        if (!raw) {
+          this.toast('請先貼入文字、上傳 PDF 或錄音口述！', 'rose');
+          return;
+        }
+
+        const segments = raw.split(/[；;。！？!?\n]/)
+          .flatMap(s => s.length > 40 ? s.split(/[，,]/) : [s])
+          .map(s => s.trim())
+          .filter(s => s.length >= 2);
+
+        const seen = new Set();
+        const items = [];
+        segments.forEach(seg => {
+          const core = this.extractCoreTerm(seg);
+          if (core.length < 2 || seen.has(core)) return;
+          seen.add(core);
+          items.push({ core, detail: seg.length > 60 ? seg.slice(0, 60) + '…' : seg });
+        });
+        const finalPool = items.slice(0, 10);
+        if (finalPool.length === 0) {
+          this.toast('找不到可用的句子，請用句號或分號分隔每個重點', 'rose');
+          return;
+        }
+
+        this.extractedTargets = finalPool.map((it, idx) => {
+          let matched = null;
+          for (let k in ABSTRACT_DICTIONARY) {
+            if (it.detail.includes(k)) { matched = ABSTRACT_DICTIONARY[k]; break; }
+          }
+          if (!matched) matched = FALLBACK_SYMBOLS[this.hashIndex(it.core, FALLBACK_SYMBOLS.length)];
+          return {
+            id: 't_' + idx + '_' + Date.now(),
+            text: it.core,
+            detail: it.detail !== it.core ? it.detail : '',
+            symbol: matched.obj,
+            emoji: matched.emoji,
+            action: matched.action,
+            selected: true
+          };
+        });
+
+        this.renderKeywordChips();
+        if (!silent) {
+          this.playFeedbackSound('spark');
+          this.toast(`✨ 提煉完成：找到 ${this.extractedTargets.length} 個記憶點，可以再手動修改`, 'emerald');
+        }
+      }
+
+      hashIndex(str, n) {
+        let h = 0;
+        for (const ch of str) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+        return h % n;
+      }
+
+      renderKeywordChips() {
+        const container = document.getElementById('keyword-chips-container');
+        const selectedCount = this.extractedTargets.filter(t => t.selected).length;
+        document.getElementById('extracted-count-badge').innerText = `已選取 ${selectedCount} 項`;
+
+        container.innerHTML = this.extractedTargets.map((item, idx) => {
+          return `
+            <div class="px-3 py-1.5 rounded-xl border flex items-center gap-2 transition ${
+              item.selected 
+                ? 'bg-indigo-600/20 border-indigo-400 text-white' 
+                : 'bg-slate-900/50 border-white/5 text-slate-500 line-through'
+            }">
+              <input type="checkbox" id="chip-${idx}" ${item.selected ? 'checked' : ''} onchange="app.toggleTargetSelect(${idx})" class="accent-indigo-500 rounded cursor-pointer" />
+              <label for="chip-${idx}" class="text-xs font-semibold cursor-pointer" title="${esc(item.detail)}">${item.emoji} ${esc(item.text)}</label>
+              <button onclick="app.removeTarget(${idx})" aria-label="移除 ${esc(item.text)}" class="text-slate-400 hover:text-rose-400 text-xs ml-1">
+                <i class="ph-bold ph-x"></i>
+              </button>
+            </div>
+          `;
+        }).join('');
+      }
+
+      toggleTargetSelect(idx) {
+        this.extractedTargets[idx].selected = !this.extractedTargets[idx].selected;
+        this.renderKeywordChips();
+      }
+
+      removeTarget(idx) {
+        this.extractedTargets.splice(idx, 1);
+        this.renderKeywordChips();
+      }
+
+      quickAddTarget() {
+        const input = document.getElementById('quick-add-keyword-input');
+        const val = input.value.trim();
+        if (!val) return;
+
+        let matched = null;
+        for (let k in ABSTRACT_DICTIONARY) { if (val.includes(k)) { matched = ABSTRACT_DICTIONARY[k]; break; } }
+        if (!matched) matched = FALLBACK_SYMBOLS[this.hashIndex(val, FALLBACK_SYMBOLS.length)];
+        this.extractedTargets.push({
+          id: 't_custom_' + Date.now(),
+          text: val,
+          detail: '',
+          symbol: matched.obj,
+          emoji: matched.emoji,
+          action: matched.action,
+          selected: true
+        });
+
+        input.value = '';
+        this.renderKeywordChips();
+      }
+
+      /* PALACE RENDER & SELECTION */
+      renderPalacePicker() {
+        const container = document.getElementById('active-palace-picker');
+        container.innerHTML = this.palaces.map(p => {
+          const isSelected = p.id === this.activePalaceId;
+          return `
+            <div onclick="app.selectPalace('${p.id}')" class="p-3.5 rounded-2xl cursor-pointer transition flex items-center justify-between border ${
+              isSelected ? 'bg-indigo-600/20 border-cyan-400 shadow-lg shadow-cyan-500/10' : 'bg-cosmic-950/60 border-white/5 hover:border-white/20'
+            }">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl ${isSelected ? 'bg-cyan-500 text-slate-950' : 'bg-slate-800 text-slate-400'} flex items-center justify-center text-xl font-bold">
+                  <i class="ph-bold ${p.icon || 'ph-house'}"></i>
+                </div>
+                <div>
+                  <h4 class="text-xs font-bold text-white">${esc(p.name)}</h4>
+                  <p class="text-[11px] text-slate-400">${p.loci.length} 個錨點 · ${esc(p.desc.slice(0, 18))}…</p>
+                </div>
+              </div>
+              ${isSelected ? '<i class="ph-bold ph-check-circle text-cyan-400 text-lg"></i>' : ''}
+            </div>
+          `;
+        }).join('');
+      }
+
+      selectPalace(id) {
+        this.activePalaceId = id;
+        this.renderPalacePicker();
+        this.playFeedbackSound('step');
+      }
+
+      /* AUTOMATIC BIZARRE VIGNETTE GENERATION ENGINE */
+      generateBizarreScript(locus, targetText, symbolObj, emoji, action, avoid = null) {
+        const L = `<strong>【${esc(locus)}】</strong>`;
+        const S = `<strong class="text-cyan-300">${esc(symbolObj)} ${emoji}</strong>`;
+        const A = esc(action);
+        const templates = [
+          `當你一走到${L}，赫然看見一具巨大的${S}正在${A}！滾燙的火花把${esc(locus)}轟出一個焦黑的深坑，燒焦味直衝你的鼻腔！`,
+          `在${L}正中央，一座發出刺眼霓虹光的${S}像陀螺一樣狂轉，一邊轉一邊${A}，強風差點把你掀翻在地！`,
+          `你伸手摸向${L}，冰冷的觸感突然變成黏稠的液體！${S}從裂縫中鑽出來，貼著你的耳朵大吼，接著${A}！`,
+          `${L}上擠滿了上百個迷你版的${S}，牠們同時轉頭盯著你，然後一起${A}，整個空間都在震動！`
+        ];
+        let i = Math.floor(Math.random() * templates.length);
+        if (avoid !== null && templates.length > 1 && i === avoid) i = (i + 1) % templates.length;
+        return { html: templates[i], idx: i };
+      }
+
+      buildSensory(locus, item, idx) {
+        return {
+          visual: `${item.symbol}在${locus}${item.action}`,
+          audio: AUDIO_CUES[(idx + this.hashIndex(item.text, AUDIO_CUES.length)) % AUDIO_CUES.length],
+          feel: FEEL_CUES[(idx * 3 + this.hashIndex(locus, FEEL_CUES.length)) % FEEL_CUES.length]
+        };
+      }
+
+      /* START IMMERSIVE TRAINING SESSION */
+      startFullTrainingJourney() {
+        const selected = this.extractedTargets.filter(t => t.selected);
+        if (selected.length === 0) {
+          this.toast('請至少勾選一個想記憶的關鍵字！', 'rose');
+          return;
+        }
+
+        const palace = this.palaces.find(p => p.id === this.activePalaceId) || this.palaces[0];
+        
+        // Assemble Stations (Combine loci and target)
+        if (selected.length > palace.loci.length) {
+          this.toast(`這座宮殿只有 ${palace.loci.length} 個錨點，請少選幾個詞，或換一座更大的宮殿`, 'rose');
+          return;
+        }
+        const stations = selected.map((item, idx) => {
+          const locus = palace.loci[idx];
+          const sc = this.generateBizarreScript(locus, item.text, item.symbol, item.emoji, item.action);
+          return {
+            idx: idx,
+            locus: locus,
+            target: item.text,
+            detail: item.detail || '',
+            symbol: item.symbol,
+            emoji: item.emoji,
+            action: item.action,
+            script: sc.html,
+            scriptIdx: sc.idx,
+            sensory: this.buildSensory(locus, item, idx),
+            userRecall: null,
+            isCorrect: false
+          };
+        });
+
+        this.activeSession = {
+          reviewId: null,
+          palace: palace,
+          stations: stations,
+          currentIdx: 0,
+          startTime: Date.now(),
+          timerInterval: null,
+          testIdx: 0,
+          hintTier: 0
+        };
+
+        this.playFeedbackSound('success');
+        this.setupStudyUI();
+        this.switchView('study');
+        this.toast('🚀 荒謬劇本已生成！請放鬆身心，依序漫步烙印。', 'cyan');
+      }
+
+      setupStudyUI() {
+        const { palace } = this.activeSession;
+        document.getElementById('study-active-palace-title').innerText = palace.name;
+        this.renderStudyStep();
+      }
+
+      renderStudyStep() {
+        const { stations, currentIdx, palace } = this.activeSession;
+        const cur = stations[currentIdx];
+        const total = stations.length;
+
+        // Progress
+        document.getElementById('study-progress-text').innerText = `${currentIdx + 1} / ${total}`;
+        const pct = Math.round(((currentIdx + 1) / total) * 100);
+        document.getElementById('study-progress-bar').style.width = `${pct}%`;
+
+        // Viewport Background
+        const viewportBox = document.getElementById('study-viewport-box');
+        if (palace.customPhoto) {
+          viewportBox.style.backgroundImage = `url(${palace.customPhoto})`;
+        } else if (palace.bg) {
+          viewportBox.style.backgroundImage = palace.bg;
+        } else {
+          viewportBox.style.backgroundImage = `linear-gradient(135deg, #1e1b4b, #0f172a)`;
+        }
+
+        document.getElementById('viewport-locus-name').innerText = cur.locus;
+        document.getElementById('viewport-item-emoji').innerText = cur.emoji;
+
+        // Loci List Navigator
+        const trackContainer = document.getElementById('study-loci-track');
+        trackContainer.innerHTML = stations.map((s, i) => {
+          const isActive = i === currentIdx;
+          const isPassed = i < currentIdx;
+          return `
+            <div onclick="app.jumpToStation(${i})" class="p-2.5 rounded-xl cursor-pointer transition flex items-center justify-between border ${
+              isActive 
+                ? 'bg-indigo-600/40 border-cyan-400 text-white shadow-md' 
+                : isPassed 
+                  ? 'bg-cosmic-950/70 border-emerald-500/30 text-slate-300' 
+                  : 'bg-cosmic-950/40 border-white/5 text-slate-500'
+            }">
+              <div class="flex items-center gap-2 text-xs truncate">
+                <span class="w-5 h-5 rounded-md font-bold text-[10px] flex items-center justify-center ${
+                  isActive ? 'bg-cyan-400 text-slate-950' : isPassed ? 'bg-emerald-500/20 text-emerald-300' : 'bg-slate-800 text-slate-400'
+                }">${i + 1}</span>
+                <span class="truncate">${esc(s.locus)}</span>
+              </div>
+              <span class="text-xs">${s.emoji}</span>
+            </div>
+          `;
+        }).join('');
+
+        // Main Stage
+        document.getElementById('study-station-badge').innerText = currentIdx + 1;
+        document.getElementById('study-target-concept').innerText = cur.target;
+        document.getElementById('study-symbolic-object').innerText = cur.symbol;
+        const detailEl = document.getElementById('study-target-detail');
+        detailEl.innerText = cur.detail ? `原文：${cur.detail}` : '';
+        detailEl.hidden = !cur.detail;
+        document.getElementById('study-vignette-script').innerHTML = cur.script;
+
+        document.getElementById('sensory-cue-visual').innerText = cur.sensory.visual;
+        document.getElementById('sensory-cue-audio').innerText = cur.sensory.audio;
+        document.getElementById('sensory-cue-feel').innerText = cur.sensory.feel;
+
+        // Buttons
+        document.getElementById('study-btn-prev').disabled = currentIdx === 0;
+        const nextBtn = document.getElementById('study-btn-next');
+        const testBtn = document.getElementById('study-btn-test');
+
+        if (currentIdx === total - 1) {
+          nextBtn.classList.add('hidden');
+          testBtn.classList.remove('hidden');
+        } else {
+          nextBtn.classList.remove('hidden');
+          testBtn.classList.add('hidden');
+        }
+
+        this.playFeedbackSound('step');
+      }
+
+      nextLocusStep() {
+        if (this.activeSession.currentIdx < this.activeSession.stations.length - 1) {
+          this.activeSession.currentIdx++;
+          this.renderStudyStep();
+        }
+      }
+
+      prevLocusStep() {
+        if (this.activeSession.currentIdx > 0) {
+          this.activeSession.currentIdx--;
+          this.renderStudyStep();
+        }
+      }
+
+      jumpToStation(i) {
+        this.activeSession.currentIdx = i;
+        this.renderStudyStep();
+      }
+
+      reGenerateCurrentScript() {
+        const cur = this.activeSession.stations[this.activeSession.currentIdx];
+        const sc = this.generateBizarreScript(cur.locus, cur.target, cur.symbol, cur.emoji, cur.action, cur.scriptIdx);
+        cur.script = sc.html; cur.scriptIdx = sc.idx;
+        this.renderStudyStep();
+        this.toast('⚡ 換了一個新劇本', 'indigo');
+      }
+
+      speakCurrentScript() {
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const cur = this.activeSession.stations[this.activeSession.currentIdx];
+          const utter = new SpeechSynthesisUtterance(cur.script.replace(/<[^>]*>/g, ''));
+          utter.lang = 'zh-TW';
+          utter.rate = 1.05;
+          window.speechSynthesis.speak(utter);
+          this.toast('🔊 正在用語音朗讀荒謬劇本...', 'indigo');
+        } else {
+          this.toast('此瀏覽器未支援語音朗讀', 'amber');
+        }
+      }
+
+      abortStudySession() {
+        this.switchView('lobby');
+        this.toast('已回到大廳，剛才選的詞都還在，可以隨時重新開始', 'slate');
+      }
+
+      /* SMART RETRIEVAL TEST & HINT LADDER */
+      jumpToTestMode() {
+        this.activeSession.testIdx = 0;
+        this.activeSession.testStartTime = Date.now();
+        this.switchView('test');
+        this.startTestTimer();
+        this.renderTestQuestion();
+        this.toast('🎯 進入回想檢驗！請依序走訪各個錨點提取記憶。', 'purple');
+      }
+
+      startTestTimer() {
+        if (this.activeSession.timerInterval) clearInterval(this.activeSession.timerInterval);
+        const clockEl = document.getElementById('test-timer-clock');
+        const start = Date.now();
+
+        this.activeSession.timerInterval = setInterval(() => {
+          const delta = Math.floor((Date.now() - start) / 1000);
+          const m = String(Math.floor(delta / 60)).padStart(2, '0');
+          const s = String(delta % 60).padStart(2, '0');
+          if (clockEl) clockEl.innerText = `${m}:${s}`;
+        }, 1000);
+      }
+
+      renderTestQuestion() {
+        const { stations, testIdx } = this.activeSession;
+        const cur = stations[testIdx];
+        const total = stations.length;
+
+        document.getElementById('test-progress-indicator').innerText = `${testIdx + 1} / ${total}`;
+        document.getElementById('test-current-locus-num').innerText = `第 ${testIdx + 1} 站錨點`;
+        document.getElementById('test-current-locus-name').innerText = cur.locus;
+
+        // Reset inputs and Hints
+        document.getElementById('test-answer-input').value = '';
+        this.activeSession.hintTier = 0;
+        document.getElementById('hint-text-1').innerText = '點擊解鎖當初的氣味/聲音...';
+        document.getElementById('hint-text-2').innerText = '點擊解鎖首字與符號提示...';
+        document.getElementById('hint-text-3').innerText = '直接重看劇本並標註弱點';
+        document.getElementById('btn-hint-tier-2').classList.add('opacity-70');
+        document.getElementById('btn-hint-tier-3').classList.add('opacity-70');
+
+        // 選項：正確答案 + 其他站的答案（不足時用範例詞補）
+        const correctTarget = cur.target;
+        const others = [...new Set(stations.map(s => s.target).filter(t => t !== correctTarget))]
+          .sort(() => 0.5 - Math.random());
+        const fillers = ['比例原則', '工作記憶', '邊際效用', '光合作用', '供需平衡', '細胞凋亡'].filter(f => f !== correctTarget && !others.includes(f));
+        while (others.length < 3 && fillers.length) others.push(fillers.shift());
+        this.currentOptions = [correctTarget, ...others.slice(0, 3)].sort(() => 0.5 - Math.random());
+
+        const mcContainer = document.getElementById('test-mc-options');
+        mcContainer.innerHTML = this.currentOptions.map((opt, i) => `
+            <button onclick="app.submitRetrievalChoice(${i})" class="p-3 rounded-xl glass-card hover:border-purple-400 hover:bg-purple-600/10 text-left transition text-xs font-semibold text-slate-200 truncate">
+              • ${esc(opt)}
+            </button>
+          `).join('');
+        this.activeSession.usedChoice = false;
+
+        if (window.matchMedia('(min-width: 768px)').matches) document.getElementById('test-answer-input').focus();
+      }
+
+      revealHint(tier) {
+        const cur = this.activeSession.stations[this.activeSession.testIdx];
+        if (tier === 1) {
+          this.activeSession.hintTier = Math.max(this.activeSession.hintTier, 1);
+          document.getElementById('hint-text-1').innerText = `👂 ${cur.sensory.audio}｜👃 ${cur.sensory.feel}｜${cur.emoji}`;
+          document.getElementById('btn-hint-tier-2').classList.remove('opacity-70');
+          this.toast('💡 已解鎖階梯 1：感官線索', 'amber');
+        } else if (tier === 2) {
+          this.activeSession.hintTier = Math.max(this.activeSession.hintTier, 2);
+          document.getElementById('hint-text-2').innerText = `首字：「${cur.target.slice(0, 1)}…」（共 ${cur.target.replace('…','').length} 字）｜${cur.symbol}`;
+          document.getElementById('btn-hint-tier-3').classList.remove('opacity-70');
+          this.toast('💡 已解鎖階梯 2：首字與符號線索', 'cyan');
+        } else if (tier === 3) {
+          this.activeSession.hintTier = 3;
+          document.getElementById('hint-text-3').innerText = `揭曉：【${cur.target}】`;
+          document.getElementById('test-answer-input').value = cur.target;
+          this.toast('⚠️ 已揭曉答案，本題將標註為需再強化記憶點', 'rose');
+        }
+      }
+
+      submitRetrievalChoice(i) {
+        document.getElementById('test-answer-input').value = this.currentOptions[i];
+        this.activeSession.usedChoice = true;
+        this.submitRetrievalAnswer();
+      }
+
+      // 容錯比對：允許錯一兩個字，但不能只寫一小部分
+      isFuzzyMatch(answer, target) {
+        const norm = (x) => String(x || '').toLowerCase().replace(/[…\s，,。、．.「」『』【】()（）]/g, '');
+        const a = norm(answer), t = norm(target);
+        if (!a || !t) return false;
+        if (a === t) return true;
+        if (a.includes(t)) return a.length <= t.length * 2;           // 多寫一點說明也可以
+        if (t.includes(a)) return a.length >= Math.max(2, Math.ceil(t.length * 0.6)); // 寫出六成以上
+        // 字元雙連（bigram）相似度，處理錯字或順序小差異
+        const grams = (x) => { const g = []; for (let i = 0; i < x.length - 1; i++) g.push(x.slice(i, i + 2)); return g.length ? g : [x]; };
+        const ga = grams(a), gt = grams(t);
+        const pool = [...gt]; let hit = 0;
+        ga.forEach(g => { const k = pool.indexOf(g); if (k >= 0) { hit++; pool.splice(k, 1); } });
+        return (2 * hit) / (ga.length + gt.length) >= 0.6;
+      }
+
+      submitRetrievalAnswer() {
+        const input = document.getElementById('test-answer-input');
+        const userText = input.value.trim();
+        const { stations, testIdx } = this.activeSession;
+        const cur = stations[testIdx];
+
+        const isMatch = this.isFuzzyMatch(userText, cur.target);
+        const penalty = this.activeSession.hintTier === 3; // Tier 3 is reveal
+
+        cur.userRecall = userText || '未作答';
+        cur.isCorrect = isMatch && !penalty;
+
+        if (cur.isCorrect) {
+          this.playFeedbackSound('success');
+          this.toast('✓ 提取精準！海馬體突觸已激活', 'emerald');
+        } else {
+          this.playFeedbackSound('wrong');
+          this.toast(`✗ 遺忘點已記錄 (正確為: ${cur.target})`, 'rose');
+        }
+
+        if (this.activeSession.testIdx < stations.length - 1) {
+          this.activeSession.testIdx++;
+          this.renderTestQuestion();
+        } else {
+          this.finishEvaluation();
+        }
+      }
+
+      /* RESULTS & DATA ANALYSIS */
+      finishEvaluation() {
+        clearInterval(this.activeSession.timerInterval);
+        const totalDuration = Math.max(1, Math.floor((Date.now() - this.activeSession.testStartTime) / 1000));
+        const stations = this.activeSession.stations;
+        const total = stations.length;
+        const correctCount = stations.filter(s => s.isCorrect).length;
+        const accPct = Math.round((correctCount / total) * 100);
+        const avgSpeed = (totalDuration / total).toFixed(1);
+
+        // 記憶強度 0–100：正確率佔 80 分，平均每題 20 秒內作答再加最多 20 分
+        const retentionScore = Math.min(100, Math.round((accPct * 0.8) + Math.max(0, 20 - Number(avgSpeed))));
+
+        // 間隔複習：做完才排下一次；答對 80% 以上升一級，否則退回第一級
+        const nextEl = document.getElementById('res-next-review');
+        const noteEl = document.getElementById('res-next-note');
+        const enrollBtn = document.getElementById('btn-enroll-review');
+        const rid = this.activeSession.reviewId;
+        const rev = rid ? this.reviews.find(r => r.id === rid) : null;
+        if (rev) {
+          rev.stage = accPct >= 80 ? Math.min(5, rev.stage + 1) : 1;
+          rev.dueTime = Date.now() + REVIEW_INTERVALS[rev.stage];
+          rev.lastAcc = accPct;
+          this.saveReviews();
+          this.renderReviewsView();
+          nextEl.innerText = formatWait(REVIEW_INTERVALS[rev.stage]);
+          noteEl.innerText = accPct >= 80 ? `升到第 ${rev.stage} 階段` : '正確率未達 80%，從頭鞏固';
+          enrollBtn.hidden = true;
+        } else {
+          nextEl.innerText = '20 分鐘後';
+          noteEl.innerText = '加入複習庫後開始排程';
+          enrollBtn.hidden = false;
+        }
+
+        document.getElementById('res-acc-value').innerText = `${accPct}%`;
+        document.getElementById('res-acc-detail').innerText = `${correctCount} / ${total} 個錨點精準提取`;
+        document.getElementById('res-speed-value').innerText = `${avgSpeed}s`;
+        document.getElementById('res-score-value').innerText = retentionScore;
+
+        const lociContainer = document.getElementById('res-loci-list');
+        lociContainer.innerHTML = stations.map((s, i) => {
+          return `
+            <div class="p-3.5 rounded-2xl flex items-center justify-between border ${
+              s.isCorrect ? 'bg-emerald-950/20 border-emerald-500/30' : 'bg-rose-950/20 border-rose-500/30'
+            }">
+              <div class="flex items-center gap-3">
+                <span class="w-6 h-6 rounded-lg text-xs font-bold flex items-center justify-center ${
+                  s.isCorrect ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'
+                }">${i + 1}</span>
+                <div>
+                  <div class="text-xs font-bold text-white">${esc(s.locus)}</div>
+                  <div class="text-[11px] ${s.isCorrect ? 'text-emerald-300' : 'text-rose-300'}">
+                    目標：${esc(s.target)} ${s.emoji} ${!s.isCorrect ? `（你的回答：${esc(s.userRecall)}）` : ''}
+                  </div>
+                </div>
+              </div>
+              <span class="text-xs font-bold ${s.isCorrect ? 'text-emerald-400' : 'text-rose-400'}">
+                ${s.isCorrect ? '✓ 提取成功' : '✗ 遺忘薄弱點'}
+              </span>
+            </div>
+          `;
+        }).join('');
+
+        // Store History
+        this.history.push({
+          date: new Date().toISOString(),
+          palace: this.activeSession.palace.name,
+          acc: accPct,
+          score: retentionScore,
+          count: total
+        });
+        safeSet(STORAGE_KEY_HISTORY, JSON.stringify(this.history.slice(-200)));
+        this.updateStatsDashboard();
+
+        this.switchView('results');
+      }
+
+      /* SPACED REPETITION VAULT SYSTEM */
+      enrollSpacedRepetitionVault() {
+        if (this.activeSession.enrolled) {
+          this.toast('這組已經在複習庫裡了', 'slate');
+          this.switchView('review');
+          return;
+        }
+        this.activeSession.enrolled = true;
+        const item = {
+          id: 'rev_' + Date.now(),
+          palaceName: this.activeSession.palace.name,
+          createdAt: Date.now(),
+          dueTime: Date.now() + (20 * 60 * 1000), // First Ebbinghaus Interval: 20 mins
+          stage: 1, // 1: 20min, 2: 1d, 3: 3d, 4: 7d, 5: 30d
+          stations: this.activeSession.stations.map(s => ({ locus: s.locus, target: s.target, detail: s.detail, symbol: s.symbol, emoji: s.emoji, action: s.action, script: s.script, sensory: s.sensory }))
+        };
+
+        this.reviews.push(item);
+        this.saveReviews();
+        this.renderReviewsView();
+        this.toast('⏰ 已成功加入艾賓浩斯間隔複習庫！將在 20 分鐘後提醒。', 'cyan');
+        this.switchView('review');
+      }
+
+      renderReviewsView() {
+        const container = document.getElementById('review-cards-container');
+        const dueCount = this.reviews.filter(r => Date.now() >= r.dueTime).length;
+        document.getElementById('review-count-label').innerText = `共 ${this.reviews.length} 組，${dueCount} 組到期`;
+
+        if (this.reviews.length === 0) {
+          container.innerHTML = `
+            <div class="py-12 text-center text-slate-500">
+              <i class="ph-bold ph-hourglass text-3xl mb-2 inline-block"></i>
+              <p class="text-xs">複習庫空空如也。完成一次記憶訓練後點擊「加入複習庫」即可排程！</p>
+            </div>
+          `;
+          return;
+        }
+
+        const now = Date.now();
+        container.innerHTML = this.reviews.map(r => {
+          const isDue = now >= r.dueTime;
+          const leftText = formatWait(Math.max(0, r.dueTime - now)).replace('後', '');
+          return `
+            <div class="p-4 rounded-2xl glass-card flex flex-col sm:flex-row sm:items-center justify-between gap-3 border ${
+              isDue ? 'border-amber-500/40 bg-amber-500/10' : 'border-white/5'
+            }">
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-bold text-white">${esc(r.palaceName)}</span>
+                  <span class="text-[10px] px-2 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-mono">階段 ${r.stage} / 5</span>
+                </div>
+                <p class="text-[11px] text-slate-400 mt-1">
+                  包含 ${r.stations.length} 個記憶目標（${esc(r.stations.map(s => s.target).slice(0, 3).join('、'))}…）${r.lastAcc != null ? `｜上次 ${r.lastAcc}%` : ''}
+                </p>
+              </div>
+
+              <div class="flex items-center gap-3">
+                <span class="text-xs font-mono font-bold ${isDue ? 'text-amber-300 animate-pulse' : 'text-slate-400'}">
+                  ${isDue ? '⏰ 到期了' : `還有 ${leftText}`}
+                </span>
+                <button onclick="app.retakeSpacedReview('${r.id}')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold transition ${
+                  isDue ? 'bg-amber-500 text-slate-950 hover:bg-amber-400' : 'bg-slate-800 text-slate-200 hover:bg-slate-700'
+                }">
+                  立即檢驗
+                </button>
+                <button onclick="app.deleteReview('${r.id}')" aria-label="刪除這組複習" class="text-slate-500 hover:text-rose-400 p-1.5 transition">
+                  <i class="ph-bold ph-trash text-sm"></i>
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      retakeSpacedReview(id) {
+        const item = this.reviews.find(r => r.id === id);
+        if (!item) return;
+
+        this.activeSession = {
+          reviewId: id,
+          palace: { name: item.palaceName, loci: item.stations.map(s => s.locus) },
+          stations: item.stations.map(s => ({ ...s, isCorrect: false, userRecall: null })),
+          testIdx: 0,
+          testStartTime: Date.now(),
+          hintTier: 0
+        };
+
+        this.startTestTimer();
+        this.switchView('test');
+        this.renderTestQuestion();
+        this.toast('🔁 開始複習測驗，完成後才會排下一次', 'amber');
+      }
+
+      deleteReview(id) {
+        this.reviews = this.reviews.filter(r => r.id !== id);
+        this.saveReviews();
+        this.renderReviewsView();
+        this.toast('已從複習庫中移除', 'slate');
+      }
+
+      /* PALACE MANAGEMENT & CUSTOM PHOTO UPLOAD */
+      renderPalacesView() {
+        const container = document.getElementById('palaces-cards-grid');
+        container.innerHTML = this.palaces.map(p => {
+          const isDefault = DEFAULT_PALACES.some(dp => dp.id === p.id);
+          return `
+            <div class="glass-panel p-5 rounded-3xl border border-white/10 flex flex-col justify-between group hover:border-indigo-400 transition">
+              <div>
+                <div class="w-full h-32 rounded-2xl overflow-hidden mb-3 bg-slate-900 relative">
+                  <div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition duration-500" style="background-image: ${p.customPhoto ? `url(${p.customPhoto})` : (p.bg || 'linear-gradient(135deg,#1e1b4b,#0f172a)')}"></div>
+                  <div class="absolute inset-0 bg-gradient-to-t from-cosmic-950 to-transparent"></div>
+                  <span class="absolute bottom-2 left-2.5 text-[10px] font-bold px-2 py-0.5 rounded bg-black/60 text-cyan-300 backdrop-blur-sm">
+                    ${p.loci.length} 個錨點
+                  </span>
+                </div>
+
+                <h3 class="font-bold text-white text-sm mb-1">${esc(p.name)}</h3>
+                <p class="text-[11px] text-slate-400 line-clamp-2 mb-3">${esc(p.desc)}</p>
+              </div>
+
+              <div class="pt-3 border-t border-white/5 flex items-center justify-between">
+                <button onclick="app.selectPalace('${p.id}'); app.switchView('lobby')" class="px-3 py-1.5 rounded-xl bg-indigo-600/30 hover:bg-indigo-600 text-indigo-200 hover:text-white text-xs font-bold transition">
+                  使用此宮殿
+                </button>
+                ${!isDefault ? `
+                  <button onclick="app.deleteCustomPalace('${p.id}')" aria-label="刪除宮殿" class="text-slate-500 hover:text-rose-400 p-1 text-sm">
+                    <i class="ph-bold ph-trash"></i>
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      openPalaceModal() {
+        document.getElementById('modal-palace').classList.remove('hidden');
+        document.getElementById('modal-palace').classList.add('flex');
+      }
+
+      closePalaceModal() {
+        document.getElementById('modal-palace').classList.add('hidden');
+        document.getElementById('modal-palace').classList.remove('flex');
+      }
+
+      handlePalacePhotoUpload(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const img = new Image();
+          img.onload = () => {
+            // 縮成最長 900px 的 JPEG，避免塞爆瀏覽器儲存空間
+            const scale = Math.min(1, 900 / Math.max(img.width, img.height));
+            const c = document.createElement('canvas');
+            c.width = Math.round(img.width * scale); c.height = Math.round(img.height * scale);
+            c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+            this.customUploadedPhoto = c.toDataURL('image/jpeg', 0.72);
+            this.toast(`📷 照片已縮小至約 ${Math.round(this.customUploadedPhoto.length / 1365)} KB`, 'cyan');
+          };
+          img.onerror = () => this.toast('這張圖片讀不出來，請換 JPG 或 PNG', 'rose');
+          img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+
+      saveNewCustomPalace() {
+        const name = document.getElementById('custom-palace-name').value.trim();
+        const lociText = document.getElementById('custom-palace-loci-text').value.trim();
+
+        if (!name) {
+          this.toast('請輸入宮殿名稱！', 'rose');
+          return;
+        }
+
+        const lines = lociText.split('\n')
+          .map(l => l.replace(/^\d+[\.\s、]+/, '').trim())
+          .filter(l => l.length > 0);
+
+        if (lines.length < 3) {
+          this.toast('請至少輸入 3 個錨點！', 'rose');
+          return;
+        }
+
+        const newPalace = {
+          id: 'custom_p_' + Date.now(),
+          name: name,
+          icon: 'ph-house-line',
+          desc: '使用者自訂現實生活照片宮殿',
+          bg: null,
+          customPhoto: this.customUploadedPhoto,
+          loci: lines
+        };
+
+        this.palaces.push(newPalace);
+        if (!this.savePalaces() && newPalace.customPhoto) {
+          newPalace.customPhoto = null;
+          this.savePalaces();
+          this.toast('瀏覽器儲存空間不足，宮殿已存，但照片沒存進去', 'amber');
+        }
+        document.getElementById('custom-palace-name').value = '';
+        document.getElementById('custom-palace-loci-text').value = '';
+        document.getElementById('custom-palace-photo').value = '';
+        this.customUploadedPhoto = null;
+        this.closePalaceModal();
+        this.renderPalacePicker();
+        this.renderPalacesView();
+        this.selectPalace(newPalace.id);
+        this.toast(`🎉 自訂宮殿「${name}」已儲存啟用！`, 'emerald');
+      }
+
+      deleteCustomPalace(id) {
+        this.palaces = this.palaces.filter(p => p.id !== id);
+        this.savePalaces();
+        this.renderPalacesView();
+        this.renderPalacePicker();
+        this.toast('已刪除宮殿', 'slate');
+      }
+
+      /* ROUTING & UI UTILITIES */
+      switchView(viewName) {
+        ['lobby', 'study', 'test', 'results', 'palaces', 'review', 'guide'].forEach(v => {
+          const el = document.getElementById(`view-${v}`);
+          if (el) el.classList.add('hidden');
+        });
+
+        const target = document.getElementById(`view-${viewName}`);
+        if (target) target.classList.remove('hidden');
+
+        ['lobby', 'palaces', 'review', 'guide'].forEach(t => {
+          const btn = document.getElementById(`nav-btn-${t}`);
+          if (btn) {
+            if (t === viewName) {
+              btn.className = 'px-4 py-2 rounded-xl text-xs font-semibold transition-all flex items-center space-x-2 text-white bg-indigo-600 shadow-sm';
+            } else {
+              btn.className = 'px-4 py-2 rounded-xl text-xs font-semibold transition-all flex items-center space-x-2 text-slate-400 hover:text-white hover:bg-white/5';
+            }
+          }
+        });
+
+        ['lobby', 'palaces', 'review', 'guide'].forEach(t => {
+          const b = document.getElementById(`mnav-${t}`);
+          if (b) b.className = `py-2.5 flex flex-col items-center gap-0.5 ${t === viewName ? 'text-cyan-300' : 'text-slate-400'}`;
+        });
+        if (viewName !== 'test' && this.activeSession && this.activeSession.timerInterval && this.currentView === 'test') {
+          clearInterval(this.activeSession.timerInterval);
+        }
+        if (viewName === 'review') this.renderReviewsView();
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+
+        this.currentView = viewName;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      updateStatsDashboard() {
+        const h = this.history;
+        const due = this.reviews.filter(r => Date.now() >= r.dueTime).length;
+        document.getElementById('mini-stat-reviews').innerText = `${due} 組`;
+        if (h.length > 0) {
+          const avgAcc = Math.round(h.reduce((a, b) => a + b.acc, 0) / h.length);
+          const items = h.reduce((a, b) => a + b.count, 0);
+          document.getElementById('mini-stat-acc').innerText = `${avgAcc}%`;
+          document.getElementById('mini-stat-summary').innerText = `共完成 ${h.length} 次測驗，練過 ${items} 個記憶點`;
+        }
+        // 連續天數：從今天（或昨天）往回數，有練習的日子
+        const days = new Set(h.map(x => new Date(x.date).toDateString()));
+        let streak = 0; const d = new Date();
+        if (!days.has(d.toDateString())) d.setDate(d.getDate() - 1);
+        while (days.has(d.toDateString())) { streak++; d.setDate(d.getDate() - 1); }
+        document.getElementById('stat-streak').innerText = `${streak} 天`;
+      }
+
+      toast(msg, theme = 'indigo') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        
+        const colors = {
+          indigo: 'bg-indigo-600/95 text-white border-indigo-400/40',
+          cyan: 'bg-cyan-600/95 text-white border-cyan-400/40',
+          emerald: 'bg-emerald-600/95 text-white border-emerald-400/40',
+          purple: 'bg-purple-600/95 text-white border-purple-400/40',
+          amber: 'bg-amber-600/95 text-white border-amber-400/40',
+          rose: 'bg-rose-600/95 text-white border-rose-400/40',
+          slate: 'bg-slate-800/95 text-slate-200 border-white/10'
+        }[theme] || 'bg-slate-900 text-white border-white/10';
+
+        toast.className = `${colors} px-4 py-3 rounded-2xl shadow-2xl border backdrop-blur-md text-xs font-medium flex items-center gap-2 transform translate-y-2 transition-all duration-300 pointer-events-auto`;
+        toast.setAttribute('role', 'status');
+        toast.innerHTML = `<i class="ph-bold ph-bell-simple text-sm"></i><span>${esc(msg)}</span>`;
+
+        container.appendChild(toast);
+        setTimeout(() => toast.classList.remove('translate-y-2'), 10);
+        setTimeout(() => {
+          toast.classList.add('opacity-0', 'translate-y-2');
+          setTimeout(() => toast.remove(), 300);
+        }, 3200);
+      }
+
+      loadPalaces() {
+        try {
+          const raw = safeGet(STORAGE_KEY_PALACES);
+          if (raw) {
+            const custom = JSON.parse(raw).filter(p => !DEFAULT_PALACES.some(d => d.id === p.id));
+            return [...DEFAULT_PALACES, ...custom];
+          }
+        } catch (e) {}
+        return [...DEFAULT_PALACES];
+      }
+
+      savePalaces() {
+        // 只存自訂宮殿，內建宮殿每次從程式載入
+        const custom = this.palaces.filter(p => !DEFAULT_PALACES.some(d => d.id === p.id));
+        return safeSet(STORAGE_KEY_PALACES, JSON.stringify(custom));
+      }
+
+      loadReviews() {
+        try { const raw = safeGet(STORAGE_KEY_REVIEWS); if (raw) return JSON.parse(raw); } catch (e) {}
+        return [];
+      }
+
+      saveReviews() {
+        if (!safeSet(STORAGE_KEY_REVIEWS, JSON.stringify(this.reviews))) this.toast('瀏覽器不允許儲存，複習紀錄只會保留到關閉頁面為止', 'amber');
+        this.updateStatsDashboard && document.getElementById('mini-stat-reviews') && this.updateStatsDashboard();
+      }
+
+      loadHistory() {
+        try { const raw = safeGet(STORAGE_KEY_HISTORY); if (raw) return JSON.parse(raw); } catch (e) {}
+        return [];
+      }
+    }
+
+    // Launch Application Instance on DOM Load
+    let app;
+    window.addEventListener('DOMContentLoaded', () => {
+      app = new MemoryPalaceApp();
+    });
+  </script>
+
+<a href="../" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:9999;background:#2F86D6;color:#fff;font:700 13px/1 system-ui,sans-serif;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.2)">← 回群島</a>
+</body></html>

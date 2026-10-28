@@ -1,0 +1,723 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>自主學習選題羅盤</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FDF8F1; --bg-warm:#F7EFE3; --card:#FFFFFF;
+  --amber:#D97706; --amber-deep:#B45309; --amber-dark:#92400E; --amber-tint:#FDF0DC;
+  --teal:#0F766E; --teal-soft:#5EAEA6; --teal-tint:#E3F2EF;
+  --ink:#2E2419; --ink-soft:#6B5D4F; --line:#E8DCCB;
+  --on-amber:#FFFFFF;
+  --shadow:0 4px 20px rgba(146,64,14,.08); --shadow-lg:0 12px 40px rgba(146,64,14,.12);
+  --radius:18px; --radius-sm:12px;
+  --serif:'Noto Serif TC','Songti TC','PMingLiU',serif;
+  --display:'Playfair Display',Georgia,'Noto Serif TC',serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#1B1611; --bg-warm:#231C15; --card:#2A221A;
+    --amber:#F59E0B; --amber-deep:#FBBF24; --amber-dark:#FCD34D; --amber-tint:#3A2A14;
+    --teal:#5EC4B8; --teal-soft:#5EAEA6; --teal-tint:#17332F;
+    --ink:#F3E9DC; --ink-soft:#BFAF9C; --line:#3E3228; --on-amber:#1B1611;
+    --shadow:0 4px 20px rgba(0,0,0,.35); --shadow-lg:0 12px 40px rgba(0,0,0,.45);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#1B1611; --bg-warm:#231C15; --card:#2A221A;
+  --amber:#F59E0B; --amber-deep:#FBBF24; --amber-dark:#FCD34D; --amber-tint:#3A2A14;
+  --teal:#5EC4B8; --teal-soft:#5EAEA6; --teal-tint:#17332F;
+  --ink:#F3E9DC; --ink-soft:#BFAF9C; --line:#3E3228; --on-amber:#1B1611;
+  --shadow:0 4px 20px rgba(0,0,0,.35); --shadow-lg:0 12px 40px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:16px;line-height:1.8;padding:0 16px}
+.wrap{max-width:880px;margin:0 auto}
+h1,h2,h3{text-wrap:balance;line-height:1.35;margin:0}
+p{margin:0}
+button,input,textarea,select{font-family:inherit;font-size:1rem;color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+
+/* hero */
+.hero{padding-block:40px 20px;display:grid;gap:10px}
+.eyebrow{font-family:var(--display);font-style:italic;color:var(--amber);letter-spacing:.06em;font-size:.95rem}
+.hero h1{font-size:clamp(1.9rem,6vw,2.8rem);font-weight:700}
+.hero p{color:var(--ink-soft);max-width:36em}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:6px;border:0;background:var(--amber);color:var(--on-amber);font-weight:600;padding:10px 22px;border-radius:999px;cursor:pointer;transition:background .2s,transform .2s}
+.btn:hover{background:var(--amber-deep);transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--amber-dark);border:1.5px solid var(--line)}
+.btn.ghost:hover{border-color:var(--amber);background:var(--amber-tint)}
+.btn.sm{padding:6px 14px;font-size:.9rem}
+.btn.danger{background:#B91C1C;color:#fff}
+.linkbtn{background:none;border:0;color:var(--ink-soft);cursor:pointer;font-size:.88rem;text-decoration:underline;padding:4px}
+
+/* banner */
+.banner{background:var(--teal-tint);border:1px solid var(--teal-soft);border-radius:var(--radius-sm);padding:12px 16px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;font-size:.95rem;margin-bottom:16px}
+.banner b{color:var(--teal)}
+
+/* stepper */
+.stepper{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:10px;border-bottom:1px solid var(--line);margin-bottom:24px}
+.steps{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.steps::-webkit-scrollbar{display:none}
+.step{flex:1 0 auto;display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:6px 14px 6px 6px;cursor:pointer;white-space:nowrap;font-size:.92rem;color:var(--ink-soft)}
+.step .n{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--bg-warm);font-family:var(--display);font-weight:700;font-size:.9rem;color:var(--amber-dark)}
+.step.done .n{background:var(--teal);color:var(--card)}
+.step.on{border-color:var(--amber);color:var(--ink);font-weight:600;background:var(--amber-tint)}
+.step.on .n{background:var(--amber);color:var(--on-amber)}
+
+/* panel */
+.phead{display:grid;gap:6px;margin-bottom:22px}
+.phead h2{font-size:clamp(1.45rem,4vw,2rem)}
+.phead h2::after{content:'';display:block;width:48px;height:3px;background:var(--amber);border-radius:2px;margin-top:12px}
+.rule{background:var(--amber-tint);border-radius:var(--radius-sm);padding:12px 16px;color:var(--amber-dark);font-size:.95rem}
+.rule strong{font-weight:700}
+.group{display:grid;gap:18px;margin-bottom:34px}
+.gtitle{display:flex;align-items:baseline;gap:10px;font-size:1.15rem;font-weight:700;padding-bottom:8px;border-bottom:1px dashed var(--line)}
+.gtitle small{font-weight:400;color:var(--ink-soft);font-size:.88rem}
+.q{display:grid;gap:8px}
+.q label,.qlabel{font-weight:600}
+.q .hint{color:var(--ink-soft);font-size:.88rem;line-height:1.6}
+.qn{font-family:var(--display);color:var(--amber);font-weight:700;margin-right:4px}
+textarea,input[type=text],input[type=number],select{width:100%;background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius-sm);padding:10px 14px;line-height:1.7}
+textarea{min-height:84px;resize:vertical}
+textarea:focus,input:focus,select:focus{border-color:var(--amber);outline:none}
+::placeholder{color:var(--ink-soft);opacity:.7}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:5px 14px;cursor:pointer;font-size:.92rem;transition:all .15s}
+.chip:hover{border-color:var(--amber)}
+.chip.on{background:var(--amber);border-color:var(--amber);color:var(--on-amber);font-weight:600}
+.chip.teal.on{background:var(--teal);border-color:var(--teal);color:var(--card)}
+
+/* skills */
+.skills{display:grid;gap:8px}
+.skill{display:grid;grid-template-columns:1fr auto;gap:8px 14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 14px}
+.seg{display:flex;border:1.5px solid var(--line);border-radius:999px;overflow:hidden}
+.seg button{border:0;background:transparent;padding:4px 10px;font-size:.84rem;cursor:pointer;color:var(--ink-soft)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button.on{background:var(--amber);color:var(--on-amber);font-weight:600}
+@media (max-width:560px){.skill{grid-template-columns:1fr}.seg{justify-self:start}}
+
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:560px){.row2{grid-template-columns:1fr}}
+
+/* summary card */
+.summary{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 22px;display:grid;gap:14px}
+.summary h3{font-size:1.1rem;display:flex;align-items:center;gap:8px}
+.summary h3 .eyebrow{font-size:.85rem}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px 20px}
+.sitem{display:grid;gap:4px}
+.sitem .k{font-size:.8rem;letter-spacing:.08em;color:var(--ink-soft)}
+.sitem .v{font-weight:600}
+.tag{display:inline-block;background:var(--bg-warm);border-radius:6px;padding:1px 8px;margin:2px 4px 2px 0;font-size:.88rem;font-weight:500}
+.tag.teal{background:var(--teal-tint);color:var(--teal)}
+.tag.amber{background:var(--amber-tint);color:var(--amber-dark)}
+.scale{border-top:1px dashed var(--line);padding-top:12px;font-size:.95rem}
+.mini{font-size:.9rem;color:var(--ink-soft)}
+details.mini-sum{background:var(--bg-warm);border-radius:var(--radius-sm);padding:10px 16px;margin-bottom:20px}
+details.mini-sum summary{cursor:pointer;font-weight:600;color:var(--amber-dark)}
+details.mini-sum .sgrid{margin-top:10px}
+
+/* diverge */
+.seedrow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media (max-width:560px){.seedrow{grid-template-columns:1fr}}
+.lab{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;display:grid;gap:14px;box-shadow:var(--shadow)}
+.sparks{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.spark{text-align:left;border:1px dashed var(--line);background:var(--bg);border-radius:var(--radius-sm);padding:8px 12px;cursor:pointer;font-size:.9rem;line-height:1.55}
+.spark:hover{border-color:var(--amber);border-style:solid}
+.spark b{color:var(--amber-dark);display:block;font-size:.78rem;letter-spacing:.06em}
+.addrow{display:grid;grid-template-columns:1fr auto;gap:10px}
+@media (max-width:560px){.addrow{grid-template-columns:1fr}}
+.meter{display:flex;align-items:center;gap:12px;font-size:.92rem}
+.bar{flex:1;height:8px;background:var(--bg-warm);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--amber);border-radius:99px;transition:width .3s}
+.bar i.ok{background:var(--teal)}
+.ideas{display:grid;gap:8px}
+.idea{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:start;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:10px 14px}
+.idea .num{font-family:var(--display);color:var(--amber);font-weight:700;min-width:1.6em;font-variant-numeric:tabular-nums}
+.idea .t{font-weight:600;line-height:1.6}
+.example{border-left:3px solid var(--teal-soft);padding:4px 0 4px 14px;font-size:.9rem;color:var(--ink-soft)}
+.example b{color:var(--teal)}
+
+/* filter */
+.crit{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.crit div{background:var(--bg-warm);border-radius:var(--radius-sm);padding:8px 12px;font-size:.88rem;line-height:1.55}
+.crit b{display:block;font-size:.95rem}
+.scorecard{background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius-sm);padding:14px 16px;display:grid;gap:10px}
+.scorecard.picked{border-color:var(--teal);background:linear-gradient(0deg,var(--teal-tint),var(--card) 70%)}
+.sc-top{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start}
+.total{font-family:var(--display);font-weight:700;font-size:1.5rem;color:var(--amber-dark);font-variant-numeric:tabular-nums;line-height:1}
+.total small{font-size:.75rem;color:var(--ink-soft);font-family:var(--serif);font-weight:400}
+.scores{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media (max-width:640px){.scores{grid-template-columns:1fr 1fr}}
+.score .k{font-size:.8rem;color:var(--ink-soft);margin-bottom:2px}
+.score .seg button{flex:1;padding:3px 0;min-width:26px;font-family:var(--display)}
+.pickbtn{justify-self:start}
+
+/* focus */
+.fcard{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px;display:grid;gap:14px;box-shadow:var(--shadow)}
+.fcard.final{border:2px solid var(--amber)}
+.fhead{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between}
+.fhead h3{font-size:1.1rem}
+.tpls{display:flex;flex-wrap:wrap;gap:6px}
+.tpl{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:3px 10px;font-size:.84rem;cursor:pointer}
+.tpl:hover{border-color:var(--amber)}
+.radio{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-weight:600;color:var(--amber-dark);border:1.5px solid var(--line);border-radius:999px;padding:4px 14px 4px 8px;background:var(--card)}
+.radio .dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--amber);display:grid;place-items:center}
+.radio.on{background:var(--amber);color:var(--on-amber);border-color:var(--amber)}
+.radio.on .dot{border-color:var(--on-amber)}
+.radio.on .dot::after{content:'';width:8px;height:8px;border-radius:50%;background:var(--on-amber)}
+
+/* form */
+.forms{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:700px){.forms{grid-template-columns:1fr}}
+.fopt{position:relative;text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:18px;cursor:pointer;display:grid;gap:8px;align-content:start;transition:transform .2s,box-shadow .2s}
+.fopt:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.fopt.on{border:2px solid var(--amber);background:var(--amber-tint)}
+.fopt h4{margin:0;font-size:1.1rem}
+.fopt p{font-size:.9rem;color:var(--ink-soft);line-height:1.65}
+.fopt .fit{font-size:.85rem;line-height:1.6}
+.rec{position:absolute;top:-11px;right:14px;background:var(--teal);color:var(--card);font-size:.76rem;padding:2px 10px;border-radius:99px;font-weight:600}
+.plan{display:grid;gap:8px}
+.prow{display:grid;grid-template-columns:120px 1fr auto;gap:8px;align-items:start}
+@media (max-width:560px){.prow{grid-template-columns:1fr auto}.prow textarea{grid-column:1/-1;grid-row:2}}
+.prow textarea{min-height:48px}
+.xbtn{border:0;background:transparent;color:var(--ink-soft);cursor:pointer;font-size:1.2rem;line-height:1;padding:8px}
+.xbtn:hover{color:#B91C1C}
+
+/* proposal */
+.doc{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow-lg);padding:clamp(20px,5vw,40px);display:grid;gap:22px}
+.doc .dt{text-align:center;display:grid;gap:4px;padding-bottom:16px;border-bottom:2px solid var(--amber)}
+.doc .dt h3{font-size:clamp(1.3rem,4vw,1.7rem)}
+.dsec{display:grid;gap:6px}
+.dsec h4{margin:0;font-size:.82rem;letter-spacing:.12em;color:var(--amber-dark)}
+.dsec .big{font-size:1.15rem;font-weight:700;line-height:1.6}
+.dplan{display:grid;gap:4px;font-size:.95rem}
+.dplan div{display:grid;grid-template-columns:110px 1fr;gap:10px;border-bottom:1px dotted var(--line);padding-block:4px}
+.dplan span:first-child{color:var(--amber-dark);font-weight:600;font-variant-numeric:tabular-nums}
+.empty{color:var(--ink-soft);font-style:italic}
+.copyarea{display:grid;gap:10px;margin-top:22px}
+.copybox{width:100%;min-height:140px;font-size:.85rem;line-height:1.6}
+.send{display:grid;gap:14px;margin-top:40px;background:var(--card);border:2px solid var(--teal-soft);border-radius:var(--radius);padding:20px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1.4fr;gap:12px}
+@media (max-width:560px){.row3{grid-template-columns:1fr 1fr}.row3 .q:last-child{grid-column:1/-1}}
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none}
+.warn{background:var(--amber-tint);border-radius:var(--radius-sm);padding:10px 16px;font-size:.92rem;color:var(--amber-dark)}
+.warn ul{margin:4px 0 0;padding-left:1.2em}
+.warn.ok{background:var(--teal-tint);color:var(--teal)}
+.warn b{display:block;font-size:.8rem;letter-spacing:.08em}
+.draft{background:var(--card);border:2px dashed var(--amber);border-radius:var(--radius-sm);padding:14px 16px;display:grid;gap:8px;justify-items:start}
+.draft .k,.fl .k,.rexc .k{font-size:.8rem;letter-spacing:.08em;color:var(--ink-soft);font-weight:600;display:block}
+.draft p{font-weight:700;font-size:1.05rem;line-height:1.6}
+.rex{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.rexc{background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px;display:grid;gap:8px;align-content:start}
+.rexc .before{color:var(--ink-soft);font-size:.95rem}
+.rexc .before s{text-decoration-color:var(--amber);text-decoration-thickness:2px}
+.rexc .after{font-weight:600;line-height:1.6;padding-left:10px;border-left:3px solid var(--teal)}
+.funnel{display:grid;gap:6px;justify-items:center}
+.fl{width:var(--w);background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 16px;display:grid;gap:6px}
+.fl:first-child{background:var(--amber-tint);border-color:transparent}
+.fl:first-child p:not(.mini){font-weight:700}
+.fl .seg{flex-wrap:wrap;gap:6px;border:0;border-radius:0;overflow:visible}
+.fl .seg button,.fl .seg button+button{border:1.5px solid var(--line);border-radius:999px;padding:5px 12px}
+.fl .seg button.on{border-color:var(--amber)}
+@media (max-width:560px){.fl{width:100%}}
+.checks{display:grid;gap:8px}
+.chk{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;background:var(--card);border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 14px}
+.chk.on{background:var(--teal-tint);border-color:var(--teal-soft)}
+.chk .box{width:28px;height:28px;border-radius:8px;border:2px solid var(--line);background:var(--card);cursor:pointer;color:var(--card);font-weight:700;display:grid;place-items:center;padding:0}
+.chk.on .box{background:var(--teal);border-color:var(--teal)}
+.chk p{font-size:.9rem;color:var(--ink-soft);line-height:1.6}
+.chk .fix{color:var(--amber-dark)}
+.doc .sub{font-size:.95rem;color:var(--ink-soft);line-height:1.7}
+.fbcard{background:var(--card);border:2px solid var(--teal);border-radius:var(--radius);padding:18px 20px;display:grid;gap:8px;margin-bottom:20px;box-shadow:var(--shadow)}
+.fbh{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px}
+.fbh b{font-size:1.1rem;color:var(--teal)}
+.fbb{border-color:var(--teal);background:var(--teal-tint)}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:10px 20px;border-radius:99px;opacity:0;pointer-events:none;transition:all .25s;font-size:.92rem;z-index:20}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+.nav{display:flex;justify-content:space-between;gap:10px;margin-block:30px 10px}
+.backup{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:18px;display:grid;gap:10px;margin-bottom:20px}
+footer{text-align:center;color:var(--ink-soft);font-size:.85rem;padding-block:40px 30px;border-top:1px solid var(--line);margin-top:30px}
+footer .brand{font-family:var(--display);font-style:italic;color:var(--amber)}
+.fade{animation:fade .35s ease}
+@keyframes fade{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">Self-Directed Learning Compass</p>
+    <h1>自主學習選題羅盤</h1>
+    <p>從認識自己開始，經過發散、篩選、聚焦、定型四個步驟，找到一個你有興趣、做得到、又能展現跨領域能力的自主學習主題。</p>
+    <div class="toolbar">
+      <button class="btn ghost sm" data-act="backup">進度碼：換裝置接著做</button>
+      <button class="btn ghost sm" data-act="askclear">全部清空</button>
+    </div>
+  </header>
+  <div id="notice"></div>
+  <nav class="stepper" aria-label="步驟"><div class="steps" id="steps"></div></nav>
+  <main id="panel"></main>
+  <footer><span class="brand">Gina教室的AI奇蹟</span> · 你的答案只存在這台裝置的瀏覽器裡，換裝置請用「進度碼」。</footer>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ===== 老師設定：部署 Apps Script 後，把「網頁應用程式網址」貼在引號中間 ===== */
+const SCRIPT_URL='';
+/* ============================================================================ */
+const KEY='gina-sdl-compass-v1';
+const SKILLS=[['a','設計問卷並整理結果'],['b','用試算表做圖表'],['c','讀懂英文文章或影片'],['d','剪輯影片或做簡報設計'],['e','寫程式或使用 AI 工具'],['f','訪談陌生人'],['g','寫 1500 字以上的報告']];
+const LEVELS=['還不會','入門','會','熟練'];
+const STUCK=['自己上網查','問老師或同學','先放著','換個方向'];
+const SHOW=['研究能力','創意','解決真實問題','社會關懷','執行力','表達溝通','科技應用','跨文化視野'];
+const GROUPS=['資訊','工程','數理化','醫藥衛生','生命科學','生物資源','地球與環境','建築與設計','藝術','社會與心理','大眾傳播','外語','文史哲','教育','法政','管理','財經','遊憩與運動'];
+const RES=['學校老師','家人的專業','社團','實驗器材','電腦或軟體','可訪問的對象','校外機構'];
+const LENSES=[
+ ['科學','「{x}」背後的成分或原理是什麼？'],
+ ['健康','「{x}」對身體或生活習慣有什麼影響？'],
+ ['心理','人們為什麼會被「{x}」吸引或影響？'],
+ ['社會','「{x}」對不同族群公平嗎？誰受影響最大？'],
+ ['環境','「{x}」產生多少浪費？可以怎麼減少？'],
+ ['經濟','「{x}」怎麼定價？錢流向哪裡？'],
+ ['科技','能不能用 AI 或程式改善「{x}」？'],
+ ['設計','怎麼讓「{x}」更好用、更好看？'],
+ ['文化','「{x}」在不同時代或國家有什麼不同？'],
+ ['傳播','媒體和廣告怎麼描述「{x}」？']
+];
+const CRIT=[['i','興趣強度','想到要做一學期，還會期待嗎？'],['d','難度剛好','5 分＝比我現在的能力高一點點'],['r','資源可行','時間、設備、訪問對象都找得到嗎？'],['f','對應目標','能展現我想展現的能力、連結學群嗎？']];
+const TPL=['___如何影響___？','___和___有什麼差異？為什麼？','如何設計___來解決___的問題？','___的現況是什麼？可以怎麼改善？'];
+const METHODS=['文獻閱讀','問卷調查','訪談','實驗','實地觀察','製作原型','數據分析','比較案例'];
+const FORMS={
+ '實作型':{d:'做出產品、App、活動或服務，並實際測試。',fit:'適合動手能力強、想展現解決問題能力的人。'},
+ '書面報告':{d:'整理文獻與案例，比較分析後提出建議。',fit:'適合時間較少、擅長閱讀整理的人。'},
+ '研究論文':{d:'自己蒐集一手資料（問卷、實驗、訪談）並分析。',fit:'適合想申請研究導向科系的人。'}
+};
+const PHASES={
+ '研究論文':[['確立研究問題、閱讀文獻',.2],['設計問卷或研究工具、試測',.15],['正式蒐集資料',.25],['整理數據與分析',.2],['撰寫小論文',.12],['發表與反思',.08]],
+ '實作型':[['需求調查與觀察使用者',.15],['構想與設計草圖',.15],['製作第一版原型',.25],['測試、收集回饋',.15],['修正改版',.18],['成果展示與反思',.12]],
+ '書面報告':[['蒐集與閱讀資料',.3],['整理、比較與分析',.25],['撰寫報告',.3],['修改與發表',.15]]
+};
+const STEPS=[['起點','輪廓'],['1','發散'],['2','篩選'],['3','聚焦'],['4','精鍊'],['5','定型'],['✓','企劃書']];
+const LAST=STEPS.length-1;
+const RTYPES=[['現況','現況是什麼？'],['相關','A 和 B 有關嗎？'],['差異','不同群體有什麼差別？'],['成效','某個做法有沒有效？'],['原因','為什麼會這樣？']];
+const REX=[
+ ['手搖飲對健康的影響','本校高一學生每週購買手搖飲的杯數，與他們對含糖量的認知有關嗎？','加上研究對象；把「影響」換成可以測量的杯數和認知程度'],
+ ['探討網路霸凌','本校高二學生在 IG 上遇過哪些類型的言語攻擊？他們通常怎麼回應？','縮小到一個平台、一個年級；把標題改寫成問句'],
+ ['AI 對教育的影響','使用 AI 作文回饋一個月後，本班同學作文中的文法錯誤數是否減少？','大議題變成可以前後比較的小實驗'],
+ ['台灣少子化的原因','鳳山區三所國小近十年的新生人數，與周邊幼兒園數量的變化有什麼關係？','原本的答案上網就查得到；改用在地資料自己整理分析']
+];
+const CHECKS=[
+ ['對象明確','看得出研究的是「誰」或「什麼」。','加上年級、學校、地區或數量，例如「本校高一學生」「5 家連鎖飲料店」。'],
+ ['可以觀察或測量','知道要蒐集什麼資料：次數、分數、看法、行為或成分。','把「影響」「探討」換成具體可以記錄的東西，例如「每週杯數」「錯誤數」。'],
+ ['做得完','在你的時間內做得完。','減少對象人數、縮短時間範圍，或只看一個地點。'],
+ ['不是查得到的答案','上網或翻書找不到現成答案，需要你自己蒐集資料。','換成你自己的學校、社區，或親自測量、調查的資料。'],
+ ['只問一件事','一句話只有一個主要問題。','留下最重要的一個當主問題，其他寫到下面的子問題。'],
+ ['有意義','答案對某些人有用，或能改善某件事。','想想誰會在乎這個答案：同學、店家、學校還是家長？']
+];
+
+function blank(){return{sample:false,name:'',student:{cls:'',seat:''},code:'',submittedAt:'',
+ refine:{forId:null,who:'',what1:'',what2:'',scope:'',type:'',rq:'',sub:'',checks:[]},
+ feedback:{text:'',at:'',seen:''},
+ profile:{q1:'',q2:'',q3:'',skills:{a:0,b:0,c:0,d:0,e:0,f:0,g:0},q5:'',q6:'',show:[],groups:[],link:'',hours:'',weeks:'',res:[],resNote:''},
+ seeds:['','',''],ideas:[],nextId:1,focus:{},final:null,reason:'',form:'',methods:[],plan:[],present:''};}
+
+function sample(){
+ const s=blank();s.sample=true;s.name='小安（範例）';
+ Object.assign(s.profile,{q1:'上個月花了一整個週末比較各家手搖飲的熱量和含糖量，用試算表整理成表格，還看了好幾支營養師的 YouTube 影片。',q2:'為什麼大家明知道很甜，還是每天都買手搖飲？',q3:'學校附近飲料店每天丟掉超多塑膠杯，回收桶常常滿出來。',skills:{a:1,b:2,c:2,d:2,e:1,f:0,g:1},q5:'高一公民課的分組報告〈校園周邊商店調查〉，我負責整理資料和做簡報。最卡的是問卷題目不知道怎麼設計才不會有誘導性。',q6:'自己上網查',show:['研究能力','解決真實問題','社會關懷'],groups:['醫藥衛生','社會與心理'],link:'強',hours:3,weeks:16,res:['學校老師','社團'],resNote:'健康與護理老師可以請教；熱音社朋友可以幫忙發問卷'});
+ s.seeds=['手搖飲','校園垃圾','睡眠'];
+ const I=[['手搖飲的「微糖」到底多甜？各家含糖量實測',['科學','健康'],[5,4,3,5]],['高中生為什麼離不開手搖飲？購買動機調查',['心理','健康'],[5,5,5,4]],['校園周邊飲料杯垃圾量追蹤與減量行動',['環境','社會'],[4,4,3,4]],['飲料店的定價與促銷如何影響購買',['經濟','心理'],[3,4,3,2]],['設計一個「控糖提醒」小工具',['科技','健康'],[4,3,3,4]],['手搖飲在台灣的流行史',['文化'],[3,5,4,2]],['高中生咖啡因攝取與睡眠時數的關係',['健康','心理'],[4,4,4,5]],['飲料廣告怎麼描述「健康」？',['傳播','心理'],[3,4,5,3]],['可重複使用杯借用站試辦',['環境','設計'],[4,3,2,3]],['用 AI 分析飲料店網路評論的情緒',['科技','傳播'],[3,2,4,2]]];
+ I.forEach(([t,d,sc])=>s.ideas.push({id:s.nextId++,title:t,doms:d,scores:{i:sc[0],d:sc[1],r:sc[2],f:sc[3]},pick:false}));
+ [2,7,1].forEach(id=>s.ideas.find(x=>x.id===id).pick=true);
+ s.focus={2:{rq:'高一學生購買手搖飲的主要動機是什麼？看到含糖量資訊後，購買意願會改變嗎？',risk:'問卷回收數量不夠；題目可能有誘導性。',need:'問卷設計（要學）、試算表統計（已經會）'},7:{rq:'本校高二學生每週的咖啡因飲料攝取量，和平日睡眠時數有關嗎？',risk:'睡眠時數是自己回報，可能不準確；要注意個資。',need:'問卷設計、相關性分析（要學）'},1:{rq:'高雄鳳山區 5 家連鎖飲料店的「微糖」含糖量一致嗎？',risk:'需要借糖度計，實驗誤差不好控制。',need:'實驗設計（要學）'}};
+ s.refine={forId:2,who:'本校高一學生',what1:'每週購買手搖飲的杯數',what2:'對飲料含糖量的認知程度',scope:'2026 年 11 月，本校高一 3 個班，約 90 人',type:'相關',
+  rq:'本校高一學生每週購買手搖飲的杯數，與他們對飲料含糖量的認知程度有關嗎？',
+  sub:'1. 高一學生最常購買手搖飲的原因是什麼？\n2. 看到含糖量標示後，有多少人願意改點較低甜度的選項？',checks:['0','1','2','3','4','5']};
+ s.final=2;s.reason='我最有興趣，又能同時連結社會與心理、醫藥衛生兩個學群；問卷對象就是身邊同學，資源最容易取得。';
+ s.form='研究論文';s.methods=['文獻閱讀','問卷調查','數據分析','訪談'];
+ s.plan=genPlan(16,'研究論文');s.present='學習歷程檔案小論文，加上校內自主學習成果發表海報';
+ return s;
+}
+
+let S=(()=>{const l=load();return l?Object.assign(blank(),l):sample()})();
+let sending=false;
+let cur=0;
+const ui={seed:0,newDoms:[],confirmClear:false,backup:false};
+
+function load(){try{const r=localStorage.getItem(KEY);return r?JSON.parse(r):null}catch(e){return null}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function getP(path){return path.split('.').reduce((o,k)=>o==null?o:o[k],S)}
+function setP(path,v){const ks=path.split('.');let o=S;ks.slice(0,-1).forEach(k=>{if(o[k]==null)o[k]={};o=o[k]});o[ks[ks.length-1]]=v}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),1800)}
+
+function genPlan(weeks,form){
+ weeks=Math.max(1,parseInt(weeks)||16);const ph=PHASES[form]||PHASES['書面報告'];
+ let lens=ph.map(p=>Math.max(1,Math.round(p[1]*weeks)));
+ let diff=weeks-lens.reduce((a,b)=>a+b,0);let i=0;
+ while(diff!==0&&i<200){const k=i%lens.length;if(diff>0){lens[k]++;diff--}else if(lens[k]>1){lens[k]--;diff++}i++}
+ let w=1;return ph.map((p,k)=>{const a=w,b=w+lens[k]-1;w=b+1;return{w:a===b?`第 ${a} 週`:`第 ${a}–${b} 週`,task:p[0]}});
+}
+
+/* derived */
+const pickedIdeas=()=>S.ideas.filter(x=>x.pick);
+const total=x=>Object.values(x.scores).reduce((a,b)=>a+(+b||0),0);
+function hoursTotal(){const h=+S.profile.hours||0,w=+S.profile.weeks||0;return h*w}
+function scaleAdvice(){const t=hoursTotal();if(!t)return'填上每週時數和週數，這裡會建議適合的作品規模。';
+ if(t<30)return`總投入約 ${t} 小時：適合<b>書面報告</b>或小規模的實作，主題範圍要收得很窄。`;
+ if(t<60)return`總投入約 ${t} 小時：可以做<b>書面報告</b>，或<b>小型實作／小型調查</b>（例如一份 30–50 人的問卷）。`;
+ return`總投入約 ${t} 小時：有空間做<b>研究論文</b>或<b>完整實作</b>，可以蒐集一手資料並改版。`}
+function strong(){return SKILLS.filter(([k])=>S.profile.skills[k]>=2).map(s=>s[1])}
+function stretch(){return SKILLS.filter(([k])=>S.profile.skills[k]===1).map(s=>s[1])}
+function recForm(){
+ const p=S.profile,t=hoursTotal(),sk=p.skills,sh=p.show;const sc={'實作型':0,'書面報告':0,'研究論文':0};
+ if(t>=60)sc['研究論文']+=2,sc['實作型']+=1;else if(t&&t<30)sc['書面報告']+=3;else sc['書面報告']+=1;
+ if(sh.includes('研究能力'))sc['研究論文']+=2;
+ ['解決真實問題','創意','執行力','科技應用'].forEach(x=>{if(sh.includes(x))sc['實作型']+=1});
+ if(sh.includes('表達溝通')||sh.includes('跨文化視野'))sc['書面報告']+=1;
+ if(sk.a>=2||sk.b>=2)sc['研究論文']+=1;if(sk.d>=2||sk.e>=2)sc['實作型']+=1;if(sk.c>=2||sk.g>=2)sc['書面報告']+=1;
+ return Object.entries(sc).sort((a,b)=>b[1]-a[1])[0][0];
+}
+function done(i){const p=S.profile;switch(i){
+ case 0:return!!(p.q1&&p.show.length&&p.hours&&p.weeks);
+ case 1:return S.ideas.length>=10;
+ case 2:return pickedIdeas().length===3;
+ case 3:return!!(S.final&&S.focus[S.final]?.rq);
+ case 4:return!!(S.refine.rq&&S.refine.forId===S.final&&S.refine.checks.length===CHECKS.length);
+ case 5:return!!(S.form&&S.plan.length);
+ case 6:return[0,1,2,3,4,5].every(done);}}
+
+/* 題目精鍊 */
+function finalIdea(){return S.ideas.find(x=>x.id===S.final)}
+function finalRQ(){return(S.refine.forId===S.final&&S.refine.rq)?S.refine.rq:(S.focus[S.final]?.rq||'')}
+function compose(){const r=S.refine;if(!r.type)return'';
+ const who=r.who||'（研究對象）',a=r.what1||'（要觀察的東西）',b=r.what2||'（另一個觀察的東西）';
+ const q={'現況':`${who}的${a}現況如何？`,'相關':`${who}的${a}，與${b}有關嗎？`,'差異':`${who}在${a}上有什麼差異？`,'成效':`${who}在${a}之後，${b}是否改善？`,'原因':`${who}為什麼會${a}？`}[r.type];
+ return q;}
+function rqWarn(t){const w=[];t=(t||'').trim();if(!t)return w;
+ if(/探討|淺談|之研究|研究$/.test(t))w.push('看起來像報告標題，請改寫成一個問句。');
+ if(!/[？?]\s*$/.test(t.replace(/（範圍：.*）$/,'')))w.push('結尾不是問號。研究問題要寫成問句。');
+ if((t.match(/[？?]/g)||[]).length>1)w.push('問了不只一個問題。留一個主問題，其他寫到子問題。');
+ if(!/(學生|同學|民眾|居民|顧客|店|人|班|校|家|區|市|縣|鎮|國小|國中|高中|網站|平台|品牌|產品|樣本|植物|動物)/.test(t))w.push('看不出研究對象是誰或什麼。');
+ else if(/影響/.test(t)&&!/(數|量|分數|時數|比例|次)/.test(t))w.push('「影響」太籠統。寫出要測量的東西，例如次數、分數、時數。');
+ if(t.length<15)w.push('有點短，可能還不夠具體。');
+ if(t.length>80)w.push('有點長，可能一次放了太多東西。');
+ return w;}
+function warnHTML(){const w=rqWarn(S.refine.rq);if(!S.refine.rq)return'';
+ return w.length?`<div class="warn"><b>系統提醒</b><ul>${w.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:'<div class="warn ok"><b>系統提醒</b>格式沒有明顯問題，接著用下面的檢核表逐項確認。</div>'}
+function draftHTML(){const d=compose();return d?`<div class="draft"><span class="k">組合出的題目草稿</span><p>${esc(d)}</p>${S.refine.scope?`<span class="mini">研究範圍：${esc(S.refine.scope)}（會另外列在企劃書上）</span>`:''}<button class="btn sm" data-act="usedraft">套用為我的研究問題</button></div>`:'<p class="mini">選好「想知道的關係」後，這裡會自動組出題目草稿。</p>'}
+
+/* renderers */
+function renderSteps(){
+ const box=document.getElementById('steps');box.innerHTML=STEPS.map((s,i)=>`<button class="step ${i===cur?'on':''} ${done(i)?'done':''}" data-go="${i}" aria-current="${i===cur?'step':'false'}"><span class="n">${done(i)&&i!==cur?'✓':s[0]}</span>${s[1]}</button>`).join('');
+ const on=box.querySelector('.step.on');if(on)box.scrollLeft=on.offsetLeft-box.offsetLeft-(box.clientWidth-on.offsetWidth)/2;
+}
+function renderNotice(){
+ const n=document.getElementById('notice');let h='';
+ if(S.sample)h+=`<div class="banner"><span>目前顯示的是<b>範例同學「小安」</b>的填寫內容，讓你先看看每一步怎麼寫。</span><button class="btn sm" data-act="start">清空，開始填我的</button></div>`;
+ if(ui.confirmClear)h+=`<div class="banner"><span>確定要清空全部答案嗎？這個動作無法復原，建議先複製進度碼備份。</span><button class="btn sm danger" data-act="clear">確定清空</button><button class="btn ghost sm" data-act="cancelclear">取消</button></div>`;
+ if(S.feedback.text&&fbKey()!==S.feedback.seen&&cur!==LAST)h+=`<div class="banner fbb"><span><b>老師給你新的建議了！</b></span><button class="btn sm" data-go="${LAST}">去看建議</button></div>`;
+ if(ui.backup)h+=`<div class="backup"><div class="qlabel">進度碼</div><p class="mini">答案只存在這個瀏覽器。要換手機或電腦接著做，先複製下面這串進度碼（可以傳到自己的 LINE 或 Email），到新裝置貼上後按「讀入」。</p><textarea id="bkOut" class="copybox" readonly>${esc(encode())}</textarea><div class="toolbar"><button class="btn sm" data-act="copybk">複製進度碼</button></div><textarea id="bkIn" class="copybox" placeholder="在這裡貼上之前複製的進度碼"></textarea><div class="toolbar"><button class="btn sm" data-act="import">讀入進度碼</button><button class="btn ghost sm" data-act="backup">收起</button></div></div>`;
+ n.innerHTML=h;
+}
+function chips(path,list,cls='',max=0){const arr=getP(path)||[];return`<div class="chips">${list.map(v=>`<button class="chip ${cls} ${arr.includes(v)?'on':''}" data-toggle="${path}" data-val="${esc(v)}" ${max?`data-max="${max}"`:''} aria-pressed="${arr.includes(v)}">${esc(v)}</button>`).join('')}</div>`}
+function seg(path,opts,vals){const v=getP(path);return`<div class="seg" role="group">${opts.map((o,i)=>`<button data-set="${path}" data-val="${vals?vals[i]:i}" class="${String(v)===String(vals?vals[i]:i)?'on':''}">${o}</button>`).join('')}</div>`}
+function ta(path,ph,rows){return`<textarea data-path="${path}" placeholder="${esc(ph)}" ${rows?`style="min-height:${rows}px"`:''}>${esc(getP(path))}</textarea>`}
+
+function summaryInner(){
+ const p=S.profile;const tags=(a,c='')=>a.length?a.map(x=>`<span class="tag ${c}">${esc(x)}</span>`).join(''):'<span class="empty">尚未填寫</span>';
+ const interest=[p.q1,p.q2,p.q3].filter(Boolean).length;
+ return`<div class="sgrid">
+  <div class="sitem"><span class="k">興趣線索</span><span class="v">${interest?`已寫下 ${interest} 條（第 1–3 題）`:'<span class="empty">尚未填寫</span>'}</span></div>
+  <div class="sitem"><span class="k">已具備的能力</span><span>${tags(strong(),'teal')}</span></div>
+  <div class="sitem"><span class="k">可以挑戰的能力</span><span>${tags(stretch(),'amber')}</span></div>
+  <div class="sitem"><span class="k">想展現</span><span>${tags(p.show,'amber')}</span></div>
+  <div class="sitem"><span class="k">目標學群</span><span>${tags(p.groups)}${p.link?`<span class="mini">關聯${esc(p.link)}</span>`:''}</span></div>
+  <div class="sitem"><span class="k">時間與資源</span><span class="v">${p.hours&&p.weeks?`每週 ${esc(p.hours)} 小時 × ${esc(p.weeks)} 週`:'<span class="empty">尚未填寫</span>'}</span><span>${tags(p.res)}</span></div>
+ </div><p class="scale">${scaleAdvice()}</p>`;
+}
+function miniSummary(){return`<details class="mini-sum"><summary>對照我的學習者輪廓</summary><div id="summary">${summaryInner()}</div></details>`}
+function nav(){return`<div class="nav">${cur>0?`<button class="btn ghost" data-go="${cur-1}">← 上一步</button>`:'<span></span>'}${cur<LAST?`<button class="btn" data-go="${cur+1}">下一步：${STEPS[cur+1][1]} →</button>`:''}</div>`}
+function head(eb,t,rule){return`<div class="phead"><p class="eyebrow">${eb}</p><h2>${t}</h2></div><p class="rule">${rule}</p><div style="height:22px"></div>`}
+
+const R=[];
+R[0]=()=>{const p=S.profile;return head('Start · Know Yourself','建立學習者輪廓','<strong>這一步的目的：</strong>把「我喜歡什麼、我會什麼、我想被看見什麼、我有多少時間」寫清楚。後面每一步篩選題目，都會拿這份輪廓來對照。')+`
+ <div class="q"><label for="nm">你的名字或暱稱（會出現在企劃書上）</label><input type="text" id="nm" data-path="name" value="${esc(S.name)}" placeholder="例如：林小安"></div><div style="height:26px"></div>
+ <section class="group"><div class="gtitle">一、興趣探索 <small>找方向</small></div>
+  <div class="q"><label for="q1"><span class="qn">1</span>最近一次你主動花好幾個小時研究某件事，是什麼？你怎麼研究的？</label><textarea id="q1" data-path="profile.q1" placeholder="例如：研究怎麼把舊手機變成監視器，看了 5 支影片、試了 3 個 App">${esc(p.q1)}</textarea></div>
+  <div class="q"><label for="q2"><span class="qn">2</span>有沒有一個問題你一直想知道答案，但課本從來沒教？</label><textarea id="q2" data-path="profile.q2" placeholder="例如：為什麼有些歌聽一次就忘不掉？">${esc(p.q2)}</textarea></div>
+  <div class="q"><label for="q3"><span class="qn">3</span>有沒有哪件事讓你覺得「這很不合理」或「可以做得更好」？</label><textarea id="q3" data-path="profile.q3" placeholder="例如：學校午餐剩食好多，打菜的份量都一樣">${esc(p.q3)}</textarea></div>
+ </section>
+ <section class="group"><div class="gtitle">二、能力程度 <small>定難度</small></div>
+  <div class="q"><span class="qlabel"><span class="qn">4</span>下列能力，你現在大概在哪個程度？</span><div class="skills">${SKILLS.map(([k,n])=>`<div class="skill"><span>${n}</span>${seg('profile.skills.'+k,LEVELS)}</div>`).join('')}</div></div>
+  <div class="q"><label for="q5"><span class="qn">5</span>你做過最完整的一份作品是什麼？過程中哪一步最卡？</label><textarea id="q5" data-path="profile.q5" placeholder="作品名稱＋你負責的部分＋最卡的地方">${esc(p.q5)}</textarea></div>
+  <div class="q"><span class="qlabel"><span class="qn">6</span>遇到卡關時，你通常怎麼做？</span>${seg('profile.q6',STUCK,STUCK)}</div>
+ </section>
+ <section class="group"><div class="gtitle">三、跨領域能力 <small>想展現什麼</small></div>
+  <div class="q"><span class="qlabel"><span class="qn">7</span>看完你的成果，你希望別人覺得你是怎樣的人？（最多選 3 個）</span>${chips('profile.show',SHOW,'',3)}</div>
+  <div class="q"><span class="qlabel"><span class="qn">8</span>目前考慮的學群（最多選 2 個，還不確定也沒關係）</span>${chips('profile.groups',GROUPS,'teal',2)}
+   <span class="hint">希望主題和學群的關聯：</span>${seg('profile.link',['強','中','弱，想探索別的'],['強','中','弱'])}</div>
+ </section>
+ <section class="group"><div class="gtitle">四、條件與目標 <small>定規模</small></div>
+  <div class="q"><span class="qlabel"><span class="qn">9</span>每週大約能投入幾小時？預計做幾週？</span>
+   <div class="row2"><input type="number" min="1" max="20" id="hrs" data-path="profile.hours" value="${esc(p.hours)}" placeholder="每週小時數，例如 3" aria-label="每週小時數"><input type="number" min="1" max="40" id="wks" data-path="profile.weeks" value="${esc(p.weeks)}" placeholder="週數，例如 16" aria-label="週數"></div></div>
+  <div class="q"><span class="qlabel"><span class="qn">10</span>你有哪些可用的資源？</span>${chips('profile.res',RES,'teal')}<input type="text" id="resn" data-path="profile.resNote" value="${esc(p.resNote)}" placeholder="補充說明，例如：阿姨是營養師，可以訪問她"></div>
+ </section>
+ <div class="summary"><h3><span class="eyebrow">Learner Profile</span>我的學習者輪廓</h3><div id="summary">${summaryInner()}</div></div>`+nav()};
+
+R[1]=()=>{const seed=S.seeds[ui.seed]||'（先寫興趣點）';return head('Step 1 · Diverge','發散：先不管可不可行','<strong>這一步的規則：</strong>先求多、不求好。把興趣點和不同領域交叉，列出 10–15 個可能的題目。現在不要刪任何想法，篩選是下一步的事。')+`
+ <section class="group"><div class="gtitle">寫下 3 個興趣點 <small>可以從輪廓第 1–3 題找關鍵字</small></div>
+  <div class="seedrow">${[0,1,2].map(i=>`<input type="text" id="seed${i}" data-path="seeds.${i}" value="${esc(S.seeds[i])}" placeholder="興趣點 ${i+1}，例如：${['手搖飲','電玩','睡眠'][i]}">`).join('')}</div>
+  <p class="example"><b>範例：</b>「手搖飲」可以延伸成 成分與健康（科學）、排隊心理（心理）、塑膠杯浪費（環境）、店家定價（經濟）、品牌設計（設計）。</p>
+ </section>
+ <section class="group"><div class="gtitle">交叉發想 <small>選一個興趣點，點下面的問題當起點</small></div>
+  <div class="lab">
+   <div class="chips">${[0,1,2].map(i=>`<button class="chip ${ui.seed===i?'on':''}" data-act="seed" data-i="${i}">${esc(S.seeds[i]||'興趣點 '+(i+1))}</button>`).join('')}</div>
+   <div class="sparks">${LENSES.map(([k,t])=>`<button class="spark" data-act="spark" data-lens="${k}"><b>${k}</b>${esc(t.replace('{x}',seed))}</button>`).join('')}</div>
+   <div class="q"><label for="newTitle">把它改寫成你的題目想法</label>
+    <div class="addrow"><input type="text" id="newTitle" placeholder="例如：高中生為什麼離不開手搖飲？"><button class="btn" data-act="add">加入清單</button></div>
+    <span class="hint">這個想法結合了哪些領域？（最多 2 個）</span>
+    <div class="chips">${LENSES.map(([k])=>`<button class="chip teal ${ui.newDoms.includes(k)?'on':''}" data-act="dom" data-val="${k}">${k}</button>`).join('')}</div></div>
+  </div>
+ </section>
+ <section class="group"><div class="gtitle">我的題目清單</div>
+  <div class="meter"><div class="bar"><i class="${S.ideas.length>=10?'ok':''}" style="width:${Math.min(100,S.ideas.length/15*100)}%"></i></div><span>${S.ideas.length} / 10–15 個${S.ideas.length>=10?'，足夠了！':''}</span></div>
+  <div class="ideas">${S.ideas.length?S.ideas.map((x,i)=>`<div class="idea"><span class="num">${i+1}</span><div><div class="t">${esc(x.title)}</div><div>${x.doms.map(d=>`<span class="tag teal">${esc(d)}</span>`).join('')}</div></div><button class="xbtn" data-act="del" data-i="${i}" aria-label="刪除">×</button></div>`).join(''):'<p class="empty">還沒有題目，從上面的問題開始發想吧。</p>'}</div>
+ </section>`+nav()};
+
+R[2]=()=>{const n=pickedIdeas().length;const list=S.ideas.map((x,i)=>({x,i}));return head('Step 2 · Filter','篩選：用輪廓當濾網','<strong>這一步的規則：</strong>每個題目依四個標準打 1–5 分，再挑出 <strong>3 個</strong>進入下一步。總分只是參考，你可以選分數不是最高、但你最想做的題目。')+miniSummary()+`
+ <div class="crit">${CRIT.map(c=>`<div><b>${c[1]}</b>${c[2]}</div>`).join('')}</div><div style="height:18px"></div>
+ <div class="toolbar" style="justify-content:space-between;align-items:center;margin-bottom:12px"><span class="mini">已選 <b style="color:var(--teal)">${n}</b> / 3 個</span><button class="btn ghost sm" data-act="sort">依總分排序</button></div>
+ <div class="ideas">${list.length?list.map(({x,i})=>`<div class="scorecard ${x.pick?'picked':''}"><div class="sc-top"><div><div class="t" style="font-weight:600">${esc(x.title)}</div><div>${x.doms.map(d=>`<span class="tag teal">${esc(d)}</span>`).join('')}</div></div><div class="total">${total(x)}<small> /20</small></div></div>
+  <div class="scores">${CRIT.map(c=>`<div class="score"><div class="k">${c[1]}</div>${seg(`ideas.${i}.scores.${c[0]}`,['1','2','3','4','5'],[1,2,3,4,5])}</div>`).join('')}</div>
+  <button class="btn sm ${x.pick?'':'ghost'} pickbtn" data-act="pick" data-i="${i}">${x.pick?'✓ 已選入前三':'選入前三'}</button></div>`).join(''):'<p class="empty">先回到「發散」列出題目。</p>'}</div>`+nav()};
+
+R[3]=()=>{const P=pickedIdeas();return head('Step 3 · Focus','聚焦：剩 3 個，比較優劣','<strong>這一步的規則：</strong>為每個題目寫一個<strong>初步的問題</strong>和最大風險，比較後選定一個。問題先寫個大概就好，下一步「精鍊」會帶你一層層磨具體。')+`
+ ${P.length?P.map(x=>{const f=S.focus[x.id]||{};return`<div class="fcard ${S.final===x.id?'final':''}" style="margin-bottom:16px">
+  <div class="fhead"><div><h3>${esc(x.title)}</h3><div>${x.doms.map(d=>`<span class="tag teal">${esc(d)}</span>`).join('')}<span class="mini">　總分 ${total(x)}</span></div></div>
+  <button class="radio ${S.final===x.id?'on':''}" data-act="final" data-id="${x.id}"><span class="dot"></span>${S.final===x.id?'就是它了':'選這個'}</button></div>
+  <div class="q"><label for="rq${x.id}">研究問題</label><div class="tpls">${TPL.map(t=>`<button class="tpl" data-act="tpl" data-id="${x.id}" data-t="${esc(t)}">${esc(t)}</button>`).join('')}</div>
+   <textarea id="rq${x.id}" data-path="focus.${x.id}.rq" placeholder="寫清楚：研究誰？範圍多大？想知道什麼？">${esc(f.rq)}</textarea>
+   <span class="hint">檢查：這個問題能在 ${esc(S.profile.weeks||'?')} 週內找到答案嗎？太大就加上對象、地點或時間來縮小。</span></div>
+  <div class="row2"><div class="q"><label for="rk${x.id}">最大風險</label><textarea id="rk${x.id}" data-path="focus.${x.id}.risk" placeholder="可能卡在哪裡？">${esc(f.risk)}</textarea></div>
+  <div class="q"><label for="nd${x.id}">需要的能力</label><textarea id="nd${x.id}" data-path="focus.${x.id}.need" placeholder="哪些已經會？哪些要學？">${esc(f.need)}</textarea></div></div>
+ </div>`}).join(''):'<p class="empty">先在「篩選」選出 3 個題目。</p>'}
+ ${P.length?`<div class="q"><label for="reason">為什麼選這個？（比較另外兩個之後寫下理由）</label>${ta('reason','例如：興趣最強、資源最容易取得、最能連結我想讀的學群')}</div>`:''}`+nav()};
+
+R[4]=()=>{const fin=finalIdea();const r=S.refine;
+ if(!fin)return head('Step 4 · Refine','精鍊：把主題磨成研究題目','<strong>這一步的規則：</strong>好題目要有明確的對象、可以測量的東西、做得完的範圍，而且答案要靠你自己蒐集。')+'<p class="empty">先在「聚焦」選定一個主題。</p>'+nav();
+ if(r.forId!==S.final&&!r.rq&&!r.who&&!r.what1){r.forId=S.final;save()}
+ const stale=r.forId!==S.final;
+ const t2={'相關':'和什麼有關？','成效':'想看哪個結果改善？'}[r.type];
+ const w1={'成效':'用了什麼做法？','原因':'想解釋的行為或現象是什麼？'}[r.type]||'要觀察或測量什麼？';
+ const ph1={'成效':'例如：使用 AI 作文回饋一個月','原因':'例如：明知道很甜還是買手搖飲'}[r.type]||'例如：每週購買手搖飲的杯數';
+ return head('Step 4 · Refine','精鍊：把主題磨成研究題目','<strong>這一步的規則：</strong>好題目要有明確的對象、可以測量的東西、做得完的範圍，而且答案要靠你自己蒐集。先看範例，再用漏斗一層層縮小。')+`
+ ${stale?`<div class="banner"><span>你在「聚焦」選定的主題是<b>「${esc(fin.title)}」</b>。${r.rq?'下面的精鍊內容是針對舊主題寫的。':''}</span><button class="btn sm" data-act="startrefine">${r.rq?'依新主題重新精鍊':'開始精鍊這個主題'}</button></div>`:''}
+ <section class="group"><div class="gtitle">改題前後對照 <small>看看好題目長什麼樣子</small></div>
+  <div class="rex">${REX.map(([a,b,c])=>`<div class="rexc"><div class="before"><span class="k">改之前</span><s>${esc(a)}</s></div><div class="after"><span class="k">改之後</span>${esc(b)}</div><p class="mini">改了什麼：${esc(c)}</p></div>`).join('')}</div>
+ </section>
+ <section class="group"><div class="gtitle">漏斗拆解 <small>從大主題一層層縮小</small></div>
+  <div class="funnel">
+   <div class="fl" style="--w:100%"><span class="k">大主題</span><p>${esc(fin.title)}</p><p class="mini">聚焦時寫的問題：${esc(S.focus[S.final]?.rq||'（還沒寫）')}</p></div>
+   <div class="fl" style="--w:94%"><label class="k" for="rwho">研究對象：研究誰或什麼？</label><input type="text" id="rwho" data-path="refine.who" value="${esc(r.who)}" placeholder="例如：本校高一學生、鳳山區 5 家連鎖飲料店"></div>
+   <div class="fl" style="--w:88%"><span class="k">想知道的關係</span>${seg('refine.type',RTYPES.map(x=>x[1]),RTYPES.map(x=>x[0]))}</div>
+   <div class="fl" style="--w:82%"><label class="k" for="rw1">${w1}</label><input type="text" id="rw1" data-path="refine.what1" value="${esc(r.what1)}" placeholder="${ph1}">
+    ${t2?`<label class="k" for="rw2" style="margin-top:6px">${t2}</label><input type="text" id="rw2" data-path="refine.what2" value="${esc(r.what2)}" placeholder="${r.type==='成效'?'例如：作文的文法錯誤數':'例如：對含糖量的認知程度'}">`:''}
+    ${r.type==='差異'?'<p class="mini">提示：研究對象要寫兩群，例如「高一和高三學生」。</p>':''}</div>
+   <div class="fl" style="--w:76%"><label class="k" for="rsc">範圍：時間、地點、人數</label><input type="text" id="rsc" data-path="refine.scope" value="${esc(r.scope)}" placeholder="例如：2026 年 11 月，本校高一 3 個班，約 90 人">
+    <p class="mini">你有 ${esc(S.profile.weeks||'?')} 週、每週 ${esc(S.profile.hours||'?')} 小時，範圍要配合這個時間。</p></div>
+  </div>
+  <div id="rdraft">${draftHTML()}</div>
+ </section>
+ <section class="group"><div class="gtitle">我的研究問題 <small>可以直接修改</small></div>
+  <textarea id="rrq" data-path="refine.rq" placeholder="套用上面的草稿，或直接寫下你的研究問題">${esc(r.rq)}</textarea>
+  <div id="rwarn">${warnHTML()}</div>
+  <div class="q"><label for="rsub">子問題（1–3 個，幫你拆解主問題）</label>${ta('refine.sub','例如：\n1. 高一學生最常購買手搖飲的原因是什麼？\n2. 看到含糖量標示後，有多少人願意改點較低甜度？',96)}</div>
+ </section>
+ <section class="group"><div class="gtitle">好題目檢核表 <small>${r.checks.length} / ${CHECKS.length} 項通過</small></div>
+  <div class="checks">${CHECKS.map(([t,d,f],i)=>{const on=r.checks.includes(String(i));return`<div class="chk ${on?'on':''}"><button class="box" data-toggle="refine.checks" data-val="${i}" aria-pressed="${on}" aria-label="${esc(t)}">${on?'✓':''}</button><div><b>${esc(t)}</b><p>${esc(d)}</p>${on?'':`<p class="fix">怎麼修：${esc(f)}</p>`}</div></div>`}).join('')}</div>
+ </section>`+nav()};
+
+R[5]=()=>{const rec=recForm();const fin=S.ideas.find(x=>x.id===S.final);return head('Step 5 · Shape','定型：決定成果形式','<strong>這一步的規則：</strong>同一個主題可以有不同做法。依你的時間、能力和想展現的能力，選一種成果形式，再排出每週進度。')+miniSummary()+`
+ ${fin?`<p class="mini" style="margin-bottom:16px">選定主題：<b style="color:var(--ink)">${esc(fin.title)}</b></p>`:'<p class="empty" style="margin-bottom:16px">還沒選定主題，可以先回「聚焦」選一個。</p>'}
+ <section class="group"><div class="gtitle">成果形式</div>
+  <div class="forms">${Object.entries(FORMS).map(([k,v])=>`<button class="fopt ${S.form===k?'on':''}" data-act="form" data-val="${k}">${k===rec?'<span class="rec">依你的輪廓推薦</span>':''}<h4>${k}</h4><p>${v.d}</p><span class="fit">${v.fit}</span></button>`).join('')}</div>
+ </section>
+ <section class="group"><div class="gtitle">研究或製作方法 <small>可複選</small></div>${chips('methods',METHODS)}</section>
+ <section class="group"><div class="gtitle">每週進度 <small>${esc(S.profile.weeks||16)} 週</small></div>
+  <div class="toolbar"><button class="btn sm" data-act="gen">${S.plan.length?'重新產生進度草稿':'依週數產生進度草稿'}</button><button class="btn ghost sm" data-act="addrow">＋ 加一列</button></div>
+  <div class="plan">${S.plan.map((r,i)=>`<div class="prow"><input type="text" data-path="plan.${i}.w" value="${esc(r.w)}" aria-label="週次"><textarea data-path="plan.${i}.task" aria-label="要做的事">${esc(r.task)}</textarea><button class="xbtn" data-act="delrow" data-i="${i}" aria-label="刪除這列">×</button></div>`).join('')||'<p class="empty">按上面的按鈕產生草稿，再依自己的情況修改。</p>'}</div>
+ </section>
+ <section class="group"><div class="gtitle">怎麼發表成果？</div>${ta('present','例如：學習歷程檔案小論文、成果發表海報、一支 3 分鐘影片')}</section>`+nav()};
+
+function proposal(){
+ const p=S.profile,fin=S.ideas.find(x=>x.id===S.final),f=fin?S.focus[fin.id]||{}:{};
+ const rf=S.refine.forId===S.final;
+ return{name:S.name,title:fin?.title||'',doms:fin?.doms||[],rq:finalRQ(),sub:rf?S.refine.sub:'',scope:rf?S.refine.scope:'',checks:rf?S.refine.checks.length:0,reason:S.reason,risk:f.risk||'',need:f.need||'',form:S.form,methods:S.methods,plan:S.plan,present:S.present,show:p.show,groups:p.groups,hours:p.hours,weeks:p.weeks,res:[...p.res,p.resNote].filter(Boolean)};
+}
+function proposalText(){const d=proposal();return`【自主學習企劃書】${d.name?'　'+d.name:''}
+主題：${d.title||'（未填）'}
+跨領域：${d.doms.join(' × ')||'（未填）'}
+研究問題：${d.rq||'（未填）'}
+${d.scope?`研究範圍：${d.scope}\n`:''}${d.sub?`子問題：\n${d.sub}\n`:''}好題目檢核：${d.checks} / ${CHECKS.length} 項通過
+選題理由：${d.reason||'（未填）'}
+想展現的能力：${d.show.join('、')||'（未填）'}　目標學群：${d.groups.join('、')||'（未填）'}
+成果形式：${d.form||'（未填）'}
+方法：${d.methods.join('、')||'（未填）'}
+時間：每週 ${d.hours||'?'} 小時 × ${d.weeks||'?'} 週
+可用資源：${d.res.join('、')||'（未填）'}
+最大風險：${d.risk||'（未填）'}
+需要的能力：${d.need||'（未填）'}
+進度：
+${d.plan.map(r=>`  ${r.w}　${r.task}`).join('\n')||'  （未填）'}
+成果發表：${d.present||'（未填）'}`}
+function promptText(){const p=S.profile;return`你是我的高中自主學習教練。請不要直接替我完成作業，而是用提問和建議，幫我把計畫變得更具體、更可行。
+
+以下是我的學習者輪廓：
+- 興趣線索：${[p.q1,p.q2,p.q3].filter(Boolean).join('／')||'（未填）'}
+- 已具備的能力：${strong().join('、')||'（無）'}；正在挑戰：${stretch().join('、')||'（無）'}
+- 過去作品與卡關經驗：${p.q5||'（未填）'}；卡關時我通常：${p.q6||'（未填）'}
+
+${proposalText()}
+
+請你：
+1. 用「對象明確、可以測量、做得完、答案不是查得到的、只問一件事、有意義」六個標準檢查我的研究問題，指出哪一項最弱，並給我 2 種修改方向（不要直接幫我定稿）。
+2. 問我 3 個能讓題目更聚焦的問題，一次只問一題，等我回答再問下一題。
+3. 檢查方法和進度是否合理，指出最可能卡住的地方和預防方法。
+4. 建議我在學習歷程檔案中，可以怎麼呈現「${p.show.join('、')||'我的能力'}」和跨領域的連結。
+每次回覆的最後，請整理「目前進度＋下一步」。`}
+
+R[6]=()=>{const d=proposal();const v=(x)=>x?esc(x):'<span class="empty">尚未填寫</span>';return head('Finish · Proposal','一頁式企劃書','<strong>完成了！</strong>把企劃書送出給老師，或複製「AI 教練提示詞」，貼到 Claude（免費帳號就可以）或其他 AI，請它用提問幫你把計畫磨得更好。')+`
+ ${fbCard()}
+ <article class="doc">
+  <div class="dt"><p class="eyebrow">Self-Directed Learning Proposal</p><h3>${v(d.title)}</h3><p class="mini">${d.name?esc(d.name)+'　·　':''}${d.doms.map(x=>`<span class="tag teal">${esc(x)}</span>`).join('')}</p></div>
+  <div class="dsec"><h4>研究問題</h4><p class="big">${v(d.rq)}</p>${d.scope?`<p class="mini">研究範圍：${esc(d.scope)}</p>`:''}${d.sub?`<p class="sub">${esc(d.sub).replace(/\n/g,'<br>')}</p>`:''}<p class="mini">好題目檢核：${d.checks} / ${CHECKS.length} 項通過${d.checks<CHECKS.length?'　<button class="linkbtn" data-go="4">回「精鍊」補完</button>':''}</p></div>
+  <div class="dsec"><h4>選題理由</h4><p>${v(d.reason)}</p></div>
+  <div class="row2"><div class="dsec"><h4>想展現的能力</h4><p>${d.show.map(x=>`<span class="tag amber">${esc(x)}</span>`).join('')||v('')}</p></div><div class="dsec"><h4>目標學群</h4><p>${d.groups.map(x=>`<span class="tag">${esc(x)}</span>`).join('')||v('')}</p></div></div>
+  <div class="row2"><div class="dsec"><h4>成果形式</h4><p>${v(d.form)}</p></div><div class="dsec"><h4>方法</h4><p>${v(d.methods.join('、'))}</p></div></div>
+  <div class="row2"><div class="dsec"><h4>時間</h4><p>${d.hours&&d.weeks?`每週 ${esc(d.hours)} 小時 × ${esc(d.weeks)} 週`:v('')}</p></div><div class="dsec"><h4>可用資源</h4><p>${v(d.res.join('、'))}</p></div></div>
+  <div class="row2"><div class="dsec"><h4>最大風險</h4><p>${v(d.risk)}</p></div><div class="dsec"><h4>需要的能力</h4><p>${v(d.need)}</p></div></div>
+  <div class="dsec"><h4>進度安排</h4><div class="dplan">${d.plan.map(r=>`<div><span>${esc(r.w)}</span><span>${esc(r.task)}</span></div>`).join('')||v('')}</div></div>
+  <div class="dsec"><h4>成果發表</h4><p>${v(d.present)}</p></div>
+ </article>
+ <div class="copyarea"><div class="toolbar"><button class="btn" data-act="copyprop">複製企劃書文字</button><button class="btn ghost" data-act="copyprompt">複製 AI 教練提示詞</button></div>
+ <p class="mini">AI 教練提示詞包含你的輪廓和企劃，貼到新對話就能開始。它會一次問一題，陪你把題目修到更具體。</p></div>
+ <section class="send" id="send">
+  <div class="gtitle">送出給老師</div>
+  ${S.sample?'<p class="rule">現在是範例資料，無法送出。請按上方「清空，開始填我的」，完成自己的企劃書後再送出。</p>':''}
+  ${!SCRIPT_URL?'<p class="rule">老師還沒設定送出網址。目前可以先按「複製企劃書文字」交給老師。</p>':''}
+  <div class="row3">
+   <div class="q"><label for="scls">班級</label><input type="text" id="scls" data-path="student.cls" value="${esc(S.student.cls)}" placeholder="例如 205" inputmode="numeric"></div>
+   <div class="q"><label for="sseat">座號</label><input type="text" id="sseat" data-path="student.seat" value="${esc(S.student.seat)}" placeholder="例如 12" inputmode="numeric"></div>
+   <div class="q"><label for="sname">姓名</label><input type="text" id="sname" data-path="name" value="${esc(S.name)}" placeholder="真實姓名"></div>
+  </div>
+  <div class="q"><label for="scode">班級代碼（老師上課時會給）</label><input type="text" id="scode" data-path="code" value="${esc(S.code)}" placeholder="輸入老師給的代碼"></div>
+  <div class="toolbar"><button class="btn" data-act="submit" ${S.sample||!SCRIPT_URL?'disabled':''}>${S.submittedAt?'更新送出的企劃書':'送出企劃書'}</button></div>
+  ${S.submittedAt&&SCRIPT_URL?'<div class="toolbar"><button class="btn ghost sm" data-act="fb">查看老師建議</button></div>':''}
+  <p class="mini" id="sendStatus">${S.submittedAt?`上次送出：${esc(S.submittedAt)}。之後修改內容，可以再按一次，老師那邊會換成最新版本。`:'同一個班級和座號重複送出時，老師那邊只會保留最新版本。'}</p>
+ </section>`+nav()};
+
+function fbKey(){return S.feedback.at||S.feedback.text}
+function fbCard(){const f=S.feedback;if(!f.text)return'';
+ return`<div class="fbcard"><div class="fbh"><span class="eyebrow">From Your Teacher</span><b>老師的建議</b>${f.at?`<span class="mini">${esc(f.at)}</span>`:''}</div><p>${esc(f.text).replace(/\n/g,'<br>')}</p><p class="mini">依建議修改後，回到這裡按「更新送出的企劃書」。</p></div>`}
+async function checkFeedback(silent){
+ if(!SCRIPT_URL||S.sample)return;
+ const c=String(S.student.cls).trim(),s=String(S.student.seat).trim(),n=String(S.name).trim(),k=String(S.code).trim();
+ if(!c||!s||!n||!k){if(!silent)toast('請先填好班級、座號、姓名和班級代碼');return}
+ try{const r=await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'feedback',code:k,cls:c,seat:s,name:n})});const j=await r.json();
+  if(!j.ok){if(!silent)toast(j.msg||'暫時查不到，請稍後再試');return}
+  if(!j.feedback){if(!silent)toast('老師還沒有寫建議');return}
+  S.feedback.text=j.feedback;S.feedback.at=j.at||'';save();render();if(!silent)toast('已取得老師建議');
+ }catch(e){if(!silent)toast('連不上，請確認網路後再試')}}
+function render(){if(cur===LAST&&S.feedback.text&&fbKey()!==S.feedback.seen){S.feedback.seen=fbKey();save()}renderSteps();renderNotice();const pn=document.getElementById('panel');pn.innerHTML=`<div class="fade">${R[cur]()}</div>`}
+function refreshLight(){renderSteps();const s=document.getElementById('summary');if(s)s.innerHTML=summaryInner();
+ const d=document.getElementById('rdraft');if(d)d.innerHTML=draftHTML();const w=document.getElementById('rwarn');if(w)w.innerHTML=warnHTML()}
+
+async function submit(){
+ const st=document.getElementById('sendStatus');const say=(m,bad)=>{st.innerHTML=m;st.style.color=bad?'#B91C1C':'var(--teal)'};
+ if(sending)return;
+ if(S.sample){say('範例資料無法送出。',true);return}
+ if(!SCRIPT_URL){say('老師還沒設定送出網址。',true);return}
+ const c=String(S.student.cls).trim(),s=String(S.student.seat).trim(),n=String(S.name).trim();
+ if(!c||!s||!n){say('請填寫班級、座號和姓名。',true);return}
+ if(!String(S.code).trim()){say('請輸入班級代碼。',true);return}
+ if(!done(3)){say('還沒選定主題或寫下研究問題，請先完成「聚焦」這一步。',true);return}
+ const d=proposal(),p=S.profile;
+ const payload={code:String(S.code).trim(),cls:c,seat:s,name:n,title:d.title,doms:d.doms.join(' × '),rq:d.rq,scope:d.scope,subq:d.sub,checks:`${d.checks} / ${CHECKS.length}`,reason:d.reason,
+  show:d.show.join('、'),groups:d.groups.join('、'),form:d.form,methods:d.methods.join('、'),hours:d.hours,weeks:d.weeks,
+  res:d.res.join('、'),risk:d.risk,need:d.need,plan:d.plan.map(r=>`${r.w}　${r.task}`).join('\n'),present:d.present,
+  interests:[p.q1,p.q2,p.q3].filter(Boolean).join('\n'),skills:SKILLS.map(([k,t])=>`${t}：${LEVELS[p.skills[k]]}`).join('\n'),
+  ideaCount:S.ideas.length,backup:encode()};
+ sending=true;say('送出中…');
+ try{
+  const r=await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify(payload)});
+  const j=await r.json();
+  if(!j.ok){say(esc(j.msg||'送出失敗，請再試一次。'),true);return}
+  S.submittedAt=new Date().toLocaleString('zh-TW',{hour12:false});save();
+  say(`已送出！這是你第 ${esc(j.count)} 次送出，老師那邊已更新為最新版本（${esc(S.submittedAt)}）。`);
+  toast('已送出給老師');
+ }catch(e){say('送不出去。請確認網路連線，並用老師發的正式網址開啟這個工具後再試一次。',true)}
+ finally{sending=false}
+}
+function encode(){try{return btoa(unescape(encodeURIComponent(JSON.stringify(S))))}catch(e){return''}}
+async function copy(text,msg,fallbackId){
+ try{await navigator.clipboard.writeText(text);toast(msg)}catch(e){
+  let el=fallbackId&&document.getElementById(fallbackId);
+  if(!el){el=document.createElement('textarea');el.className='copybox';el.id='fb';el.readOnly=true;document.querySelector('.copyarea')?.appendChild(el)}
+  el.value=text;el.focus();el.select();toast('請長按或按 Ctrl+C 複製選取的文字')}
+}
+
+document.addEventListener('input',e=>{const t=e.target,p=t.dataset.path;if(!p)return;
+ setP(p,t.type==='number'?(t.value===''?'':+t.value):t.value);save();refreshLight();});
+
+document.addEventListener('click',e=>{
+ const b=e.target.closest('button');if(!b)return;const d=b.dataset;
+ if(d.go!=null){cur=+d.go;render();document.querySelector('.stepper').scrollIntoView({behavior:'smooth'});return}
+ if(d.toggle){const arr=getP(d.toggle)||[];const i=arr.indexOf(d.val);if(i>=0)arr.splice(i,1);else{if(d.max&&arr.length>=+d.max){toast(`最多選 ${d.max} 個`);return}arr.push(d.val)}setP(d.toggle,arr);save();render();return}
+ if(d.set){const cv=getP(d.set);let v=isNaN(+d.val)?d.val:+d.val;if(String(cv)===String(v)&&typeof v==='string')v='';setP(d.set,v);save();render();return}
+ const a=d.act;if(!a)return;
+ switch(a){
+  case'start':S=blank();save();cur=0;ui.seed=0;ui.newDoms=[];render();toast('已清空，開始填寫你的輪廓');break;
+  case'askclear':ui.confirmClear=true;renderNotice();window.scrollTo({top:0,behavior:'smooth'});break;
+  case'cancelclear':ui.confirmClear=false;renderNotice();break;
+  case'clear':S=blank();ui.confirmClear=false;save();cur=0;render();toast('已清空');break;
+  case'backup':ui.backup=!ui.backup;renderNotice();break;
+  case'copybk':copy(encode(),'已複製進度碼','bkOut');break;
+  case'import':{const v=document.getElementById('bkIn').value.trim();try{const o=JSON.parse(decodeURIComponent(escape(atob(v))));if(!o.profile)throw 0;S=Object.assign(blank(),o);save();ui.backup=false;render();toast('已讀入進度')}catch(err){toast('進度碼不完整，請重新複製整串再貼上')}break}
+  case'seed':ui.seed=+d.i;render();break;
+  case'spark':{const seed=S.seeds[ui.seed];if(!seed){toast('先在上面寫下興趣點');document.getElementById('seed'+ui.seed)?.focus();return}
+   const t=LENSES.find(l=>l[0]===d.lens)[1].replace('{x}',seed);ui.newDoms=[d.lens];render();const el=document.getElementById('newTitle');el.value=t;el.focus();break}
+  case'dom':{const i=ui.newDoms.indexOf(d.val);if(i>=0)ui.newDoms.splice(i,1);else{if(ui.newDoms.length>=2)ui.newDoms.shift();ui.newDoms.push(d.val)}
+   const keep=document.getElementById('newTitle').value;render();document.getElementById('newTitle').value=keep;break}
+  case'add':{const el=document.getElementById('newTitle');const t=el.value.trim();if(!t){toast('先寫下題目想法');el.focus();return}
+   S.ideas.push({id:S.nextId++,title:t,doms:[...ui.newDoms],scores:{i:3,d:3,r:3,f:3},pick:false});ui.newDoms=[];save();render();toast(`已加入第 ${S.ideas.length} 個想法`);document.getElementById('newTitle').focus();break}
+  case'del':{const x=S.ideas.splice(+d.i,1)[0];delete S.focus[x.id];if(S.final===x.id)S.final=null;save();render();break}
+  case'sort':S.ideas.sort((a,b)=>total(b)-total(a));save();render();break;
+  case'pick':{const x=S.ideas[+d.i];if(!x.pick&&pickedIdeas().length>=3){toast('已經選了 3 個，先取消一個');return}x.pick=!x.pick;if(!x.pick&&S.final===x.id)S.final=null;save();render();break}
+  case'final':S.final=+d.id;save();render();break;
+  case'tpl':{const id=d.id;S.focus[id]=S.focus[id]||{};S.focus[id].rq=d.t;save();render();const el=document.getElementById('rq'+id);el.focus();el.setSelectionRange(0,0);break}
+  case'form':S.form=d.val;if(!S.plan.length)S.plan=genPlan(S.profile.weeks,S.form);save();render();break;
+  case'gen':S.plan=genPlan(S.profile.weeks,S.form||recForm());save();render();toast('已產生進度草稿，可以直接修改');break;
+  case'addrow':S.plan.push({w:'第 ? 週',task:''});save();render();break;
+  case'delrow':S.plan.splice(+d.i,1);save();render();break;
+  case'copyprop':copy(proposalText(),'已複製企劃書');break;
+  case'copyprompt':copy(promptText(),'已複製，貼到 AI 新對話就能開始');break;
+  case'submit':submit();break;
+  case'fb':checkFeedback(false);break;
+  case'usedraft':{const d=compose();if(!d)return;S.refine.rq=d;S.refine.forId=S.final;save();render();const el=document.getElementById('rrq');el.focus();toast('已套用，可以再修改得更順');break}
+  case'startrefine':S.refine={forId:S.final,who:'',what1:'',what2:'',scope:'',type:'',rq:'',sub:'',checks:[]};save();render();break;
+ }
+});
+render();
+checkFeedback(true);
+</script>
+
+<a href="../" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:9999;background:#2F86D6;color:#fff;font:700 13px/1 system-ui,sans-serif;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.2)">← 回群島</a>
+</body></html>

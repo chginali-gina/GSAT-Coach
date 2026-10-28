@@ -1,0 +1,411 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>208好事星探社</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Noto+Sans+TC:wght@400;500;700;900&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,500,0..1,0&display=swap">
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script>
+tailwind.config={theme:{extend:{colors:{cosmic:{950:'#030712',900:'#070b19',850:'#0c1328',800:'#111a36',700:'#1e293b'}},fontFamily:{sans:['"Plus Jakarta Sans"','"Noto Sans TC"','sans-serif']}}}}
+</script>
+<style>
+/* Layout: sticky glass header, 12-col work grid (lg 7/5), mobile bottom nav. Single dark cosmic theme by design. */
+:root{--bg:#030712;--fg:#f1f5f9;color-scheme:dark}
+html,body{background:var(--bg);color:var(--fg)}
+body{font-family:"Plus Jakarta Sans","Noto Sans TC",sans-serif}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:#070b19}
+.stars-bg{background-color:#030712;background-image:radial-gradient(at 0% 0%,rgba(99,102,241,.16) 0px,transparent 45%),radial-gradient(at 100% 0%,rgba(6,182,212,.14) 0px,transparent 45%),radial-gradient(at 50% 100%,rgba(168,85,247,.14) 0px,transparent 50%);background-attachment:fixed}
+.gutter{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.glass-panel{background:rgba(12,19,40,.78);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.08);box-shadow:0 12px 40px 0 rgba(0,0,0,.55)}
+.glass-card{background:rgba(22,32,60,.55);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.07);transition:border-color .2s,box-shadow .2s,transform .2s}
+.glass-card.hov:hover{border-color:rgba(99,102,241,.45);box-shadow:0 12px 30px -10px rgba(99,102,241,.3)}
+.glass-input{background:rgba(7,11,25,.75);border:1px solid rgba(255,255,255,.12);color:#f8fafc}
+.glass-input:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.25);outline:none}
+select.glass-input option{background:#0c1328}
+.mi{font-family:'Material Symbols Rounded';font-style:normal;font-weight:500;font-size:1.25em;line-height:1;display:inline-block;vertical-align:-.2em;font-variation-settings:'FILL' 0;font-feature-settings:'liga'}
+.mi.fill{font-variation-settings:'FILL' 1}
+.num{font-variant-numeric:tabular-nums}
+h1,h2,h3{text-wrap:balance}
+:focus-visible{outline:2px solid #38bdf8;outline-offset:2px}
+.view{animation:fadeIn .35s ease}
+@keyframes fadeIn{from{opacity:.4;transform:translateY(6px)}to{opacity:1;transform:none}}
+.float{animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.main-pad{padding-bottom:calc(6.5rem + env(safe-area-inset-bottom,0px))}
+@media(min-width:768px){.main-pad{padding-bottom:3rem}}
+.bottom-nav{padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="stars-bg min-h-screen text-slate-100">
+<header class="glass-panel sticky z-40 gutter" style="top:env(safe-area-inset-top,0px)">
+  <div class="max-w-6xl mx-auto py-3 flex items-center gap-3 flex-wrap">
+    <div class="flex items-center gap-3 min-w-0 flex-1">
+      <div class="w-10 h-10 shrink-0 rounded-xl p-[2px] bg-gradient-to-br from-indigo-500 via-purple-600 to-cyan-400">
+        <div class="w-full h-full rounded-[10px] bg-cosmic-900 grid place-items-center"><i class="mi fill text-cyan-300">auto_awesome</i></div>
+      </div>
+      <div class="min-w-0">
+        <div class="text-[11px] font-extrabold tracking-[.2em] bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-300 bg-clip-text text-transparent">STAR SCOUTS</div>
+        <div class="font-black tracking-tight text-base leading-tight truncate">208好事星探社</div>
+      </div>
+    </div>
+    <nav id="topTabs" class="hidden md:flex bg-cosmic-950/80 p-1 rounded-xl border border-white/10 text-sm"></nav>
+    <label class="flex items-center gap-2 text-xs text-slate-400">
+      <span class="hidden sm:inline">示範身分</span>
+      <select id="who" class="glass-input rounded-lg px-2 py-1.5 text-sm max-w-[10rem]" aria-label="切換示範身分"></select>
+    </label>
+  </div>
+</header>
+
+<div class="gutter"><div class="max-w-6xl mx-auto mt-3">
+  <div class="px-3 py-2 rounded-xl bg-amber-500/10 border border-amber-500/25 text-amber-200 text-xs flex items-start gap-2">
+    <i class="mi text-amber-300">science</i>
+    <span>示範版：正式版會用學校帳號登入，點數記在各自的學校信箱下。現在用右上角切換身分，就能走完推薦、附議、審核、兌換。</span>
+  </div>
+</div></div>
+
+<main class="gutter main-pad"><div class="max-w-6xl mx-auto pt-5" id="view"></div></main>
+<nav id="bottomNav" class="bottom-nav md:hidden fixed bottom-0 inset-x-0 z-40 glass-panel border-t border-white/10"></nav>
+<div id="toasts" class="fixed z-50 right-4 left-4 md:left-auto md:w-80 flex flex-col gap-2 pointer-events-none" style="bottom:calc(5.5rem + env(safe-area-inset-bottom,0px))" role="status" aria-live="polite"></div>
+</div>
+
+<script>
+const KEY='starpoints-demo-v2';
+const WEEK_LIMIT=3;
+const now=()=>new Date().toISOString();
+const daysAgo=d=>new Date(Date.now()-d*864e5).toISOString();
+const dateOnly=t=>t.slice(0,10);
+const DEFAULT={
+  students:[
+    {seat:'01',name:'王小明',email:'demo01@example.com'},
+    {seat:'02',name:'林佳穎',email:'demo02@example.com'},
+    {seat:'03',name:'陳柏宇',email:'demo03@example.com'},
+    {seat:'04',name:'張雅婷',email:'demo04@example.com'},
+    {seat:'05',name:'黃子晴',email:'demo05@example.com'},
+    {seat:'06',name:'劉冠廷',email:'demo06@example.com'},
+    {seat:'07',name:'吳宥辰',email:'demo07@example.com'},
+    {seat:'08',name:'蔡欣妤',email:'demo08@example.com'}
+  ],
+  cats:[
+    {id:'lead',name:'活動負責人',pts:10,icon:'flag',hint:'統籌班級或學校活動'},
+    {id:'serve',name:'熱心服務',pts:5,icon:'volunteer_activism',hint:'主動幫忙班上或同學'},
+    {id:'help',name:'協助活動',pts:3,icon:'groups',hint:'參與籌備、現場支援'},
+    {id:'clean',name:'打掃確實',pts:2,icon:'cleaning_services',hint:'掃區做得特別仔細'},
+    {id:'hw',name:'準時完成作業',pts:2,icon:'task_alt',hint:'一週作業全部準時'}
+  ],
+  noms:[
+    {id:'n1',to:'demo05@example.com',by:'demo02@example.com',cat:'lead',fact:'統籌園遊會攤位排班表，每個時段都有人顧',date:dateOnly(daysAgo(9)),status:'approved',pts:10,time:daysAgo(8)},
+    {id:'n2',to:'demo06@example.com',by:'demo01@example.com',cat:'help',fact:'園遊會當天提早一小時到校搬桌椅',date:dateOnly(daysAgo(9)),status:'approved',pts:3,time:daysAgo(8)},
+    {id:'n3',to:'demo02@example.com',by:'teacher',cat:'serve',fact:'主動幫請病假的同學整理各科講義',date:dateOnly(daysAgo(5)),status:'approved',pts:5,time:daysAgo(5)},
+    {id:'n4',to:'demo03@example.com',by:'demo03@example.com',cosigner:'demo06@example.com',cat:'clean',fact:'外掃區落葉全部清完，還把排水溝撈乾淨',date:dateOnly(daysAgo(2)),status:'approved',pts:2,time:daysAgo(2)},
+    {id:'n5',to:'demo01@example.com',by:'demo05@example.com',cat:'serve',fact:'午休幫忙把全班的作業簿送到英文科辦公室',date:dateOnly(daysAgo(1)),status:'pending',time:daysAgo(1)},
+    {id:'n6',to:'demo04@example.com',by:'demo08@example.com',cat:'help',fact:'教師節卡片設計和收集全班簽名',date:dateOnly(daysAgo(1)),status:'pending',time:daysAgo(1)},
+    {id:'n7',to:'demo02@example.com',by:'demo02@example.com',cosigner:'demo01@example.com',cat:'hw',fact:'這週國英數三科作業都在期限前交',date:dateOnly(daysAgo(0)),status:'cosign',time:daysAgo(0)}
+  ],
+  ledger:[
+    {email:'demo05@example.com',pts:10,reason:'活動負責人：統籌園遊會攤位排班表',time:daysAgo(8)},
+    {email:'demo06@example.com',pts:3,reason:'協助活動：園遊會提早到校搬桌椅',time:daysAgo(8)},
+    {email:'demo02@example.com',pts:5,reason:'熱心服務：幫病假同學整理講義',time:daysAgo(5)},
+    {email:'demo03@example.com',pts:2,reason:'打掃確實：外掃區與排水溝',time:daysAgo(2)},
+    {email:'demo05@example.com',pts:-8,reason:'兌換：午休選歌一次',time:daysAgo(3)}
+  ],
+  rewards:[
+    {id:'r1',name:'午休選歌一次',cost:8,stock:5,open:true,icon:'music_note'},
+    {id:'r2',name:'當一日小老師',cost:10,stock:3,open:true,icon:'school'},
+    {id:'r3',name:'作業延交一天',cost:12,stock:8,open:true,icon:'schedule'},
+    {id:'r4',name:'自選座位一週',cost:15,stock:4,open:true,icon:'event_seat'}
+  ],
+  redeems:[{id:'d1',email:'demo05@example.com',rid:'r1',status:'given',time:daysAgo(3)}],
+  goal:{target:80,prize:'全班電影午後'},
+  mail:[]
+};
+
+let S,me='demo01@example.com',tab='home',form={who:'other',to:'',cat:'',fact:'',date:'',cosigner:''},setTab='items';
+function load(){try{const r=localStorage.getItem(KEY);if(r)return JSON.parse(r)}catch(e){}return null}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){toast('這台裝置無法儲存，重新整理後會回到範例資料','rose')}}
+S=load()||JSON.parse(JSON.stringify(DEFAULT));
+
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=p=>p+Date.now().toString(36)+Math.random().toString(36).slice(2,5);
+const stu=e=>S.students.find(s=>s.email===e);
+const nm=e=>e==='teacher'?'導師':(stu(e)?.name||'—');
+const bal=e=>S.ledger.filter(l=>l.email===e).reduce((a,l)=>a+l.pts,0);
+const earned=e=>S.ledger.filter(l=>l.email===e&&l.pts>0).reduce((a,l)=>a+l.pts,0);
+const classEarned=()=>S.ledger.filter(l=>l.pts>0).reduce((a,l)=>a+l.pts,0);
+const cat=id=>S.cats.find(c=>c.id===id);
+const rew=id=>S.rewards.find(r=>r.id===id);
+const isT=()=>me==='teacher';
+const md=t=>{const d=new Date(t);return `${d.getMonth()+1}/${d.getDate()}`};
+const sign=n=>n>0?'+'+n:String(n);
+const weekCount=e=>S.noms.filter(n=>n.by===e&&Date.now()-new Date(n.time)<7*864e5).length;
+
+function toast(msg,tone='indigo'){
+  const m={indigo:'bg-indigo-950/80 border-indigo-500/40 text-indigo-100',emerald:'bg-emerald-950/80 border-emerald-500/40 text-emerald-100',rose:'bg-rose-950/80 border-rose-500/40 text-rose-100',amber:'bg-amber-950/80 border-amber-500/40 text-amber-100',cyan:'bg-cyan-950/80 border-cyan-500/40 text-cyan-100'};
+  const el=document.createElement('div');el.className=`px-4 py-3 rounded-2xl backdrop-blur-md border text-sm shadow-xl ${m[tone]||m.indigo}`;el.textContent=msg;
+  document.getElementById('toasts').appendChild(el);setTimeout(()=>el.remove(),3200);
+}
+function sendMail(to,subject){S.mail.unshift({to,subject,time:now()})}
+
+/* nav */
+function tabs(){
+  return isT()
+    ?[{id:'home',label:'總覽',icon:'dashboard'},{id:'review',label:'審核',icon:'fact_check'},{id:'wall',label:'善行牆',icon:'auto_awesome'},{id:'settings',label:'設定',icon:'tune'}]
+    :[{id:'home',label:'我的星點',icon:'stars'},{id:'nominate',label:'推薦善行',icon:'campaign'},{id:'wall',label:'善行牆',icon:'auto_awesome'},{id:'shop',label:'兌換站',icon:'redeem'}];
+}
+function renderNav(){
+  const t=tabs();if(!t.find(x=>x.id===tab))tab='home';
+  const pend=S.noms.filter(n=>n.status==='pending').length;
+  const cos=isT()?0:S.noms.filter(n=>n.status==='cosign'&&n.cosigner===me).length;
+  const badge=id=>{const n=id==='review'?pend:id==='home'&&!isT()?cos:0;return n?`<span class="ml-1 px-1.5 rounded-full bg-amber-500 text-cosmic-950 text-[10px] font-black num">${n}</span>`:''};
+  document.getElementById('topTabs').innerHTML=t.map(x=>`<button onclick="go('${x.id}')" class="px-3 py-1.5 rounded-lg font-bold ${tab===x.id?'bg-indigo-600 text-white':'text-slate-400 hover:text-white'}">${x.label}${badge(x.id)}</button>`).join('');
+  document.getElementById('bottomNav').innerHTML=`<div class="grid grid-cols-4">`+t.map(x=>`<button onclick="go('${x.id}')" class="relative py-2.5 flex flex-col items-center gap-0.5 text-[11px] font-bold ${tab===x.id?'text-cyan-300':'text-slate-400'}"><i class="mi ${tab===x.id?'fill':''} text-xl">${x.icon}</i>${x.label}${badge(x.id)?`<span class="absolute top-1.5 left-1/2 ml-2 w-2 h-2 rounded-full bg-amber-400"></span>`:''}</button>`).join('')+'</div>';
+  const sel=document.getElementById('who');
+  sel.innerHTML=`<option value="teacher">導師｜李姬慧</option>`+S.students.map(s=>`<option value="${s.email}">${esc(s.seat)} ${esc(s.name)}</option>`).join('');
+  sel.value=me;
+}
+function go(t){tab=t;render();window.scrollTo({top:0,behavior:'smooth'})}
+document.getElementById('who').addEventListener('change',e=>{me=e.target.value;tab='home';form={who:'other',to:'',cat:'',fact:'',date:'',cosigner:''};render();toast(`已切換為 ${isT()?'導師':nm(me)}`,'cyan')});
+
+/* pieces */
+const panel=(inner,cls='')=>`<section class="glass-panel rounded-3xl p-5 sm:p-6 relative overflow-hidden ${cls}">${inner}</section>`;
+const h2=(icon,t,sub='')=>`<div class="mb-4"><h2 class="font-black tracking-tight text-lg flex items-center gap-2"><i class="mi text-indigo-300">${icon}</i>${t}</h2>${sub?`<p class="text-slate-400 text-sm mt-1">${sub}</p>`:''}</div>`;
+const pill=(t,tone)=>{const m={cyan:'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',amber:'bg-amber-500/20 text-amber-300 border-amber-500/30',rose:'bg-rose-500/20 text-rose-300 border-rose-500/30',emerald:'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',slate:'bg-slate-500/20 text-slate-300 border-slate-500/30'};return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold border whitespace-nowrap ${m[tone]}">${t}</span>`};
+const empty=t=>`<p class="text-slate-500 text-sm py-6 text-center">${t}</p>`;
+const cta=(label,fn,icon='')=>`<button onclick="${fn}" class="w-full py-4 rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-600 to-cyan-400 font-extrabold shadow-xl shadow-indigo-600/30 hover:-translate-y-0.5 transition">${icon?`<i class="mi">${icon}</i> `:''}${label}</button>`;
+function credit(n){
+  if(n.by==='teacher')return '導師肯定';
+  if(n.by===n.to)return `自薦・${esc(nm(n.cosigner))} 附議`;
+  return `推薦人：${esc(nm(n.by))}`;
+}
+function goalBar(){
+  const g=S.goal,v=classEarned(),p=Math.min(100,v/g.target*100);
+  return `<div class="flex items-end justify-between gap-3 mb-2"><div><div class="text-xs text-slate-400">全班共同目標</div><div class="font-black">${esc(g.prize)}</div></div><div class="num text-sm text-slate-300"><b class="text-cyan-300 text-lg">${v}</b> / ${g.target}</div></div>
+  <div class="h-2.5 bg-slate-800 rounded-full p-0.5 border border-white/10"><div class="h-full rounded-full bg-gradient-to-r from-indigo-500 to-cyan-400" style="width:${Math.max(3,p)}%"></div></div>
+  <p class="text-[11px] text-slate-500 mt-2">${v>=g.target?'目標達成，找導師安排獎勵！':`還差 ${g.target-v} 點。每個人被肯定的點數都會累積到這裡，兌換不會扣掉。`}</p>`;
+}
+
+/* ---------- student views ---------- */
+function vStudentHome(){
+  const s=stu(me),b=bal(me);
+  const mine=S.ledger.filter(l=>l.email===me).slice().sort((a,c)=>c.time.localeCompare(a.time));
+  const myNoms=S.noms.filter(n=>n.by===me&&n.status!=='approved').slice().reverse();
+  const toCos=S.noms.filter(n=>n.status==='cosign'&&n.cosigner===me);
+  const steps=[['推薦善行','自己做的或看到同學做的，寫下具體事實'],['導師審核','確認有這件事，依點數表給點'],['自動入帳','點數記在你的學校信箱帳號，並寄信通知'],['兌換獎勵','點數夠了就到兌換站換']];
+  return `<div class="grid grid-cols-1 lg:grid-cols-12 gap-6"><div class="lg:col-span-7 flex flex-col gap-6">
+  ${toCos.length?panel(h2('how_to_reg','同學請你附議','你也看到這件事，就按附議；沒看到就略過')+`<ul class="flex flex-col gap-2.5">${toCos.map(n=>`<li class="glass-card rounded-xl p-3.5"><div class="font-bold">${esc(nm(n.to))}・${esc(cat(n.cat)?.name)}</div><div class="text-sm text-slate-300 mt-0.5">${esc(n.fact)}</div><div class="text-[11px] text-slate-500 mt-0.5">${md(n.date)}</div><div class="flex gap-2 mt-3"><button onclick="cosign('${n.id}',false)" class="flex-1 py-2 rounded-xl glass-card hover:bg-white/10 text-slate-300 text-sm font-bold">我沒看到</button><button onclick="cosign('${n.id}',true)" class="flex-1 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-sm font-bold">附議</button></div></li>`).join('')}</ul>`,'ring-1 ring-amber-400/40'):''}
+  ${panel(`<div class="absolute -right-16 -top-16 w-80 h-80 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
+   <div class="relative flex items-center gap-5 flex-wrap">
+    <div class="float w-28 h-28 rounded-full p-[3px] bg-gradient-to-br from-indigo-500 via-purple-600 to-cyan-400 shrink-0"><div class="w-full h-full rounded-full bg-cosmic-900 grid place-items-center text-center"><div><div class="num text-4xl font-black">${b}</div><div class="text-[10px] text-slate-400 tracking-widest">可用星點</div></div></div></div>
+    <div class="min-w-0"><div class="text-slate-400 text-sm">${esc(s.seat)} 號</div><h1 class="text-2xl font-black tracking-tight">${esc(s.name)}</h1><div class="text-xs text-slate-400 mt-1 break-all"><i class="mi text-cyan-300">mail</i> ${esc(s.email)}</div><div class="text-xs text-slate-500 mt-1">本學期累計獲得 <b class="num text-slate-300">${earned(me)}</b> 點</div></div>
+   </div>
+   <div class="relative grid grid-cols-2 gap-3 mt-5">
+    <button onclick="startNom('self')" class="py-3.5 rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-600 to-cyan-400 font-extrabold shadow-xl shadow-indigo-600/30 hover:-translate-y-0.5 transition"><i class="mi">person_add</i> 自薦</button>
+    <button onclick="startNom('other')" class="py-3.5 rounded-2xl glass-card hover:bg-white/10 text-slate-200 font-bold"><i class="mi">campaign</i> 推薦同學</button>
+   </div>`)}
+  ${panel(goalBar())}
+  ${panel(h2('route','怎麼運作')+`<ol class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">${steps.map((x,i)=>`<li class="glass-card rounded-xl p-3 flex items-start gap-3"><span class="w-6 h-6 shrink-0 rounded-lg bg-indigo-500/20 text-indigo-300 font-bold text-xs grid place-items-center">${i+1}</span><div><div class="font-bold text-sm">${x[0]}</div><div class="text-slate-400 text-xs mt-0.5">${x[1]}</div></div></li>`).join('')}</ol>`)}
+  </div><div class="lg:col-span-5 flex flex-col gap-6">
+  ${panel(h2('receipt_long','我的星點紀錄')+(mine.length?`<ul class="divide-y divide-white/5">${mine.map(l=>`<li class="py-2.5 flex items-center gap-3"><div class="min-w-0 flex-1"><div class="text-sm">${esc(l.reason)}</div><div class="text-[11px] text-slate-500 num">${md(l.time)}</div></div><div class="num font-extrabold ${l.pts>=0?'text-emerald-300':'text-rose-300'}">${sign(l.pts)}</div></li>`).join('')}</ul>`:empty('還沒有點數。做一件幫助班上的事，或推薦一位你看到的同學吧')))}
+  ${panel(h2('outgoing_mail','我送出的推薦',`本週已推薦 ${weekCount(me)} / ${WEEK_LIMIT} 次`)+(myNoms.length?`<ul class="flex flex-col gap-2">${myNoms.map(n=>`<li class="glass-card rounded-xl p-3"><div class="flex items-center gap-2"><div class="font-bold text-sm flex-1 min-w-0 truncate">${n.to===me?'自薦':esc(nm(n.to))}・${esc(cat(n.cat)?.name)}</div>${n.status==='cosign'?pill('等 '+esc(nm(n.cosigner))+' 附議','amber'):n.status==='pending'?pill('導師審核中','cyan'):pill('已退回','rose')}</div><div class="text-xs text-slate-400 mt-1">${esc(n.fact)}</div>${n.status==='returned'&&n.reason?`<div class="text-xs text-rose-300 mt-1">原因：${esc(n.reason)}</div>`:''}</li>`).join('')}</ul>`:empty('目前沒有審核中的推薦')))}
+  </div></div>`;
+}
+function startNom(w){form={who:w,to:'',cat:'',fact:'',date:new Date().toISOString().slice(0,10),cosigner:''};go('nominate')}
+
+function vNominate(){
+  if(!form.date)form.date=new Date().toISOString().slice(0,10);
+  const left=WEEK_LIMIT-weekCount(me);
+  const others=S.students.filter(s=>s.email!==me);
+  const opt=(list,val,ph)=>`<option value="">${ph}</option>`+list.map(s=>`<option value="${s.email}" ${val===s.email?'selected':''}>${esc(s.seat)} ${esc(s.name)}</option>`).join('');
+  return `<div class="grid grid-cols-1 lg:grid-cols-12 gap-6"><div class="lg:col-span-7">
+  ${panel(h2('campaign','推薦一件善行',`寫下具體事實，導師確認後就會給點。本週還能推薦 <b class="num text-cyan-300">${Math.max(0,left)}</b> 次`)+`
+   <div class="flex bg-cosmic-950/80 p-1 rounded-xl border border-white/10 text-sm mb-5">
+    <button onclick="form.who='other';render()" class="flex-1 py-2 rounded-lg font-bold ${form.who==='other'?'bg-indigo-600 text-white':'text-slate-400 hover:text-white'}">推薦同學</button>
+    <button onclick="form.who='self';render()" class="flex-1 py-2 rounded-lg font-bold ${form.who==='self'?'bg-indigo-600 text-white':'text-slate-400 hover:text-white'}">自薦</button>
+   </div>
+   ${form.who==='other'
+     ?`<label for="fTo" class="block text-sm font-bold mb-1.5">誰做了這件事？</label><select id="fTo" onchange="form.to=this.value" class="glass-input w-full rounded-xl px-3 py-3">${opt(others,form.to,'選擇同學')}</select>`
+     :`<label for="fCo" class="block text-sm font-bold mb-1.5">請一位看到的同學附議</label><select id="fCo" onchange="form.cosigner=this.value" class="glass-input w-full rounded-xl px-3 py-3">${opt(others,form.cosigner,'選擇附議人')}</select><p class="text-xs text-slate-500 mt-1.5">對方按下附議後，才會送到導師那裡。</p>`}
+   <div class="text-sm font-bold mt-5 mb-2">是哪一類？</div>
+   <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">${S.cats.map(c=>`<button onclick="form.cat='${c.id}';syncText();render()" class="rounded-2xl p-3 text-left border transition ${form.cat===c.id?'bg-indigo-600/20 border-cyan-400 shadow-lg shadow-cyan-500/10':'bg-cosmic-950/60 border-white/5 hover:border-white/20'}"><i class="mi ${form.cat===c.id?'fill text-cyan-300':'text-slate-400'} text-2xl">${c.icon}</i><div class="font-bold text-sm mt-1">${esc(c.name)}</div><div class="text-[11px] text-slate-400">${esc(c.hint)}</div><div class="text-xs text-emerald-300 num mt-0.5">+${c.pts}</div></button>`).join('')}</div>
+   <label for="fFact" class="block text-sm font-bold mt-5 mb-1.5">做了什麼？寫事實，不寫形容詞</label>
+   <textarea id="fFact" rows="3" maxlength="80" oninput="form.fact=this.value" class="glass-input w-full rounded-xl px-3 py-3" placeholder="例如：午休幫忙把回收場的紙箱壓平綁好">${esc(form.fact)}</textarea>
+   <p class="text-[11px] text-slate-500 mt-1">「他很熱心」不夠具體；「10/27 幫忙搬園遊會桌椅」就可以。</p>
+   <label for="fDate" class="block text-sm font-bold mt-4 mb-1.5">哪一天？</label>
+   <input id="fDate" type="date" value="${esc(form.date)}" onchange="form.date=this.value" class="glass-input w-full rounded-xl px-3 py-3">
+   <div class="mt-5">${cta('送出推薦','submitNom()','send')}</div>`)}
+  </div><div class="lg:col-span-5 flex flex-col gap-6">
+  ${panel(h2('table_chart','點數表','每一類固定點數，大家都看得到')+`<ul class="flex flex-col gap-2">${S.cats.map(c=>`<li class="flex items-center gap-3"><i class="mi text-cyan-300">${c.icon}</i><span class="flex-1 text-sm">${esc(c.name)}</span><span class="num font-extrabold text-emerald-300">+${c.pts}</span></li>`).join('')}</ul>`)}
+  ${panel(`<div class="p-3.5 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-200 text-sm flex gap-2"><i class="mi text-amber-300">lightbulb</i><span>推薦規則：每人每週最多 ${WEEK_LIMIT} 次；同一個人、同一類、同一天只能登錄一次；自薦要有同學附議。</span></div>`)}
+  </div></div>`;
+}
+function syncText(){const a=document.getElementById('fFact');if(a)form.fact=a.value;const d=document.getElementById('fDate');if(d)form.date=d.value}
+function submitNom(){
+  syncText();
+  const to=form.who==='self'?me:form.to,fact=form.fact.trim();
+  if(weekCount(me)>=WEEK_LIMIT)return toast(`這週已經推薦 ${WEEK_LIMIT} 次了，下週再來`,'amber');
+  if(form.who==='other'&&!to)return toast('請選擇要推薦的同學','amber');
+  if(form.who==='self'&&!form.cosigner)return toast('自薦需要選一位附議的同學','amber');
+  if(!form.cat)return toast('請選一個類別','amber');
+  if(fact.length<8)return toast('請寫具體一點：做了什麼事，至少 8 個字','amber');
+  if(!form.date)return toast('請選日期','amber');
+  if(S.noms.some(n=>n.to===to&&n.cat===form.cat&&n.date===form.date&&n.status!=='returned'))return toast('這件事已經有人登錄過了，不用重複推薦','amber');
+  const self=form.who==='self';
+  S.noms.push({id:uid('n'),to,by:me,cosigner:self?form.cosigner:undefined,cat:form.cat,fact,date:form.date,status:self?'cosign':'pending',time:now()});
+  save();toast(self?`已送出，等 ${nm(form.cosigner)} 附議`:`已推薦 ${nm(to)}，等導師審核`,'emerald');
+  form={who:'other',to:'',cat:'',fact:'',date:'',cosigner:''};go('home');
+}
+function cosign(id,ok){
+  const n=S.noms.find(x=>x.id===id);if(!n)return;
+  if(ok){n.status='pending';toast('已附議，送到導師審核','emerald')}
+  else{n.status='returned';n.reason=`附議人 ${nm(me)} 表示沒看到這件事`;toast('已略過這筆自薦','amber')}
+  save();render();
+}
+
+function vWall(){
+  const list=S.noms.filter(n=>n.status==='approved').slice().sort((a,c)=>c.time.localeCompare(a.time));
+  return `<div class="grid grid-cols-1 lg:grid-cols-12 gap-6"><div class="lg:col-span-8">
+  ${panel(h2('auto_awesome','善行牆','導師確認過的每一件事都在這裡，被看見比點數更重要')+(list.length?`<ul class="grid grid-cols-1 sm:grid-cols-2 gap-3">${list.map(n=>{const c=cat(n.cat);return `<li class="glass-card hov rounded-2xl p-4 flex flex-col gap-2"><div class="flex items-center gap-2"><i class="mi fill text-cyan-300">${c?.icon||'star'}</i><span class="font-black">${esc(nm(n.to))}</span>${pill(esc(c?.name),'cyan')}</div><p class="text-sm text-slate-200">${esc(n.fact)}</p><div class="text-[11px] text-slate-500 flex justify-between gap-2"><span>${credit(n)}</span><span class="num">${md(n.date)}</span></div></li>`}).join('')}</ul>`:empty('還沒有核定的善行')))}
+  </div><div class="lg:col-span-4">${panel(goalBar())}</div></div>`;
+}
+
+function vShop(){
+  const b=bal(me);
+  const mine=S.redeems.filter(r=>r.email===me).slice().reverse();
+  return `<div class="grid grid-cols-1 lg:grid-cols-12 gap-6"><div class="lg:col-span-8">
+  ${panel(h2('redeem','兌換站',`你有 <b class="num text-cyan-300">${b}</b> 星點`)+`<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">${S.rewards.filter(r=>r.open).map(r=>{
+    const act=r.stock<=0?`<button disabled class="w-full py-2.5 rounded-xl bg-white/5 text-slate-500 font-bold">已換完</button>`
+      :b>=r.cost?`<button onclick="redeem('${r.id}')" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-indigo-500 to-cyan-400 font-extrabold hover:-translate-y-0.5 transition">兌換</button>`
+      :`<button disabled class="w-full py-2.5 rounded-xl bg-white/5 text-slate-400 font-bold text-sm">還差 <span class="num">${r.cost-b}</span> 點</button>`;
+    return `<div class="glass-card hov rounded-2xl p-4 flex flex-col gap-3"><div class="flex items-start gap-3"><div class="w-11 h-11 rounded-xl bg-indigo-500/15 grid place-items-center shrink-0"><i class="mi text-cyan-300 text-2xl">${r.icon||'star'}</i></div><div class="flex-1 min-w-0"><div class="font-bold">${esc(r.name)}</div><div class="text-xs text-slate-400 mt-0.5">剩 <span class="num">${r.stock}</span> 份</div></div><div class="num text-xl font-black text-amber-300">${r.cost}</div></div>${act}</div>`}).join('')}</div>`)}
+  </div><div class="lg:col-span-4">${panel(h2('inventory','我的兌換')+(mine.length?`<ul class="flex flex-col gap-2">${mine.map(d=>`<li class="glass-card rounded-xl p-3 flex items-center gap-2"><span class="flex-1 text-sm font-bold">${esc(rew(d.rid)?.name)}</span>${d.status==='given'?pill('已領取','emerald'):pill('找導師領取','amber')}</li>`).join('')}</ul>`:empty('還沒有兌換紀錄')))}</div></div>`;
+}
+function redeem(rid){
+  const r=rew(rid);if(bal(me)<r.cost||r.stock<=0)return;
+  r.stock--;S.ledger.push({email:me,pts:-r.cost,reason:'兌換：'+r.name,time:now()});
+  S.redeems.push({id:uid('d'),email:me,rid,status:'waiting',time:now()});
+  save();toast(`已兌換「${r.name}」，找導師領取`,'emerald');render();
+}
+
+/* ---------- teacher views ---------- */
+function unrecognized(){
+  const m=new Date();const ym=`${m.getFullYear()}-${String(m.getMonth()+1).padStart(2,'0')}`;
+  return S.students.filter(s=>!S.noms.some(n=>n.to===s.email&&n.status==='approved'&&n.time.slice(0,7)===ym));
+}
+function vTeacherHome(){
+  const pend=S.noms.filter(n=>n.status==='pending').length;
+  const waiting=S.redeems.filter(d=>d.status==='waiting');
+  const un=unrecognized();
+  return `<div class="grid grid-cols-1 lg:grid-cols-12 gap-6"><div class="lg:col-span-7 flex flex-col gap-6">
+  ${panel(`<div class="absolute -right-16 -top-16 w-80 h-80 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div><div class="relative">
+   <div class="text-slate-400 text-sm">導師總覽</div><h1 class="text-2xl font-black tracking-tight">今天要處理的事</h1>
+   <div class="grid grid-cols-3 gap-3 mt-4">
+    <button onclick="go('review')" class="glass-card hov rounded-2xl p-4 text-left"><div class="num text-3xl font-black ${pend?'text-amber-300':'text-slate-500'}">${pend}</div><div class="text-slate-400 text-xs mt-1">待審推薦</div></button>
+    <a href="#unrec" class="glass-card hov rounded-2xl p-4 text-left block"><div class="num text-3xl font-black ${un.length?'text-cyan-300':'text-slate-500'}">${un.length}</div><div class="text-slate-400 text-xs mt-1">本月未被肯定</div></a>
+    <a href="#give" class="glass-card hov rounded-2xl p-4 text-left block"><div class="num text-3xl font-black ${waiting.length?'text-amber-300':'text-slate-500'}">${waiting.length}</div><div class="text-slate-400 text-xs mt-1">待發獎勵</div></a>
+   </div></div>`)}
+  <div id="unrec">${panel(h2('visibility','本月還沒被肯定的同學','可能是默默做事沒被看見。看到他們的付出，就直接給點')+(un.length?`<div class="flex flex-wrap gap-2">${un.map(s=>`<button onclick="tGive('${s.email}')" class="px-3 py-2 rounded-xl glass-card hov text-sm font-bold"><span class="num text-slate-500 mr-1">${esc(s.seat)}</span>${esc(s.name)} <i class="mi text-cyan-300">add</i></button>`).join('')}</div>`:empty('這個月每位同學都被肯定過了')))}</div>
+  <div id="give">${panel(h2('card_giftcard','待發獎勵')+(waiting.length?`<ul class="flex flex-col gap-2">${waiting.map(d=>`<li class="glass-card rounded-xl p-3 flex items-center gap-3"><span class="flex-1 text-sm"><b>${esc(nm(d.email))}</b>・${esc(rew(d.rid)?.name)}</span><button onclick="given('${d.id}')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-bold">已發放</button></li>`).join('')}</ul>`:empty('沒有待發放的獎勵')))}</div>
+  </div><div class="lg:col-span-5 flex flex-col gap-6">
+  ${panel(goalBar())}
+  ${panel(h2('outgoing_mail','通知信紀錄','正式版核定後會自動寄到學生學校信箱')+(S.mail.length?`<ul class="divide-y divide-white/5">${S.mail.slice(0,8).map(m=>`<li class="py-2"><div class="text-sm">${esc(m.subject)}</div><div class="text-[11px] text-slate-500 break-all">${esc(m.to)}・${md(m.time)}</div></li>`).join('')}</ul>`:empty('還沒有寄出通知，核定一筆推薦試試看')))}
+  </div></div>`;
+}
+function given(id){const d=S.redeems.find(x=>x.id===id);d.status='given';save();toast('已標記發放','emerald');render()}
+function tGive(email){go('review');setTimeout(()=>{const s=document.getElementById('gTo');if(s){s.value=email;s.focus()}},50)}
+
+function vReview(){
+  const list=S.noms.filter(n=>n.status==='pending').slice().sort((a,c)=>a.time.localeCompare(c.time));
+  const reasons=['事實不夠具體','與已核定的事重複','不符合這個類別','請當面跟老師說明'];
+  return `<div class="grid grid-cols-1 lg:grid-cols-12 gap-6"><div class="lg:col-span-7">
+  ${panel(h2('fact_check','待審推薦','確認有這件事就核定，點數預設照點數表，特殊情況可以調整')+(list.length?`<ul class="flex flex-col gap-3">${list.map(n=>{const c=cat(n.cat);return `<li class="glass-card rounded-2xl p-4">
+    <div class="flex items-center gap-2 flex-wrap"><i class="mi fill text-cyan-300">${c?.icon}</i><span class="font-black">${esc(nm(n.to))}</span>${pill(esc(c?.name),'cyan')}<span class="text-[11px] text-slate-500 num ml-auto">${md(n.date)}</span></div>
+    <p class="text-sm text-slate-200 mt-2">${esc(n.fact)}</p>
+    <div class="text-[11px] text-slate-400 mt-1">${credit(n)}</div>
+    <div class="flex items-center gap-2 mt-3 flex-wrap">
+     <label class="text-xs text-slate-400" for="p_${n.id}">點數</label><input id="p_${n.id}" type="number" min="1" value="${c?.pts||1}" class="glass-input w-16 rounded-lg px-2 py-1.5 num text-center">
+     <select id="r_${n.id}" class="glass-input rounded-lg px-2 py-1.5 text-xs flex-1 min-w-[8rem]" aria-label="退回原因">${reasons.map(r=>`<option>${r}</option>`).join('')}</select>
+    </div>
+    <div class="flex gap-2 mt-3"><button onclick="decide('${n.id}',false)" class="flex-1 py-2.5 rounded-xl glass-card hover:bg-white/10 text-slate-300 text-sm font-bold">退回</button><button onclick="decide('${n.id}',true)" class="flex-[2] py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-sm font-bold">核定並寄通知</button></div>
+  </li>`}).join('')}</ul>`:empty('都審完了')))}
+  </div><div class="lg:col-span-5">
+  ${panel(h2('add_reaction','導師直接肯定','你自己看到的善行，不用等學生推薦')+`
+   <label for="gTo" class="block text-sm font-bold mb-1.5">學生</label><select id="gTo" class="glass-input w-full rounded-xl px-3 py-3"><option value="">選擇學生</option>${S.students.map(s=>`<option value="${s.email}">${esc(s.seat)} ${esc(s.name)}</option>`).join('')}</select>
+   <label for="gCat" class="block text-sm font-bold mt-4 mb-1.5">類別</label><select id="gCat" class="glass-input w-full rounded-xl px-3 py-3">${S.cats.map(c=>`<option value="${c.id}">${esc(c.name)}（+${c.pts}）</option>`).join('')}</select>
+   <label for="gFact" class="block text-sm font-bold mt-4 mb-1.5">做了什麼</label><input id="gFact" maxlength="80" class="glass-input w-full rounded-xl px-3 py-3" placeholder="例如：主動幫忙關全校走廊的窗戶">
+   <div class="mt-5">${cta('給點並寄通知','teacherGive()','send')}</div>`)}
+  </div></div>`;
+}
+function award(n,pts){
+  n.status='approved';n.pts=pts;n.time=now();
+  const c=cat(n.cat);
+  S.ledger.push({email:n.to,pts,reason:`${c.name}：${n.fact}`,time:now()});
+  sendMail(n.to,`【208好事星探社】你獲得 ${pts} 點：${c.name}`);
+}
+function decide(id,ok){
+  const n=S.noms.find(x=>x.id===id);if(!n)return;
+  if(ok){
+    const p=Math.round(+document.getElementById('p_'+id).value);
+    if(!(p>=1&&p<=30))return toast('點數請填 1 到 30','amber');
+    award(n,p);toast(`已核定 ${nm(n.to)} +${p}，通知寄到 ${n.to}`,'emerald');
+  }else{
+    n.status='returned';n.reason=document.getElementById('r_'+id).value;
+    sendMail(n.by,`【208好事星探社】你的推薦被退回：${n.reason}`);
+    toast(`已退回，原因會讓推薦人看到`,'amber');
+  }
+  save();render();
+}
+function teacherGive(){
+  const to=document.getElementById('gTo').value,c=document.getElementById('gCat').value,f=document.getElementById('gFact').value.trim();
+  if(!to)return toast('請選擇學生','amber');
+  if(f.length<4)return toast('請寫下看到的事','amber');
+  const n={id:uid('n'),to,by:'teacher',cat:c,fact:f,date:new Date().toISOString().slice(0,10),status:'pending',time:now()};
+  S.noms.push(n);award(n,cat(c).pts);save();toast(`已給 ${nm(to)} +${cat(c).pts}`,'emerald');render();
+}
+
+function vSettings(){
+  const t=[['items','兌換項目'],['points','點數表'],['goal','班級目標'],['export','匯出紀錄']];
+  let body='';
+  if(setTab==='items')body=h2('inventory_2','兌換項目')+`<ul class="flex flex-col gap-2 mb-5">${S.rewards.map(r=>`<li class="glass-card rounded-xl p-3 flex items-center gap-3"><div class="flex-1 min-w-0"><div class="font-bold text-sm truncate">${esc(r.name)}</div><div class="text-xs text-slate-400 num">${r.cost} 點・剩 ${r.stock} 份</div></div><button onclick="toggleItem('${r.id}')" class="px-3 py-1.5 rounded-lg text-xs font-bold ${r.open?'bg-emerald-500/20 text-emerald-300':'bg-slate-500/20 text-slate-300'}">${r.open?'開放中':'已暫停'}</button></li>`).join('')}</ul>
+   <div class="grid grid-cols-1 sm:grid-cols-[1fr_6rem_6rem_auto] gap-2"><input id="iName" class="glass-input rounded-xl px-3 py-2.5" placeholder="新項目名稱"><input id="iCost" type="number" min="1" class="glass-input rounded-xl px-3 py-2.5" placeholder="點數"><input id="iStock" type="number" min="1" class="glass-input rounded-xl px-3 py-2.5" placeholder="數量"><button onclick="addItem()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 font-bold">上架</button></div>`;
+  if(setTab==='points')body=h2('table_chart','點數表','改完按儲存，之後的審核預設值就會更新')+`<ul class="flex flex-col gap-2">${S.cats.map((c,i)=>`<li class="glass-card rounded-xl p-3 flex items-center gap-3"><i class="mi text-cyan-300">${c.icon}</i><span class="flex-1 text-sm font-bold">${esc(c.name)}</span><input id="cp_${i}" type="number" min="1" value="${c.pts}" class="glass-input w-16 rounded-lg px-2 py-1.5 num text-center" aria-label="${esc(c.name)} 點數"></li>`).join('')}</ul><button onclick="savePts()" class="mt-4 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 font-bold">儲存點數表</button>`;
+  if(setTab==='goal')body=h2('flag','班級共同目標','全班被肯定的點數加總達標，就解鎖團體獎勵')+`<div class="grid grid-cols-1 sm:grid-cols-[1fr_7rem_auto] gap-2"><input id="gPrize" value="${esc(S.goal.prize)}" class="glass-input rounded-xl px-3 py-2.5" aria-label="獎勵"><input id="gTarget" type="number" min="1" value="${S.goal.target}" class="glass-input rounded-xl px-3 py-2.5 num" aria-label="目標點數"><button onclick="saveGoal()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 font-bold">儲存</button></div><div class="mt-5">${goalBar()}</div>`;
+  if(setTab==='export'){
+    const txt=exportText();
+    body=h2('download','學期善行紀錄','每位同學被肯定的事蹟，可以貼到學習歷程或幹部服務證明')+`<div class="overflow-x-auto mb-4"><table class="w-full text-sm"><thead class="text-slate-400 text-xs"><tr><th class="text-left py-2">座號</th><th class="text-left">姓名</th><th class="text-right">事蹟</th><th class="text-right">累計獲得</th><th class="text-right">可用</th></tr></thead><tbody>${S.students.map(s=>`<tr class="border-t border-white/5"><td class="py-2.5 num text-slate-400">${esc(s.seat)}</td><td>${esc(s.name)}</td><td class="text-right num">${S.noms.filter(n=>n.to===s.email&&n.status==='approved').length}</td><td class="text-right num font-extrabold">${earned(s.email)}</td><td class="text-right num text-slate-300">${bal(s.email)}</td></tr>`).join('')}</tbody></table></div>
+    <textarea id="exp" readonly rows="6" class="glass-input w-full rounded-xl px-3 py-2 text-xs">${esc(txt)}</textarea>
+    <div class="flex gap-2 mt-3 flex-wrap"><button onclick="copyExport()" class="px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 font-bold"><i class="mi">content_copy</i> 複製（可貼到試算表）</button><button onclick="resetDemo()" class="px-4 py-2.5 rounded-xl glass-card hover:bg-white/10 text-slate-300 font-bold"><i class="mi">restart_alt</i> 重設示範資料</button></div>`;
+  }
+  return `<div class="flex gap-1 overflow-x-auto bg-cosmic-950/80 p-1 rounded-xl border border-white/10 mb-5 text-sm">${t.map(([id,l])=>`<button onclick="setTab='${id}';render()" class="px-3 py-2 rounded-lg font-bold whitespace-nowrap ${setTab===id?'bg-indigo-600 text-white':'text-slate-400 hover:text-white'}">${l}</button>`).join('')}</div>`+panel(body);
+}
+function toggleItem(id){const r=rew(id);r.open=!r.open;save();render()}
+function addItem(){
+  const n=document.getElementById('iName').value.trim(),c=+document.getElementById('iCost').value,s=+document.getElementById('iStock').value;
+  if(!n||c<1||s<1)return toast('名稱、點數、數量都要填，點數和數量至少 1','amber');
+  S.rewards.push({id:uid('r'),name:n,cost:c,stock:s,open:true,icon:'star'});save();toast(`已上架「${n}」`,'emerald');render();
+}
+function savePts(){S.cats.forEach((c,i)=>{const v=Math.round(+document.getElementById('cp_'+i).value);if(v>=1)c.pts=v});save();toast('點數表已更新','emerald');render()}
+function saveGoal(){const p=document.getElementById('gPrize').value.trim(),t=Math.round(+document.getElementById('gTarget').value);if(!p||t<1)return toast('請填獎勵名稱和目標點數','amber');S.goal={prize:p,target:t};save();toast('班級目標已更新','emerald');render()}
+function exportText(){
+  const rows=[['座號','姓名','學校信箱','日期','類別','事蹟','點數','推薦方式']];
+  S.students.forEach(s=>S.noms.filter(n=>n.to===s.email&&n.status==='approved').forEach(n=>rows.push([s.seat,s.name,s.email,n.date,cat(n.cat)?.name,n.fact,n.pts,credit(n)])));
+  return rows.map(r=>r.join('\t')).join('\n');
+}
+function copyExport(){
+  const el=document.getElementById('exp');
+  navigator.clipboard.writeText(el.value).then(()=>toast('已複製，貼到 Google 試算表就會自動分欄','emerald')).catch(()=>{el.focus();el.select();toast('已選取文字，請按複製','amber')});
+}
+let resetArmed=false;
+function resetDemo(){
+  if(!resetArmed){resetArmed=true;toast('再按一次「重設示範資料」就會清掉這台裝置的紀錄','amber');setTimeout(()=>resetArmed=false,4000);return}
+  resetArmed=false;S=JSON.parse(JSON.stringify(DEFAULT));save();toast('已回到範例資料','cyan');render();
+}
+
+function render(){
+  renderNav();
+  const v=isT()?{home:vTeacherHome,review:vReview,wall:vWall,settings:vSettings}[tab]:{home:vStudentHome,nominate:vNominate,wall:vWall,shop:vShop}[tab];
+  document.getElementById('view').innerHTML=`<div class="view">${v()}</div><footer class="text-center text-[11px] text-slate-500 mt-10">鳳新高中英文科李姬慧老師 X AI 彙整製作</footer>`;
+}
+render();
+</script>
+
+<a href="../" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:9999;background:#2F86D6;color:#fff;font:700 13px/1 system-ui,sans-serif;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.2)">← 回群島</a>
+</body></html>

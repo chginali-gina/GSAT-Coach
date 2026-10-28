@@ -1,0 +1,534 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>課程地圖工作坊</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+/* 版面：淺藍清新手機 App——四個步驟（總覽／拆解／提示詞／範本）一次一頁，底部分頁列，設定從底部滑出。 */
+:root{
+  --bg:#F5F9FD; --bg-2:#EAF3FB; --card:#FFFFFF;
+  --accent:#2F86D6; --accent-deep:#1F6FB8; --accent-ink:#155A96; --tint:#DCEBFA;
+  --second:#0E9A9A; --second-tint:#D7F2F0;
+  --ink:#17324D; --ink-soft:#557089; --line:#D3E2EF; --on-accent:#FFFFFF;
+  --good:#3F7A3A; --good-tint:#E3EFDD; --bad:#A63D2A; --bad-tint:#F8E1DA;
+  --code-bg:#17324D; --code-ink:#EAF3FB;
+  --scrim:rgba(15,30,50,.42);
+  --shadow:0 6px 22px rgba(31,111,184,.10);
+  --radius:16px;
+  --font:'Nunito','Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;
+  --mono:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1A26; --bg-2:#132233; --card:#182A3D;
+  --accent:#6CB4F0; --accent-deep:#4A9BE0; --accent-ink:#A6D2F8; --tint:#1C3550;
+  --second:#4FD1C5; --second-tint:#173A3A;
+  --ink:#E6EFF8; --ink-soft:#9FB3C8; --line:#26394D; --on-accent:#0F1A26;
+  --good:#8CC983; --good-tint:#22321F; --bad:#F09A84; --bad-tint:#3B231C;
+  --code-bg:#0A131C; --code-ink:#E6EFF8;
+  --scrim:rgba(0,0,0,.6);
+  --shadow:0 6px 22px rgba(0,0,0,.35);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0F1A26; --bg-2:#132233; --card:#182A3D;
+  --accent:#6CB4F0; --accent-deep:#4A9BE0; --accent-ink:#A6D2F8; --tint:#1C3550;
+  --second:#4FD1C5; --second-tint:#173A3A;
+  --ink:#E6EFF8; --ink-soft:#9FB3C8; --line:#26394D; --on-accent:#0F1A26;
+  --good:#8CC983; --good-tint:#22321F; --bad:#F09A84; --bad-tint:#3B231C;
+  --code-bg:#0A131C; --code-ink:#E6EFF8;
+  --scrim:rgba(0,0,0,.6);
+  --shadow:0 6px 22px rgba(0,0,0,.35);
+  color-scheme:dark;
+}
+html{font-size:106.25%}
+html.big{font-size:118.75%}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);line-height:1.8;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--card)}
+h1,h2,h3{margin:0;text-wrap:balance;font-weight:800;line-height:1.35}
+p{margin:0}
+a{color:var(--accent-ink)}
+button,input,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:8px}
+svg.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
+.num{font-variant-numeric:lining-nums tabular-nums}
+.en{display:block;font-size:.86em;line-height:1.6;color:var(--ink-soft);margin-top:2px}
+.en.in{display:inline;margin-left:.45em;font-size:.82em}
+.btn .en,.on .en,.tab.on .en,.get .en,.copy .en{color:inherit;opacity:.82}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--card);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:12px;padding-block:10px}
+.brand{flex:1;min-width:0;line-height:1.3}
+.brand b{display:block;font-weight:800;font-size:1.02rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand .en{margin:0;font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.big-num{font-weight:800;font-size:1.25rem;color:var(--accent);text-align:right;line-height:1.1}
+.big-num small{display:block;font-size:.68rem;color:var(--ink-soft);font-weight:600}
+.pill-btn{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--bg);cursor:pointer;font-weight:700;font-size:.88rem}
+.pill-btn:hover{border-color:var(--accent)}
+
+main{padding-block:20px calc(96px + env(safe-area-inset-bottom,0px))}
+.page{display:flex;flex-direction:column;gap:16px}
+.phead{display:flex;flex-direction:column;gap:6px}
+.stepline{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.stepno{font-weight:800;font-size:2.2rem;line-height:1;color:var(--accent)}
+.steplbl{font-size:.82rem;color:var(--ink-soft);font-weight:700}
+.lvl{font-size:.75rem;font-weight:700;background:var(--second-tint);color:var(--second);padding:2px 10px;border-radius:999px}
+.phead h1{font-size:clamp(1.45rem,5.6vw,1.95rem)}
+.get{background:var(--tint);color:var(--accent-ink);border-radius:12px;padding:10px 14px;font-size:.95rem;font-weight:600}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;min-width:0}
+.sub{color:var(--ink-soft);font-size:.95rem}
+h2.sec{font-size:1.15rem;margin-top:6px}
+
+.hint{background:var(--second-tint);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;font-size:.93rem}
+.hint b{color:var(--second)}
+.hint .btn{align-self:flex-start;min-height:40px}
+
+.flow{display:flex;flex-direction:column;gap:6px;list-style:none;margin:0;padding:0}
+.flow li{display:flex;align-items:center;gap:10px;font-weight:700}
+.flow .fn{width:28px;height:28px;border-radius:50%;background:var(--tint);color:var(--accent-ink);display:grid;place-items:center;font-size:.85rem;flex:0 0 auto}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:.95rem}
+.facts dt{color:var(--ink-soft);font-weight:700;white-space:nowrap}
+.facts dd{margin:0;min-width:0}
+
+.agenda{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.agenda li{display:grid;grid-template-columns:78px 1fr;gap:2px 12px;background:var(--card);border:1px solid var(--line);border-left:5px solid var(--accent);border-radius:14px;padding:12px 14px}
+.agenda li.do{border-left-color:var(--second)}
+.agenda .t{font-weight:800;color:var(--accent-ink);grid-row:1/3}
+.agenda li.do .t{color:var(--second)}
+.agenda .n{font-weight:800}
+.agenda .d{font-size:.9rem;color:var(--ink-soft);line-height:1.65;grid-column:2}
+.key{display:flex;gap:16px;font-size:.84rem;color:var(--ink-soft);flex-wrap:wrap}
+.key i{display:inline-block;width:14px;height:5px;border-radius:3px;margin-right:6px;vertical-align:middle}
+
+details.acc{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+details.acc summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:14px 16px;min-height:52px}
+details.acc summary::-webkit-details-marker{display:none}
+details.acc .an{font-weight:800;font-size:1.6rem;color:var(--accent);line-height:1}
+details.acc .at{font-weight:800}
+details.acc .at small{display:block;font-weight:700;font-size:.75rem;color:var(--second);letter-spacing:.04em}
+details.acc summary svg.ic{transition:transform .2s;color:var(--ink-soft)}
+details.acc[open] summary svg.ic{transform:rotate(90deg)}
+details.acc .ab{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px}
+.q{background:var(--tint);border-radius:12px;padding:10px 12px;font-size:.94rem}
+textarea{width:100%;min-height:80px;resize:vertical;border:1.5px dashed var(--line);background:var(--bg);border-radius:12px;padding:10px 12px;font-size:.95rem}
+textarea:focus{border-color:var(--accent);border-style:solid;outline:none}
+.reveal-btn{align-self:flex-start}
+.answer{background:var(--second-tint);border-radius:12px;padding:10px 12px;font-size:.93rem}
+.answer b{color:var(--second);display:block;font-size:.82rem}
+
+.picks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.picks li{display:grid;grid-template-columns:1fr auto;gap:2px 12px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.picks .pt{font-weight:700}
+.picks .pd{grid-column:1;font-size:.9rem;color:var(--ink-soft);line-height:1.65}
+.picks .tag{grid-row:1/3;grid-column:2;font-size:.78rem;font-weight:800;padding:2px 10px;border-radius:999px;white-space:nowrap}
+.tag.must{background:var(--accent);color:var(--on-accent)}
+.tag.plus{background:var(--second-tint);color:var(--second)}
+.tag.later{background:var(--bg-2);color:var(--ink-soft)}
+
+.pcard{display:flex;flex-direction:column;gap:10px}
+.phd{display:flex;align-items:center;gap:12px}
+.phd .pn{font-weight:800;font-size:2rem;line-height:1;color:var(--accent)}
+.phd h3{font-size:1.1rem}
+.code{position:relative;background:var(--code-bg);color:var(--code-ink);border-radius:12px}
+.code pre{margin:0;padding:14px 14px 16px;font-family:var(--mono);font-size:.8rem;line-height:1.7;white-space:pre-wrap;word-break:break-word;max-height:320px;overflow:auto}
+.copy{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 18px;border-radius:999px;border:none;background:var(--accent);color:var(--on-accent);font-weight:800;cursor:pointer;align-self:flex-start}
+.copy:hover{background:var(--accent-deep)}
+.tip{font-size:.9rem;background:var(--bg-2);border-radius:12px;padding:10px 12px}
+.tip b{color:var(--accent-ink)}
+
+.tpl-mini{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.tpl-mini span{background:var(--bg-2);border-radius:10px;border-left:4px solid var(--accent);padding:6px 8px;font-size:.78rem;font-weight:700;line-height:1.35}
+.tpl-mini span:nth-child(n+4){border-left-color:var(--second)}
+.tpl-mini span:nth-child(n+6){border-left-color:#7A5CC2}
+.checks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.checks label{display:flex;gap:12px;align-items:flex-start;cursor:pointer;background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:12px 14px;min-height:52px}
+.checks label:has(input:checked){border-color:var(--accent);background:var(--tint)}
+.checks input{margin-top:.35em;accent-color:var(--accent);width:20px;height:20px;flex:0 0 auto}
+.checks b{display:block}
+.checks small{display:block;color:var(--ink-soft);font-size:.86rem;line-height:1.6}
+.meter{position:sticky;bottom:calc(72px + env(safe-area-inset-bottom,0px));background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px;z-index:5}
+.meter .row{display:flex;justify-content:space-between;font-weight:700;font-size:.9rem}
+.progress{height:8px;border-radius:999px;background:var(--bg-2);overflow:hidden}
+.progress i{display:block;height:100%;background:var(--accent);border-radius:999px;transition:width .3s}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 22px;border-radius:999px;border:none;background:var(--accent);color:var(--on-accent);font-weight:800;cursor:pointer;text-decoration:none}
+.btn:hover{background:var(--accent-deep)}
+.btn.sec{background:var(--card);color:var(--accent-ink);border:1.5px solid var(--accent)}
+.btn.sec:hover{background:var(--tint)}
+.btn.full{width:100%}
+.navrow{display:flex;gap:10px;margin-top:8px}
+.navrow .btn{flex:1}
+
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+.tabs .row{max-width:760px;margin:0 auto;display:grid;grid-auto-flow:column;grid-auto-columns:1fr}
+.tab{min-height:64px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--ink-soft);font-weight:700;font-size:.85rem;border-top:3px solid transparent;line-height:1.25;padding:4px 2px}
+.tab .tn{font-weight:800;font-size:.95rem}
+.tab .en{font-size:.68rem;margin:0}
+.tab.on{color:var(--accent);border-top-color:var(--accent)}
+
+.scrim{position:fixed;inset:0;background:var(--scrim);z-index:40}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;max-height:88vh;overflow-y:auto;background:var(--bg);border-radius:22px 22px 0 0;box-shadow:0 -10px 40px rgba(0,0,0,.18);padding:10px max(16px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.sheet .in{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.grab{width:44px;height:5px;border-radius:3px;background:var(--line);margin:4px auto 6px}
+.sheet-head{display:flex;align-items:center;gap:12px}
+.sheet-head h2{flex:1;font-size:1.3rem}
+.x{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--line);background:var(--card);cursor:pointer;display:grid;place-items:center}
+.seg-ctl{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--bg-2);border-radius:999px;padding:4px;gap:4px}
+.seg-ctl button{min-height:42px;border-radius:999px;border:none;background:transparent;cursor:pointer;font-weight:700;font-size:.9rem}
+.seg-ctl button.on{background:var(--accent);color:var(--on-accent)}
+.field{display:flex;flex-direction:column;gap:6px}
+.field>span{font-weight:700;font-size:.9rem}
+footer{text-align:center;color:var(--ink-soft);font-size:.82rem;padding-top:16px;line-height:1.7}
+footer b{color:var(--accent-ink)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<header class="top"><div class="wrap" id="top"></div></header>
+<main><div class="wrap" id="main"></div></main>
+<nav class="tabs" aria-label="分頁"><div class="row" id="tabs"></div></nav>
+<div id="overlay"></div>
+
+<script>
+(function(){
+  const CASE_URL = "https://self-leadership-island.pages.dev/";
+  const TEMPLATE_URL = "https://claude.ai/artifact/S9gG5rD4khmMwbn916kJW1";
+  const TEMPLATE3D_URL = "https://claude.ai/artifact/TLa5pPedggyLnqLEwqV6nE";
+  const KEY = "cmw-sky";
+  const state = { lang:"bi", big:false, page:0, hintSeen:false, notes:{}, shown:{}, checks:{}, sheet:false };
+  try { Object.assign(state, JSON.parse(localStorage.getItem(KEY) || "{}")); } catch(e) {}
+  state.sheet = false;
+  if (!["zh","bi","en"].includes(state.lang)) state.lang = "bi";
+  const save = () => { try { const {sheet, ...rest} = state; localStorage.setItem(KEY, JSON.stringify(rest)); } catch(e) {} };
+
+  const T = v => Array.isArray(v) ? v : [v, ""];
+  function L(zh,en,inline){const f=document.createDocumentFragment();
+    if(state.lang==='en'&&en)f.append(en);
+    else if(state.lang==='zh'||!en)f.append(zh);
+    else{f.append(zh);const s=document.createElement('span');s.className=inline?'en in':'en';s.lang='en';s.textContent=en;f.append(s);}
+    return f;}
+  function S(zh,en){return state.lang==='en'?(en||zh):state.lang==='zh'?zh:(en?zh+' / '+en:zh);}
+  const Lx = (v,i) => L(...T(v), i), Sx = v => S(...T(v));
+  function h(t,a,...c){const e=document.createElement(t);
+    if(a)for(const k in a){const v=a[k];if(v==null||v===false)continue;
+      if(k==='class')e.className=v;else if(k.startsWith('on'))e.addEventListener(k.slice(2),v);
+      else if(k==='style')e.style.cssText=v;else if(k==='value')e.value=v;else e.setAttribute(k,v===true?'':v);}
+    for(const x of c.flat(Infinity)){if(x==null||x===false)continue;e.append(x instanceof Node?x:String(x));}
+    return e;}
+  const P = {
+    gear:'<line x1="4" y1="6" x2="20" y2="6"/><circle cx="9" cy="6" r="2.2"/><line x1="4" y1="12" x2="20" y2="12"/><circle cx="15" cy="12" r="2.2"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="8" cy="18" r="2.2"/>',
+    x:'<line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/>',
+    chev:'<polyline points="9 5 16 12 9 19"/>',
+    left:'<polyline points="15 5 8 12 15 19"/>', right:'<polyline points="9 5 16 12 9 19"/>',
+    copy:'<rect x="8" y="8" width="12" height="12" rx="2.5"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>',
+    ext:'<path d="M14 4h6v6"/><line x1="20" y1="4" x2="11" y2="13"/><path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/>',
+    eye:'<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'
+  };
+  const icon = n => { const s=document.createElementNS('http://www.w3.org/2000/svg','svg'); s.setAttribute('viewBox','0 0 24 24'); s.setAttribute('class','ic'); s.setAttribute('aria-hidden','true'); s.innerHTML=P[n]; return s; };
+
+  /* ---------- 內容 ---------- */
+  const AGENDA = [
+    ["0–10′", false, ["逛案例","Explore the case"], ["每人用手機逛七習慣島 5 分鐘，記下第一個讓你想點下去的地方。","Explore the Seven Habits Island on your phone for 5 minutes. Note the first thing you wanted to tap."]],
+    ["10–30′", false, ["拆資訊架構","Take it apart"], ["兩人一組完成六個鏡頭，講師帶全班對答案。","In pairs, work through the six lenses, then check together."]],
+    ["30–45′", true, ["步驟一：整理","Step 1: Organise"], ["上傳自己的課程計畫，用提示詞一整理成地圖資料。","Upload your syllabus and turn it into map data with Prompt 1."]],
+    ["45–70′", true, ["步驟二：成圖","Step 2: Build"], ["把資料套進範本，用瀏覽器打開，調整站名與分段。","Put the data into the template, open it, and adjust names and segments."]],
+    ["70–80′", true, ["步驟三：檢核","Step 3: Check"], ["請 AI 逐站對照原文，修掉多寫、寫錯的地方。","Ask AI to check every stop against the original and fix errors."]],
+    ["80–90′", false, ["互逛與分享","Swap and share"], ["換手機逛鄰座的地圖，給一句「我最想點的那站」。","Swap phones, explore a partner's map, and name the stop you most want to open."]]
+  ];
+  const LENSES = [
+    { k:["隱喻","Metaphor"], t:["用什麼比喻代表整門課？","What metaphor stands for the course?"],
+      q:["比喻和課程結構之間，有哪些地方是一一對應的？","Where does the metaphor match the course structure one to one?"],
+      a:["群島對應課程：7 個習慣＝7 座島，再加序章、AAR 回顧島、評鑑燈塔、工具港，共 11 座。習慣七「不斷更新」放在正中央、包住其他六座，直接把柯維七習慣圖變成地形。","Islands match the course: 7 habits are 7 islands, plus a prologue, an AAR review island, an evaluation lighthouse and a tool harbour, 11 in all. Habit 7 sits in the centre around the other six, turning Covey's diagram into a landscape."] },
+    { k:["分層","Layers"], t:["點開一座島，資訊分成幾層？","How many layers does an island open into?"],
+      q:["每座島的卡片固定有哪些欄位？為什麼是這幾個？","Which fields does every island card have, and why these?"],
+      a:["第一層是島卡：學什麼、第幾週幾節、怎麼評量、學到什麼能力。第二層是島上 3–4 個建物，各是一個子單元。第三層是和其他島的連結。每座島欄位一樣，看過一座就會看全部。","Layer 1 is the island card: what students learn, which weeks, how it is graded, and skills. Layer 2 is 3–4 buildings, each a unit. Layer 3 is links to other islands. Every island uses the same fields, so reading one teaches you to read them all."] },
+    { k:["導覽","Navigation"], t:["讀者有幾種方式找到內容？","How many ways can readers find things?"],
+      q:["不想玩地圖的人、只想知道這週上什麼的人，各怎麼走？","How does someone who skips the map, or only wants this week, find their way?"],
+      a:["至少五條路：自由逛地圖、清單文字搜尋、依進度看（點週次飛到那座島）、一學期旅程自動導覽附字幕、不用 3D 的文字版。時間和空間是同一份資料的兩種排序。","At least five paths: free exploring, a searchable list, a week view that flies to the island, an auto tour with captions, and a text-only version. Time and place are two orderings of the same data."] },
+    { k:["讀者","Audience"], t:["這個網站寫給誰看？","Who is this site written for?"],
+      q:["找出專門為不同讀者準備的內容。","Find content made for different readers."],
+      a:["開場請訪客選身分（家長、學生、校友、老師、市民、路人）。「關於」裡有給家長的話（在家怎麼陪、3C 雙贏協議），也公開課程評鑑，學生的抱怨和老師的改進都寫出來。","Visitors first pick who they are: parent, student, alumni, teacher, citizen or passer-by. The About page has advice for parents and publishes the course review, including student complaints and teacher fixes."] },
+    { k:["參與","Engagement"], t:["什麼設計讓人想逛下去？","What keeps people exploring?"],
+      q:["哪些是小成本、你的課也做得到的？","Which ones are cheap enough for your course?"],
+      a:["旅人護照：打開一座島就蓋章，0／11 一目了然。底部一節課 45 分鐘時鐘循環演出上課流程。還有走動的小人和校園新聞。護照蓋章成本最低、效果最明顯。","A traveller's passport stamps each island you open, showing 0/11 at a glance. A 45-minute lesson clock plays the class routine. Walking figures and school news add life. The passport is the cheapest and most effective."] },
+    { k:["誠信","Honesty"], t:["怎麼分清楚真實與虛構？","How does it separate fact from fiction?"],
+      q:["AI 很會補故事，這個網站怎麼避免誤導？","AI loves to fill in stories. How does the site avoid misleading people?"],
+      a:["島主、小人、島間連線都標「故事設定（虛構）」，課程內容只依學校課程計畫。頁尾寫明資料來源、整理日期、非學校官方網站、不放學生作品、不用真實姓名。","Island hosts, figures and links are labelled as fiction, and course content follows only the school plan. The footer gives sources, the date, a not-official notice, and states that no student work or real names are used."] }
+  ];
+  const PICKS = [
+    ["must", ["一個對應課程結構的比喻","A metaphor that fits the structure"], ["站、島、關卡、星座都行；先決定一站等於什麼。","Stops, islands, levels or stars; first decide what one stop means."]],
+    ["must", ["固定欄位的卡片","Cards with fixed fields"], ["學什麼／第幾週／怎麼評量／能力，四欄就夠。","What, when, grading, skills. Four fields are enough."]],
+    ["must", ["依週次找內容","Find by week"], ["點週次就看到那一站（範本已內建）。","Tap a week to see its stop (built into the template)."]],
+    ["must", ["真實與虛構分開標示","Label fiction clearly"], ["故事元素寫進 story，自動用虛線框標示。","Put story elements in the story field; it is boxed and labelled."]],
+    ["plus", ["蓋章護照","Stamp passport"], ["打開一站就蓋章（範本已內建）。","Opening a stop stamps it (built in)."]],
+    ["plus", ["家長與評鑑專區","Parents and review page"], ["多一站「給家長的話」。","Add one stop for parents."]],
+    ["plus", ["3D 群島地圖","3D island map"], ["同一份 COURSE 貼進 3D 範本，島會自動排好。","Paste the same COURSE into the 3D template; islands are placed for you."]],
+    ["later", ["自動導覽、角色動畫","Auto tour, characters"], ["今天不做，之後再請 AI 升級。","Not today. Ask AI to upgrade later."]]
+  ];
+  const TAGTXT = { must:["必做","Must"], plus:["加分","Bonus"], later:["之後","Later"] };
+
+  const PROMPTS = [
+    { t:["整理：課程計畫 → 地圖資料","Organise: syllabus → map data"],
+      why:["先把文件變成固定格式的資料，AI 只負責整理，不負責創作。","Turn the document into fixed-format data. AI organises; it does not invent."],
+      tip:["課程計畫若有學生姓名、成績或照片，上傳前先刪掉。","Remove any student names, grades or photos before uploading."],
+      zh:`你是課程設計助理。我上傳的是我的課程計畫。請「只根據文件內容」，把它整理成下面這個 JavaScript 物件格式（COURSE）。
+
+規則：
+1. 先決定「一站」等於什麼：一個主題、一個單元，或連續幾週的同一件事。全課程以 5–10 站為佳。
+2. segments 依段考或學期段落切分，每段給一個顏色（可用 #2F86D6、#0E9A9A、#7A5CC2）。
+3. weeks 用數字陣列，例如 [5,6,8]。
+4. 文字欄位寫成 ["中文","English"]；英文用 CEFR B1–B2 短句。
+5. learn、assess 各 1–2 句，學生看得懂；skills 2–3 個；units 每站 2–4 個。
+6. 文件沒寫的欄位一律留空字串 ""，不要自己補。story 一律留空。
+7. isSample 設為 false。
+
+格式：
+const COURSE = {
+  isSample: false,
+  title: ["",""],
+  subtitle: ["",""],   // 年級、節數、週數、這門課要學會什麼
+  totalWeeks: 0,
+  segments: [ { id: "s1", name: ["",""], weeks: "1–6", color: "#2F86D6" } ],
+  stations: [
+    { id: "a", name: ["",""], seg: "s1", weeks: [1],
+      tagline: ["",""], learn: ["",""], assess: ["",""],
+      skills: [["",""]], units: [ { t: ["",""], d: ["",""] } ],
+      story: "", links: ["b"] }
+  ]
+};
+
+最後另外列一張清單：「文件裡找不到、需要老師補充的資訊」。`,
+      en:`You are a curriculum assistant. I have uploaded my course plan. Using ONLY what the document says, turn it into the JavaScript object below (COURSE).
+
+Rules:
+1. First decide what one "stop" is: a topic, a unit, or several weeks on one theme. Aim for 5–10 stops.
+2. Split segments by exam periods or terms. Give each a colour (#2F86D6, #0E9A9A, #7A5CC2).
+3. weeks is a number array, e.g. [5,6,8].
+4. Write text fields as ["中文","English"]; English in short CEFR B1–B2 sentences.
+5. learn and assess: 1–2 sentences each, student-friendly; skills: 2–3; units: 2–4 per stop.
+6. If the document does not say it, leave the field as "". Do not fill gaps. Always leave story empty.
+7. Set isSample to false.
+
+(Use the same COURSE format as the template.)
+
+Finally, list "information the document does not contain that the teacher needs to add".` },
+    { t:["成圖：資料 → 2D 卡片地圖","Build: data → 2D card map"],
+      why:["範本已經寫好互動，只要換掉資料，比讓 AI 從零生網頁穩定得多。","The template already has the interactions. Swapping data is far more reliable than generating a page from scratch."],
+      tip:["不想用 AI 也行：用記事本打開範本，把 COURSE 整段貼上取代，存檔後用瀏覽器打開。","No AI needed: open the template in a text editor, replace the COURSE block, save, and open it in a browser."],
+      zh:`附件是一個「課程地圖範本」HTML 檔。請只替換其中 const COURSE = { … }; 這一段，換成我下面提供的 COURSE 資料；其他 HTML、CSS、JavaScript 一個字都不要改。輸出完整的 HTML 檔案。
+
+（在這裡貼上步驟一的 COURSE）
+
+完成後告訴我：
+1. 總共幾站、幾週，有沒有週次沒被任何一站涵蓋；
+2. 有沒有站的 links 指向不存在的站 id。`,
+      en:`The attached file is a course map template (HTML). Replace ONLY the block const COURSE = { … }; with the COURSE data below. Do not change any other HTML, CSS or JavaScript. Output the complete HTML file.
+
+(Paste the COURSE from Step 1 here.)
+
+Then tell me:
+1. How many stops and weeks there are, and whether any week is not covered by a stop;
+2. Whether any stop links to an id that does not exist.` },
+    { t:["檢核：逐站對照原文","Check: compare every stop"],
+      why:["AI 整理時常把「合理但文件沒寫」的內容加進去，這一步專門抓這種錯。","AI often adds things that sound right but are not in the document. This step catches them."],
+      tip:["想加島主、角色等故事元素時，請 AI 寫進 story 欄位，地圖會自動標成「故事設定（虛構）」。","Want hosts or characters? Ask AI to put them in story; the map labels them as fiction."],
+      zh:`請把剛才的 COURSE 資料，逐站對照我上傳的原始課程計畫，做成一張表：
+
+站名｜欄位｜地圖上寫的｜課程計畫原文（附頁碼或段落）｜判定（一致／文件沒寫／不一致）
+
+特別檢查：
+- 週次、節數是否和原文相同；
+- 評量方式與比例是否和原文相同；
+- 有沒有任何內容在原文找不到。
+
+只列出判定不是「一致」的項目，並給我修正後的那幾行。`,
+      en:`Compare the COURSE data, stop by stop, with the original course plan I uploaded. Make a table:
+
+Stop | Field | What the map says | Original text (with page or section) | Verdict (match / not in document / mismatch)
+
+Check especially:
+- weeks and number of periods;
+- assessment methods and percentages;
+- anything that cannot be found in the original.
+
+List only items that are not "match", and give me the corrected lines.` }
+  ];
+  const CHECKS = [
+    [["每一站都能在原始課程計畫找到出處","Every stop has a source in the plan"],["步驟三的表裡只剩「一致」","Only 'match' left in the Step 3 table"]],
+    [["沒有學生姓名、照片、作品或成績","No student names, photos, work or grades"],["要放成果，先取得同意並去識別","Get consent and remove identities first"]],
+    [["虛構的故事元素都有標示","All fictional elements are labelled"],["寫在 story 欄位就會自動標","The story field labels them for you"]],
+    [["副標寫清楚年級、節數、週數","Subtitle states grade, periods and weeks"],["家長第一眼就知道這是什麼課","Parents know the course at a glance"]],
+    [["用手機從頭點到尾一次","Tap through everything on a phone"],["每一站都打得開、週次都對得上","Every stop opens and weeks line up"]],
+    [["註明資料來源與整理日期","Note the source and date"],["例如「依 115 學年度課程計畫整理」","e.g. 'Based on the 2026 course plan'"]]
+  ];
+
+  const PAGES = [
+    { tab:["總覽","Overview"], lvl:["理解","Understand"], title:["把課程計畫變成一張地圖","Turn a course plan into a map"],
+      get:["90 分鐘後，每位老師帶走一張自己課程的地圖網頁。","In 90 minutes, every teacher leaves with a map page of their own course."], render: pOverview },
+    { tab:["拆解","Analyse"], lvl:["理解","Understand"], title:["案例拆解：六個鏡頭","Case study: six lenses"],
+      get:["20 分鐘看懂一個好課程網站的資訊架構，決定自己要做哪幾項。","In 20 minutes, see how a good course site is organised and choose what to copy."], render: pLenses },
+    { tab:["提示詞","Prompts"], lvl:["練習","Practise"], title:["三段提示詞","Three prompts"],
+      get:["40 分鐘內，課程計畫 PDF 變成一份對過原文的地圖資料。","In 40 minutes, your syllabus becomes checked map data."], render: pPrompts },
+    { tab:["範本","Template"], lvl:["應用","Apply"], title:["範本與交付檢核","Template and final check"],
+      get:["六項檢核全部打勾，地圖就可以分享給學生和家長。","Tick all six checks and the map is ready to share."], render: pTemplate }
+  ];
+  if (!(state.page >= 0 && state.page < PAGES.length)) state.page = 0;
+
+  /* ---------- 頁面 ---------- */
+  function pOverview(){
+    return [
+      !state.hintSeen ? h("div",{class:"hint"},
+        h("p",null,h("b",null,L("第一次用？","First time?",true)),L("底部分頁列可以跳頁，右上「設定」可切換中文／雙語／English 和字級。學習單筆記只存在你的瀏覽器。","Use the tabs at the bottom to move between steps. Settings (top right) switches language and text size. Your notes stay in your own browser.")),
+        h("button",{class:"btn",type:"button",onclick:()=>{state.hintSeen=true;save();renderMain();}},L("知道了","Got it",true))) : null,
+      h("div",{class:"card"},
+        h("h2",{class:"sec",style:"margin:0"},L("流程","Workflow",true)),
+        h("ol",{class:"flow"},[["課程計畫 PDF","Course plan PDF"],["AI 整理成結構","AI organises it"],["套進地圖範本","Fill the template"],["對照原文檢核","Check against the source"]]
+          .map((x,i)=>h("li",null,h("span",{class:"fn num"},String(i+1)),Lx(x,true))))),
+      h("dl",{class:"card facts"},
+        h("dt",null,L("時長","Time",true)),h("dd",{class:"num"},L("90 分鐘","90 minutes",true)),
+        h("dt",null,L("對象","For",true)),h("dd",null,L("國高中教師，不需程式基礎","Secondary teachers, no coding needed",true)),
+        h("dt",null,L("請帶","Bring",true)),h("dd",null,L("自己的課程計畫（PDF 或 Word）、筆電","Your course plan (PDF or Word) and a laptop",true)),
+        h("dt",null,L("工具","Tools",true)),h("dd",null,L("Claude，或任一可上傳檔案的 AI","Claude, or any AI that accepts files",true))),
+      h("div",{class:"card"},
+        h("h2",{class:"sec",style:"margin:0"},L("今天的案例：自我領導力．七習慣島","Today's case: Seven Habits Island",true)),
+        h("p",{class:"sub"},L("新竹市竹光國中八年級「自我領導力」課程的教學展示網站，七個習慣做成 11 座島，一學期 21 週都能在地圖上找到。網站為該課程團隊製作，本工作坊僅引用作為分析案例。",
+          "A showcase site for a Grade 8 self-leadership course at Zhuguang Junior High, Hsinchu. Seven habits become 11 islands covering all 21 weeks. Made by the course team; used here only as a case study.")),
+        h("a",{class:"btn full",href:CASE_URL,target:"_blank",rel:"noopener"},L("打開案例網站","Open the case site",true),icon("ext"))),
+      h("h2",{class:"sec"},L("90 分鐘怎麼走","The 90 minutes",true)),
+      h("ol",{class:"agenda"},AGENDA.map(([t,doit,n,d])=>h("li",{class:doit?"do":null},h("span",{class:"t num"},t),h("span",{class:"n"},Lx(n,true)),h("span",{class:"d"},Lx(d))))),
+      h("div",{class:"key"},h("span",null,h("i",{style:"background:var(--accent)"}),L("看與討論","Watch and discuss",true)),h("span",null,h("i",{style:"background:var(--second)"}),L("動手做","Hands-on",true)))
+    ];
+  }
+
+  function pLenses(){
+    const accs = LENSES.map((l,i) => {
+      const d = h("details",{class:"acc"},
+        h("summary",null,h("span",{class:"an num"},String(i+1)),
+          h("span",{class:"at"},h("small",null,Lx(l.k,true)),Lx(l.t)), icon("chev")),
+        h("div",{class:"ab"},
+          h("p",{class:"q"},Lx(l.q)),
+          h("textarea",{id:"note"+i,"aria-label":S(`鏡頭 ${i+1} 筆記`,`Lens ${i+1} notes`),placeholder:S("寫下你的觀察…","Write what you notice…"),value:state.notes[i]||"",
+            oninput:e=>{state.notes[i]=e.target.value;save();}}),
+          state.shown[i]
+            ? h("div",{class:"answer"},h("b",null,L("案例裡的做法","What the case does",true)),Lx(l.a))
+            : h("button",{class:"btn sec reveal-btn",type:"button",onclick:()=>{state.shown[i]=true;save();renderMain(i);}},icon("eye"),L("看案例裡的做法","See what the case does",true))));
+      return d;
+    });
+    return [
+      h("p",{class:"sub"},L("先寫下自己的觀察，再打開「案例裡的做法」對照。重點不是 3D 好不好看，而是它怎麼把一份課程計畫拆成讀者找得到的資訊。",
+        "Write your own notes first, then compare. The point is not the 3D graphics but how the plan is split into findable pieces.")),
+      ...accs,
+      h("h2",{class:"sec"},L("你的版本要做哪些？","What will your version include?",true)),
+      h("ul",{class:"picks"},PICKS.map(([k,t,d])=>h("li",null,h("span",{class:"pt"},Lx(t,true)),h("span",{class:"tag "+k},Lx(TAGTXT[k],true)),h("span",{class:"pd"},Lx(d)))))
+    ];
+  }
+
+  function pPrompts(){
+    return [
+      h("p",{class:"sub"},L("依序貼給 AI。每一段的輸出是下一段的輸入，中間請自己讀過一次再往下。英文模式會顯示英文版提示詞。",
+        "Use them in order. Each output feeds the next; read it yourself before moving on. English mode shows English prompts.")),
+      ...PROMPTS.map((p,i) => {
+        const txt = state.lang==="en" ? p.en : p.zh;
+        const pre = h("pre",{id:"prompt"+i},txt);
+        const btn = h("button",{class:"copy",type:"button"},icon("copy"),L("複製提示詞","Copy prompt",true));
+        btn.addEventListener("click",()=>{
+          const ok = () => { btn.replaceChildren(icon("copy"),L("已複製","Copied",true)); setTimeout(()=>btn.replaceChildren(icon("copy"),L("複製提示詞","Copy prompt",true)),1600); };
+          const fb = () => { const r=document.createRange(); r.selectNodeContents(pre); const s=getSelection(); s.removeAllRanges(); s.addRange(r); btn.replaceChildren(icon("copy"),L("已選取，請手動複製","Selected — copy manually",true)); };
+          try { navigator.clipboard.writeText(txt).then(ok,fb); } catch(e){ fb(); }
+        });
+        return h("div",{class:"card pcard"},
+          h("div",{class:"phd"},h("span",{class:"pn num"},String(i+1)),h("h3",null,Lx(p.t))),
+          h("p",{class:"sub"},Lx(p.why)),
+          h("div",{class:"code"},pre),
+          btn,
+          h("p",{class:"tip"},h("b",null,L("提醒","Note",true)),"　",Lx(p.tip)));
+      })
+    ];
+  }
+
+  function pTemplate(){
+    const done = CHECKS.filter((_,i)=>state.checks[i]).length;
+    return [
+      h("div",{class:"card"},
+        h("h2",{class:"sec",style:"margin:0"},L("課程地圖範本","Course map template",true)),
+        h("p",{class:"sub"},L("單一 HTML 檔，手機好用、可放 GitHub Pages。範例是一門 18 週的 SDGs 選修，換掉 COURSE 就變成你的課；也支援中文／雙語／English。",
+          "One HTML file, phone-friendly, ready for GitHub Pages. The sample is an 18-week SDGs elective; replace COURSE to make it yours. It also switches between Chinese, bilingual and English.")),
+        h("div",{class:"tpl-mini","aria-hidden":"true"},["啟航港","目標群島","數據燈塔","問題拆解站","訪談工坊","行動實驗場","發表灣"].map((n,i)=>h("span",null,String(i+1).padStart(2,"0")+" ",n))),
+        h("a",{class:"btn full",href:TEMPLATE_URL,target:"_blank",rel:"noopener"},L("打開 2D 範本","Open the 2D template",true),icon("ext"))),
+      h("div",{class:"card"},
+        h("h2",{class:"sec",style:"margin:0"},L("進階：3D 課程群島","Advanced: 3D course islands",true)),
+        h("p",{class:"sub"},L("和 2D 範本用同一份 COURSE 資料。每一站變成一座低多邊形小島，沿學期航線排成一圈，可以拖曳旋轉、點島看內容、依週次飛到那座島；舊手機無法顯示 3D 時會自動改用清單。",
+          "Uses the same COURSE data as the 2D template. Each stop becomes a low-poly island on a semester route. Drag to rotate, tap an island, or jump to it by week. Older phones fall back to the list.")),
+        h("a",{class:"btn sec full",href:TEMPLATE3D_URL,target:"_blank",rel:"noopener"},L("打開 3D 範本","Open the 3D template",true),icon("ext"))),
+      h("h2",{class:"sec"},L("交出去之前","Before you share",true)),
+      h("ul",{class:"checks"},CHECKS.map(([t,s],i)=>h("li",null,h("label",null,
+        h("input",{type:"checkbox",id:"chk"+i,checked:state.checks[i]?true:null,onchange:e=>{state.checks[i]=e.target.checked;save();renderMain();}}),
+        h("span",null,h("b",null,Lx(t,true)),h("small",null,Lx(s))))))),
+      h("div",{class:"meter",role:"status"},
+        h("div",{class:"row"},h("span",null,L("檢核進度","Checklist",true)),h("span",{class:"num"},`${done} / ${CHECKS.length}`)),
+        h("div",{class:"progress"},h("i",{style:`width:${done/CHECKS.length*100}%`})))
+    ];
+  }
+
+  /* ---------- 骨架 ---------- */
+  function renderTop(){
+    document.getElementById("top").replaceChildren(
+      h("div",{class:"brand"},h("b",null,state.lang==="en"?"Course Map Workshop":"課程地圖工作坊"),state.lang==="bi"?h("span",{class:"en",lang:"en"},"Course Map Workshop"):null),
+      h("div",{class:"big-num num"},"90′",h("small",null,S("分鐘","minutes"))),
+      h("button",{class:"pill-btn",type:"button","aria-label":S("設定","Settings"),onclick:openSheet},icon("gear"),L("設定","Settings",true)));
+  }
+  function renderTabs(){
+    document.getElementById("tabs").replaceChildren(...PAGES.map((p,i)=>
+      h("button",{class:"tab"+(i===state.page?" on":""),type:"button","aria-current":i===state.page?"page":null,onclick:()=>go(i)},
+        h("span",{class:"tn num"},String(i+1)),h("span",null,T(p.tab)[state.lang==="en"?1:0]),
+        state.lang==="bi"?h("span",{class:"en",lang:"en"},T(p.tab)[1]):null)));
+  }
+  function renderMain(openIdx){
+    const i = state.page, p = PAGES[i];
+    const openSet = new Set([...document.querySelectorAll("details.acc")].map((d,k)=>d.open?k:-1).filter(k=>k>=0));
+    if (openIdx != null) openSet.add(openIdx);
+    document.getElementById("main").replaceChildren(h("section",{class:"page","aria-labelledby":"ptitle"},
+      h("div",{class:"phead"},
+        h("div",{class:"stepline"},h("span",{class:"stepno num"},String(i+1)),h("span",{class:"steplbl num"},`Step ${i+1} / ${PAGES.length}`),h("span",{class:"lvl"},Lx(p.lvl,true))),
+        h("h1",{id:"ptitle"},Lx(p.title)),
+        h("p",{class:"get"},Lx(p.get))),
+      p.render(),
+      h("div",{class:"navrow"},
+        i>0?h("button",{class:"btn sec",type:"button",onclick:()=>go(i-1)},icon("left"),L("上一步","Back",true)):null,
+        i<PAGES.length-1?h("button",{class:"btn",type:"button",onclick:()=>go(i+1)},L("下一步","Next",true),icon("right")):null),
+      h("footer",null,h("b",null,"Gina教室的AI奇蹟"),h("br"),"鳳新高中英文科李姬慧老師 X AI 彙整製作",h("br"),L("案例網站版權屬原製作團隊","The case site belongs to its original team",true))));
+    document.querySelectorAll("details.acc").forEach((d,k)=>{ if (openSet.has(k)) d.open = true; });
+  }
+  function go(i){ state.page=i; save(); render(); scrollTo({top:0,behavior:"instant"}); }
+
+  let lastFocus=null;
+  function openSheet(){ lastFocus=document.activeElement; state.sheet=true; renderOverlay(); }
+  function closeSheet(){ state.sheet=false; renderOverlay(); if(lastFocus&&document.contains(lastFocus))lastFocus.focus(); }
+  function renderOverlay(){
+    const ov=document.getElementById("overlay");
+    if(!state.sheet){ov.replaceChildren();return;}
+    const seg=(opts,cur,set)=>h("div",{class:"seg-ctl",role:"group"},opts.map(([v,lab])=>
+      h("button",{class:cur===v?"on":"",type:"button","aria-pressed":String(cur===v),onclick:()=>{set(v);save();render();}},lab)));
+    ov.replaceChildren(h("div",{class:"scrim",onclick:closeSheet}),
+      h("div",{class:"sheet",role:"dialog","aria-modal":"true","aria-labelledby":"shead"},h("div",{class:"in"},
+        h("div",{class:"grab"}),
+        h("div",{class:"sheet-head"},h("h2",{id:"shead"},L("設定","Settings",true)),h("button",{class:"x",type:"button","aria-label":S("關閉","Close"),onclick:closeSheet},icon("x"))),
+        h("div",{class:"field"},h("span",null,L("語言","Language",true)),seg([["zh","中文"],["bi","雙語"],["en","English"]],state.lang,v=>state.lang=v)),
+        h("div",{class:"field"},h("span",null,L("字級","Text size",true)),seg([[false,S("標準","Normal")],[true,S("放大","Large")]],state.big,v=>state.big=v)))));
+    ov.querySelector(".x").focus();
+  }
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&state.sheet)closeSheet();});
+
+  function render(){
+    document.documentElement.classList.toggle("big",state.big);
+    document.documentElement.lang = state.lang==="en"?"en":"zh-Hant";
+    renderTop(); renderTabs(); renderMain();
+    if(state.sheet) renderOverlay();
+  }
+  render();
+})();
+</script>
+
+<a href="../" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:9999;background:#2F86D6;color:#fff;font:700 13px/1 system-ui,sans-serif;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.2)">← 回群島</a>
+</body></html>

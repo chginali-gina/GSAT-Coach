@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>我們需要核能，才能阻止氣候變遷嗎？｜Gina &amp; 宏孝的SDGs多元選修課</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#FDF8F1; --bg-warm:#F7EFE3; --card:#FFFFFF;
+  --amber:#D97706; --amber-deep:#B45309; --amber-dark:#92400E;
+  --teal:#0F766E; --teal-soft:#5EAEA6;
+  --ink:#2E2419; --ink-soft:#6B5D4F;
+  --line:#E8DCCB;
+  --shadow:0 4px 20px rgba(146,64,14,.08);
+  --shadow-lg:0 12px 40px rgba(146,64,14,.12);
+  --radius:18px; --radius-sm:12px; --max:1080px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Serif TC',serif;color:var(--ink);background:var(--bg);font-size:1.05rem;line-height:1.85;-webkit-text-size-adjust:100%}
+.display{font-family:'Playfair Display','Noto Serif TC',serif}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+button{font-family:inherit}
+
+/* Hero */
+.hero{text-align:center;padding:72px 24px 56px;background:linear-gradient(180deg,#FBEFD9 0%,var(--bg) 100%)}
+.eyebrow{font-family:'Playfair Display',serif;color:var(--amber);letter-spacing:.08em;font-size:.95rem}
+.hero-title{font-size:clamp(2rem,6vw,3.5rem);line-height:1.3;margin:12px 0 14px;color:var(--amber-dark);font-weight:700}
+.hero-sub{color:var(--ink-soft);max-width:560px;margin:0 auto 28px}
+.btn{display:inline-block;background:var(--amber);color:#fff;font-weight:600;padding:13px 30px;border-radius:999px;text-decoration:none;border:0;cursor:pointer;font-size:1rem;transition:background .25s ease,transform .2s ease}
+.btn:hover{background:var(--amber-deep);transform:translateY(-2px)}
+
+/* Note */
+.note{margin:-20px auto 36px;max-width:720px;background:#FFF8E8;border:1px solid #F1D9A8;border-radius:var(--radius-sm);padding:16px 20px;font-size:.95rem;color:var(--ink-soft);line-height:1.75}
+.note strong{color:var(--amber-dark)}
+
+/* Tabs */
+.tabs{position:sticky;top:0;z-index:30;background:rgba(253,248,241,.94);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.tabs-inner{max-width:var(--max);margin:0 auto;padding:10px 24px;display:flex;gap:10px;overflow-x:auto;scrollbar-width:none}
+.tabs-inner::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;background:transparent;border:1.5px solid var(--line);color:var(--ink-soft);padding:8px 20px;border-radius:999px;font-size:.95rem;font-weight:600;cursor:pointer;transition:all .25s ease;white-space:nowrap}
+.tab:hover{border-color:var(--amber);color:var(--amber-deep)}
+.tab[aria-selected="true"]{background:var(--amber);border-color:var(--amber);color:#fff}
+.panel[hidden]{display:none}
+.panel{padding-bottom:40px}
+
+/* Sections */
+.section{padding:56px 0 8px}
+.section-title{font-size:clamp(1.5rem,4vw,2.25rem);line-height:1.4;color:var(--amber-dark);font-weight:700;margin-top:4px}
+.section-title::after{content:'';display:block;width:48px;height:3px;background:var(--amber);margin-top:12px;border-radius:2px}
+.lead{color:var(--ink-soft);margin:16px 0 28px;max-width:720px}
+h3.sub{font-size:1.2rem;color:var(--amber-dark);margin:36px 0 14px}
+
+/* Grid + cards */
+.grid{display:grid;gap:20px;grid-template-columns:1fr}
+@media(min-width:640px){.grid.c2{grid-template-columns:repeat(2,1fr)}.grid.c3{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:900px){.grid.c3{grid-template-columns:repeat(3,1fr)}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px 26px;box-shadow:var(--shadow);transition:transform .3s ease,box-shadow .3s ease}
+.card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+.card h4{font-size:1.1rem;color:var(--amber-dark);margin:6px 0 4px;line-height:1.5}
+.card p{font-size:.98rem;color:var(--ink-soft);line-height:1.75}
+.num{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:var(--amber);color:#fff;font-family:'Playfair Display',serif;font-weight:700}
+.num.teal{background:var(--teal)}
+.time{font-family:'Playfair Display',serif;color:var(--teal);font-size:.9rem;letter-spacing:.04em}
+.scenario{background:linear-gradient(135deg,#FFFBF3,#FFF3DC);border-color:#F1D9A8}
+.scenario p{color:var(--ink);font-size:1.02rem}
+.center{text-align:center}
+
+/* Flip cards */
+.flip{perspective:1200px;cursor:pointer;outline:none;-webkit-tap-highlight-color:transparent}
+.flip:focus-visible .face{outline:3px solid var(--teal-soft);outline-offset:2px}
+.flip-inner{display:grid;transition:transform .6s ease;transform-style:preserve-3d}
+.flip.on .flip-inner{transform:rotateY(180deg)}
+.face{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+.face.front{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:6px;min-height:170px}
+.face.back{transform:rotateY(180deg);background:#FFFBF3;border-color:var(--amber);font-size:.95rem;line-height:1.7}
+.face.back ul{padding-left:1.1em;margin:4px 0 10px;color:var(--ink-soft)}
+.face.back .lab{font-weight:700;color:var(--amber-dark);font-size:.85rem;letter-spacing:.03em}
+.face.back .say{font-family:'Playfair Display','Noto Serif TC',serif;font-style:italic;color:var(--teal);border-left:3px solid var(--teal-soft);padding-left:10px;margin-top:8px}
+.hint{font-size:.82rem;color:var(--ink-soft)}
+.flip .role-en{font-family:'Playfair Display',serif;color:var(--amber);font-size:.98rem}
+.flip .role-zh{font-size:1.2rem;font-weight:700;color:var(--amber-dark);line-height:1.4}
+.vword{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:600;color:var(--amber-dark);line-height:1.3}
+.pos{font-size:.85rem;color:var(--ink-soft);font-style:italic}
+.tagpass{display:inline-block;font-size:.72rem;background:var(--teal);color:#fff;padding:1px 9px;border-radius:999px;margin-top:4px;letter-spacing:.03em}
+
+/* Chips + tips */
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 16px;font-size:.95rem;font-family:'Playfair Display','Noto Serif TC',serif;color:var(--amber-dark)}
+.tips{list-style:none;display:grid;gap:12px}
+.tips li{background:#fff;border:1px solid var(--line);border-left:4px solid var(--amber);border-radius:var(--radius-sm);padding:12px 16px;font-size:.98rem}
+
+/* English reading */
+.passage{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:30px 28px;max-width:720px;margin:0 auto}
+.passage h3{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--amber-dark);line-height:1.35;margin-bottom:14px}
+.passage p{font-family:Georgia,'Times New Roman',serif;font-size:1.08rem;line-height:1.9;margin-bottom:14px}
+.w{font:inherit;color:var(--amber-deep);background:#FFF3DC;border:0;border-bottom:2px dotted var(--amber);border-radius:3px;padding:0 2px;cursor:pointer}
+.w:hover,.w.sel{background:var(--amber);color:#fff}
+.gloss{position:sticky;top:62px;z-index:15;max-width:720px;margin:0 auto 16px;background:#FFFBF3;border:1px solid var(--amber);border-radius:var(--radius-sm);padding:12px 16px;font-size:.95rem;line-height:1.6;box-shadow:var(--shadow)}
+.gloss b{font-family:'Playfair Display',serif;color:var(--amber-dark);font-size:1.1rem}
+.tf{background:#fff;border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px 18px;box-shadow:var(--shadow)}
+.tf p{font-family:Georgia,serif;font-size:1rem;color:var(--ink);margin-bottom:10px;line-height:1.6}
+.tf .opts{display:flex;gap:10px}
+.tf .opts button{border:1.5px solid var(--amber);background:#fff;color:var(--amber-deep);border-radius:999px;padding:5px 20px;cursor:pointer;font-weight:600}
+.tf .opts button:hover{background:var(--amber);color:#fff}
+.tf .res{margin-top:10px;font-size:.92rem;font-family:Georgia,serif;display:none}
+.tf .res.show{display:block}
+.tf .ok{color:var(--teal);font-weight:700}
+.tf .no{color:#B91C1C;font-weight:700}
+.qtag{display:inline-block;font-size:.72rem;background:var(--bg-warm);color:var(--amber-dark);border-radius:999px;padding:0 9px;margin-right:6px;border:1px solid var(--line)}
+.qen{list-style:none;counter-reset:q;display:grid;gap:14px}
+.qen li{counter-increment:q;background:#fff;border:1px solid var(--line);border-radius:var(--radius-sm);padding:16px 18px 16px 62px;position:relative;box-shadow:var(--shadow);font-family:Georgia,serif;line-height:1.7}
+.qen li::before{content:counter(q);position:absolute;left:16px;top:16px;width:34px;height:34px;border-radius:50%;background:var(--amber);color:#fff;font-family:'Playfair Display',serif;font-weight:700;display:flex;align-items:center;justify-content:center}
+.qen .qtag{font-family:'Noto Serif TC',serif}
+.tk{list-style:none;display:grid;gap:10px}
+.tk li{font-family:Georgia,serif;background:#fff;border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:var(--radius-sm);padding:12px 16px;font-size:1rem;line-height:1.65}
+
+/* Footer + top */
+.site-footer{text-align:center;padding:40px 24px 60px;color:#9A8B7A;font-size:.9rem}
+#top{position:fixed;right:18px;bottom:18px;width:46px;height:46px;border-radius:50%;border:0;background:var(--amber);color:#fff;font-size:1.2rem;cursor:pointer;box-shadow:var(--shadow-lg);opacity:0;pointer-events:none;transition:opacity .3s,background .25s;z-index:40}
+#top.show{opacity:1;pointer-events:auto}
+#top:hover{background:var(--amber-deep)}
+
+/* Reveal */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.flip-inner{transition:none}html{scroll-behavior:auto}}
+
+/* Print */
+@media print{
+  body{background:#fff;font-size:10.5pt;line-height:1.55}
+  .hero,.tabs,.note,.site-footer,#top,.no-print,.gloss{display:none!important}
+  .reveal{opacity:1!important;transform:none!important}
+  .card,.passage,.tf,.qen li,.face{box-shadow:none!important}
+  .section{padding:14px 0}
+  .flip-inner{transform:none!important;display:block}
+  .face{backface-visibility:visible;-webkit-backface-visibility:visible;transform:none!important;margin-bottom:6px;padding:10px 14px;break-inside:avoid}
+  .grid{gap:10px}
+  .tf .res{display:none!important}
+}
+</style>
+</head>
+<body>
+
+<header class="hero reveal">
+  <p class="eyebrow">Climate · Energy · Critical Thinking</p>
+  <h1 class="display hero-title">我們需要核能，<br>才能阻止氣候變遷嗎？</h1>
+  <p class="hero-sub">一套給高中生的思辨教材：45 分鐘課堂辯論，加上附單字支援的英文版。</p>
+  <a class="btn" href="#tabs">開始使用</a>
+</header>
+
+<div class="wrap">
+  <div class="note">
+    <strong>給老師的小提醒：</strong>本教材依一般知識整理，並非取自任何影片內容。數據皆為約略值，上課前建議再核對最新資料，尤其是台灣核能政策的最新現況。
+  </div>
+</div>
+
+<nav class="tabs" id="tabs" role="tablist" aria-label="教材分頁">
+  <div class="tabs-inner">
+    <button class="tab" role="tab" id="t-how" aria-controls="p-how" aria-selected="true">如何進行</button>
+    <button class="tab" role="tab" id="t-debate" aria-controls="p-debate" aria-selected="false">角色卡</button>
+    <button class="tab" role="tab" id="t-en" aria-controls="p-en" aria-selected="false">English Version</button>
+  </div>
+</nav>
+
+<main>
+
+<!-- ============ TAB 1：如何進行 ============ -->
+<section class="panel" id="p-how" role="tabpanel" aria-labelledby="t-how">
+  <div class="section">
+    <div class="wrap">
+      <div class="reveal">
+        <p class="eyebrow">How It Works</p>
+        <h2 class="section-title">如何進行：45 分鐘小組辯論</h2>
+        <p class="lead">全班分成 6 組，每組扮演一種立場，說服全班。重點不是贏，而是學會用證據做取捨。</p>
+      </div>
+
+      <div class="card scenario reveal">
+        <p class="eyebrow">The Situation</p>
+        <p><b>情境：</b>「陽光島」是一座人口密集的小島，約九成五的能源靠進口。2040 年前，島上必須大幅減少發電產生的碳排放。要蓋新的核能電廠？全力發展太陽能與風電？還是兩者並用？</p>
+      </div>
+
+      <h3 class="sub reveal">課前準備</h3>
+      <ul class="tips reveal">
+        <li>把全班分成 6 組，每組 4–6 人。人數較少時，只用其中 4–5 張角色卡也可以。</li>
+        <li>讓學生看到角色卡（投影，或請學生用手機開啟「角色卡」分頁）。</li>
+      </ul>
+      <p class="center reveal" style="margin-top:18px"><button class="btn" data-goto="t-debate">前往角色卡 →</button></p>
+
+      <h3 class="sub reveal">四個步驟</h3>
+      <div class="grid c2">
+        <div class="card reveal"><span class="num">1</span><h4>站隊暖身</h4><span class="time">5 MIN</span><p>老師唸：「核能是阻止氣候變遷的必要條件。」同意的站左邊，不同意的站右邊，不確定的站中間。每個人記下自己站在哪裡。</p></div>
+        <div class="card reveal"><span class="num">2</span><h4>小組準備</h4><span class="time">10 MIN</span><p>每組抽一張角色卡，翻面讀完。一起準備 1 分鐘的發言：一個立場、兩個理由。組內分工：發言人、記錄員、提問人、計時員。</p></div>
+        <div class="card reveal"><span class="num">3</span><h4>發言與提問</h4><span class="time">20 MIN</span><p>每組發言 1 分鐘。接著每組向另一組問一個問題（可以用角色卡上的「hard question」），被問的組要回答。老師指定誰問誰，讓立場相近的組也互相挑戰。</p></div>
+        <div class="card reveal"><span class="num teal">4</span><h4>再站隊與反思</h4><span class="time">10 MIN</span><p>再站一次隊，看看誰移動了。每個人寫一小段話：我有沒有改變想法？是哪個證據或哪句話讓我改變（或沒有改變）？</p></div>
+      </div>
+
+      <h3 class="sub reveal">怎樣算表現好？</h3>
+      <div class="grid c3">
+        <div class="card reveal"><h4>有證據</h4><p>至少說出一個數字或例子，不只是「我覺得」。</p></div>
+        <div class="card reveal"><h4>有回應</h4><p>先聽懂對方，再回答，例如：“I understand your point, but …”</p></div>
+        <div class="card reveal"><h4>有禮貌</h4><p>對事不對人。可以不同意，但要說明原因。</p></div>
+      </div>
+
+      <h3 class="sub reveal">結束時可以問學生</h3>
+      <ul class="tips reveal">
+        <li>你改變想法，是因為證據，還是因為某個人講得比較好聽？</li>
+        <li>如果你真的是陽光島的市長，你還想知道什麼資訊才能做決定？</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TAB 2：角色卡 ============ -->
+<section class="panel" id="p-debate" role="tabpanel" aria-labelledby="t-debate" hidden>
+  <div class="section">
+    <div class="wrap">
+      <div class="reveal">
+        <p class="eyebrow">Role Cards · CEFR B1</p>
+        <h2 class="section-title">6 張角色卡</h2>
+        <p class="lead">點一下卡片翻面。每張卡都有一個「hard question」，先想好怎麼回答。</p>
+      </div>
+      <div class="grid c3" id="roles"></div>
+
+      <h3 class="sub reveal">Useful Sentences</h3>
+      <div class="chips reveal" lang="en">
+        <span class="chip">I think … because …</span>
+        <span class="chip">For example, …</span>
+        <span class="chip">I understand your point, but …</span>
+        <span class="chip">One problem is …</span>
+        <span class="chip">What will happen if …?</span>
+        <span class="chip">We agree on …, but we disagree on …</span>
+        <span class="chip">I changed my mind because …</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TAB 3：English Version ============ -->
+<section class="panel" id="p-en" role="tabpanel" aria-labelledby="t-en" hidden>
+  <div class="section">
+    <div class="wrap">
+      <div class="reveal center" style="margin-bottom:24px">
+        <p class="eyebrow">English Version · CEFR B1–B2</p>
+        <h2 class="section-title" style="display:inline-block;text-align:left">English Version with Vocabulary Support</h2>
+        <p class="lead" style="margin:16px auto 18px">閱讀短文 → 點標示單字看解釋 → 理解檢測 → 單字卡 → 討論題。</p>
+        <button class="btn no-print" onclick="window.print()">列印此頁</button>
+      </div>
+
+      <div class="gloss" id="gloss" lang="en">Tap a <u>highlighted word</u> to see its meaning. <span lang="zh-Hant">點一下有底線的單字，看解釋。</span></div>
+
+      <article class="passage reveal" lang="en">
+        <h3>Do We Need Nuclear Power to Stop Climate Change?</h3>
+        <p>Climate change is mainly caused by burning <button class="w" data-k="fossil fuels">fossil fuels</button> such as coal, oil and gas. To slow it down, the world must cut its <button class="w" data-k="emissions">emissions</button> quickly. But how? Many scientists agree that we need to produce electricity without releasing much carbon dioxide. Nuclear power is one option. Wind and solar power are others.</p>
+        <p>Supporters of nuclear power point out that a <button class="w" data-k="reactor">reactor</button> produces electricity day and night, in any weather. Wind and solar are cheap and growing fast, but they are <button class="w" data-k="intermittent">intermittent</button>: the sun sets and the wind sometimes stops. Batteries help, but storing enough energy for days or weeks is still difficult. Nuclear plants also take up little land and, over their whole <button class="w" data-k="life cycle">life cycle</button>, release about as little carbon as wind farms. Statistics show that, per unit of energy, nuclear power has caused far fewer deaths than coal.</p>
+        <p>Critics answer that nuclear plants are expensive and slow to build. Several recent projects in Europe and the United States were years late and billions of dollars <button class="w" data-k="over budget">over budget</button>. Time matters, because climate <button class="w" data-k="target">targets</button> have deadlines. Money spent on one big reactor might build much more wind and solar power, much faster. There is also the problem of <button class="w" data-k="radioactive waste">radioactive waste</button>, which must be stored safely for thousands of years, and the fear that follows accidents such as Fukushima in 2011.</p>
+        <p>So do we need nuclear power? Most climate models say it is helpful but not <button class="w" data-k="strictly necessary">strictly necessary</button>. Countries with lots of sun, wind or hydropower may not need it. Countries with little space or weak <button class="w" data-k="renewable">renewable</button> resources may find it more attractive. In the end, the question is not only about science. It is also about money, risk, and what kind of future people are willing to accept.</p>
+      </article>
+
+      <h3 class="sub reveal">Key Takeaways</h3>
+      <ul class="tk reveal" lang="en">
+        <li>Most models say nuclear power helps, but the must-do is cutting fossil fuels fast.</li>
+        <li>Nuclear gives steady power; wind and solar are cheaper and quicker to build.</li>
+        <li>Nuclear waste and high costs are the biggest concerns; safety fears are strong, even though its death rate per unit of energy is low.</li>
+        <li>The core question is a trade-off: speed and cost, or keeping every low-carbon option open?</li>
+      </ul>
+
+      <h3 class="sub reveal">Quick Check: True or False?</h3>
+      <div class="grid c2" id="tfs" lang="en"></div>
+
+      <h3 class="sub reveal">Vocabulary Cards</h3>
+      <p class="hint reveal" style="margin-bottom:14px">Tap a card to flip it. Cards marked "Discussion" are used in the questions below.　點卡片翻面。</p>
+      <div class="grid c3" id="vocab" lang="en"></div>
+
+      <h3 class="sub reveal">Discussion Questions</h3>
+      <ol class="qen reveal" lang="en">
+        <li><span class="qtag">Trade-off</span>You have $50 billion and 10 years. Would you build nuclear reactors, or solar, wind and batteries? What evidence would change your mind?</li>
+        <li><span class="qtag">Risk perception</span>People fear nuclear accidents more than coal pollution, even though coal pollution kills far more people. Why do we judge some risks differently? Is that fear irrational?</li>
+        <li><span class="qtag">Ethics</span>Nuclear waste stays dangerous for thousands of years. Do we have the right to leave it to future generations, when climate change is also a burden we leave them?</li>
+        <li><span class="qtag">Assumptions</span>The world may need much more electricity as cars, heating and AI data centers switch to it. How does that change the question "Do we need nuclear power?"</li>
+        <li><span class="qtag">Compare cases</span>Germany closed its reactors, while France built many. Which choice would you defend? What would you need to know first?</li>
+        <li><span class="qtag">Local context</span>Taiwan imports almost all of its energy and has phased out its reactors, while the debate about restarting them continues. How should a small island weigh energy security, safety and emissions?</li>
+        <li><span class="qtag">Values</span>Some environmental groups oppose nuclear power and others now support it. Why might people who share a goal disagree on the method?</li>
+        <li><span class="qtag">Decision-making</span>Who should decide: scientists, politicians or voters? What does each group get right, and what might each get wrong?</li>
+      </ol>
+
+      <h3 class="sub reveal">Sentence Frames for Your Answer</h3>
+      <div class="chips reveal" lang="en">
+        <span class="chip">I think … because …</span>
+        <span class="chip">For example, …</span>
+        <span class="chip">On the one hand, … On the other hand, …</span>
+        <span class="chip">The biggest trade-off is …</span>
+        <span class="chip">I would need more evidence about …</span>
+        <span class="chip">Although …, I still believe …</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <p class="display" style="color:var(--amber-deep);font-size:1.05rem">Gina &amp; 宏孝的SDGs多元選修課</p>
+  <p>讓學生學會用證據思考，而不是只選邊站。</p>
+</footer>
+
+<button id="top" aria-label="回到頂端">↑</button>
+
+<script>
+/* ---------- 資料 ---------- */
+const ROLES = [
+ {en:'Nuclear Engineer', zh:'核能工程師',
+  pos:'We should build new nuclear power plants. We should also use wind and solar.',
+  args:['Nuclear plants make electricity day and night.','They make very little carbon.','They need little land. This is good for a small island.'],
+  hard:'Nuclear plants often cost too much and take too long to build. Where will the waste go?',
+  say:'Nuclear power keeps the lights on when the wind stops.'},
+ {en:'Renewable Energy Business Owner', zh:'再生能源創業者',
+  pos:'We should use solar, wind and batteries. We should not build new nuclear plants.',
+  args:['Solar and wind are much cheaper now.','We can build them fast.','They have no nuclear waste and no risk of a big accident.'],
+  hard:'What do we do when there is no sun and no wind? Do we have enough space?',
+  say:'We can build faster and cheaper, and we do not have much time.'},
+ {en:'Climate Scientist', zh:'氣候科學家',
+  pos:'We should choose the plan that cuts carbon the fastest. I do not choose a side before I see the facts.',
+  args:['Every year of burning coal and gas puts more carbon in the air.','Nuclear, wind and solar are all much cleaner than coal and gas.','We need to compare facts: carbon, cost and time.'],
+  hard:'So which side are you on?',
+  say:'Let\'s look at the facts and choose the fastest way to cut carbon.'},
+ {en:'Economist', zh:'經濟學家',
+  pos:'We should get the most carbon cuts for the money we have.',
+  args:['Compare how much each plan costs for each ton of carbon we save.','Big projects often cost more than planned. People who pay taxes carry this risk.','Power cuts are also very expensive for shops and factories.'],
+  hard:'A cheap plan is no good if the power goes out. Who pays for that?',
+  say:'Every dollar we spend on one plan is a dollar we cannot spend on another.'},
+ {en:'Local Resident', zh:'沿海居民',
+  pos:'I care about safety and my community. I also worry about the sea getting higher.',
+  args:['I want to know what happens in an accident and where the waste goes.','Wind farms and solar panels can also change the view and hurt fishing.','Leaders must share information and listen to local people.'],
+  hard:'You are afraid of floods from climate change too. So what do you really want?',
+  say:'Whatever we choose, people who live nearby need a real voice.'},
+ {en:'Young Voter (age 18)', zh:'年輕選民',
+  pos:'I will live with today\'s choice for 60 years. The plan must protect my future.',
+  args:['Climate change will hurt young people the most.','I do not want to leave dangerous waste or a huge bill for the next generation.','I want a plan that is safe, clean and fair for everyone.'],
+  hard:'Every plan has a risk. Which risk are you more willing to accept?',
+  say:'Our generation will pay for this decision, so we want a voice in it.'}
+];
+
+const VOCAB = [
+ {w:'emissions',pos:'noun',def:'gases, especially carbon dioxide, sent into the air',zh:'排放（量）',ex:'Cars and factories produce a lot of emissions.',p:1},
+ {w:'fossil fuels',pos:'noun',def:'coal, oil and gas, made from ancient plants and animals',zh:'化石燃料',ex:'Burning fossil fuels warms the planet.',p:1},
+ {w:'reactor',pos:'noun',def:'a machine in a nuclear power plant that makes heat from nuclear reactions',zh:'反應爐',ex:'The plant has two reactors.',p:1},
+ {w:'intermittent',pos:'adjective',def:'stopping and starting; not continuous',zh:'間歇性的',ex:'Solar power is intermittent because the sun sets.',p:1},
+ {w:'life cycle',pos:'noun',def:'all the stages of a product or plant, from building it to shutting it down',zh:'生命週期',ex:'We should count emissions over the whole life cycle.',p:1},
+ {w:'over budget',pos:'adjective phrase',def:'costing more money than planned',zh:'超出預算',ex:'The bridge was two years late and over budget.',p:1},
+ {w:'radioactive waste',pos:'noun',def:'dangerous used material from nuclear reactions that must be stored safely',zh:'放射性廢棄物（核廢料）',ex:'Radioactive waste can stay dangerous for thousands of years.',p:1},
+ {w:'target',pos:'noun',def:'a goal you try to reach by a certain time',zh:'目標',ex:'The country set a target of cutting emissions by half.',p:1},
+ {w:'strictly necessary',pos:'adverb + adjective',def:'absolutely needed; impossible to avoid',zh:'絕對必要的',ex:'Homework is useful, but it is not strictly necessary for everyone.',p:1},
+ {w:'renewable',pos:'adjective',def:'from sources that do not run out, like sun, wind and water',zh:'可再生的',ex:'Wind is a renewable energy source.',p:1},
+ {w:'trade-off',pos:'noun',def:'giving up one good thing in order to get another',zh:'取捨、權衡',ex:'The trade-off is speed versus cost.',p:0},
+ {w:'energy security',pos:'noun phrase',def:'having reliable energy that does not depend too much on other countries',zh:'能源安全',ex:'Small islands worry a lot about energy security.',p:0},
+ {w:'phase out',pos:'phrasal verb',def:'to stop using something slowly, step by step',zh:'逐步淘汰',ex:'The country plans to phase out coal by 2035.',p:0},
+ {w:'stakeholder',pos:'noun',def:'a person or group affected by a decision',zh:'利害關係人',ex:'Local residents are important stakeholders.',p:0}
+];
+
+const TFS = [
+ {s:'Nuclear power plants release large amounts of CO₂ while they produce electricity.',a:false,e:'False. Over its whole life cycle, nuclear releases about as little carbon as wind power.'},
+ {s:'Wind and solar power are "intermittent" because they do not produce electricity all the time.',a:true,e:'True. The sun sets and the wind sometimes stops.'},
+ {s:'Recent nuclear projects in Europe and the US were finished faster and cheaper than planned.',a:false,e:'False. Several were years late and billions of dollars over budget.'},
+ {s:'The passage says nuclear power is strictly necessary in every country.',a:false,e:'False. Most models say it is helpful but not strictly necessary.'}
+];
+
+/* ---------- 渲染角色卡 ---------- */
+const roles = document.getElementById('roles');
+ROLES.forEach((r,i)=>{
+  roles.insertAdjacentHTML('beforeend',`
+  <div class="flip reveal" tabindex="0" role="button" aria-pressed="false" aria-label="${r.en}，點一下翻面">
+    <div class="flip-inner">
+      <div class="face front">
+        <span class="num${i===2?' teal':''}">${'ABCDEF'[i]}</span>
+        <div class="role-en">${r.en}</div>
+        <div class="role-zh">${r.zh}</div>
+        <div class="hint">點一下翻面 ↻</div>
+      </div>
+      <div class="face back" lang="en">
+        <div class="lab">MY POSITION</div><div>${r.pos}</div>
+        <div class="lab" style="margin-top:8px">MY 3 REASONS</div>
+        <ul>${r.args.map(a=>`<li>${a}</li>`).join('')}</ul>
+        <div class="lab">A HARD QUESTION</div><div style="color:var(--ink-soft)">${r.hard}</div>
+        <div class="say">"${r.say}"</div>
+      </div>
+    </div>
+  </div>`);
+});
+
+/* ---------- 渲染單字卡 ---------- */
+const vocab = document.getElementById('vocab');
+VOCAB.forEach(v=>{
+  vocab.insertAdjacentHTML('beforeend',`
+  <div class="flip reveal" tabindex="0" role="button" aria-pressed="false" aria-label="${v.w}，點一下翻面">
+    <div class="flip-inner">
+      <div class="face front">
+        <div class="vword">${v.w}</div>
+        <div class="pos">${v.pos}</div>
+        ${v.p?'':'<span class="tagpass">Discussion</span>'}
+        <div class="hint">tap to flip ↻</div>
+      </div>
+      <div class="face back">
+        <div class="lab">Meaning</div><div>${v.def}</div>
+        <div class="lab" style="margin-top:6px">中文</div><div lang="zh-Hant">${v.zh}</div>
+        <div class="say">${v.ex}</div>
+      </div>
+    </div>
+  </div>`);
+});
+
+/* ---------- 渲染是非題 ---------- */
+const tfs = document.getElementById('tfs');
+TFS.forEach((t,i)=>{
+  tfs.insertAdjacentHTML('beforeend',`
+  <div class="tf reveal">
+    <p>${i+1}. ${t.s}</p>
+    <div class="opts"><button data-a="true">True</button><button data-a="false">False</button></div>
+    <div class="res"></div>
+  </div>`);
+  const box = tfs.lastElementChild;
+  box.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+    const ok = (b.dataset.a==='true')===t.a;
+    const res = box.querySelector('.res');
+    res.innerHTML = `<span class="${ok?'ok':'no'}">${ok?'✓ Correct!':'✗ Not quite.'}</span> ${t.e}`;
+    res.classList.add('show');
+  }));
+});
+
+/* ---------- 翻牌（事件委派）---------- */
+function toggleFlip(el){
+  const on = el.classList.toggle('on');
+  el.setAttribute('aria-pressed', on);
+}
+document.addEventListener('click',e=>{
+  const f = e.target.closest('.flip');
+  if(f) toggleFlip(f);
+});
+document.addEventListener('keydown',e=>{
+  if((e.key==='Enter'||e.key===' ') && e.target.classList && e.target.classList.contains('flip')){
+    e.preventDefault(); toggleFlip(e.target);
+  }
+});
+
+/* ---------- 單字解釋列 ---------- */
+const gloss = document.getElementById('gloss');
+document.querySelectorAll('.w').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const v = VOCAB.find(x=>x.w===btn.dataset.k);
+    if(!v) return;
+    document.querySelectorAll('.w.sel').forEach(x=>x.classList.remove('sel'));
+    btn.classList.add('sel');
+    gloss.innerHTML = `<b>${v.w}</b> <span class="pos">(${v.pos})</span> — ${v.def}<br><span lang="zh-Hant">${v.zh}</span>　<i>${v.ex}</i>`;
+  });
+});
+
+/* ---------- 分頁 ---------- */
+const tabs = document.querySelectorAll('.tab');
+function showTab(id){
+  tabs.forEach(t=>t.setAttribute('aria-selected', t.id===id));
+  document.querySelectorAll('.panel').forEach(p=>{
+    p.hidden = p.getAttribute('aria-labelledby')!==id;
+  });
+  const panel = document.querySelector('.panel:not([hidden])');
+  setTimeout(()=>panel.querySelectorAll('.reveal').forEach(el=>{
+    const r = el.getBoundingClientRect();
+    if(r.top < window.innerHeight) el.classList.add('in');
+  }),80);
+  const y = document.getElementById('tabs').offsetTop;
+  if(window.scrollY > y) window.scrollTo({top:y,behavior:'smooth'});
+}
+tabs.forEach(t=>t.addEventListener('click',()=>showTab(t.id)));
+document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>{
+  showTab(b.dataset.goto);
+  window.scrollTo({top:document.getElementById('tabs').offsetTop,behavior:'smooth'});
+}));
+
+/* ---------- 捲動進場 ---------- */
+document.querySelectorAll('.grid').forEach(g=>{
+  [...g.children].forEach((c,i)=>{ c.style.transitionDelay = (i%3*0.08)+'s'; });
+});
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); });
+},{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+/* ---------- 回到頂端 ---------- */
+const topBtn = document.getElementById('top');
+window.addEventListener('scroll',()=>topBtn.classList.toggle('show', window.scrollY>600));
+topBtn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+</script>
+<a href="../" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:9999;background:#2F86D6;color:#fff;font:700 13px/1 system-ui,sans-serif;padding:10px 14px;border-radius:999px;text-decoration:none;box-shadow:0 4px 14px rgba(0,0,0,.2)">← 回群島</a>
+</body>
+</html>
