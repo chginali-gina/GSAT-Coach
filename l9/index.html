@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pilgrimage Guardian｜媽祖進香文化特使 L9</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800&family=Lora:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#2a0b0b; --bg2:#3b0d0d;
+  --verm:#b91c1c; --verm-d:#7f1d1d; --gold:#d97706; --gold-b:#fbbf24; --gold-t:#fef3c7;
+  --parch:#fffbeb; --parch2:#fef3c7; --card:#fffdf6;
+  --ink:#1c1917; --soft:#6b5b4e; --line:#ecd9a8;
+  --jade:#047857; --jade-t:#d1fae5; --bad:#b91c1c; --bad-t:#fee2e2;
+  --pink:#db2777; --pink-t:#fce7f3; --sky:#0369a1; --sky-t:#e0f2fe;
+  --radius:16px; --shadow:0 10px 28px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html{font-size:106.25%;-webkit-text-size-adjust:100%}
+html.big{font-size:118.75%}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:'Inter','Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;line-height:1.75;
+  background-color:var(--bg);
+  background-image:radial-gradient(circle at 50% 0%,rgba(217,119,6,.25),transparent 60%),radial-gradient(circle at 15% 85%,rgba(185,28,28,.35),transparent 55%),repeating-linear-gradient(45deg,rgba(251,191,36,.04) 0 2px,transparent 2px 16px);
+  background-attachment:fixed}
+body::before{content:"";position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);background:#1c0606;z-index:60}
+button{font:inherit;color:inherit}
+h1,h2,h3{margin:0;line-height:1.3;text-wrap:balance}
+.disp{font-family:'Cinzel','Noto Sans TC',serif;letter-spacing:.03em}
+.scrollf{font-family:'Lora','Noto Sans TC',serif}
+.num{font-variant-numeric:lining-nums tabular-nums}
+.hidden-svg{position:absolute;width:0;height:0;overflow:hidden}
+svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.en{display:block;font-size:.86em;line-height:1.55;color:var(--soft);margin-top:2px}
+.en.in{display:inline;margin-left:.4em;font-size:.82em}
+.btn .en,.dark .en{color:inherit;opacity:.8}
+
+/* header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:linear-gradient(90deg,#450a0a,#1c1917,#450a0a);border-bottom:2px solid rgba(251,191,36,.6);box-shadow:0 4px 16px rgba(0,0,0,.4);color:var(--gold-t)}
+.top-in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:8px;padding:8px max(14px,env(safe-area-inset-right,0px)) 6px max(14px,env(safe-area-inset-left,0px))}
+.crest{width:40px;height:40px;flex:none}
+.brand{flex:1;min-width:0;line-height:1.2}
+.brand b{display:block;font-family:'Cinzel',serif;font-size:.9rem;color:var(--gold-b);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand small{display:block;font-size:.72rem;opacity:.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbtn{display:inline-grid;place-items:center;width:40px;height:40px;border-radius:12px;border:1px solid rgba(251,191,36,.45);background:rgba(28,25,23,.7);color:var(--gold-t);cursor:pointer}
+.hbtn.codex{width:auto;padding:0 10px;gap:6px;display:inline-flex;background:var(--gold);color:#1c1917;border:none;font-weight:800;font-size:.82rem}
+.hud{max-width:760px;margin:0 auto;display:flex;gap:10px;align-items:center;padding:0 max(14px,env(safe-area-inset-right,0px)) 8px max(14px,env(safe-area-inset-left,0px));font-size:.72rem;font-weight:800}
+.hud:empty{display:none}
+.meter{flex:1;display:flex;align-items:center;gap:8px}
+.meter .tr{flex:1;height:8px;border-radius:999px;background:#292524;overflow:hidden}
+.meter .fl{display:block;height:100%;background:linear-gradient(90deg,#ef4444,#f59e0b,#fde047);transition:width .5s}
+.merit{background:rgba(4,120,87,.25);border:1px solid rgba(16,185,129,.5);color:#6ee7b7;border-radius:8px;padding:2px 8px;white-space:nowrap}
+
+main{max-width:760px;margin:0 auto;padding:16px max(14px,env(safe-area-inset-right,0px)) calc(96px + env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px))}
+
+/* cards */
+.scroll{background:linear-gradient(180deg,var(--parch),var(--parch2));border:2px solid var(--gold);border-radius:var(--radius);box-shadow:var(--shadow),inset 0 0 0 4px rgba(185,28,28,.1);padding:18px;margin:14px 0}
+.dark{background:linear-gradient(165deg,#3b0d0d,#1c1917);border:1.5px solid rgba(251,191,36,.45);border-radius:var(--radius);box-shadow:var(--shadow);color:var(--gold-t);padding:16px;margin:14px 0}
+.kicker{display:inline-flex;align-items:center;gap:6px;font-size:.72rem;font-weight:800;letter-spacing:.08em;color:var(--gold-t);background:var(--verm-d);padding:3px 10px;border-radius:999px;text-transform:uppercase}
+.lead{color:var(--soft);margin:8px 0 0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:8px 20px;border-radius:14px;border:2px solid var(--gold-b);background:linear-gradient(90deg,var(--verm-d),var(--verm),#b45309);color:var(--gold-t);font-weight:800;cursor:pointer;line-height:1.3;text-align:center}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:var(--card);color:var(--verm-d);border:2px solid var(--gold)}
+.btn.block{width:100%}
+.btn:disabled{opacity:.45;cursor:not-allowed;filter:none}
+:focus-visible{outline:3px solid var(--gold-b);outline-offset:2px}
+
+/* form */
+.field{display:grid;gap:4px}
+.field label{font-weight:700;font-size:.88rem}
+.field input,textarea{font:inherit;color:var(--ink);background:#fff;border:1.5px solid var(--gold);border-radius:12px;padding:10px 12px;min-height:46px;width:100%}
+.field input:focus,textarea:focus{outline:none;box-shadow:0 0 0 3px rgba(185,28,28,.25)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid2 .wide{grid-column:1/-1}
+.err{color:var(--bad);font-weight:700;font-size:.85rem;margin:8px 0 0}
+
+/* route map */
+.gmap{position:relative;width:100%;aspect-ratio:360/520}
+.gmap svg.mapsvg{position:absolute;inset:0;width:100%;height:100%}
+.node{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:3px;border:none;background:none;cursor:pointer;padding:0}
+.node .disc{width:60px;height:60px;border-radius:50%;display:grid;place-items:center;background:var(--parch);border:3px solid var(--gold-b);box-shadow:0 5px 0 rgba(0,0,0,.3)}
+.node .disc svg{width:44px;height:44px}
+.node.lock .disc{filter:grayscale(1);opacity:.55}
+.node.lock{cursor:not-allowed}
+.node.now .disc{animation:glow 1.8s infinite}
+@keyframes glow{50%{box-shadow:0 5px 0 rgba(0,0,0,.3),0 0 0 12px rgba(251,191,36,0)}0%,100%{box-shadow:0 5px 0 rgba(0,0,0,.3),0 0 0 0 rgba(251,191,36,.7)}}
+.node .nl{background:var(--verm-d);color:var(--gold-t);border:1px solid var(--gold-b);border-radius:999px;padding:0 10px;font-size:.72rem;font-weight:800;white-space:nowrap;line-height:1.7}
+.node .ok{position:absolute;top:-4px;right:-6px;width:22px;height:22px;border-radius:50%;background:var(--jade);color:#fff;display:grid;place-items:center;border:2px solid var(--parch)}
+.node .ok svg.i{width:14px;height:14px}
+.node .sc{font-size:.7rem;font-weight:900;color:var(--gold-b)}
+
+/* act header */
+.banner{position:relative;border-radius:var(--radius);overflow:hidden;border:2px solid var(--gold);box-shadow:var(--shadow);margin:2px 0 12px}
+.banner svg.scene{display:block;width:100%;height:auto}
+.banner .tag{position:absolute;left:12px;top:10px;background:var(--verm-d);color:var(--gold-t);border:1px solid var(--gold-b);border-radius:999px;font-size:.72rem;font-weight:900;letter-spacing:.1em;padding:2px 10px}
+.banner .stamp{position:absolute;right:14px;bottom:14px;color:var(--verm);border:4px solid var(--verm);background:rgba(255,251,235,.9);border-radius:10px;padding:2px 12px;font-weight:900;font-family:'Cinzel',serif;transform:rotate(-10deg);animation:stampin .5s cubic-bezier(.18,.89,.32,1.28)}
+@keyframes stampin{0%{transform:rotate(-10deg) scale(2.2);opacity:0}100%{transform:rotate(-10deg) scale(1);opacity:1}}
+.ah{display:flex;align-items:center;gap:12px}
+.ah .ae{width:56px;height:56px;flex:none}
+.ah small{display:block;font-weight:800;font-size:.78rem;color:var(--gold-b)}
+.ah h2{font-family:'Cinzel','Noto Sans TC',serif;color:var(--gold-t);font-size:clamp(1.15rem,4.8vw,1.5rem)}
+.ah .sub{color:var(--gold-t);opacity:.8;font-size:.86rem}
+.goal{display:flex;gap:8px;align-items:flex-start;background:rgba(251,191,36,.12);border:1px dashed rgba(251,191,36,.5);border-radius:12px;padding:8px 12px;margin-top:10px;font-size:.92rem;color:var(--gold-t)}
+.goal svg.i{color:var(--gold-b);margin-top:3px}
+
+/* guide */
+.guide{display:flex;gap:12px;align-items:flex-start}
+.guide .av{width:48px;height:48px;flex:none}
+.guide .who{font-size:.72rem;font-weight:900;letter-spacing:.08em;color:var(--gold-b);display:flex;align-items:center;gap:6px}
+.guide .who::before{content:"";width:7px;height:7px;border-radius:50%;background:#34d399;animation:blink 1.2s infinite}
+@keyframes blink{50%{opacity:.2}}
+.guide .msg{font-weight:600;font-size:.94rem;margin-top:2px}
+.guide.warn{border-color:#f59e0b}
+.guide.cheer{border-color:#34d399}
+
+/* field scroll */
+.fsh{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;font-size:.74rem;font-weight:800;letter-spacing:.06em;color:var(--verm-d);text-transform:uppercase}
+.passage{font-family:'Lora',serif;font-size:1.05rem;line-height:1.95;margin:0}
+.vw{color:#991b1b;font-weight:700;border:none;border-bottom:2px dashed var(--gold);background:rgba(251,191,36,.18);padding:0 3px;border-radius:4px;cursor:pointer;font-family:inherit;font-size:inherit;line-height:inherit}
+.vw.on{background:var(--verm);color:var(--parch)}
+.vw.clue{background:#fde047;border:1.5px solid var(--verm);box-shadow:0 0 10px rgba(217,119,6,.5)}
+.tipbox{margin-top:10px;background:#fff;border:1.5px solid var(--gold);border-radius:12px;padding:10px 12px;display:flex;gap:10px;align-items:flex-start}
+.tipbox b{color:var(--verm-d)}
+.tipbox i{color:var(--gold);font-size:.85rem;margin-left:4px}
+.tipbox .x{margin-left:auto;border:none;background:none;cursor:pointer;color:var(--soft);font-weight:900;min-width:32px;min-height:32px}
+
+/* questions */
+.q{background:var(--card);border:2px solid var(--line);border-radius:var(--radius);padding:16px;margin:14px 0;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.q.ok{border-color:var(--jade)}
+.qh{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+.qn{background:var(--verm-d);color:var(--gold-t);border-radius:8px;font-weight:900;padding:1px 9px;flex:none;font-size:.85rem}
+.qt{font-weight:700;line-height:1.55}
+.qtype{display:block;font-size:.7rem;font-weight:800;letter-spacing:.06em;color:var(--gold);text-transform:uppercase}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;width:100%;min-height:52px;padding:11px 13px;border-radius:12px;border:1.5px solid var(--line);background:#fff;cursor:pointer;line-height:1.5}
+.opt:hover:not(:disabled){border-color:var(--verm);background:var(--parch)}
+.opt .k{font-weight:900;color:var(--verm-d);flex:none;width:24px}
+.opt.good{border-color:var(--jade);background:var(--jade-t)}
+.opt.bad{border-color:var(--bad);background:var(--bad-t);opacity:.85}
+.opt.out{opacity:.35;text-decoration:line-through}
+.opt.sel{border-color:var(--verm);background:var(--parch2)}
+.opt:disabled{cursor:default}
+.fb{border-radius:12px;padding:10px 12px;margin-top:10px;font-size:.94rem}
+.fb.good{background:var(--jade-t);border-left:5px solid var(--jade)}
+.fb.bad{background:var(--bad-t);border-left:5px solid var(--bad)}
+.fb b{display:inline-flex;align-items:center;gap:6px}
+.fb.good b{color:var(--jade)} .fb.bad b{color:var(--bad)}
+.shake{animation:shake .4s ease}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+
+/* fill */
+.sent{margin:0 0 12px;line-height:2.15}
+.blank{display:inline-flex;align-items:center;justify-content:center;min-width:104px;min-height:38px;padding:0 10px;margin:0 2px;border-radius:10px;border:2px dashed var(--verm);background:var(--parch2);color:var(--verm-d);font-weight:800;cursor:pointer;vertical-align:middle}
+.blank.act{border-style:solid;box-shadow:0 0 0 4px rgba(251,191,36,.5)}
+.blank.filled{border-style:solid;background:#fff}
+.blank.right{border-color:var(--jade);background:var(--jade-t);color:var(--jade);cursor:default}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.chip{min-height:44px;padding:0 14px;border-radius:999px;border:1.5px solid var(--gold);background:#fff;cursor:pointer;font-weight:800}
+.chip:disabled{opacity:.3;cursor:default}
+.subh{font-size:.76rem;font-weight:800;color:var(--soft);margin:12px 0 4px}
+
+/* order & lock */
+.seqbox{background:#1c1917;border-radius:12px;padding:10px;color:#fff}
+.seqbox .lt{font-size:.7rem;font-weight:900;letter-spacing:.12em;opacity:.85;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.slots{display:flex;flex-wrap:wrap;gap:6px;min-height:50px;border:1.5px dashed rgba(255,255,255,.35);border-radius:10px;padding:8px}
+.slots.col{flex-direction:column}
+.slots .ph{opacity:.6;font-size:.85rem;align-self:center}
+.tile{min-height:42px;padding:4px 12px;border-radius:10px;border:none;font-weight:700;cursor:pointer;background:#fff;color:var(--ink);text-align:left;line-height:1.35}
+.tile .n{display:inline-block;min-width:22px;font-weight:900;color:var(--verm)}
+.tiles{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tiles.col{flex-direction:column}
+.tiles .tile{background:#fff;border:1.5px solid var(--gold)}
+.tiles .tile:disabled{opacity:.25}
+.seqbox.open{background:var(--jade)}
+
+/* sort */
+.cards{display:grid;gap:8px}
+.bc{display:flex;align-items:center;gap:10px;width:100%;text-align:left;min-height:52px;padding:10px 12px;border-radius:12px;border:1.5px solid var(--line);background:#fff;cursor:pointer;line-height:1.4}
+.bc.sel{border-color:var(--gold-b);box-shadow:0 0 0 3px rgba(251,191,36,.45)}
+.lab{margin-left:auto;font-size:.72rem;font-weight:900;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.lab.b0{background:var(--bad-t);color:var(--verm-d)} .lab.b1{background:var(--pink-t);color:var(--pink)} .lab.b2{background:var(--sky-t);color:var(--sky)}
+.lab.empty{border:1.5px dashed var(--line);color:var(--soft)}
+.bins{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.bin{min-height:58px;border-radius:12px;border:none;cursor:pointer;font-weight:800;line-height:1.25;padding:6px;font-size:.88rem}
+.bin.b0{background:var(--bad-t);color:var(--verm-d)} .bin.b1{background:var(--pink-t);color:var(--pink)} .bin.b2{background:var(--sky-t);color:var(--sky)}
+.bin:disabled{opacity:.45;cursor:default}
+.bin small{display:block;font-size:.7rem;opacity:.8}
+
+/* hints */
+.hints{margin-top:14px;border-top:1px dashed var(--line);padding-top:10px}
+.hints .hl{font-size:.74rem;font-weight:800;color:var(--soft);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px}
+.tier{display:flex;flex-direction:column;align-items:center;gap:2px;min-height:68px;padding:6px 4px;border-radius:12px;border:1.5px solid var(--line);background:#fff;cursor:pointer;font-weight:800;font-size:.78rem;line-height:1.25;text-align:center}
+.tier .tn{font-size:.66rem;font-weight:900;letter-spacing:.06em}
+.tier.t1 .tn{color:var(--gold)} .tier.t2 .tn{color:var(--sky)} .tier.t3 .tn{color:var(--jade)}
+.tier.next{border-color:var(--gold-b);box-shadow:0 0 0 3px rgba(251,191,36,.3)}
+.tier.used{background:var(--parch2);opacity:.7}
+.tier:disabled{cursor:default}
+.tier:not(.used):not(.next){opacity:.5}
+.tier.locked{background:repeating-linear-gradient(45deg,#f5f5f4 0 6px,#e7e5e4 6px 12px);opacity:.7}
+.hint{background:var(--parch2);border-radius:12px;padding:10px 12px;margin-top:8px;font-size:.92rem}
+.hint .lv{font-weight:900;color:var(--gold);font-size:.74rem;display:block}
+.quote{display:block;margin-top:6px;padding:8px 10px;background:#fff;border-radius:10px;font-style:italic;font-family:'Lora',serif;border-left:4px solid var(--gold)}
+
+/* nav */
+.nav2{display:flex;gap:10px;margin:20px 0 4px}
+.nav2 .btn{flex:1}
+.nav2 .en{display:none}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:50;background:#1c1917;border-top:2px solid rgba(251,191,36,.5);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabs-in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(7,1fr)}
+.tab{position:relative;height:62px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#a8a29e;font-weight:800;font-size:.7rem;line-height:1.1}
+.tab .tn{height:22px;display:flex;align-items:center;font-size:1rem;font-weight:900}
+.tab.on{color:var(--gold-b)}
+.tab.on::before{content:"";position:absolute;top:0;left:20%;right:20%;height:3px;background:var(--gold-b);border-radius:0 0 3px 3px}
+.tab.done .tn{color:#34d399}
+.tab:disabled{opacity:.35;cursor:not-allowed}
+
+/* codex drawer, sheet, modal */
+.mask{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:80;display:none}
+.mask.show{display:block}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(92vw,460px);z-index:92;background:var(--parch);transform:translateX(105%);transition:transform .25s;display:flex;flex-direction:column}
+.drawer.show{transform:none}
+.dhead{background:linear-gradient(90deg,#450a0a,#1c1917);color:var(--gold-t);padding:calc(12px + env(safe-area-inset-top,0px)) 16px 10px;display:flex;align-items:center;gap:10px;border-bottom:2px solid var(--gold-b)}
+.dhead b{font-family:'Cinzel','Noto Sans TC',serif;color:var(--gold-b)}
+.dhead .x{margin-left:auto;background:none;border:none;color:var(--gold-t);cursor:pointer;min-width:40px;min-height:40px}
+.dtabs{display:flex;gap:4px;padding:8px 10px 0;background:var(--parch2);border-bottom:1px solid var(--gold)}
+.dtabs button{flex:1;min-height:42px;border:none;border-radius:10px 10px 0 0;background:transparent;cursor:pointer;font-weight:800;font-size:.82rem;color:var(--soft)}
+.dtabs button.on{background:#fff;color:var(--verm-d);border:1px solid var(--gold);border-bottom:none}
+.dbody{flex:1;overflow:auto;padding:14px 16px calc(20px + env(safe-area-inset-bottom,0px));background:#fff;font-size:.94rem}
+.vgrid{display:grid;gap:8px;margin-top:10px}
+.vcard{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--parch)}
+.vcard b{color:var(--verm-d)} .vcard i{color:var(--gold);font-size:.82rem;margin-left:4px}
+table.cmp{width:100%;border-collapse:collapse;font-size:.88rem}
+table.cmp th{background:var(--verm-d);color:var(--gold-t);text-align:left;padding:8px}
+table.cmp td{border-bottom:1px solid var(--line);padding:8px;vertical-align:top}
+table.cmp td:first-child{font-weight:800;color:var(--verm-d)}
+.gram{border-left:4px solid var(--verm);background:var(--parch);border-radius:0 12px 12px 0;padding:10px 12px;margin-bottom:12px}
+.formula{background:#1c1917;color:var(--gold-b);font-family:ui-monospace,Menlo,monospace;border-radius:8px;padding:8px 10px;font-size:.85rem;margin:6px 0}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:90;background:var(--parch);border-radius:22px 22px 0 0;padding:18px max(18px,env(safe-area-inset-left,0px)) calc(20px + env(safe-area-inset-bottom,0px));max-width:760px;margin:0 auto;transform:translateY(105%);transition:transform .25s}
+.sheet.show{transform:none}
+.seg{display:flex;background:var(--parch2);border-radius:999px;padding:4px;gap:4px;margin:6px 0 14px}
+.seg button{flex:1;min-height:42px;border:none;border-radius:999px;background:transparent;cursor:pointer;font-weight:800;font-size:.88rem}
+.seg button.on{background:var(--verm);color:var(--gold-t)}
+.modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.9);opacity:0;pointer-events:none;z-index:95;width:min(92vw,420px);background:linear-gradient(180deg,var(--parch),var(--parch2));border:3px solid var(--gold);border-radius:24px;padding:24px 20px 20px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5);transition:all .25s}
+.modal.show{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+.amulet{display:inline-block;animation:pop .6s ease}
+@keyframes pop{0%{transform:scale(.3) rotate(-15deg)}70%{transform:scale(1.1) rotate(5deg)}100%{transform:scale(1)}}
+.petals{position:fixed;inset:0;pointer-events:none;z-index:96;overflow:hidden}
+.petals i{position:absolute;top:-14px;width:10px;height:10px;border-radius:50% 0;animation:fall 1.8s ease-in forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(600deg);opacity:.6}}
+@media (prefers-reduced-motion:reduce){.petals i,.amulet,.node.now .disc,.banner .stamp,.shake,.guide .who::before{animation:none}.drawer,.sheet,.modal{transition:none}}
+
+/* certificate */
+.cert{text-align:center}
+.idbar{background:linear-gradient(90deg,#450a0a,#1c1917,#450a0a);color:var(--gold-t);border:2px solid var(--gold-b);border-radius:14px;padding:12px 14px;text-align:left;margin:14px 0}
+.idbar small{display:block;font-size:.68rem;letter-spacing:.12em;color:var(--gold-b);font-weight:800}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+.sbox{background:#fff;border:1.5px solid var(--gold);border-radius:12px;padding:10px;text-align:left}
+.sbox b{display:block;font-size:1.45rem;font-weight:900;color:var(--verm-d)}
+.sbox small{color:var(--soft);font-weight:700}
+.amulets{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin:10px 0}
+.miss{list-style:none;padding:0;margin:0;display:grid;gap:8px;text-align:left}
+.miss li{background:var(--parch);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:.9rem}
+.miss li small{display:block;color:var(--soft);font-weight:700}
+.sync{display:flex;align-items:center;gap:8px;font-size:.86rem;font-weight:700;padding:10px 12px;border-radius:12px;margin-top:10px;text-align:left}
+.sync.ok{background:var(--jade-t);color:var(--jade)} .sync.wait{background:var(--gold-t);color:#78350f} .sync.off{background:#f5f5f4;color:var(--soft)}
+footer{text-align:center;color:rgba(254,243,199,.7);font-size:.78rem;margin:26px 0 0;line-height:1.7}
+footer b{color:var(--gold-b)}
+.muted{color:var(--soft)}
+</style>
+</head>
+<body>
+    <svg class="hidden-svg" aria-hidden="true">
+        <defs>
+            <!-- 1. Mazu Goddess Emblem with Beaded Imperial Crown (Mianliu) & Halo -->
+            <symbol id="icon-mazu" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="45" fill="#fef3c7" stroke="#d97706" stroke-width="3"/>
+                <circle cx="50" cy="48" r="34" fill="#fbbf24" opacity="0.45"/>
+                <circle cx="50" cy="48" r="26" fill="none" stroke="#b91c1c" stroke-width="2" stroke-dasharray="4 3"/>
+                <!-- Imperial Robe -->
+                <path d="M24 88 C26 68, 74 68, 76 88 Z" fill="#b91c1c" stroke="#7f1d1d" stroke-width="2"/>
+                <path d="M38 69 L50 85 L62 69" fill="none" stroke="#fbbf24" stroke-width="3"/>
+                <!-- Face -->
+                <ellipse cx="50" cy="49" rx="13" ry="15" fill="#fde68a" stroke="#92400e" stroke-width="1.5"/>
+                <!-- Serene Eyes & Smile -->
+                <path d="M43 47 Q45 45 47 47" fill="none" stroke="#451a03" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M53 47 Q55 45 57 47" fill="none" stroke="#451a03" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M47 55 Q50 57 53 55" fill="none" stroke="#b91c1c" stroke-width="1.5" stroke-linecap="round"/>
+                <!-- Imperial Crown (Mianliu) -->
+                <rect x="33" y="29" width="34" height="7" rx="2" fill="#d97706" stroke="#78350f" stroke-width="1.5"/>
+                <polygon points="28,29 72,29 66,22 34,22" fill="#991b1b" stroke="#fbbf24" stroke-width="1.5"/>
+                <!-- Hanging Pearl Tassels -->
+                <line x1="35" y1="36" x2="35" y2="54" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="2 2"/>
+                <line x1="40" y1="36" x2="40" y2="52" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="2 2"/>
+                <line x1="60" y1="36" x2="60" y2="52" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="2 2"/>
+                <line x1="65" y1="36" x2="65" y2="54" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="2 2"/>
+                <circle cx="50" cy="25" r="3" fill="#fde047"/>
+            </symbol>
+
+            <!-- 2. Traditional Taiwanese Swallowtail Temple Roof (Zhenlan Temple) -->
+            <symbol id="icon-temple" viewBox="0 0 100 100">
+                <rect x="8" y="8" width="84" height="84" rx="18" fill="#7f1d1d" stroke="#fbbf24" stroke-width="2.5"/>
+                <!-- Upper Swallowtail Roof -->
+                <path d="M16 42 Q32 44 50 32 Q68 44 84 42 Q74 52 50 48 Q26 52 16 42 Z" fill="#d97706" stroke="#fef08a" stroke-width="1.5"/>
+                <!-- Ridge Pearl -->
+                <circle cx="50" cy="28" r="4" fill="#fde047"/>
+                <!-- Lower Roof -->
+                <path d="M12 60 Q30 62 50 52 Q70 62 88 60 Q76 68 50 65 Q24 68 12 60 Z" fill="#f59e0b" stroke="#78350f" stroke-width="1.5"/>
+                <!-- Pillars & Sanctuary Gate -->
+                <rect x="26" y="65" width="48" height="20" fill="#450a0a"/>
+                <rect x="30" y="65" width="4" height="20" fill="#dc2626"/>
+                <rect x="42" y="65" width="4" height="20" fill="#dc2626"/>
+                <rect x="54" y="65" width="4" height="20" fill="#dc2626"/>
+                <rect x="66" y="65" width="4" height="20" fill="#dc2626"/>
+                <rect x="46" y="71" width="8" height="14" fill="#fbbf24"/>
+            </symbol>
+
+            <!-- 3. Crescent Moon Blocks (Jiaobei / Poe) -->
+            <symbol id="icon-jiaobei" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="44" fill="#fffbeb" stroke="#d97706" stroke-width="2.5"/>
+                <!-- Left Crescent Block (Flat Side Up) -->
+                <path d="M22 30 C16 52, 24 72, 42 78 C36 62, 36 44, 42 30 Z" fill="#dc2626" stroke="#7f1d1d" stroke-width="2"/>
+                <path d="M26 36 C22 50, 26 64, 37 71" fill="none" stroke="#fca5a5" stroke-width="1.5" stroke-linecap="round"/>
+                <!-- Right Crescent Block (Curved Side Up) -->
+                <path d="M58 24 C76 30, 84 52, 74 74 C66 60, 64 42, 58 24 Z" fill="#b91c1c" stroke="#7f1d1d" stroke-width="2"/>
+                <path d="M64 32 C72 44, 74 58, 70 68" fill="none" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="3 2"/>
+                <!-- Auspicious Sparkles -->
+                <circle cx="50" cy="22" r="2.5" fill="#d97706"/>
+                <circle cx="50" cy="80" r="2.5" fill="#d97706"/>
+            </symbol>
+
+            <!-- 4. Ornate Golden/Pink Sedan Chair (Luanjiao) -->
+            <symbol id="icon-sedan" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="44" fill="#fdf2f8" stroke="#db2777" stroke-width="2.5"/>
+                <!-- Carrying Poles -->
+                <line x1="8" y1="72" x2="92" y2="72" stroke="#92400e" stroke-width="4" stroke-linecap="round"/>
+                <line x1="12" y1="66" x2="88" y2="66" stroke="#b45309" stroke-width="2.5" stroke-linecap="round"/>
+                <!-- Sedan Cabin -->
+                <rect x="30" y="36" width="40" height="32" rx="3" fill="#ec4899" stroke="#9d174d" stroke-width="2"/>
+                <rect x="36" y="42" width="28" height="20" fill="#fef08a" stroke="#d97706" stroke-width="1.5"/>
+                <!-- Ornate Golden Roof -->
+                <path d="M22 36 Q50 20 78 36 Z" fill="#f59e0b" stroke="#92400e" stroke-width="2"/>
+                <circle cx="50" cy="23" r="4" fill="#dc2626"/>
+                <!-- Tassels -->
+                <line x1="26" y1="36" x2="26" y2="48" stroke="#dc2626" stroke-width="2"/>
+                <line x1="74" y1="36" x2="74" y2="48" stroke="#dc2626" stroke-width="2"/>
+            </symbol>
+
+            <!-- 5. Festive Red Firecrackers & Golden Drum -->
+            <symbol id="icon-firecrackers" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="44" fill="#fef2f2" stroke="#dc2626" stroke-width="2.5"/>
+                <!-- Golden Drum -->
+                <ellipse cx="64" cy="64" rx="18" ry="14" fill="#b91c1c" stroke="#7f1d1d" stroke-width="2"/>
+                <ellipse cx="64" cy="56" rx="16" ry="7" fill="#fde68a" stroke="#d97706" stroke-width="2"/>
+                <line x1="48" y1="45" x2="78" y2="58" stroke="#78350f" stroke-width="2.5" stroke-linecap="round"/>
+                <!-- String of Firecrackers -->
+                <line x1="34" y1="18" x2="34" y2="76" stroke="#fbbf24" stroke-width="2.5"/>
+                <rect x="20" y="24" width="13" height="6" rx="2" transform="rotate(-15 20 24)" fill="#dc2626"/>
+                <rect x="35" y="30" width="13" height="6" rx="2" transform="rotate(15 35 30)" fill="#ef4444"/>
+                <rect x="20" y="40" width="13" height="6" rx="2" transform="rotate(-15 20 40)" fill="#b91c1c"/>
+                <rect x="35" y="46" width="13" height="6" rx="2" transform="rotate(15 35 46)" fill="#dc2626"/>
+                <rect x="20" y="56" width="13" height="6" rx="2" transform="rotate(-15 20 56)" fill="#ef4444"/>
+                <!-- Spark -->
+                <circle cx="34" cy="80" r="4" fill="#f59e0b"/>
+            </symbol>
+
+            <!-- 6. Eco-Friendly Green Leaf + Incense Burner (SDGs) -->
+            <symbol id="icon-sdgs" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="44" fill="#ecfdf5" stroke="#059669" stroke-width="2.5"/>
+                <!-- Traditional Golden Censer (Incense Burner) -->
+                <path d="M30 56 L70 56 L64 76 L36 76 Z" fill="#d97706" stroke="#78350f" stroke-width="2"/>
+                <path d="M24 58 Q20 64 28 68" fill="none" stroke="#b45309" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M76 58 Q80 64 72 68" fill="none" stroke="#b45309" stroke-width="2.5" stroke-linecap="round"/>
+                <rect x="38" y="76" width="6" height="6" fill="#78350f"/>
+                <rect x="56" y="76" width="6" height="6" fill="#78350f"/>
+                <!-- Sprouting Green Eco Leaves -->
+                <path d="M50 56 C50 38, 32 30, 26 36 C32 48, 44 50, 50 56 Z" fill="#10b981" stroke="#065f46" stroke-width="1.5"/>
+                <path d="M50 52 C50 32, 68 24, 76 30 C68 44, 56 46, 50 52 Z" fill="#059669" stroke="#065f46" stroke-width="1.5"/>
+                <line x1="50" y1="56" x2="50" y2="36" stroke="#065f46" stroke-width="2" stroke-linecap="round"/>
+            </symbol>
+        </defs>
+    </svg>
+
+<header class="top"><div class="top-in">
+  <svg class="crest" aria-hidden="true"><use href="#icon-mazu"></use></svg>
+  <div class="brand"><b>PILGRIMAGE GUARDIAN</b><small id="brandSub"></small></div>
+  <button class="hbtn codex" id="codexBtn" data-act="codex"></button>
+  <button class="hbtn" id="muteBtn" data-act="mute" aria-label="音效 Sound"></button>
+  <button class="hbtn" id="setBtn" data-act="settings" aria-label="設定 Settings"></button>
+</div><div class="hud" id="hud"></div></header>
+
+<main id="app"></main>
+<nav class="tabs" aria-label="進香路線"><div class="tabs-in" id="tabs"></div></nav>
+
+<div class="mask" id="mask"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Field Codex"></aside>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true"></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true"></div>
+<div class="petals" id="petals"></div>
+
+<script>
+/* ====== 老師設定：貼上 Google Apps Script 網頁應用程式網址（留空 = 不上傳成績） ====== */
+const SCRIPT_URL = '';
+const GAME_ID = 'L9-MazuMania';
+/* ============================================================================ */
+const KEY='mazu-l9-v1';
+const ICONS={
+ check:'<path d="M5 12l5 5L20 7"/>', x:'<path d="M6 6l12 12M18 6L6 18"/>', lock:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+ arrow:'<path d="M9 6l6 6-6 6"/>', back:'<path d="M15 6l-6 6 6 6"/>', home:'<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/>',
+ book:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2V5z"/><path d="M6 19h13v2H6"/>', sliders:'<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>',
+ vol:'<path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/>', mute:'<path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M17 9l5 6M22 9l-5 6"/>',
+ target:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/>', award:'<circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/>',
+ cloud:'<path d="M7 18a4 4 0 0 1-.5-8A6 6 0 0 1 18 9a4.5 4.5 0 0 1-.5 9H7z"/><path d="M12 11v5M9.5 13.5L12 11l2.5 2.5"/>', copy:'<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>',
+ pen:'<path d="M4 20h4L19 9l-4-4L4 16v4z"/>', bulb:'<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/>'
+};
+const ic=(n,c='')=>`<svg class="i ${c}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n]||''}</svg>`;
+const sym=(id,w=44,h=44)=>`<svg width="${w}" height="${h}" aria-hidden="true"><use href="#${id}"></use></svg>`;
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* ---------------- 22 詞彙 ---------------- */
+const VOCAB=[
+ ['pilgrimage','n.','a journey to a holy place for religious reasons','進香；朝聖'],['unify','v.','to bring people or groups together as one','使團結'],
+ ['exaggeration','n.','saying something is bigger or better than it really is','誇大'],['undoubtedly','adv.','without any doubt; certainly','無疑地'],
+ ['authorities','n. pl.','the people who have the power to make decisions','當局；管理單位'],['cast','v.','to throw something for a special purpose','擲'],
+ ['devotion','n.','deep religious love or strong loyalty','虔誠'],['throng','n.','a large crowd of people','人群'],
+ ['explosive','adj.','sudden and very loud, like an explosion','爆炸般的'],['pierce','v.','(of a sound) to cut suddenly through the air','劃破'],
+ ['emerge','v.','to come out from a hidden or closed place','出現'],['blessing','n.','help or protection from a god','保佑；祝福'],
+ ['kneel','v.','to go down on one or both knees','跪下'],['pavement','n.','the hard surface of a road or path','路面'],
+ ['hospitality','n.','friendly and generous treatment of guests','熱情款待'],['facilities','n. pl.','buildings or equipment for a special use','設施'],
+ ['accommodations','n. pl.','places where travelers can stay','住宿'],['religious','adj.','connected with religion','宗教的'],
+ ['humanity','n.','kindness toward other people','人情味；仁慈'],['ritual','n.','a ceremony that is always done in the same way','儀式'],
+ ['designate','v.','to officially give something a special title or status','指定'],['heritage','n.','traditions passed down from the past','文化遺產']
+];
+const VMAP={}; VOCAB.forEach(v=>VMAP[v[0]]=v);
+VMAP['lunar calendar']=['lunar calendar','n.','a calendar based on the moon’s cycles','農曆'];
+VMAP['emerges']=VMAP.emerge; VMAP['throngs']=VMAP.throng; VMAP['designated']=VMAP.designate;
+
+/* ---------------- 五幕內容 ---------------- */
+// 課文片段：[文字] 或 ['w','詞'] 可點詞彙，['c','詞'] 關鍵線索
+const ACTS=[
+{n:1,emb:'icon-jiaobei',title:['燈會擲筊','The Lantern Festival Oracle'],skill:['閱讀與字彙','Reading & Vocabulary'],
+ goal:['了解進香日期怎麼決定，學會本幕關鍵字。','Learn how the pilgrimage date is decided and master the key words.'],
+ guide:['歡迎來到鎮瀾宮，特使！點課文裡虛線的單字可以看意思。先看看進香的日子是怎麼決定的。','Welcome to Zhenlan Temple, Envoy! Tap any dashed word in the scroll to see its meaning. Let’s find out how the pilgrimage date is decided.'],
+ scroll:['The annual ',['w','pilgrimage'],', which honors the sea goddess Mazu, sets out from Dajia’s Zhenlan Temple around her birthday on Taiwan’s ',['c','lunar calendar'],'. During the Lantern Festival, temple ',['c','authorities'],' ',['c','cast'],' two half-moon-shaped wooden blocks to decide the exact departure schedule. The journey lasts nine days and eight nights and covers about 300 kilometers on foot.'],
+ items:[
+  {id:'a1f',type:'fill',title:['字彙熱身','Word warm-up'],q:'Complete the envoy’s notes with the right words.',
+   bank:['pilgrimage','authorities','cast','devotion','unify','pavement','explosive'],
+   blanks:[
+    {id:'a1f1',pre:'Every year, thousands of believers join the ',post:' to honor Mazu.',ans:'pilgrimage',src:'The annual pilgrimage, which honors the sea goddess Mazu…',fb:['要一個名詞：「為了宗教目的的旅程」。','You need a noun: a journey for religious reasons.']},
+    {id:'a1f2',pre:'Temple ',post:' decide when the journey will begin.',ans:'authorities',src:'During the Lantern Festival, temple authorities cast…',fb:['誰有權力做決定？要一個複數名詞。','Who has the power to decide? Use a plural noun.']},
+    {id:'a1f3',pre:'They ',post:' two wooden blocks to ask for Mazu’s answer.',ans:'cast',src:'…cast two half-moon-shaped wooden blocks…',fb:['「擲」筊的動作是哪個動詞？','Which verb means "throw for a special purpose"?']},
+    {id:'a1f4',pre:'Walking for nine days shows the pilgrims’ deep ',post:'.',ans:'devotion',src:'(Act 2) …thousands of believers in deep devotion…',fb:['deep 後面接名詞，意思是「虔誠」。','After "deep," use a noun meaning strong religious love.']},
+    {id:'a1f5',pre:'The festival helps ',post:' people from many different towns.',ans:'unify',src:'(Title) A Great Pilgrimage That Unifies the People',fb:['helps 後面接原形動詞，意思是「使團結」。','After "helps," use a base verb meaning "bring together."']}
+   ],
+   hints:[{t:['先判斷空格要名詞還是動詞，看空格前後的字。','Decide whether each blank needs a noun or a verb.']},{t:['第一個還沒填對的空格，看這句：','For the first blank you haven’t got right, read this:'],quote:true},{t:['幫你揭曉一格。','One blank will be filled in for you.'],act:'reveal'}]},
+  {id:'a1m',type:'mc',title:['閱讀理解','Comprehension'],q:'Who decides the exact departure schedule, and how?',
+   opts:['Government officials choose a date on the solar calendar.','Each pilgrim casts wooden blocks to choose a destination.','Temple authorities cast wooden blocks during the Lantern Festival.','The journey always starts on the night of Mazu’s birthday.'],ans:2,
+   fb:{0:['課文說的是「廟方」和「農曆」，不是政府和國曆。','The text talks about temple authorities and the lunar calendar, not the government.'],1:['擲筊的是廟方，不是每位信徒；而且是決定出發時間，不是目的地。','The temple authorities cast the blocks, and they decide the schedule, not the destination.'],3:['課文說是在媽祖生日「前後」出發，確切時間要靠擲筊決定。','It sets out around her birthday; the exact time is decided by casting the blocks.']},
+   ok:['正確！元宵節由廟方擲筊，決定出發的確切時辰。','Correct! On the Lantern Festival, the temple authorities cast the blocks to set the exact time.'],
+   hints:[{t:['找課文第二句，看「誰」在「什麼時候」做什麼。','Look at the second sentence: who does what, and when?']},{t:['讀這句：','Read this:'],quote:'During the Lantern Festival, temple authorities cast two half-moon-shaped wooden blocks to decide the exact departure schedule.'},{t:['刪去兩個錯誤選項。','Two wrong options are removed.'],act:'elim',keep:[2,3]}]},
+  {id:'a1o',type:'order',title:['時間排序','Timeline'],q:'Put the events in the correct order.',
+   steps:['The Lantern Festival arrives.','Temple authorities cast the wooden blocks.','The departure schedule is announced.','Pilgrims set out around Mazu’s birthday.','The journey ends after nine days and eight nights.'],
+   fb:['再想想：日期是先「擲筊決定」，才「公布」，然後才「出發」。','Think again: the date is decided first, then announced, and only then do pilgrims set out.'],
+   ok:['順序完全正確！元宵擲筊 → 公布 → 出發 → 九天八夜後結束。','Perfect order! Lantern Festival → cast blocks → announce → set out → end after 9 days.'],
+   hints:[{t:['第一件事和最後一件事最好找，先放這兩個。','Start with the first and the last events.']},{t:['讀這兩句：','Read these:'],quote:'During the Lantern Festival, temple authorities cast two half-moon-shaped wooden blocks… The journey lasts nine days and eight nights…'},{t:['幫你放好前兩步。','The first two steps will be placed for you.'],act:'place2'}]}
+ ]},
+{n:2,emb:'icon-sedan',title:['雙線進香','Twin Pilgrimages'],skill:['比較與對照','Compare & Contrast'],
+ goal:['分清楚大甲與白沙屯兩大進香的不同。','Tell the Dajia and Baishatun pilgrimages apart.'],
+ guide:['很多遊客會把大甲和白沙屯搞混！需要的話，打開右上角的 Field Codex 看比較表。','Many visitors mix up Dajia and Baishatun! Open the Field Codex (top right) to check the comparison chart.'],
+ scroll:['Although both events ',['w','unify'],' thousands of believers in deep ',['w','devotion'],', the Dajia pilgrimage follows a ',['c','fixed nine-day, eight-night'],' route to Xingang, ',['c','whereas'],' Baishatun Mazu travels in a ',['c','pink sedan chair'],' with no fixed route or duration.'],
+ items:[
+  {id:'a2s',type:'sort',title:['特徵分類','Sort the facts'],q:'Is each fact about Dajia, Baishatun, or both?',
+   bins:[['大甲','Dajia'],['白沙屯','Baishatun'],['兩者皆是','Both']],
+   cards:[['a2s1','Starts at Zhenlan Temple',0],['a2s2','Mazu rides in a pink sedan chair',1],['a2s3','Honors the sea goddess Mazu',2],
+          ['a2s4','Always lasts nine days and eight nights',0],['a2s5','Has no fixed route or duration',1],['a2s6','Takes place in the third lunar month',2],
+          ['a2s7','Goes to Fengtian Temple in Xingang',0],['a2s8','Starts at Gongtian Temple in Miaoli',1],['a2s9','Unifies thousands of believers',2]],
+   hints:[{t:['大甲 = 固定行程；白沙屯 = 粉紅轎、不固定。','Dajia = fixed schedule; Baishatun = pink sedan chair, nothing fixed.']},{t:['每一類剛好 3 張。「兩者皆是」是兩個進香共同的特點。','Each group has exactly 3 cards. "Both" means true for both pilgrimages.']},{t:['幫你放對一張卡。','One card will be placed for you.'],act:'reveal'}]},
+  {id:'a2m',type:'mc',title:['對照句','Contrast sentence'],q:'Which sentence compares the two pilgrimages correctly?',
+   opts:['Dajia Mazu rides in a pink sedan chair, whereas Baishatun has a fixed route.','Both pilgrimages last nine days, whereas only Dajia starts in Miaoli.','The Baishatun route ends in Xingang, whereas the Dajia route ends in Beigang.','The Dajia route is fixed, whereas Baishatun Mazu has no fixed route or time.'],ans:3,
+   fb:{0:['兩邊對調了！粉紅轎是白沙屯，固定路線是大甲。','You swapped them! The pink sedan chair is Baishatun; the fixed route is Dajia.'],1:['只有大甲是九天八夜；而且白沙屯才是從苗栗出發。','Only Dajia lasts nine days, and Baishatun is the one from Miaoli.'],2:['終點對調了：大甲到新港，白沙屯到北港。','The endpoints are swapped: Dajia goes to Xingang; Baishatun goes to Beigang.']},
+   ok:['正確！whereas 用來對比兩件不同的事。','Correct! "Whereas" shows a contrast between two different things.'],
+   hints:[{t:['看課文裡 whereas 前後各在講哪一個進香。','Check which pilgrimage comes before and after "whereas" in the scroll.']},{t:['讀這句：','Read this:'],quote:'the Dajia pilgrimage follows a fixed nine-day, eight-night route to Xingang, whereas Baishatun Mazu travels in a pink sedan chair with no fixed route or duration.'},{t:['刪去兩個錯誤選項。','Two wrong options are removed.'],act:'elim',keep:[0,3]}]},
+  {id:'a2v',type:'mc',title:['字義推論','Word in context'],q:'In the scroll, "unify" is closest in meaning to ____.',
+   opts:['separate','bring together','entertain','protect'],ans:1,
+   fb:{0:['相反了！separate 是「分開」。','That’s the opposite! "Separate" means to split apart.'],2:['進香不只是娛樂，unify 是讓人「團結在一起」。','It’s not about fun. "Unify" means making people one group.'],3:['protect 是「保護」，課文說的是把信徒「聚在一起」。','"Protect" means keep safe. The text is about bringing believers together.']},
+   ok:['沒錯！unify = bring together，課名就是 A Great Pilgrimage That Unifies the People。','Right! Unify = bring together, just like the title says.'],
+   hints:[{t:['想想課名：A Great Pilgrimage That Unifies the People。','Think about the lesson title.']},{t:['讀這句：','Read this:'],quote:'Although both events unify thousands of believers in deep devotion…'},{t:['刪去兩個錯誤選項。','Two wrong options are removed.'],act:'elim',keep:[0,1]}]}
+ ]},
+{n:3,emb:'icon-firecrackers',title:['神轎下的虔誠','Devotion Under the Sedan Chair'],skill:['倒裝句','Negative Inversion'],
+ goal:['用 Never / Rarely / Seldom 開頭的倒裝句描寫進香場面。','Describe the scene with inversion after Never / Rarely / Seldom.'],
+ guide:['從這一幕開始，每用一次提示都會扣 1 分。倒裝句的公式在 Field Codex 第 3 頁。','From now on, every hint costs 1 point. The inversion formula is on page 3 of the Field Codex.'],
+ scroll:['When Mazu’s statue ',['w','emerges'],', ',['w','explosive'],' sounds of drums and firecrackers ',['w','pierce'],' the air. Believers ',['w','kneel'],' on the ',['w','pavement'],' for her ',['w','blessing'],', while locals offer free food, washing ',['w','facilities'],', and ',['w','accommodations'],'. ',['c','Rarely'],' can such ',['w','hospitality'],' be seen, and ',['c','never'],' do the pilgrims’ passion and dedication fade.'],
+ items:[
+  {id:'a3f',type:'fill',title:['場景字彙','Scene words'],q:'Complete the description of the scene.',
+   bank:['emerges','pierces','kneel','hospitality','designated','heritage'],
+   blanks:[
+    {id:'a3f1',pre:'When Mazu’s statue ',post:' from the temple, the crowd cheers.',ans:'emerges',src:'When Mazu’s statue emerges, explosive sounds…',fb:['statue 是單數，要用加 -s 的動詞「出現」。','"Statue" is singular, so use the -s verb meaning "come out."']},
+    {id:'a3f2',pre:'The sound of firecrackers ',post:' the quiet night air.',ans:'pierces',src:'…sounds of drums and firecrackers pierce the air.',fb:['聲音「劃破」空氣；sound 是單數，動詞加 -s。','A sound "cuts through" the air. "Sound" is singular, so add -s.']},
+    {id:'a3f3',pre:'Many believers ',post:' on the road to receive her blessing.',ans:'kneel',src:'Believers kneel on the pavement for her blessing…',fb:['信徒在路上「跪下」；believers 是複數，用原形。','Believers go down on their knees. "Believers" is plural.']},
+    {id:'a3f4',pre:'Local families show warm ',post:' by offering free food and drinks.',ans:'hospitality',src:'Rarely can such hospitality be seen…',fb:['warm 後面接名詞「熱情款待」。','After "warm," use the noun meaning friendly treatment of guests.']}
+   ],
+   hints:[{t:['注意主詞單複數：單數主詞的動詞要加 -s。','Check singular and plural subjects: a singular subject needs a verb with -s.']},{t:['第一個還沒填對的空格，看這句：','For the first blank you haven’t got right, read this:'],quote:true},{t:['幫你揭曉一格。','One blank will be filled in for you.'],act:'reveal'}]},
+  {id:'a3m',type:'mc',title:['倒裝判斷','Spot the inversion'],q:'Which sentence uses inversion correctly?',
+   opts:['Rarely such generosity can be seen during a religious event.','Rarely can such generosity be seen during a religious event.','Rarely can such generosity is seen during a religious event.','Rarely does such generosity can be seen during a religious event.'],ans:1,
+   fb:{0:['Rarely 放句首時，助動詞 can 要移到主詞前面。','When "Rarely" starts the sentence, "can" must move before the subject.'],2:['can 後面要接原形：can be seen，不是 can is seen。','After "can," use the base form: "can be seen."'],3:['一個子句只要一個助動詞，does 和 can 不能同時出現。','Use only one helping verb. "Does" and "can" can’t both be there.']},
+   ok:['正確！Rarely + can + 主詞 + be seen。','Correct! Rarely + can + subject + be seen.'],
+   hints:[{t:['公式：否定副詞 + 助動詞 + 主詞 + 原形動詞。','Formula: negative adverb + helping verb + subject + base verb.']},{t:['課文例句：','From the scroll:'],quote:'Rarely can such hospitality be seen'},{t:['刪去兩個錯誤選項。','Two wrong options are removed.'],act:'elim',keep:[1,2]}]},
+  {id:'a3l',type:'lock',title:['句型鎖','Syntax lock'],q:'Build the sentence: the pilgrims’ passion and dedication never fade.',
+   tiles:['fade.','Never','does','the pilgrims’ passion and dedication','do','fades.'],
+   ans:['Never','do','the pilgrims’ passion and dedication','fade.'],
+   ok:['解鎖！passion and dedication 是複數，用 do；助動詞後面接原形 fade。','Unlocked! "Passion and dedication" is plural, so use "do," and the verb after it stays "fade."'],
+   hints:[{t:['Never 放句首 → 助動詞要移到主詞前面。','"Never" first, then the helping verb, then the subject.']},{t:['課文例句：','From the scroll:'],quote:'never do the pilgrims’ passion and dedication fade'},{t:['幫你放好前兩塊。','The first two pieces will be placed for you.'],act:'place2'}]},
+  {id:'a3t',type:'mc',title:['句子改寫','Rewrite'],q:'Rewrite with inversion: "Pilgrims seldom complain about the long walk."',
+   opts:['Seldom pilgrims complain about the long walk.','Seldom do pilgrims complained about the long walk.','Seldom do pilgrims complain about the long walk.','Seldom are pilgrims complain about the long walk.'],ans:2,
+   fb:{0:['少了助動詞！Seldom 開頭要加 do。','The helping verb is missing! Add "do" after "Seldom."'],1:['do 後面要接原形 complain，不能用過去式。','After "do," use the base form "complain."'],3:['complain 是一般動詞，助動詞要用 do，不是 are。','"Complain" is an action verb, so the helper is "do," not "are."']},
+   ok:['完美！Seldom + do + 主詞 + 原形動詞。','Perfect! Seldom + do + subject + base verb.'],
+   hints:[{t:['原句是現在式一般動詞 → 助動詞用 do / does。','The original uses a present action verb, so the helper is do/does.']},{t:['對照這個公式：','Compare with this:'],quote:'Never do their passion and dedication fade.'},{t:['刪去兩個錯誤選項。','Two wrong options are removed.'],act:'elim',keep:[0,2]}]}
+ ]},
+{n:4,emb:'icon-mazu',title:['活的文化遺產','Living Cultural Heritage'],skill:['強調句與作者目的','Emphasis & Purpose'],fade:true,
+ goal:['看懂 It is no exaggeration to say that…，判斷作者的寫作目的。','Understand "It is no exaggeration to say that…" and the author’s purpose.'],
+ guide:['你已經走了很遠！從這一幕開始，第 3 層提示會關閉，要靠自己判斷了。','You’ve come a long way! From this Act, Tier 3 hints are locked. Trust your own reading.'],
+ scroll:['Over the years, the Mazu pilgrimage has become more than just a ',['w','religious'],' ',['w','ritual'],'. It attracts all kinds of people, young and old, foreign and Taiwanese, and it has been ',['c','designated'],' an important national folk custom. ',['c','Undoubtedly'],', ',['c','it is no exaggeration to say that'],' joining this event is a great way to experience Taiwan’s cultural ',['w','heritage'],'.'],
+ items:[
+  {id:'a4m',type:'mc',title:['句型意義','Pattern meaning'],q:'What does "It is no exaggeration to say that…" mean?',
+   opts:['It is too much to say that…','It is hard to believe that…','It is unfair to say that…','It is completely true to say that…'],ans:3,
+   fb:{0:['相反了！no exaggeration =「一點也不誇張」。','The opposite! "No exaggeration" means it is not overstated at all.'],1:['作者不是在懷疑，而是在強調這件事「千真萬確」。','The author isn’t doubting; it stresses that something is really true.'],2:['句型沒有「不公平」的意思。','The pattern has nothing to do with being unfair.']},
+   ok:['正確！說…一點也不誇張 = 完全是真的。','Correct! Saying it is no exaggeration means it is completely true.'],
+   hints:[{t:['拆開看：no + exaggeration（誇大）。','Break it down: no + exaggeration.']},{t:['課文中的用法：','How the scroll uses it:'],quote:'Undoubtedly, it is no exaggeration to say that joining this event is a great way to experience Taiwan’s cultural heritage.'}]},
+  {id:'a4s',type:'mc',title:['同義改寫','Same meaning'],q:'Which sentence means the SAME as: "It is no exaggeration to say that this event might be the world’s largest birthday party."',
+   opts:['It is not too much to say that this event might be the world’s largest birthday party.','It is an exaggeration to say that this event might be the world’s largest birthday party.','It is no exaggeration saying what this event might be the world’s largest birthday party.','It is not enough to say that this event might be the world’s largest birthday party.'],ans:0,
+   fb:{1:['拿掉 no 意思就完全相反了。','Removing "no" reverses the meaning.'],2:['句型固定是 to say that，不是 saying what。','The fixed pattern is "to say that," not "saying what."'],3:['not enough（不夠）和 not too much（不過分）意思不同。','"Not enough" is different from "not too much."']},
+   ok:['沒錯！It is not too much to say that… = It is no exaggeration to say that…','Right! "It is not too much to say that…" has the same meaning.'],
+   hints:[{t:['找「一點也不過分」的說法。','Look for the phrase meaning "not overstated."']},{t:['Field Codex 第 3 頁有寫：','From the Field Codex:'],quote:'It is no exaggeration to say that + S + V = It is not too much to say that + S + V'}]},
+  {id:'a4p',type:'mc',title:['作者目的','Author’s purpose'],q:'Why does the author mention that the pilgrimage has been "designated an important national folk custom"?',
+   opts:['To show that the event is too crowded for tourists.','To show that the event is officially recognized as important.','To argue that the government controls the ritual.','To explain why the route changes every year.'],ans:1,
+   fb:{0:['課文沒有說人太多，反而說各種人都來參加。','The text never complains about crowds; it says all kinds of people join.'],2:['designate 是「正式指定」，不代表政府控制儀式。','"Designate" means to give an official title, not to control.'],3:['課文這段沒有談路線變化。','This part doesn’t talk about the route.']},
+   ok:['正確！被正式指定，代表它的文化價值受到肯定。','Correct! Being officially designated shows its cultural value is recognized.'],
+   hints:[{t:['先想 designate 的意思（點課文裡的字）。','First check what "designate" means (tap it in the scroll).']},{t:['讀這句：','Read this:'],quote:'it has been designated an important national folk custom.'}]}
+ ]},
+{n:5,emb:'icon-sdgs',title:['SDGs 綠色進香','SDGs Eco-Pilgrimage'],skill:['SDGs 行動方案','SDGs Action Plan'],fade:true,
+ goal:['提出兼顧傳統與環境的方案，並用本課句型寫下你的提案。','Propose a plan that protects both tradition and the environment, and write it with a lesson pattern.'],
+ guide:['最後一站！我們要怎麼同時守護媽祖的文化，又守護大家呼吸的空氣？','Final stop! How can we protect Mazu’s culture and the air we breathe at the same time?'],
+ scroll:['While ',['w','throngs'],' of pilgrims celebrate with ',['w','explosive'],' firecrackers and generous free meals, air-quality monitoring has found that PM2.5 levels can rise to unhealthy levels during the pilgrimage, and single-use tableware creates huge amounts of waste. A good plan must protect public health and the environment while keeping the festival’s ',['c','devotion'],' and ',['c','hospitality'],' alive.'],
+ items:[
+  {id:'a5s',type:'sort',title:['方案評估','Rate the ideas'],q:'Sort each idea: does it balance both, hurt tradition, or hurt the environment?',
+   bins:[['兩全其美','Balanced'],['傷害傳統','Hurts tradition'],['傷害環境','Hurts environment']],
+   cards:[['a5s1','Use digital firecracker sound effects',0],['a5s2','Ban all free food along the route',1],['a5s3','Hand out more plastic water bottles',2],
+          ['a5s4','Offer reusable bowls at food stations',0],['a5s5','Cancel the pilgrimage every other year',1],['a5s6','Set off twice as many firecrackers',2],
+          ['a5s7','Burn fewer, eco-friendly incense sticks',0],['a5s8','Stop believers from kneeling for blessings',1],['a5s9','Use disposable plates at every stop',2]],
+   hints:[{t:['好方案要同時保留 devotion 和 hospitality，又減少空污和垃圾。','A good idea keeps devotion and hospitality and also cuts pollution and waste.']},{t:['每一類剛好 3 張。','Each group has exactly 3 cards.']}]},
+  {id:'a5m',type:'mc',title:['最佳方案','Best plan'],q:'Which plan best balances tradition and the environment?',
+   opts:['Keep all the firecrackers but ask pilgrims to wear masks.','Switch to paper cups and plates so the waste can be recycled.','Replace most firecrackers with digital sound effects and set up reusable tableware stations.','Let only temple staff walk the route to reduce the crowds.'],ans:2,
+   fb:{0:['口罩只保護個人，空氣還是被污染了。','Masks protect people a little, but the air is still polluted.'],1:['紙杯紙盤還是一次性用品，垃圾沒有變少。','Paper cups and plates are still single-use, so waste stays high.'],3:['這樣就失去「團結眾人」的意義，傷害了傳統。','That loses the spirit of unifying people and hurts the tradition.']},
+   ok:['很棒的 SDGs 方案！保留熱鬧與款待，同時減少 PM2.5 和垃圾。','Great SDGs thinking! It keeps the festive spirit and hospitality while cutting PM2.5 and waste.'],
+   hints:[{t:['想一想：哪一個同時處理「空污」和「垃圾」？','Which plan deals with both air pollution and waste?']},{t:['回到課文最後一句：','Go back to the last sentence:'],quote:'A good plan must protect public health and the environment while keeping the festival’s devotion and hospitality alive.'}]},
+  {id:'a5w',type:'write',title:['寫下你的提案','Write your plan'],q:'Write ONE sentence for your eco-pilgrimage plan. Use "It is no exaggeration to say that…" OR start with Never / Rarely / Seldom + helping verb.',
+   ex:'It is no exaggeration to say that reusable bowls can keep the festival’s hospitality alive.',
+   hints:[{t:['選一個句型：It is no exaggeration to say that + S + V，或 Rarely/Never/Seldom + 助動詞 + S + V。','Pick one pattern: "It is no exaggeration to say that + S + V," or "Rarely/Never/Seldom + helper + S + V."']},{t:['範例：','Example:'],quote:'Rarely can a festival be so lively and so green at the same time.'}]}
+ ]}
+];
+const ITEM={},QOWN={},ACT_Q={};
+ACTS.forEach(a=>{ACT_Q[a.n]=[];a.items.forEach(it=>{it.act=a.n;ITEM[it.id]=it;
+  if(it.type==='fill'){it.blanks.forEach(b=>{QOWN[b.id]=it.id;ACT_Q[a.n].push(b.id);});}
+  else if(it.type==='sort'){it.cards.forEach(c=>{QOWN[c[0]]=it.id;ACT_Q[a.n].push(c[0]);});}
+  else {QOWN[it.id]=it.id;ACT_Q[a.n].push(it.id);}
+});});
+function qLabel(qid){const it=ITEM[QOWN[qid]];const a=it.act;
+  if(it.type==='fill'){const b=it.blanks.find(x=>x.id===qid);return `Act ${a} · ${it.title[1]}: ${b.ans}`;}
+  if(it.type==='sort'){const c=it.cards.find(x=>x[0]===qid);return `Act ${a} · ${it.title[1]}: ${c[1]}`;}
+  return `Act ${a} · ${it.title[1]}: ${it.q}`;}
+
+/* ---------------- 狀態 ---------------- */
+const fresh=()=>({lang:'bi',big:false,mute:false,page:'home',player:null,start:null,end:null,done:[0,0,0,0,0],score:{},q:{},hl:{},hs:{},w:{},stamina:100,guide:null,vocabOpen:null,outbox:[],reflect:''});
+let state=load();
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.done)return Object.assign(fresh(),s);}catch(e){}return fresh();}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+function T(zh,en,inline){if(state.lang==='en'&&en)return esc(en);if(state.lang==='zh'||!en)return esc(zh);return esc(zh)+`<span class="en${inline?' in':''}" lang="en">${esc(en)}</span>`;}
+const TP=(p,i)=>T(p[0],p[1],i);
+const S=(zh,en)=>state.lang==='en'?(en||zh):zh;
+
+const isOk=id=>!!(state.q[id]&&state.q[id].ok);
+function attempt(id,c){const r=state.q[id]||(state.q[id]={t:0,w:0,first:null,ok:false});r.t++;if(!c)r.w++;if(r.first===null)r.first=!!c;if(c)r.ok=true;}
+const hlv=id=>state.hl[id]||0;
+const unlocked=n=>n===1||!!state.done[n-2];
+const doneCount=()=>state.done.filter(Boolean).length;
+const totalScore=()=>Object.values(state.score).reduce((a,b)=>a+b,0);
+const totalHints=()=>Object.values(state.hs).reduce((a,b)=>a+b,0);
+function wrongCount(){let c=0;for(const k in state.q)c+=state.q[k].w||0;return c;}
+function elapsed(){return state.start?Math.round(((state.end||Date.now())-state.start)/1000):0;}
+const fmt=s=>Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+function stam(d){state.stamina=Math.max(10,Math.min(100,state.stamina+d));}
+function rankOf(sc){return sc>=90?['文化守護者','Grand Cultural Guardian']:sc>=75?['資深文化特使','Senior Heritage Envoy']:sc>=60?['文化特使','Heritage Envoy']:['進香紀錄員','Pilgrimage Chronicler'];}
+
+/* ---------------- 音效（Web Audio） ---------------- */
+let actx=null;
+function tone(f1,f2,dur,type,vol,delay=0){if(state.mute)return;try{actx=actx||new(window.AudioContext||window.webkitAudioContext)();if(actx.state==='suspended')actx.resume();
+ const t=actx.currentTime+delay,o=actx.createOscillator(),g=actx.createGain();o.type=type;o.frequency.setValueAtTime(f1,t);o.frequency.exponentialRampToValueAtTime(f2,t+dur);
+ g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(g);g.connect(actx.destination);o.start(t);o.stop(t+dur+.02);}catch(e){}}
+const sfx={clack(){tone(640,240,.07,'triangle',.14);},hint(){tone(587,880,.25,'sine',.1);},wrong(){tone(140,55,.35,'sine',.22);},
+ right(){[523.25,659.25,783.99].forEach((f,i)=>tone(f,f,.22,'sine',.1,i*.07));},win(){[523.25,659.25,783.99,1046.5].forEach((f,i)=>tone(f,f,.5,'sine',.09,i*.08));}};
+
+/* ---------------- 上傳 ---------------- */
+function payload(type,n){const p=state.player||{};
+ return {type,game:GAME_ID,cls:p.cls,seat:p.seat,name:p.name,station:n||'',current:typeof state.page==='number'?state.page:(doneCount()===5?'done':''),
+  stationScore:n?state.score[n]:'',scores:[1,2,3,4,5].map(k=>state.score[k]??''),done:doneCount(),total:totalScore(),hints:totalHints(),wrong:wrongCount(),
+  elapsedSec:elapsed(),rank:doneCount()===5?rankOf(totalScore())[1]:'',reflect:state.reflect||'',stamina:state.stamina,
+  details:n?ACT_Q[n].map(id=>({qid:id,label:qLabel(id),station:n,first:state.q[id]?.first?1:0,tries:state.q[id]?.t||0})):[],ts:new Date().toISOString()};}
+function queue(type,n){if(!state.player)return;state.outbox.push(payload(type,n));if(state.outbox.length>40)state.outbox=state.outbox.slice(-40);save();flush();}
+let flushing=false;
+async function flush(){if(!SCRIPT_URL||!state.outbox.length||flushing)return;flushing=true;
+ while(state.outbox.length){try{await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(state.outbox[0])});state.outbox.shift();save();}catch(e){break;}}
+ flushing=false;if(state.page==='cert')render();}
+addEventListener('online',flush);
+
+/* ---------------- 場景 ---------------- */
+function lanterns(y=18){return [40,110,250,320].map((x,i)=>`<g transform="translate(${x} ${y+(i%2)*6})"><line x1="0" y1="-18" x2="0" y2="0" stroke="#78350f" stroke-width="1.5"/><ellipse cx="0" cy="12" rx="11" ry="13" fill="#dc2626" stroke="#7f1d1d" stroke-width="1.5"/><rect x="-6" y="-2" width="12" height="3" fill="#fbbf24"/><rect x="-6" y="24" width="12" height="3" fill="#fbbf24"/><line x1="0" y1="27" x2="0" y2="34" stroke="#fbbf24" stroke-width="2"/></g>`).join('');}
+function actScene(a){return `<svg class="scene" viewBox="0 0 360 150" aria-hidden="true"><defs><linearGradient id="sg${a.n}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7f1d1d"/><stop offset="1" stop-color="#2a0b0b"/></linearGradient></defs>
+ <rect width="360" height="150" fill="url(#sg${a.n})"/><circle cx="180" cy="80" r="70" fill="#fbbf24" opacity=".12"/>${lanterns(20)}
+ <path d="M0 132 Q180 112 360 132 V150 H0z" fill="#1c1917" opacity=".6"/>
+ <svg x="128" y="28" width="104" height="104"><use href="#${a.emb}"/></svg></svg>`;}
+function routeMap(){const pts=[[180,488],[110,404],[250,320],[110,236],[250,152],[150,64]];
+ const d='M180 500 C180 460 110 440 110 404 S250 360 250 320 S110 270 110 236 S250 190 250 152 S150 100 150 64';
+ const cur=state.done.indexOf(0)+1;
+ let h=`<svg class="mapsvg" viewBox="0 0 360 520" aria-hidden="true"><rect width="360" height="520" rx="16" fill="#3b0d0d"/><path d="M0 330 Q120 300 200 330 T360 320 V520 H0z" fill="#450a0a"/>
+  ${[[40,120],[320,230],[36,330],[320,420],[300,60]].map(([x,y])=>`<g transform="translate(${x} ${y})"><ellipse cx="0" cy="10" rx="9" ry="11" fill="#dc2626"/><rect x="-5" y="-2" width="10" height="3" fill="#fbbf24"/></g>`).join('')}
+  <path d="${d}" fill="none" stroke="#a16207" stroke-width="28" stroke-linecap="round" opacity=".55"/><path d="${d}" fill="none" stroke="#fde68a" stroke-width="3" stroke-dasharray="7 9" stroke-linecap="round"/>
+  <g transform="translate(150 506)"><rect x="-38" y="-10" width="76" height="20" rx="6" fill="#b91c1c" stroke="#fbbf24"/><text y="5" text-anchor="middle" font-size="10" font-weight="800" fill="#fef3c7" font-family="Inter">ZHENLAN</text></g></svg>`;
+ ACTS.forEach((a,i)=>{const [x,y]=pts[i+1];const ok=state.done[i];const u=state.player&&unlocked(a.n);const now=state.player&&cur===a.n;
+  h+=`<button class="node ${u?'':'lock'} ${now?'now':''}" style="left:${x/3.6}%;top:${y/5.2}%" data-go="${a.n}" ${u?'':'disabled'} aria-label="Act ${a.n}">
+   <span class="disc">${sym(a.emb)}${ok?`<span class="ok">${ic('check')}</span>`:''}</span><span class="nl">${a.n}. ${esc(state.lang==='en'?a.title[1]:a.title[0])}</span>${ok?`<span class="sc num">${state.score[a.n]}/20</span>`:''}</button>`;});
+ return `<div class="gmap">${h}</div>`;}
+function amulet(n,size=64,off){const a=ACTS[n-1];return `<svg width="${size}" height="${size*1.35}" viewBox="0 0 64 86" aria-hidden="true">
+ <path d="M32 2 v8" stroke="#fbbf24" stroke-width="2"/><rect x="6" y="10" width="52" height="72" rx="6" fill="${off?'#57534e':'#b91c1c'}" stroke="${off?'#a8a29e':'#fbbf24'}" stroke-width="3"/>
+ <rect x="12" y="16" width="40" height="60" rx="3" fill="none" stroke="${off?'#a8a29e':'#fde68a'}" stroke-width="1.2" stroke-dasharray="3 2"/>
+ <svg x="14" y="20" width="36" height="36" ${off?'opacity=".4"':''}><use href="#${a.emb}"/></svg>
+ <text x="32" y="70" text-anchor="middle" font-size="10" font-weight="900" fill="${off?'#d6d3d1':'#fde68a'}" font-family="Cinzel">ACT ${n}</text></svg>`;}
+
+/* ---------------- 共用 UI ---------------- */
+function guideBox(n){const g=state.guide&&state.guide.n===n?state.guide:{k:'intro',m:(n==='home'?['歡迎，文化特使！我是廟方導覽林師父。沿著進香路線完成五幕任務，把媽祖文化用英文記錄下來。','Welcome, Cultural Envoy! I’m Master Lin, your temple guide. Follow the route through five Acts and record Mazu culture in English.']:ACTS[n-1].guide)};
+ return `<div class="dark guide ${g.k==='wrong'?'warn':g.k==='right'?'cheer':''}" role="status" aria-live="polite"><svg class="av" aria-hidden="true"><use href="#icon-temple"/></svg><div><span class="who">${esc(S('林師父','MASTER LIN'))} · TEMPLE GUIDE</span><div class="msg">${TP(g.m)}</div></div></div>`;}
+const GUIDE_LINES={wrong:[['沒關係，回到課文找線索再試一次。','That’s okay. Go back to the scroll for clues and try again.'],['慢慢來，點課文裡的單字看看意思。','Take your time. Tap the words in the scroll to check their meaning.']],
+ right:[['做得好！媽祖會保佑認真的特使。','Well done! Mazu blesses hard-working envoys.'],['紀錄得很準確！','A very accurate record!']],done:[['這一幕完成了！平安符已經收進你的行囊。','This Act is complete! The amulet is in your bag.']],final:[['五幕全部完成！你是真正的文化特使了，去領取證書吧。','All five Acts are complete! You are a true Cultural Envoy. Go get your certificate.']]};
+function say(k,n){const L=GUIDE_LINES[k];state.guide={n,k,m:L[Math.floor(Math.random()*L.length)]};}
+function scrollBox(a){const parts=a.scroll.map(seg=>{if(typeof seg==='string')return esc(seg);const w=seg[1];const key=w.toLowerCase();const has=VMAP[key];
+  const cls='vw'+(seg[0]==='c'&&hlv('clue'+a.n)>0?' clue':'')+(state.vocabOpen===key?' on':'');
+  return has?`<button class="${cls}" data-vocab="${esc(key)}">${esc(w)}</button>`:(seg[0]==='c'&&hlv('clue'+a.n)>0?`<mark class="vw clue">${esc(w)}</mark>`:esc(w));}).join('');
+ const v=state.vocabOpen&&VMAP[state.vocabOpen];
+ return `<div class="scroll"><div class="fsh"><span>${T('田野卷軸','Field Scroll',true).replace(/<span class="en in"/,'<span class="en in" style="display:none"')} · ${esc(S('點虛線單字看意思','tap dashed words'))}</span></div>
+  <p class="passage" lang="en">${parts}</p>
+  ${v?`<div class="tipbox"><div><b lang="en">${esc(v[0])}</b><i>${esc(v[1])}</i><div lang="en">${esc(v[2])}</div><div class="muted">${esc(v[3])}</div></div><button class="x" data-act="closeVocab" aria-label="close">✕</button></div>`:''}</div>`;}
+function actHead(a){return `<div class="banner">${actScene(a)}<span class="tag">ACT ${a.n} / 5</span>${state.done[a.n-1]?'<span class="stamp">RECORDED</span>':''}</div>
+ <div class="dark"><div class="ah"><svg class="ae" aria-hidden="true"><use href="#${a.emb}"/></svg><div><small>${TP(a.skill,true)}</small><h2>${TP(a.title)}</h2></div></div>
+ <div class="goal">${ic('target')}<div>${TP(a.goal)}</div></div></div>${guideBox(a.n)}`;}
+
+/* 提示 */
+function hintUI(it){const id=it.id;if(isItemOk(it))return '';const a=ACTS[it.act-1];const lv=hlv(id);const cost=it.act>=3;
+ const tiers=[[ 'TIER 1',['方向','Where'] ],[ 'TIER 2',['原句','Quote'] ],[ 'TIER 3',['排除','Clear'] ]];
+ let btns='';tiers.forEach((t,i)=>{const locked=i===2&&(a.fade||!it.hints[2]);const used=i<lv;const next=i===lv&&!locked;
+  btns+=`<button class="tier t${i+1} ${used?'used':''} ${next?'next':''} ${locked?'locked':''}" data-hint="${id}" ${next?'':'disabled'}><span class="tn">${t[0]}</span><span>${esc(locked?S('已關閉','Locked'):(state.lang==='en'?t[1][1]:t[1][0]))}</span>${locked?ic('lock'):''}</button>`;});
+ let out='';for(let i=0;i<lv;i++){const H=it.hints[i];let qt='';if(H.quote){const t=typeof H.quote==='string'?H.quote:currentSrc(it);if(t)qt=`<span class="quote" lang="en">${esc(t)}</span>`;}
+  out+=`<div class="hint"><span class="lv">TIER ${i+1}</span>${TP(H.t)}${qt}</div>`;}
+ return `<div class="hints"><div class="hl"><span>${T('三層提示','3-tier hints',true)}</span><span>${cost?esc(S('每次 −1 分','−1 point each')):esc(S('第 1–2 幕免費','Free in Acts 1–2'))}</span></div><div class="tiers">${btns}</div>${out}</div>`;}
+function currentSrc(it){if(it.type==='fill'){const b=it.blanks.find(x=>!isOk(x.id));return b?b.src:'';}return '';}
+function isItemOk(it){if(it.type==='fill')return it.blanks.every(b=>isOk(b.id));if(it.type==='sort')return it.cards.every(c=>isOk(c[0]));return isOk(it.id);}
+function qHead(it,num){return `<div class="qh"><span class="qn num">${num}</span><div class="qt"><span class="qtype">${TP(it.title,true).replace(/<span class="en in"/,'<span class="en in" style="display:none"')}</span><span lang="en">${esc(it.q)}</span></div></div>`;}
+
+/* ---------------- 題型 ---------------- */
+function rMC(it,num){const ok=isOk(it.id);const w=state.w[it.id]||(state.w[it.id]={wrong:[],last:null});
+ const elim=it.hints[2]&&it.hints[2].act==='elim'&&hlv(it.id)>=3?it.hints[2].keep:null;
+ const opts=it.opts.map((o,i)=>{let c='opt',dis=ok;if(ok&&i===it.ans)c+=' good';if(w.wrong.includes(i)){c+=' bad';dis=true;}if(elim&&!elim.includes(i)&&!ok){c+=' out';dis=true;}
+  return `<button class="${c}" data-mc="${it.id}" data-i="${i}" ${dis?'disabled':''}><span class="k">${'ABCD'[i]}</span><span lang="en">${esc(o)}</span></button>`;}).join('');
+ let fb='';if(ok)fb=`<div class="fb good"><b>${ic('check')}${T('正確','Correct',true)}</b><br>${TP(it.ok)}</div>`;else if(w.last!==null&&it.fb[w.last])fb=`<div class="fb bad"><b>${ic('x')}${T('再想想','Not quite',true)}</b><br>${TP(it.fb[w.last])}</div>`;
+ return `<div class="q ${ok?'ok':''}" id="q-${it.id}">${qHead(it,num)}<div class="opts">${opts}</div>${fb}${hintUI(it)}</div>`;}
+function rFill(it,num){const w=state.w[it.id]||(state.w[it.id]={fill:{},sel:null,wrongIds:[]});const done=isItemOk(it);
+ if(!done&&(!w.sel||isOk(w.sel))){const f=it.blanks.find(b=>!isOk(b.id)&&!w.fill[b.id]);w.sel=f?f.id:null;}
+ const used=Object.values(w.fill);
+ const sents=it.blanks.map((b,i)=>{const ok=isOk(b.id);const v=ok?b.ans:w.fill[b.id];return `<p class="sent" lang="en"><b class="num" style="color:var(--verm)">${i+1}.</b> ${esc(b.pre)}<button class="blank${ok?' right':v?' filled':''}${w.sel===b.id&&!ok?' act':''}" data-blank="${it.id}|${b.id}" ${ok?'disabled':''}>${v?esc(v):'?'}</button>${esc(b.post)}</p>`;}).join('');
+ const chips=it.bank.map(x=>{const u=used.includes(x)||it.blanks.some(b=>isOk(b.id)&&b.ans===x);return `<button class="chip" data-chip="${it.id}|${esc(x)}" ${u||done?'disabled':''} lang="en">${esc(x)}</button>`;}).join('');
+ const all=it.blanks.every(b=>isOk(b.id)||w.fill[b.id]);
+ const fbs=w.wrongIds.filter(id=>!isOk(id)).map(id=>{const b=it.blanks.find(x=>x.id===id);const i=it.blanks.indexOf(b)+1;return `<div class="fb bad"><b>${ic('x')}${T('第'+i+'格','Blank '+i,true)}</b><br>${TP(b.fb)}</div>`;}).join('');
+ return `<div class="q ${done?'ok':''}" id="q-${it.id}">${qHead(it,num)}${sents}
+  ${done?`<div class="fb good"><b>${ic('check')}${T('全部正確','All correct',true)}</b></div>`:`<div class="subh">${T('點空格，再點單字。有 2 個字用不到。','Tap a blank, then a word. Two words are extra.')}</div><div class="chips">${chips}</div>
+  <button class="btn block" style="margin-top:12px" data-check="${it.id}" ${all?'':'disabled'}>${ic('check')}${T('檢查','Check',true)}</button>`}${fbs}${hintUI(it)}</div>`;}
+function rOrder(it,num){const ok=isOk(it.id);const w=state.w[it.id]||(state.w[it.id]={seq:[],last:null,shuf:shuffleIdx(it.steps.length,it.id)});
+ const seq=ok?it.steps.map((_,i)=>i):w.seq;
+ const slots=seq.length?seq.map((si,k)=>`<button class="tile" data-oslot="${it.id}|${k}" ${ok?'disabled':''} lang="en"><span class="n">${k+1}</span>${esc(it.steps[si])}</button>`).join(''):`<span class="ph">${T('依序點下方事件','Tap the events below in order',true)}</span>`;
+ const tiles=w.shuf.map(i=>`<button class="tile" data-otile="${it.id}|${i}" ${seq.includes(i)||ok?'disabled':''} lang="en">${esc(it.steps[i])}</button>`).join('');
+ let fb='';if(ok)fb=`<div class="fb good"><b>${ic('check')}${T('正確','Correct',true)}</b><br>${TP(it.ok)}</div>`;else if(w.last)fb=`<div class="fb bad"><b>${ic('x')}${T('順序不對','Wrong order',true)}</b><br>${TP(it.fb)}</div>`;
+ return `<div class="q ${ok?'ok':''}" id="q-${it.id}">${qHead(it,num)}<div class="seqbox ${ok?'open':''}"><div class="lt">${ic(ok?'check':'book')} TIMELINE</div><div class="slots col">${slots}</div></div>
+  ${ok?'':`<div class="tiles col">${tiles}</div><button class="btn block" style="margin-top:10px" data-check="${it.id}" ${seq.length===it.steps.length?'':'disabled'}>${ic('check')}${T('檢查順序','Check order',true)}</button>`}${fb}${hintUI(it)}</div>`;}
+function shuffleIdx(n,seed){const a=[...Array(n).keys()];let h=0;for(const c of seed)h=(h*31+c.charCodeAt(0))>>>0;for(let i=n-1;i>0;i--){h=(h*1103515245+12345)>>>0;const j=h%(i+1);[a[i],a[j]]=[a[j],a[i]];}if(a.every((v,i)=>v===i))a.reverse();return a;}
+function rLock(it,num){const ok=isOk(it.id);const w=state.w[it.id]||(state.w[it.id]={seq:[],last:null});const seq=ok?it.ans.map(x=>it.tiles.indexOf(x)):w.seq;
+ const slots=seq.length?seq.map((ti,k)=>`<button class="tile" data-lslot="${it.id}|${k}" ${ok?'disabled':''} lang="en">${esc(it.tiles[ti])}</button>`).join(''):`<span class="ph">${T('依序點下方字卡','Tap the pieces in order',true)}</span>`;
+ const tiles=it.tiles.map((t,i)=>`<button class="tile" data-ltile="${it.id}|${i}" ${seq.includes(i)||ok?'disabled':''} lang="en">${esc(t)}</button>`).join('');
+ let fb='';if(ok)fb=`<div class="fb good"><b>${ic('check')}${T('解鎖','Unlocked',true)}</b><br>${TP(it.ok)}</div>`;else if(w.last)fb=`<div class="fb bad"><b>${ic('x')}${T('鎖還沒開','Still locked',true)}</b><br>${TP(w.last)}</div>`;
+ return `<div class="q ${ok?'ok':''}" id="q-${it.id}">${qHead(it,num)}<div class="seqbox ${ok?'open':''}"><div class="lt">${ic(ok?'check':'lock')} SYNTAX LOCK</div><div class="slots">${slots}</div></div>
+  ${ok?'':`<div class="tiles">${tiles}</div><button class="btn block" style="margin-top:10px" data-check="${it.id}" ${seq.length?'':'disabled'}>${ic('lock')}${T('解鎖','Unlock',true)}</button>`}${fb}${hintUI(it)}</div>`;}
+function rSort(it,num){const w=state.w[it.id]||(state.w[it.id]={bins:{},sel:null,res:null});const done=isItemOk(it);
+ if(!done&&!w.sel){const nx=it.cards.find(c=>w.bins[c[0]]===undefined);w.sel=nx?nx[0]:null;}
+ const cards=it.cards.map(c=>{const b=done?c[2]:w.bins[c[0]];return `<button class="bc ${w.sel===c[0]&&!done?'sel':''}" data-card="${it.id}|${c[0]}" ${done?'disabled':''}><span lang="en">${esc(c[1])}</span>${b!==undefined?`<span class="lab b${b}">${esc(state.lang==='en'?it.bins[b][1]:it.bins[b][0])}</span>`:`<span class="lab empty">${esc(S('未分類','Unsorted'))}</span>`}</button>`;}).join('');
+ const cnt=k=>Object.values(w.bins).filter(v=>v===k).length;
+ const bins=it.bins.map((b,k)=>`<button class="bin b${k}" data-bin="${it.id}|${k}" ${w.sel&&!done?'':'disabled'}>${esc(state.lang==='en'?b[1]:b[0])}${state.lang==='bi'?`<small lang="en">${esc(b[1])}</small>`:''}<small class="num">${cnt(k)}/3</small></button>`).join('');
+ const all=it.cards.every(c=>w.bins[c[0]]!==undefined);
+ let fb='';if(done)fb=`<div class="fb good"><b>${ic('check')}${T('分類全對','All sorted correctly',true)}</b></div>`;
+ else if(w.res){fb=`<div class="fb bad"><b>${ic('x')}${T('還有卡片放錯','Some cards are wrong',true)}</b><br>${it.bins.map((b,k)=>w.res[k]?esc(S(b[0]+'：錯 '+w.res[k]+' 張',b[1]+': '+w.res[k]+' wrong')):'').filter(Boolean).join('　')}</div>`;}
+ return `<div class="q ${done?'ok':''}" id="q-${it.id}">${qHead(it,num)}<div class="subh">${T('點卡片（黃框），再點下方分類。','Tap a card (gold frame), then a group below.')}</div><div class="cards">${cards}</div>
+  ${done?'':`<div class="bins">${bins}</div><button class="btn block" style="margin-top:10px" data-check="${it.id}" ${all?'':'disabled'}>${ic('check')}${T('檢查分類','Check',true)}</button>`}${fb}${hintUI(it)}</div>`;}
+function rWrite(it,num){const ok=isOk(it.id);const w=state.w[it.id]||(state.w[it.id]={txt:state.reflect||'',last:null});
+ let fb='';if(ok)fb=`<div class="fb good"><b>${ic('check')}${T('提案已記錄','Plan recorded',true)}</b><br>${T('你的句子已送給老師。','Your sentence has been sent to your teacher.')}</div>`;else if(w.last)fb=`<div class="fb bad"><b>${ic('x')}${T('再修改一下','Revise a little',true)}</b><br>${TP(w.last)}</div>`;
+ return `<div class="q ${ok?'ok':''}" id="q-${it.id}">${qHead(it,num)}<textarea id="wtxt" rows="3" lang="en" placeholder="${esc(it.ex)}" ${ok?'disabled':''}>${esc(w.txt)}</textarea>
+  ${ok?'':`<button class="btn block" style="margin-top:10px" data-check="${it.id}">${ic('pen')}${T('送出提案','Submit',true)}</button>`}${fb}${hintUI(it)}</div>`;}
+const RENDER={mc:rMC,fill:rFill,order:rOrder,lock:rLock,sort:rSort,write:rWrite};
+
+/* ---------------- 頁面 ---------------- */
+function pageHome(){const p=state.player;
+ let h=`<div class="scroll" style="text-align:center"><div style="display:flex;justify-content:center;gap:10px;margin-bottom:8px">${sym('icon-temple',64,64)}${sym('icon-mazu',76,76)}${sym('icon-jiaobei',64,64)}</div>
+  <span class="kicker">Lesson 9 · Mazu Mania</span><h1 class="disp" style="color:var(--verm-d);font-size:clamp(1.4rem,5.5vw,1.9rem);margin:10px 0 4px">PILGRIMAGE GUARDIAN</h1>
+  <p class="lead" style="margin-top:0">${T('媽祖進香文化特使：沿著進香路線完成 5 幕任務，用英文記錄這項活的文化遺產，並提出 SDGs 綠色進香方案。約 25 分鐘。','Follow the pilgrimage route through 5 Acts, record this living heritage in English, and propose an SDGs eco-pilgrimage plan. About 25 minutes.')}</p></div>`;
+ if(p)h+=guideBox('home');
+ if(!p){h+=`<form class="scroll" id="joinForm"><h3 class="disp" style="color:var(--verm-d)">${T('特使報到','Envoy registration')}</h3><div class="grid2" style="margin-top:10px">
+   <div class="field"><label for="fCls">${T('班級','Class',true)}</label><input id="fCls" inputmode="numeric" placeholder="205" autocomplete="off"></div>
+   <div class="field"><label for="fSeat">${T('座號','Seat No.',true)}</label><input id="fSeat" inputmode="numeric" placeholder="12" autocomplete="off"></div>
+   <div class="field wide"><label for="fName">${T('姓名','Name',true)}</label><input id="fName" placeholder="${esc(S('王小明','Your name'))}" autocomplete="off"></div></div>
+   <p class="err" id="regErr" hidden>${T('請填好班級、座號和姓名。','Please fill in your class, seat number and name.')}</p>
+   <button class="btn block" type="submit" style="margin-top:12px">${T('開始進香','Begin pilgrimage',true)}${ic('arrow')}</button></form>`;}
+ else{const nx=state.done.indexOf(0)+1;h+=`<div class="dark"><small style="font-size:.7rem;letter-spacing:.12em;color:var(--gold-b);font-weight:800">CULTURAL ENVOY</small>
+   <div style="font-size:1.15rem;font-weight:900">${esc(p.name)} <span style="opacity:.75;font-weight:600;font-size:.9rem">· ${esc(p.cls)} · No. ${esc(p.seat)}</span></div>
+   <div style="opacity:.85;font-size:.88rem;margin:2px 0 12px">${esc(S('平安符','Amulets'))} ${doneCount()}/5 · Merit ${totalScore()}/100</div>
+   ${nx>0?`<button class="btn block" data-go="${nx}">${T(nx===1?'開始第 1 幕':'繼續第 '+nx+' 幕',nx===1?'Start Act 1':'Continue Act '+nx,true)}${ic('arrow')}</button>`:`<button class="btn block" data-go="cert">${ic('award')}${T('查看證書','View certificate',true)}</button>`}</div>`;}
+ h+=`<div class="scroll"><h3 class="disp" style="color:var(--verm-d)">${T('進香路線','Pilgrimage route')}</h3><p class="muted" style="margin:2px 0 6px;font-size:.88rem">${T('完成一幕才會解鎖下一幕。','Each Act unlocks the next one.')}</p>${routeMap()}</div>
+  <div class="scroll"><h3 class="disp" style="color:var(--verm-d)">${T('怎麼玩','How to play')}</h3><ul style="margin:8px 0 0;padding-left:1.2em">
+  <li>${T('每幕有 3–4 題，題型會輪替：填空、選擇、排序、分類、句型鎖、寫作。','Each Act has 3–4 tasks: fill-in, multiple choice, ordering, sorting, syntax locks and writing.')}</li>
+  <li>${T('答錯會告訴你錯在哪裡，可以重答。分數看「第一次就答對」的比例，每幕 20 分。','Wrong answers explain why, and you can try again. Each Act is worth 20 points, based on first-try answers.')}</li>
+  <li>${T('三層提示：第 1–2 幕免費；第 3 幕起每次 −1 分；第 4–5 幕第 3 層關閉（漸退鷹架）。','3-tier hints: free in Acts 1–2, −1 point each from Act 3, and Tier 3 is locked in Acts 4–5.')}</li>
+  <li>${T('隨時打開右上角 Field Codex 查 22 個單字、兩大進香比較表、句型公式。','Open the Field Codex (top right) anytime for the 22 words, the comparison chart and grammar.')}</li></ul></div>`;
+ return h;}
+function pageAct(n){const a=ACTS[n-1];let k=0;const items=a.items.map(it=>RENDER[it.type](it,'Q'+(++k))).join('');
+ return actHead(a)+scrollBox(a)+items+navBtns(n);}
+function navBtns(n){return `<div class="nav2">${n===1?`<button class="btn ghost" data-go="home">${ic('home')}${T('路線圖','Map',true)}</button>`:`<button class="btn ghost" data-go="${n-1}">${ic('back')}${T('上一幕','Back',true)}</button>`}
+ <button class="btn" data-go="${n===5?'cert':n+1}" ${state.done[n-1]?'':'disabled'}>${n===5?T('領取證書','Certificate',true):T('下一幕','Next Act',true)}${ic('arrow')}</button></div>`;}
+function pageCert(){if(doneCount()<5)return `<div class="scroll"><h2>${T('還沒完成 5 幕','Not finished yet')}</h2><button class="btn" data-go="home" style="margin-top:10px">${ic('home')}${T('回路線圖','Back to map',true)}</button></div>`;
+ const sc=totalScore(),rk=rankOf(sc),p=state.player;const missed=Object.keys(state.q).filter(id=>state.q[id].first===false&&QOWN[id]);
+ const sync=!SCRIPT_URL?`<div class="sync off">${ic('cloud')}${T('這個版本沒有設定成績上傳，請按「複製紀錄」貼給老師。','Score upload isn’t set up in this version. Tap "Copy record" and send it to your teacher.')}</div>`
+  :state.outbox.length?`<div class="sync wait">${ic('cloud')}${T('成績還沒送出','Not sent yet')}<button class="btn ghost" style="min-height:36px;margin-left:auto;padding:0 12px" data-act="flush">${T('重送','Retry',true)}</button></div>`
+  :`<div class="sync ok">${ic('check')}${T('成績已送給老師','Sent to your teacher')}</div>`;
+ return `<div class="scroll cert"><div style="display:flex;justify-content:center;gap:10px">${sym('icon-mazu',64,64)}${sym('icon-sdgs',64,64)}</div>
+  <span class="kicker">Pilgrimage completed</span><h1 class="disp" style="color:var(--verm-d);margin:8px 0 4px;font-size:clamp(1.3rem,5vw,1.8rem)">${T('文化特使證書','Cultural Envoy Certificate')}</h1>
+  <div class="idbar"><small>CERTIFIED CULTURAL ENVOY</small><div style="font-size:1.1rem;font-weight:900">${esc(p.name)} · ${esc(p.cls)} · No. ${esc(p.seat)}</div><div style="font-size:.85rem;opacity:.85">${T(rk[0],rk[1],true)}</div></div>
+  <div class="amulets">${ACTS.map(a=>amulet(a.n,48)).join('')}</div>
+  <div class="stats"><div class="sbox"><b class="num">${sc}</b><small>Merit / 100</small></div><div class="sbox"><b class="num">${fmt(elapsed())}</b><small>${T('用時','Time',true)}</small></div>
+   <div class="sbox"><b class="num">${totalHints()}</b><small>${T('提示次數','Hints',true)}</small></div><div class="sbox"><b class="num">${wrongCount()}</b><small>${T('答錯次數','Mistakes',true)}</small></div></div>
+  ${sync}<button class="btn ghost block" style="margin-top:10px" data-act="copy">${ic('copy')}${T('複製紀錄','Copy record',true)}</button></div>
+  <div class="scroll"><h3 class="disp" style="color:var(--verm-d)">${T('各幕分數','Act scores')}</h3>${ACTS.map(a=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--line)"><span>${a.n}. ${TP(a.title,true)}</span><b class="num">${state.score[a.n]} / 20</b></div>`).join('')}</div>
+  <div class="scroll"><h3 class="disp" style="color:var(--verm-d)">${T('複習清單：第一次答錯的題目','Review list: first-try mistakes')}</h3>${missed.length?`<ul class="miss" style="margin-top:8px">${missed.map(id=>`<li lang="en">${esc(qLabel(id))}</li>`).join('')}</ul>`:`<p class="muted">${T('全部一次就答對，太厲害了！','Everything right on the first try. Amazing!')}</p>`}</div>
+  ${state.reflect?`<div class="scroll"><h3 class="disp" style="color:var(--verm-d)">${T('我的 SDGs 提案','My SDGs plan')}</h3><p class="scrollf" lang="en" style="margin:6px 0 0">${esc(state.reflect)}</p></div>`:''}
+  <div class="nav2"><button class="btn ghost" data-go="home">${ic('home')}${T('路線圖','Map',true)}</button></div>`;}
+
+/* ---------------- render ---------------- */
+function render(){document.documentElement.classList.toggle('big',!!state.big);document.documentElement.lang=state.lang==='en'?'en':'zh-Hant';
+ document.getElementById('brandSub').textContent=S('媽祖進香文化特使 · L9','Mazu Mania · L9');
+ document.getElementById('codexBtn').innerHTML=ic('book')+'Codex';document.getElementById('muteBtn').innerHTML=ic(state.mute?'mute':'vol');document.getElementById('setBtn').innerHTML=ic('sliders');
+ document.getElementById('hud').innerHTML=state.player?`<span class="meter"><span>${esc(S('體力','Stamina'))}</span><span class="tr"><span class="fl" style="width:${state.stamina}%"></span></span><span class="num">${state.stamina}%</span></span><span class="merit num">Merit ${totalScore()}/100</span>`:'';
+ let pg=state.page;if(typeof pg==='number'&&(!state.player||!unlocked(pg)))pg=state.page='home';
+ const html=pg==='home'?pageHome():pg==='cert'?pageCert():pageAct(pg);
+ document.getElementById('app').innerHTML=html+`<footer><b>Gina教室的AI奇蹟</b><br>鳳新高中英文科李姬慧老師 X AI 彙整製作</footer>`;
+ const cells=[{k:'home',n:ic('home'),l:S('路線','Map')}].concat(ACTS.map(a=>({k:a.n,n:state.done[a.n-1]?ic('check'):(state.player&&unlocked(a.n)?a.n:ic('lock')),l:'Act '+a.n,lock:!state.player||!unlocked(a.n),done:state.done[a.n-1]}))).concat([{k:'cert',n:ic('award'),l:S('證書','Cert.'),lock:doneCount()<5}]);
+ document.getElementById('tabs').innerHTML=cells.map(c=>`<button class="tab ${pg===c.k?'on':''} ${c.done?'done':''}" data-go="${c.k}" ${c.lock?'disabled':''}><span class="tn num">${c.n}</span><span>${esc(c.l)}</span></button>`).join('');
+ save();requestAnimationFrame(runFx);}
+let fx=[];function runFx(){const l=fx;fx=[];l.forEach(sel=>{const el=document.querySelector(sel);if(el){el.classList.remove('shake');void el.offsetWidth;el.classList.add('shake');}});}
+function go(k){state.page=(k==='home'||k==='cert')?k:Number(k);state.vocabOpen=null;
+ if(typeof state.page==='number'){if(!(state.guide&&state.guide.n===state.page))state.guide=null;queue('enter');}
+ render();scrollTo(0,0);}
+
+/* 完成一幕 */
+function checkAct(n){if(state.done[n-1])return;if(!ACT_Q[n].every(isOk))return;
+ const ids=ACT_Q[n],first=ids.filter(id=>state.q[id].first).length;const sc=Math.max(0,Math.round(20*first/ids.length)-(state.hs[n]||0));
+ state.score[n]=sc;state.done[n-1]=1;if(doneCount()===5&&!state.end)state.end=Date.now();say(n===5?'final':'done',n);save();
+ queue(doneCount()===5?'final':'progress',n);sfx.win();
+ const m=document.getElementById('modal');m.innerHTML=`<div class="amulet">${amulet(n,84)}</div><h2 class="disp" style="color:var(--verm-d);margin-top:6px">${T('獲得平安符','Amulet earned')}</h2>
+  <p class="muted" style="margin:4px 0">${TP(ACTS[n-1].title,true)}</p><p style="margin:4px 0 14px">Merit <b class="num" style="font-size:1.4rem;color:var(--verm-d)">${sc}</b> / 20</p>
+  <button class="btn block" data-modalgo="${n===5?'cert':n+1}">${n===5?T('領取證書','Get certificate',true):T('前往第 '+(n+1)+' 幕','Go to Act '+(n+1),true)}${ic('arrow')}</button>
+  <button class="btn ghost block" style="margin-top:8px" data-act="closeModal">${T('留下來看答案','Stay and review',true)}</button>`;
+ show('modal');petals();}
+function petals(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const b=document.getElementById('petals');const c=['#dc2626','#fbbf24','#f59e0b','#fde68a','#db2777'];
+ b.innerHTML=Array.from({length:36},(_,i)=>`<i style="left:${Math.random()*100}%;background:${c[i%5]};animation-delay:${Math.random()*.5}s"></i>`).join('');setTimeout(()=>b.innerHTML='',2400);}
+function show(id){document.getElementById('mask').classList.add('show');document.getElementById(id).classList.add('show');}
+function hideAll(){['modal','sheet','drawer','mask'].forEach(id=>document.getElementById(id).classList.remove('show'));}
+
+/* Codex */
+let codexTab='vocab',codexQ='';
+function openCodex(){const d=document.getElementById('drawer');
+ const vocab=VOCAB.filter(v=>!codexQ||v[0].includes(codexQ.toLowerCase())||v[3].includes(codexQ)).map(v=>`<div class="vcard"><b lang="en">${esc(v[0])}</b><i>${esc(v[1])}</i><div lang="en">${esc(v[2])}</div><div class="muted">${esc(v[3])}</div></div>`).join('');
+ const body=codexTab==='vocab'?`<input id="vq" class="field" style="width:100%;font:inherit;padding:10px 12px;border:1.5px solid var(--gold);border-radius:12px" placeholder="${esc(S('搜尋單字…','Search words…'))}" value="${esc(codexQ)}"><div class="vgrid">${vocab||esc(S('找不到','No match'))}</div>`
+  :codexTab==='routes'?`<table class="cmp"><tr><th></th><th>Dajia</th><th>Baishatun</th></tr><tr><td>Route</td><td>Zhenlan Temple (Dajia, Taichung) → Fengtian Temple (Xingang, Chiayi)</td><td>Gongtian Temple (Baishatun, Miaoli) → Chaotian Temple (Beigang, Yunlin)</td></tr>
+   <tr><td>Time</td><td>3rd lunar month; always 9 days, 8 nights (decided by casting moon blocks on the Lantern Festival)</td><td>3rd lunar month; no fixed duration</td></tr>
+   <tr><td>Feature</td><td>About 300 km on foot; one of the world’s three major religious festivals</td><td>Mazu guides the route and speed; rides in a famous pink sedan chair</td></tr></table>`
+  :`<div class="gram"><b>1. Negative Adverb Inversion</b><div class="formula">Never / Rarely / Seldom / Hardly + aux. (do / does / did / can…) + S + base verb</div><div lang="en"><i>Never do their passion and dedication fade.</i><br><i>Rarely can such generosity be seen during a religious event.</i></div><div class="muted" style="margin-top:6px">${esc(S('否定副詞放句首 → 助動詞移到主詞前；用 do/does/did 時，後面動詞回到原形。','Negative adverb first → helper before the subject; after do/does/did, use the base verb.'))}</div></div>
+   <div class="gram"><b>2. Emphatic Pattern</b><div class="formula">It is no exaggeration to say that + S + V<br>= It is not too much to say that + S + V</div><div lang="en"><i>It is no exaggeration to say that this event might be the world’s largest birthday party.</i></div></div>`;
+ d.innerHTML=`<div class="dhead">${sym('icon-mazu',32,32)}<b>Field Codex</b><button class="x" data-act="closeAll" aria-label="close">${ic('x')}</button></div>
+  <div class="dtabs">${[['vocab',S('22 單字','22 Words')],['routes',S('進香比較','Routes')],['grammar',S('句型','Grammar')]].map(([k,l])=>`<button class="${codexTab===k?'on':''}" data-ctab="${k}">${esc(l)}</button>`).join('')}</div><div class="dbody">${body}</div>`;
+ if(!d.classList.contains('show'))show('drawer');
+ const vq=document.getElementById('vq');if(vq)vq.addEventListener('input',e=>{codexQ=e.target.value;const pos=e.target.selectionStart;openCodex();const n=document.getElementById('vq');n.focus();n.setSelectionRange(pos,pos);});}
+function openSettings(){const sh=document.getElementById('sheet');const seg=(k,o)=>`<div class="seg">${o.map(([v,l])=>`<button data-set="${k}" data-v="${v}" class="${String(state[k])===String(v)?'on':''}">${l}</button>`).join('')}</div>`;
+ sh.innerHTML=`<h3>${T('設定','Settings',true)}</h3><b>${T('語言','Language',true)}</b>${seg('lang',[['zh','中文'],['bi','雙語'],['en','English']])}<b>${T('字級','Text size',true)}</b>${seg('big',[[false,S('標準','Normal')],[true,S('放大','Large')]])}
+  <button class="btn ghost block" data-act="resetAsk">${T('重新開始（清除進度）','Start over',true)}</button><div id="resetBox"></div><button class="btn block" style="margin-top:10px" data-act="closeAll">${T('完成','Done',true)}</button>`;show('sheet');}
+
+/* ---------------- 事件 ---------------- */
+document.addEventListener('click',e=>{const t=e.target.closest('button');if(!t)return;const d=t.dataset;
+ if(d.go!==undefined){sfx.clack();go(d.go);return;}
+ if(d.modalgo!==undefined){hideAll();go(d.modalgo);return;}
+ if(d.act==='codex'){sfx.clack();openCodex();return;}
+ if(d.ctab){codexTab=d.ctab;openCodex();return;}
+ if(d.act==='mute'){state.mute=!state.mute;render();sfx.clack();return;}
+ if(d.act==='settings'){openSettings();return;}
+ if(d.set){state[d.set]=d.v==='true'?true:d.v==='false'?false:d.v;render();openSettings();return;}
+ if(d.act==='closeAll'||d.act==='closeModal'){hideAll();render();return;}
+ if(d.act==='resetAsk'){document.getElementById('resetBox').innerHTML=`<div class="fb bad" style="margin-top:8px">${T('確定清除所有進度？已送給老師的紀錄不會刪除。','Clear all progress? Records already sent stay with your teacher.')}<div style="display:flex;gap:8px;margin-top:8px"><button class="btn" data-act="reset">${T('確定','Clear',true)}</button><button class="btn ghost" data-act="closeAll">${T('取消','Cancel',true)}</button></div></div>`;return;}
+ if(d.act==='reset'){const k={lang:state.lang,big:state.big,mute:state.mute};state=Object.assign(fresh(),k);hideAll();go('home');return;}
+ if(d.act==='flush'){flush();return;}
+ if(d.act==='copy'){const p=state.player;const txt=`[${GAME_ID}] ${p.cls}-${p.seat} ${p.name} | Merit ${totalScore()}/100 | Acts ${[1,2,3,4,5].map(k=>state.score[k]).join('/')} | Hints ${totalHints()} | Mistakes ${wrongCount()} | Time ${fmt(elapsed())} | ${rankOf(totalScore())[1]}`;
+  (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject()).then(()=>{t.innerHTML=ic('check')+T('已複製','Copied',true);}).catch(()=>{const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');t.innerHTML=ic('check')+T('已複製','Copied',true);}catch(x){}ta.remove();});return;}
+ if(d.act==='closeVocab'){state.vocabOpen=null;render();return;}
+ if(d.vocab){state.vocabOpen=state.vocabOpen===d.vocab?null:d.vocab;sfx.clack();render();return;}
+
+ if(d.hint){const it=ITEM[d.hint];const lv=hlv(it.id);if(lv>=3)return;state.hl[it.id]=lv+1;if(lv===0)state.hl['clue'+it.act]=1;
+  if(it.act>=3){state.hs[it.act]=(state.hs[it.act]||0)+1;}stam(-4);sfx.hint();
+  if(lv+1===3){const w=state.w[it.id];
+   if(it.hints[2].act==='reveal'&&it.type==='fill'){const b=it.blanks.find(x=>!isOk(x.id));if(b){const r=state.q[b.id]||(state.q[b.id]={t:0,w:0,first:null,ok:false});if(r.first===null)r.first=false;r.ok=true;delete w.fill[b.id];Object.keys(w.fill).forEach(k=>{if(w.fill[k]===b.ans)delete w.fill[k];});w.sel=null;}}
+   if(it.hints[2].act==='reveal'&&it.type==='sort'){const c=it.cards.find(x=>w.bins[x[0]]!==x[2]);if(c){w.bins[c[0]]=c[2];w.sel=null;}}
+   if(it.hints[2].act==='place2'){w.seq=it.type==='lock'?[it.tiles.indexOf(it.ans[0]),it.tiles.indexOf(it.ans[1])]:[0,1];w.last=null;}}
+  render();checkAct(it.act);return;}
+
+ if(d.mc){const it=ITEM[d.mc];const i=Number(d.i);const c=i===it.ans;attempt(it.id,c);const w=state.w[it.id];
+  if(c){w.last=null;stam(2);sfx.right();say('right',it.act);}else{w.wrong.push(i);w.last=i;stam(-6);sfx.wrong();say('wrong',it.act);fx.push(`[data-mc="${it.id}"][data-i="${i}"]`);}
+  render();checkAct(it.act);return;}
+ if(d.blank){const [iid,bid]=d.blank.split('|');const w=state.w[iid];if(w.fill[bid])delete w.fill[bid];w.sel=bid;render();return;}
+ if(d.chip){const [iid,word]=d.chip.split('|');const w=state.w[iid];if(!w.sel)return;w.fill[w.sel]=word;const it=ITEM[iid];const nx=it.blanks.find(b=>!isOk(b.id)&&!w.fill[b.id]);w.sel=nx?nx.id:null;sfx.clack();render();return;}
+ if(d.card){const [iid,cid]=d.card.split('|');state.w[iid].sel=cid;render();return;}
+ if(d.bin){const [iid,k]=d.bin.split('|');const w=state.w[iid];const it=ITEM[iid];if(!w.sel)return;w.bins[w.sel]=Number(k);w.res=null;const nx=it.cards.find(c=>w.bins[c[0]]===undefined);w.sel=nx?nx[0]:null;sfx.clack();render();return;}
+ if(d.otile){const [iid,i]=d.otile.split('|');const w=state.w[iid];w.seq.push(Number(i));w.last=null;sfx.clack();render();return;}
+ if(d.oslot){const [iid,k]=d.oslot.split('|');const w=state.w[iid];w.seq.splice(Number(k),1);render();return;}
+ if(d.ltile){const [iid,i]=d.ltile.split('|');const w=state.w[iid];w.seq.push(Number(i));w.last=null;sfx.clack();render();return;}
+ if(d.lslot){const [iid,k]=d.lslot.split('|');const w=state.w[iid];w.seq.splice(Number(k),1);render();return;}
+
+ if(d.check){const it=ITEM[d.check];const w=state.w[it.id];let good=false;
+  if(it.type==='fill'){w.wrongIds=[];it.blanks.forEach(b=>{if(isOk(b.id))return;const c=w.fill[b.id]===b.ans;attempt(b.id,c);if(!c){w.wrongIds.push(b.id);delete w.fill[b.id];}});w.sel=null;good=!w.wrongIds.length;}
+  else if(it.type==='sort'){const res=[0,0,0];it.cards.forEach(c=>{const ok=w.bins[c[0]]===c[2];attempt(c[0],ok);state.q[c[0]].ok=ok;if(!ok)res[w.bins[c[0]]]++;});good=res.every(x=>!x);w.res=good?null:res;}
+  else if(it.type==='order'){good=w.seq.every((v,i)=>v===i);attempt(it.id,good);w.last=good?null:1;if(!good)w.seq=[];}
+  else if(it.type==='lock'){const b=w.seq.map(i=>it.tiles[i]);good=b.join('|')===it.ans.join('|');attempt(it.id,good);
+   if(!good){w.last=b.includes('does')?['passion and dedication 是複數主詞，助動詞要用 do。','"Passion and dedication" is plural, so the helper is "do."']:b.includes('fades.')?['助動詞 do 後面要接原形 fade。','After "do," the verb stays "fade."']:b[0]!=='Never'?['倒裝句由 Never 開頭。','The sentence starts with "Never."']:b[1]!=='do'?['Never 後面先放助動詞，再放主詞。','After "Never," put the helper first, then the subject.']:['字卡還沒用完，或順序不對。','Some pieces are missing or out of order.'];w.seq=[];}}
+  else if(it.type==='write'){const txt=(document.getElementById('wtxt').value||'').trim();w.txt=txt;const words=txt.split(/\s+/).filter(Boolean).length;
+   const emph=/it is no exaggeration to say that\s+\S+/i.test(txt)||/it is not too much to say that\s+\S+/i.test(txt);
+   const inv=/^(never|rarely|seldom|hardly)\s+(do|does|did|can|could|will|would|should|is|are|was|were|has|have|had)\s+\S+/i.test(txt);
+   good=words>=8&&(emph||inv)&&/[.!]$/.test(txt);attempt(it.id,good);
+   w.last=good?null:words<8?['句子太短了，至少寫 8 個字，說清楚你的方案。','Too short. Write at least 8 words to explain your plan.']:!(emph||inv)?['要用指定句型：It is no exaggeration to say that…，或 Never/Rarely/Seldom + 助動詞開頭。','Use one of the patterns: "It is no exaggeration to say that…" or start with Never/Rarely/Seldom + a helper.']:['句尾記得加句點。','Remember to end with a period.'];
+   if(good){state.reflect=txt;queue('reflect');}}
+  if(good){stam(3);sfx.right();say('right',it.act);}else{stam(-6);sfx.wrong();say('wrong',it.act);fx.push('#q-'+it.id);}
+  render();checkAct(it.act);return;}
+});
+document.addEventListener('submit',e=>{if(e.target.id!=='joinForm')return;e.preventDefault();const c=document.getElementById('fCls').value.trim(),s=document.getElementById('fSeat').value.trim(),n=document.getElementById('fName').value.trim();
+ if(!c||!s||!n){document.getElementById('regErr').hidden=false;sfx.wrong();return;}state.player={cls:c,seat:s,name:n};state.start=state.start||Date.now();save();queue('join');sfx.win();go(1);});
+document.addEventListener('input',e=>{if(e.target.id==='wtxt'){const it=ITEM.a5w;(state.w[it.id]||(state.w[it.id]={txt:'',last:null})).txt=e.target.value;save();}});
+document.getElementById('mask').addEventListener('click',()=>{hideAll();render();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){hideAll();}});
+render();flush();
+</script>
+</body>
+</html>

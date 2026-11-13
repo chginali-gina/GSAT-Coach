@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jungle Rescue: Save the Elephants｜叢林大象救援行動 L8</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F2F6F1; --bg-2:#E3ECE2; --card:#FFFFFF;
+  --accent:#2E7D5B; --accent-deep:#1F5C42; --accent-ink:#164732; --tint:#D7EDE2;
+  --second:#C87D28; --second-tint:#FBEBD6;
+  --ink:#192B22; --ink-soft:#52695D; --line:#C9D9CD; --on-accent:#FFFFFF;
+  --good:#2E7D32; --good-tint:#DFF0E0; --bad:#B83A2D; --bad-tint:#FBE2DF;
+  --sun:#E8A528; --sun-tint:#FFF3D6; --grape:#6B5B95; --grape-tint:#EBE7F5;
+  --shadow:0 6px 22px rgba(25,43,34,.11);
+  --radius:16px;
+  --c1:#2E7D5B; --c2:#B86B25; --c3:#3D7A8A; --c4:#B83A2D; --c5:#4E6E58;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#0E1713; --bg-2:#14221B; --card:#192A22;
+  --accent:#56B88C; --accent-deep:#3E9B72; --accent-ink:#9CE3C2; --tint:#1B382B;
+  --second:#E5A14B; --second-tint:#382815;
+  --ink:#E5F0EA; --ink-soft:#97B0A3; --line:#273E33; --on-accent:#0E1713;
+  --good:#7CCF82; --good-tint:#1D3620; --bad:#F08D82; --bad-tint:#3B1E1B;
+  --sun:#F2BD52; --sun-tint:#362B16; --grape:#A999D4; --grape-tint:#262138;
+  --shadow:0 6px 22px rgba(0,0,0,.4);
+  --c1:#56B88C; --c2:#E5A14B; --c3:#63B3C7; --c4:#F08D82; --c5:#7FB392;
+}}
+*{box-sizing:border-box}
+html{font-size:106.25%;-webkit-text-size-adjust:100%}
+html.big{font-size:118.75%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Nunito','Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif;line-height:1.8;overflow-x:hidden}
+body::before{content:"";position:fixed;top:0;left:0;right:0;height:env(safe-area-inset-top,0px);background:var(--card);z-index:60}
+button{font:inherit;color:inherit}
+h1,h2,h3{font-weight:800;text-wrap:balance;line-height:1.35;margin:0}
+.num{font-variant-numeric:lining-nums tabular-nums}
+.en{display:block;font-size:.86em;line-height:1.6;color:var(--ink-soft);margin-top:2px}
+.en.in{display:inline;margin-left:.45em;font-size:.82em}
+.btn .en,.on .en,.tab.on .en{color:inherit;opacity:.85}
+svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* header & HUD */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--card);border-bottom:1px solid var(--line);box-shadow:0 2px 12px rgba(25,43,34,.06)}
+.top-in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:8px;padding:8px max(16px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px))}
+.logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--second));display:grid;place-items:center;color:#fff;flex:none;box-shadow:0 3px 10px rgba(46,125,91,.3)}
+.logo svg.i{width:22px;height:22px}
+.brand{flex:1;min-width:0;line-height:1.25}
+.brand b{display:block;font-size:.98rem;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand small{color:var(--ink-soft);font-size:.76rem;display:flex;align-items:center;gap:6px}
+.pill{display:inline-flex;align-items:center;gap:5px;min-height:36px;padding:0 10px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);cursor:pointer;font-weight:800;font-size:.82rem;transition:transform .12s}
+.pill:active{transform:scale(.95)}
+.pill.badge{background:var(--sun-tint);border-color:transparent;color:var(--ink)}
+.pill.badge svg.i{color:var(--sun)}
+.pill.combo{background:linear-gradient(135deg,#D97706,#B91C1C);color:#fff;border:none;animation:popIn .35s cubic-bezier(.18,.89,.32,1.28)}
+.pill.icon-only{padding:0 9px}
+
+/* Rescue Progress HUD */
+.hud-bar{max-width:760px;margin:0 auto;padding:0 16px 8px;display:flex;align-items:center;gap:10px;font-size:.75rem;font-weight:800}
+.xp-lv{background:var(--tint);color:var(--accent-ink);padding:2px 9px;border-radius:999px;white-space:nowrap}
+.xp-track{flex:1;height:8px;background:var(--bg-2);border-radius:999px;overflow:hidden;position:relative}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--second));border-radius:999px;transition:width .5s cubic-bezier(.22,1,.36,1)}
+.xp-num{color:var(--ink-soft);white-space:nowrap}
+
+main{max-width:760px;margin:0 auto;padding:16px max(16px,env(safe-area-inset-right,0px)) calc(96px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+
+/* cards & animations */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin:14px 0}
+.kicker{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:800;letter-spacing:.04em;color:var(--accent-ink);background:var(--card);padding:3px 10px;border-radius:999px;border:1px solid var(--line)}
+.lead{color:var(--ink-soft);margin:6px 0 0}
+
+@keyframes popIn{0%{transform:scale(.6);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.shake{animation:shake .38s ease}
+@keyframes floatUp{0%{transform:translateY(0) scale(.9);opacity:1}100%{transform:translateY(-44px) scale(1.1);opacity:0}}
+.float-xp{position:fixed;pointer-events:none;z-index:120;font-weight:900;font-size:1.1rem;color:var(--second);text-shadow:0 2px 8px rgba(0,0,0,.18);animation:floatUp .95s ease-out forwards}
+
+/* Rescue Radio Comms */
+.comms{display:flex;gap:12px;align-items:flex-start;background:linear-gradient(135deg,var(--tint),var(--bg-2));border:1.5px solid var(--accent);border-radius:16px;padding:12px 14px;margin:12px 0;position:relative}
+.comms-av{width:44px;height:44px;border-radius:14px;background:var(--accent);color:#fff;display:grid;place-items:center;flex:none;box-shadow:0 4px 10px rgba(46,125,91,.25)}
+.comms-tag{font-size:.72rem;font-weight:900;letter-spacing:.06em;color:var(--accent-ink);text-transform:uppercase;display:flex;align-items:center;gap:6px}
+.comms-tag::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--second);animation:blink 1.2s infinite}
+.comms-msg{font-size:.93rem;font-weight:700;margin-top:2px;line-height:1.55}
+
+/* Rescue Gear / Gadgets */
+.gadgets{display:flex;gap:8px;margin:10px 0 14px;flex-wrap:wrap}
+.gadget{flex:1;min-width:145px;display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:14px;border:1.5px solid var(--second);background:var(--second-tint);color:var(--ink);cursor:pointer;text-align:left;transition:transform .12s,box-shadow .12s}
+.gadget:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 4px 12px rgba(200,125,40,.22)}
+.gadget:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.6)}
+.gadget .g-ic{width:34px;height:34px;border-radius:10px;background:var(--second);color:#fff;display:grid;place-items:center;flex:none}
+.gadget .g-t{font-size:.82rem;font-weight:800;line-height:1.25}
+.gadget .g-c{margin-left:auto;background:var(--card);color:var(--second);font-weight:900;font-size:.78rem;padding:2px 8px;border-radius:999px}
+
+/* Escape Room Lock Display */
+.lock-box{background:var(--bg-2);border:2px dashed var(--accent);border-radius:14px;padding:12px 14px;margin:12px 0;text-align:center}
+.lock-digits{display:flex;justify-content:center;gap:8px;margin:8px 0}
+.digit{width:46px;height:54px;border-radius:12px;background:var(--card);border:2px solid var(--accent);display:grid;place-items:center;font-size:1.45rem;font-weight:900;color:var(--accent-ink);box-shadow:var(--shadow)}
+.digit.open{background:var(--good-tint);border-color:var(--good);color:var(--good)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:8px 20px;border-radius:999px;border:none;background:var(--accent);color:var(--on-accent);font-weight:800;cursor:pointer;text-align:center;line-height:1.3;transition:transform .12s,background .15s;box-shadow:0 4px 0 var(--accent-deep)}
+.btn:hover:not(:disabled){background:var(--accent-deep)}
+.btn:active:not(:disabled){transform:translateY(2px);box-shadow:0 2px 0 var(--accent-deep)}
+.btn.ghost{background:var(--card);color:var(--accent-ink);border:1.5px solid var(--accent);box-shadow:none}
+.btn.ghost:hover:not(:disabled){background:var(--tint)}
+.btn.block{width:100%}
+.btn:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row > .btn{flex:1}
+
+/* steps intro */
+.steps3{display:grid;gap:10px;margin-top:6px}
+.s3{display:flex;gap:12px;align-items:flex-start}
+.s3 .n{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:900;color:#fff;flex:none}
+
+/* form */
+.field{display:grid;gap:6px;margin:10px 0}
+.field label{font-weight:700;font-size:.92rem}
+.field input,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;min-height:46px;width:100%}
+.field input:focus,textarea:focus{outline:none;border-color:var(--accent);background:var(--card)}
+.grid3{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3 .wide{grid-column:1/-1}
+
+/* station header */
+.sh{display:flex;gap:14px;align-items:center;margin:4px 0 8px}
+.bignum{width:62px;height:62px;border-radius:20px;display:grid;place-items:center;color:#fff;font-size:2rem;font-weight:900;flex:none;box-shadow:var(--shadow)}
+.sh small{display:block;color:var(--ink-soft);font-weight:700}
+.tag{display:inline-block;font-size:.75rem;font-weight:800;background:var(--second-tint);color:var(--second);padding:2px 9px;border-radius:999px;margin-left:6px;vertical-align:middle}
+.sh h2{font-size:clamp(1.3rem,5vw,1.7rem)}
+.get{display:flex;gap:8px;align-items:flex-start;background:var(--sun-tint);border-radius:12px;padding:10px 12px;margin:10px 0 0;font-weight:600}
+.get svg.i{color:var(--second);margin-top:4px}
+
+/* passage */
+details.psg{background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);margin:14px 0;overflow:hidden;transition:border-color .2s}
+details.psg[open]{border-color:var(--accent)}
+details.psg summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:12px 16px;min-height:52px;font-weight:800}
+details.psg summary::-webkit-details-marker{display:none}
+details.psg summary .ar{margin-left:auto;transition:transform .2s}
+details.psg[open] summary .ar{transform:rotate(90deg)}
+.psg-body{padding:0 16px 14px;border-top:1px dashed var(--line)}
+.psg-body p{margin:12px 0;font-size:.98rem}
+.psg-body .pn{display:inline-block;font-weight:900;color:var(--accent-ink);background:var(--tint);border-radius:8px;padding:0 7px;margin-right:6px;font-size:.8rem}
+.psg-body mark.clue{background:var(--sun-tint);color:var(--ink);padding:2px 5px;border-radius:6px;font-weight:700;border-bottom:2px solid var(--sun)}
+
+/* questions */
+.q{background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:16px;margin:14px 0;box-shadow:var(--shadow);transition:border-color .25s,transform .2s}
+.q.ok{border-color:var(--good)}
+.qh{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+.qn{background:var(--tint);color:var(--accent-ink);border-radius:10px;font-weight:900;padding:2px 9px;flex:none;font-size:.9rem}
+.qt{font-weight:700;line-height:1.6}
+.opts{display:grid;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;width:100%;min-height:52px;padding:11px 13px;border-radius:13px;border:1.5px solid var(--line);background:var(--bg);cursor:pointer;line-height:1.55;transition:transform .1s,border-color .15s,background .15s}
+.opt:hover:not(:disabled){border-color:var(--accent);background:var(--tint);transform:translateX(3px)}
+.opt .k{font-weight:900;color:var(--accent-ink);flex:none;width:26px}
+.opt.sel{border-color:var(--accent);background:var(--tint)}
+.opt.good{border-color:var(--good);background:var(--good-tint)}
+.opt.bad{border-color:var(--bad);background:var(--bad-tint);opacity:.85}
+.opt.out{opacity:.32;text-decoration:line-through;pointer-events:none}
+.opt:disabled{cursor:default}
+.fb{border-radius:12px;padding:10px 12px;margin-top:10px;font-size:.95rem;animation:popIn .25s ease}
+.fb.good{background:var(--good-tint);color:var(--ink);border-left:5px solid var(--good)}
+.fb.bad{background:var(--bad-tint);color:var(--ink);border-left:5px solid var(--bad)}
+.fb b{display:inline-flex;align-items:center;gap:6px}
+.fb.good b{color:var(--good)} .fb.bad b{color:var(--bad)}
+
+/* hints */
+.hintbar{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap}
+.hbtn{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;border:1.5px dashed var(--second);background:transparent;color:var(--ink);cursor:pointer;font-weight:700;font-size:.88rem}
+.hbtn:disabled{opacity:.45;cursor:default}
+.hbtn svg.i{color:var(--second)}
+.hdots{display:inline-flex;gap:4px}
+.hdots i{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.hdots i.on{background:var(--second)}
+.hint{background:var(--sun-tint);border-radius:12px;padding:10px 12px;margin-top:8px;font-size:.93rem}
+.hint .lv{font-weight:900;color:var(--second);font-size:.78rem;display:block}
+.quote{display:block;margin-top:6px;padding:8px 10px;background:var(--card);border-radius:10px;font-style:italic;border-left:4px solid var(--second)}
+
+/* station 1 */
+.note{background:repeating-linear-gradient(var(--card),var(--card) 37px,var(--line) 38px);border-radius:var(--radius);border:1px solid var(--line);padding:16px 16px 6px;box-shadow:var(--shadow)}
+.note .sent{margin:0 0 14px;line-height:2.1}
+.note .sn{font-weight:900;color:var(--c1);margin-right:4px}
+.blank{display:inline-flex;align-items:center;justify-content:center;min-width:110px;min-height:38px;padding:0 10px;margin:0 2px;border-radius:10px;border:2px dashed var(--accent);background:var(--tint);color:var(--accent-ink);font-weight:800;cursor:pointer;vertical-align:middle}
+.blank.act{border-style:solid;box-shadow:0 0 0 4px rgba(232,165,40,.45)}
+.blank.filled{border-style:solid;background:var(--card)}
+.blank.right{border-color:var(--good);background:var(--good-tint);color:var(--good);cursor:default}
+.bank{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 -4px 20px rgba(25,43,34,.12);padding:12px;margin:14px 0}
+.bank small{display:block;color:var(--ink-soft);font-weight:700;margin-bottom:6px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-height:44px;padding:0 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--bg);cursor:pointer;font-weight:800;transition:transform .1s}
+.chip:hover:not(:disabled){border-color:var(--accent);transform:translateY(-2px)}
+.chip:disabled{opacity:.3;cursor:default}
+
+/* station 3 */
+.cards{display:grid;gap:8px}
+.bc{display:flex;align-items:center;gap:10px;width:100%;text-align:left;min-height:54px;padding:10px 12px;border-radius:13px;border:1.5px solid var(--line);background:var(--bg);cursor:pointer;line-height:1.45;transition:transform .1s}
+.bc.sel{border-color:var(--sun);box-shadow:0 0 0 3px rgba(232,165,40,.4);background:var(--card);transform:scale(1.01)}
+.bc .lab{margin-left:auto;font-size:.75rem;font-weight:900;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.lab.trap{background:var(--bad-tint);color:var(--bad)}
+.lab.safe{background:var(--good-tint);color:var(--good)}
+.lab.none{background:var(--bg-2);color:var(--ink-soft)}
+.lab.empty{border:1.5px dashed var(--line);color:var(--ink-soft)}
+.bins{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;position:sticky;bottom:calc(72px + env(safe-area-inset-bottom,0px));z-index:20;background:var(--card);padding:10px;border-radius:var(--radius);border:1px solid var(--line);box-shadow:0 -4px 20px rgba(25,43,34,.12);margin-top:12px}
+.bin{min-height:64px;border-radius:14px;border:none;cursor:pointer;font-weight:800;line-height:1.3;padding:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;transition:transform .1s}
+.bin:active:not(:disabled){transform:scale(.95)}
+.bin svg.i{width:22px;height:22px}
+.bin.trap{background:var(--bad-tint);color:var(--bad)}
+.bin.safe{background:var(--good-tint);color:var(--good)}
+.bin.none{background:var(--bg-2);color:var(--ink-soft)}
+.bin:disabled{opacity:.5;cursor:default}
+.bin .cnt{font-size:.72rem;opacity:.85}
+
+/* station 4 */
+.sus{display:grid;gap:12px}
+.sus .p{display:flex;gap:12px;align-items:flex-start;background:var(--bg);border-radius:14px;padding:12px;border:1.5px solid var(--line)}
+.sus-portrait{width:64px;height:64px;border-radius:16px;overflow:hidden;flex:none;border:2px solid var(--card);box-shadow:var(--shadow)}
+.sus .p b{display:flex;align-items:center;gap:6px}
+.sus .p small{color:var(--ink-soft);font-weight:700;background:var(--card);padding:1px 8px;border-radius:999px;border:1px solid var(--line)}
+.sus .p p{margin:6px 0 0;font-size:.96rem}
+
+.boss-bar{display:flex;align-items:center;justify-content:space-between;background:linear-gradient(90deg,var(--bad-tint),var(--sun-tint));border:1.5px solid var(--bad);border-radius:14px;padding:10px 14px;margin:10px 0;font-weight:800;font-size:.88rem;color:var(--bad)}
+.boss-bar .pulse-dot{width:10px;height:10px;border-radius:50%;background:var(--bad);display:inline-block;margin-right:6px;animation:blink .9s infinite}
+
+/* nav */
+.nav2{display:flex;gap:10px;margin:22px 0 4px}
+.nav2 .btn{flex:1}
+.nav2 .en{display:none}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabs-in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(7,1fr)}
+.tab{position:relative;height:64px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;color:var(--ink-soft);font-weight:800;font-size:.72rem;line-height:1.15;padding:0 2px}
+.tab .tn{font-size:1.05rem;font-weight:900;display:flex;align-items:center;justify-content:center;height:24px}
+.tab .tn svg.i{width:18px;height:18px}
+.tab.on{color:var(--accent)}
+.tab.on::before{content:"";position:absolute;top:0;left:18%;right:18%;height:3px;border-radius:0 0 3px 3px;background:var(--accent)}
+.tab.done .tn{color:var(--good)}
+.tab:disabled{opacity:.4;cursor:not-allowed}
+
+/* sheet & modal */
+.mask{position:fixed;inset:0;background:rgba(14,23,19,.55);backdrop-filter:blur(2px);z-index:80;display:none}
+.mask.show{display:block}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:90;background:var(--card);border-radius:22px 22px 0 0;padding:18px max(18px,env(safe-area-inset-left,0px)) calc(20px + env(safe-area-inset-bottom,0px));max-width:760px;margin:0 auto;transform:translateY(105%);transition:transform .25s}
+.sheet.show{transform:none}
+.sheet h3{margin-bottom:10px}
+.seg{display:flex;background:var(--bg-2);border-radius:999px;padding:4px;gap:4px;margin:6px 0 14px}
+.seg button{flex:1;min-height:42px;border:none;border-radius:999px;background:transparent;cursor:pointer;font-weight:800;font-size:.9rem}
+.seg button.on{background:var(--accent);color:var(--on-accent)}
+.modal{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%) scale(.9);opacity:0;pointer-events:none;z-index:95;width:min(92vw,420px);background:var(--card);border-radius:24px;padding:26px 20px 20px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.3);transition:all .25s}
+.modal.show{opacity:1;pointer-events:auto;transform:translate(-50%,-50%) scale(1)}
+@keyframes pop{0%{transform:scale(.3) rotate(-20deg)}70%{transform:scale(1.12) rotate(6deg)}100%{transform:scale(1)}}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:96;overflow:hidden}
+.confetti i{position:absolute;top:-12px;width:9px;height:14px;border-radius:3px;animation:fall 1.6s ease-in forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(540deg);opacity:.7}}
+@media (prefers-reduced-motion:reduce){.confetti i,.shake,.float-xp{animation:none}.sheet,.modal{transition:none}}
+
+/* certificate & Ranger ID */
+.cert{text-align:center;background:linear-gradient(160deg,var(--sun-tint),var(--tint));border:2px solid var(--sun)}
+.cert h1{font-size:clamp(1.4rem,5.5vw,1.9rem);margin:6px 0}
+.agent-id{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:12px 14px;margin:10px auto;max-width:340px;text-align:left;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.agent-id::after{content:"RESCUED";position:absolute;right:-14px;bottom:10px;font-size:.7rem;font-weight:900;color:var(--good);border:2px solid var(--good);padding:1px 6px;border-radius:4px;transform:rotate(-15deg);opacity:.65}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+.stat-box{background:var(--card);border-radius:14px;padding:10px}
+.stat-box b{display:block;font-size:1.5rem;font-weight:900;color:var(--accent-ink)}
+.stat-box small{color:var(--ink-soft);font-weight:700}
+.rank{display:inline-block;font-weight:900;padding:4px 14px;border-radius:999px;background:var(--card);color:var(--second);margin-top:4px;border:1px solid var(--line)}
+.miss{list-style:none;padding:0;margin:0;display:grid;gap:8px}
+.miss li{background:var(--bg);border-radius:12px;padding:10px 12px;font-size:.93rem}
+.miss li small{display:block;color:var(--ink-soft);font-weight:700}
+.sync{display:flex;text-align:left;align-items:center;gap:8px;font-size:.88rem;font-weight:700;padding:10px 12px;border-radius:12px;margin-top:10px}
+.sync.ok{background:var(--good-tint);color:var(--good)}
+.sync.wait{background:var(--sun-tint);color:var(--ink)}
+.sync.off{background:var(--bg-2);color:var(--ink-soft)}
+.tip{background:var(--second-tint);border-radius:14px;padding:12px 14px;margin:14px 0;display:flex;gap:10px;align-items:flex-start}
+.tip svg.i{color:var(--second);margin-top:4px}
+
+/* scenes */
+.scene{display:block;width:100%;height:auto;border-radius:var(--radius)}
+.sv-sky{fill:var(--tint)}.sv-sky2{fill:var(--second-tint)}.sv-ground{fill:var(--good-tint)}.sv-card{fill:var(--card)}
+.sv-ink{fill:var(--ink)}.sv-soft{fill:var(--ink-soft)}.sv-a{fill:var(--accent)}.sv-b{fill:var(--second)}.sv-c{fill:var(--grape)}
+.sv-d{fill:var(--c3)}.sv-sun{fill:var(--sun)}.sv-sunt{fill:var(--sun-tint)}.sv-bad{fill:var(--bad)}.sv-badt{fill:var(--bad-tint)}
+.sv-bg2{fill:var(--bg-2)}.sv-skin{fill:#F5C9A8}.sv-hair{fill:#2D241E}.sv-ele{fill:#8E9E99}.sv-ele-dark{fill:#697A75}
+.st-ink{stroke:var(--ink);fill:none;stroke-width:2.5;stroke-linecap:round}
+.sv-tx{fill:var(--ink);font-family:Nunito,sans-serif;font-weight:900}.sv-tw{fill:#fff;font-family:Nunito,sans-serif;font-weight:900}.sv-tbad{fill:var(--bad);font-family:Nunito,sans-serif;font-weight:900}
+.hero-scene{padding:0;overflow:hidden}
+.hero-scene .hs-body{padding:16px 18px 18px}
+.mission{position:relative;margin:4px 0 12px;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+.mission .mlabel{position:absolute;left:12px;top:10px;background:var(--card);color:var(--ink);font-weight:900;font-size:.75rem;letter-spacing:.08em;padding:3px 10px;border-radius:999px;display:flex;align-items:center;gap:6px}
+.mission .mlabel i{width:8px;height:8px;border-radius:50%;background:var(--bad);animation:blink 1.4s infinite}
+@keyframes blink{50%{opacity:.2}}
+.gmap{position:relative;width:100%;aspect-ratio:360/540;margin-top:4px}
+.mapsvg{position:absolute;inset:0;width:100%;height:100%}
+.node{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:3px;border:none;background:none;cursor:pointer;padding:0;color:var(--ink)}
+.node .disc{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:1.45rem;font-weight:900;border:4px solid var(--card);box-shadow:0 5px 0 rgba(25,43,34,.22),var(--shadow);transition:transform .15s}
+.node:hover:not(.lock) .disc{transform:scale(1.08)}
+.node .disc svg.i{width:24px;height:24px}
+.node.lock .disc{background:var(--bg-2)!important;color:var(--ink-soft);box-shadow:0 4px 0 rgba(25,43,34,.08)}
+.node.lock{cursor:not-allowed}
+.node.now .disc{animation:pulse 1.8s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 5px 0 rgba(25,43,34,.22),0 0 0 0 rgba(232,165,40,.7)}50%{box-shadow:0 5px 0 rgba(25,43,34,.22),0 0 0 12px rgba(232,165,40,0)}}
+.node .nl{background:var(--card);border-radius:999px;padding:1px 10px;font-size:.74rem;font-weight:800;box-shadow:var(--shadow);white-space:nowrap;line-height:1.6}
+.node .pin{position:absolute;right:calc(100% - 6px);top:-18px;animation:hop 1.2s ease-in-out infinite}
+@keyframes hop{50%{transform:translateY(-6px)}}
+.nstars{display:flex;gap:1px;margin-top:-2px}
+.nstars svg{width:15px;height:15px;fill:var(--line)}
+.nstars svg.on{fill:var(--sun)}
+.trophy{background:linear-gradient(135deg,var(--sun),var(--second))!important;width:64px!important;height:64px!important}
+.cert-node.lock .trophy{background:var(--bg-2)!important}
+.badge-row{display:flex;justify-content:center;gap:4px;flex-wrap:wrap;margin:14px 0}
+.medal2{animation:pop .6s ease;display:inline-block}
+@media (prefers-reduced-motion:reduce){.node.now .disc,.node .pin,.mission .mlabel i{animation:none}}
+/* intel drawer */
+.fab{position:fixed;right:max(14px,env(safe-area-inset-right,0px));bottom:calc(78px + env(safe-area-inset-bottom,0px));z-index:45;display:none;align-items:center;gap:6px;min-height:46px;padding:0 14px;border-radius:999px;border:none;background:var(--second);color:#fff;font-weight:900;box-shadow:0 6px 18px rgba(200,125,40,.4);cursor:pointer}
+.fab.show{display:inline-flex}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(90vw,440px);z-index:92;background:var(--card);box-shadow:-10px 0 30px rgba(0,0,0,.18);transform:translateX(105%);transition:transform .25s;overflow:auto;padding:calc(14px + env(safe-area-inset-top,0px)) 18px calc(20px + env(safe-area-inset-bottom,0px))}
+.drawer.show{transform:none}
+.drawer p{font-size:.98rem;margin:12px 0}
+.drawer p.rel{background:var(--bg);border-radius:12px;padding:10px 12px;border-left:4px solid var(--accent)}
+.drawer mark.clue{background:var(--sun-tint);color:inherit;border-bottom:2px solid var(--sun);padding:0 2px;border-radius:3px}
+.qtool{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 12px;border-radius:999px;border:1.5px solid var(--second);background:var(--second-tint);color:var(--ink);font-weight:800;font-size:.84rem;cursor:pointer;margin-top:10px}
+.qtool .ct{background:var(--second);color:#fff;border-radius:999px;font-size:.7rem;padding:0 7px}
+.qtool:disabled{opacity:.4;cursor:default}
+@media (prefers-reduced-motion:reduce){.drawer{transition:none}}
+footer{text-align:center;color:var(--ink-soft);font-size:.8rem;margin:26px 0 0;line-height:1.7}
+footer b{color:var(--ink)}
+.muted{color:var(--ink-soft)}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="logo" aria-hidden="true" id="logo"></div>
+    <div class="brand"><b>Jungle Rescue: L8</b><small id="brandSub"></small></div>
+    <span class="pill combo num" id="comboPill" style="display:none"></span>
+    <span class="pill badge num" id="badgeCount"></span>
+    <button class="pill icon-only" id="sndBtn" aria-label="音效開關"></button>
+    <button class="pill icon-only" id="setBtn" aria-label="設定 Settings"></button>
+  </div>
+  <div class="hud-bar" id="hudBar"></div>
+</header>
+
+<main id="app"></main>
+
+<nav class="tabs" aria-label="密室關卡"><div class="tabs-in" id="tabs"></div></nav>
+
+<div class="mask" id="mask"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"></div>
+<div class="modal" id="modal" role="dialog" aria-modal="true"></div>
+<div class="confetti" id="confetti"></div>
+<button class="fab" id="fab" data-act="intel"></button>
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="Camp Intel"></aside>
+
+<script>
+/* ====== 老師設定：貼上 Google Apps Script 網頁應用程式網址（留空則不上傳成績） ====== */
+const SCRIPT_URL = '';
+const GAME_ID = 'L8-JungleRescue';
+/* ============================================================================ */
+
+const KEY = 'jungle-rescue-l8-v1';
+const ICONS = {
+  compass:'<circle cx="12" cy="12" r="9"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>',
+  lock:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+  unlock:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.5-1.9"/>',
+  check:'<path d="M5 12l5 5L20 7"/>',
+  x:'<path d="M6 6l12 12M18 6L6 18"/>',
+  star:'<path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/>',
+  sliders:'<path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/>',
+  bulb:'<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V16h5v-.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3z"/>',
+  book:'<path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2V5z"/><path d="M6 19h13v2H6"/>',
+  arrow:'<path d="M9 6l6 6-6 6"/>',
+  back:'<path d="M15 6l-6 6 6 6"/>',
+  home:'<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/>',
+  pen:'<path d="M4 20h4L19 9l-4-4L4 16v4z"/>',
+  alert:'<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+  heart:'<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>',
+  key:'<circle cx="7.5" cy="15.5" r="5.5"/><path d="M21 2l-9.6 9.6M15.5 7.5l3 3"/>',
+  sort:'<rect x="3" y="4" width="7" height="7" rx="2"/><rect x="14" y="4" width="7" height="7" rx="2"/><rect x="8.5" y="14" width="7" height="7" rx="2"/>',
+  shield:'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+  award:'<circle cx="12" cy="9" r="6"/><path d="M8.5 14L7 22l5-3 5 3-1.5-8"/>',
+  target:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/>',
+  cloud:'<path d="M7 18a4 4 0 0 1-.5-8A6 6 0 0 1 18 9a4.5 4.5 0 0 1-.5 9H7z"/><path d="M12 11v5M9.5 13.5L12 11l2.5 2.5"/>',
+  hand:'<path d="M8 13V5a1.5 1.5 0 0 1 3 0v6M11 10V4a1.5 1.5 0 0 1 3 0v6M14 10V5a1.5 1.5 0 0 1 3 0v7c0 5-3 8-6.5 8S5 17 4.5 15L3 11.5a1.5 1.5 0 0 1 2.6-1.4L8 13"/>',
+  q:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6V14M12 17.5v.01"/>',
+  volOn:'<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>',
+  volOff:'<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>',
+  radio:'<circle cx="12" cy="12" r="2"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/>',
+  zap:'<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+  eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'
+};
+const ic = (n,cls='') => `<svg class="i ${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n]||''}</svg>`;
+const esc = s => String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* ---------- Web Audio 叢林與密室音效 ---------- */
+let audioCtx = null;
+function playSfx(type){
+  if(!state.sound) return;
+  try{
+    if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    if(audioCtx.state==='suspended') audioCtx.resume();
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    if(type==='tap'){
+      osc.type='sine'; osc.frequency.setValueAtTime(480,now); osc.frequency.exponentialRampToValueAtTime(720,now+.06);
+      gain.gain.setValueAtTime(.08,now); gain.gain.exponentialRampToValueAtTime(.001,now+.06);
+      osc.start(now); osc.stop(now+.06);
+    } else if(type==='good'){
+      const comboBoost = Math.min(state.combo||0, 6)*40;
+      osc.type='triangle';
+      osc.frequency.setValueAtTime(440+comboBoost,now);
+      osc.frequency.setValueAtTime(554.37+comboBoost,now+.08);
+      osc.frequency.setValueAtTime(659.25+comboBoost,now+.16);
+      gain.gain.setValueAtTime(.14,now); gain.gain.exponentialRampToValueAtTime(.001,now+.32);
+      osc.start(now); osc.stop(now+.32);
+    } else if(type==='bad'){
+      osc.type='sawtooth'; osc.frequency.setValueAtTime(165,now); osc.frequency.linearRampToValueAtTime(115,now+.24);
+      gain.gain.setValueAtTime(.11,now); gain.gain.exponentialRampToValueAtTime(.001,now+.25);
+      osc.start(now); osc.stop(now+.25);
+    } else if(type==='gadget'){
+      osc.type='sine'; osc.frequency.setValueAtTime(340,now); osc.frequency.exponentialRampToValueAtTime(1080,now+.25);
+      gain.gain.setValueAtTime(.12,now); gain.gain.exponentialRampToValueAtTime(.001,now+.26);
+      osc.start(now); osc.stop(now+.26);
+    } else if(type==='win'){
+      [440,554.37,659.25,880].forEach((f,idx)=>{
+        const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+        o.type='triangle'; o.connect(g); g.connect(audioCtx.destination);
+        o.frequency.setValueAtTime(f, now+idx*.1);
+        g.gain.setValueAtTime(.15, now+idx*.1); g.gain.exponentialRampToValueAtTime(.001, now+idx*.1+.35);
+        o.start(now+idx*.1); o.stop(now+idx*.1+.36);
+      });
+    }
+  }catch(e){}
+}
+
+function spawnFloatXP(text, x, y){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const el=document.createElement('div');
+  el.className='float-xp';
+  el.textContent=text;
+  el.style.left=(x||window.innerWidth/2)+'px';
+  el.style.top=(y||window.innerHeight/2)+'px';
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),1000);
+}
+
+/* ---------- 課文 (Lesson 8: Elephant Abuse) ---------- */
+const PASSAGE = {
+1:"Every year, Thailand sees millions of tourists, many of whom have a lot of fun riding elephants. In fact, this activity is often the highlight of a visitor's vacation, and these rides bring a lot of money into the Thai economy. However, there is a dark side to elephant tourism that would horrify many travelers.",
+2:"Due to high demand in Thailand's tourism industry, some young wild elephants are illegally captured and sold to tourist attractions. These young elephants are lured away from their mothers and into traps. Wild elephants live in herds led by females, and it is natural for mothers to protect their babies. Any females from the herd that try to defend their calves may be shot by brutal trappers. Once the captured elephants are sold to tour operators, the real horror begins as they are often violently abused. Confined in small cages, these poor creatures are beaten mercilessly for days and even struck with sharp nails. Such psychological torture and physical abuse, both of which cause extreme suffering, are committed in order to make them obedient to their human trainers.",
+3:"After the elephants are tamed, they are forced into a life of slavery. Many of them are made to carry people on their backs at tourist attractions and elephant camps. Since an elephant's spine is vulnerable to pressure from above, carrying heavy tourists for hours every day can lead to painful, permanent back injuries. What's more, they are denied an adequate amount of food and water, which further contributes to their exhaustion. Worse still, these elephants are beaten as they work; their flesh is struck with bullhooks. On average, more than 13 million tourists ride elephants in Thailand every year. This puts money in the pockets of those who capture and take advantage of them, which allows the cruel elephant trade to continue.",
+4:"Supply never comes without demand, so it is high time that we dealt with the roots of this problem. When you visit Thailand, avoid companies profiting from elephant tourism. As an alternative, visit one of Thailand's three national parks where wild elephants roam free. There, you can take pleasure in seeing these complex, intelligent animals as they happily go about their lives in peace."
+};
+
+const CLUES = [
+  "there is a dark side to elephant tourism that would horrify many travelers",
+  "young wild elephants are illegally captured and sold to tourist attractions",
+  "lured away from their mothers and into traps",
+  "Confined in small cages, these poor creatures are beaten mercilessly for days",
+  "make them obedient to their human trainers",
+  "elephant's spine is vulnerable to pressure from above",
+  "lead to painful, permanent back injuries",
+  "denied an adequate amount of food and water, which further contributes to their exhaustion",
+  "avoid companies profiting from elephant tourism",
+  "visit one of Thailand's three national parks where wild elephants roam free"
+];
+
+/* ---------- 密室關卡資料 (5道叢林封鎖區) ---------- */
+const CODENAMES = ['Jungle Fox 叢林狐','Leaf Ranger 葉影','River Hawk 溪鷹','Bamboo Owl 竹梟','Emerald Wolf 翠狼','Sun Bear 日熊','Mist Panther 霧豹','Fern Scout 蕨哨'];
+const STATIONS = [
+ {n:1, color:'var(--c1)', icon:'compass', tag:['密室一 · 詞彙鎖','Room 1 · Word Lock'], title:['藤蔓入口：盜獵者日誌','Vine Gate: Poacher’s Log'], en:'Decode the Field Log',
+  comms:['救援隊員！我們已潛入泰國叢林深處的非法象營外圍。門口有一本被撕毀的盜獵者日誌，填出 6 個關鍵字彙才能解開藤蔓鐵門！','Ranger! We’ve infiltrated the perimeter of an illegal jungle camp. Decode 6 missing words in the poacher’s log to unlock the vine gate!'],
+  get:['用課文單字還原盜獵者日誌，取得「第 1 把叢林鑰匙」。','Restore the poacher’s log with lesson words to earn Key #1.'], paras:[1,2,3]},
+ {n:2, color:'var(--c2)', icon:'book', tag:['密室二 · 檔案庫','Room 2 · Archives'], title:['暗影帳篷：黑暗真相','Shadow Tent: Dark Truths'], en:'Uncover the Secret',
+  comms:['我們潛入了營區指揮帳篷！桌上散落著旅遊業帳本與《大象的歷史轉變》紀錄。破解 4 道情報謎題，找出他們虐待大象的真相！','We’re inside the command tent! Analyze the tourism records and history timeline to answer 4 intel questions.'],
+  get:['答對 4 題閱讀理解與 PIE 寫作目的題，取得「第 2 把叢林鑰匙」。','Answer 4 comprehension & PIE questions to earn Key #2.'], paras:[1,2,3]},
+ {n:3, color:'var(--c3)', icon:'sort', tag:['密室三 · 陷阱陣','Room 3 · Trap Maze'], title:['沼澤迷宮：因果因果鏈','Swamp Maze: Cause & Effect'], en:'Sort the Chain of Cruelty',
+  comms:['小心腳下的陷阱！這座迷宮記錄了「大象悲劇的因果循環」與「遊客的保育行動」。把 9 張線索卡正確歸類，才能通過沼澤！','Watch out for traps! Sort these 9 clues into "Cruelty Chain," "Ethical Action," or "Not in Text" to cross the swamp.'],
+  get:['把 9 張線索卡分對類，取得「第 3 把叢林鑰匙」。','Sort all 9 clue cards correctly to earn Key #3.'], paras:[2,3,4]},
+ {n:4, color:'var(--c4)', icon:'key', tag:['密室四 · 鐵籠鎖','Room 4 · Cage Lock'], title:['鐵籠禁區：營救小象 Koko','The Iron Cage: Save Baby Koko'], en:'Unlock the Cage',
+  comms:['【最高警戒】我們找到被鐵鏈鎖住的小象 Koko 了！巡邏隊 3 分鐘後就會回來，快解開兩道數位密碼鎖，剪斷鐵鏈救出牠！','[HIGH ALERT] We found baby elephant Koko locked in a cage! Crack the 2-stage digital lock before guards return!'],
+  get:['破解密碼題並選出 3 項「拒絕虐待」的正確標語，救出小象 Koko！','Crack the lock & pick 3 valid rescue slogans to free Koko!'], paras:[3,4]},
+ {n:5, color:'var(--c5)', icon:'shield', tag:['密室五 · 逃脫門','Room 5 · Exit Gate'], title:['自由之門：護送回國家公園','Freedom Gate: National Park'], en:'Final Escape',
+  comms:['Koko 已經跟著我們跑到保護區邊界了！最後一道電子閘門需要正確的「關係代名詞與呼籲句型」才能開啟，帶牠奔向自由吧！','Koko is right behind us at the sanctuary border! Solve 3 grammar & summary locks to open the final gate!'],
+  get:['完成 3 題最終密碼題，成功逃出密室並獲得「叢林救援英雄證書」！','Solve 3 final locks to escape and claim your Hero Certificate!'], paras:[1,4]}
+];
+
+/* 密室 1：詞彙破譯 */
+const S1 = {
+ intro:['盜獵者日誌被雨水浸濕了。根據課文語意，從下方密碼詞庫選出正確單字還原日誌（有 2 個干擾誘餌）。','The poacher’s log is water-damaged. Restore the 6 blanks using the word bank below (2 words are decoys).'],
+ bank:['illegally','lured','mercilessly','obedient','vulnerable','permanent','adequate','roam'],
+ items:[
+  {id:'v1',pre:'Young wild elephants are ',post:' captured in the forest and sold to camps.',ans:'illegally',ref:'P2',
+   src:'…some young wild elephants are illegally captured and sold to tourist attractions.',
+   fb:['修飾動詞 captured 需要副詞，意思是「非法地」。','You need an adverb modifying "captured," meaning "against the law."']},
+  {id:'v2',pre:'Trappers ',post:' the baby elephants away from their mothers and into traps.',ans:'lured',ref:'P2',
+   src:'These young elephants are lured away from their mothers and into traps.',
+   fb:['意思是用誘餌「引誘」小象離開母象身邊（過去式）。','Meaning "tempted or led into a trap" (past tense).']},
+  {id:'v3',pre:'Locked in small cages, the calves are beaten ',post:' for days.',ans:'mercilessly',ref:'P2',
+   src:'Confined in small cages, these poor creatures are beaten mercilessly for days…',
+   fb:['形容殘忍地毆打，毫無憐憫之心（副詞）。','An adverb meaning "cruelly, showing no pity."']},
+  {id:'v4',pre:'The cruel abuse is meant to make them ',post:' to their trainers.',ans:'obedient',ref:'P2',
+   src:'…are committed in order to make them obedient to their human trainers.',
+   fb:['make + 受詞 + 形容詞：讓大象變得「服從的、聽話的」。','Adjective after "make them": willing to obey orders.']},
+  {id:'v5',pre:'An elephant’s spine is ',post:' to heavy pressure from above.',ans:'vulnerable',ref:'P3',
+   src:'Since an elephant’s spine is vulnerable to pressure from above…',
+   fb:['be ___ to = 容易受到⋯⋯傷害的、脆弱的。','be ___ to = easily hurt by.']},
+  {id:'v6',pre:'In national parks, wild elephants can ',post:' free in peace.',ans:'roam',ref:'P4',
+   src:'…visit one of Thailand’s three national parks where wild elephants roam free.',
+   fb:['can 後面接原形動詞，意思是「自由漫步、閒逛」。','Base verb after "can," meaning "walk or travel freely."']}
+ ],
+ hints:[
+  {t:['先看空格詞性！第 1、3 格需要 -ly 結尾的副詞；第 4、5 格需要形容詞。','Check parts of speech! Blanks 1 & 3 need -ly adverbs; Blanks 4 & 5 need adjectives.']},
+  {t:['看看第一個還沒解開的密碼格，課文這句話有直接線索：','Look at the first unsolved blank. This line from the passage holds the key:'], quote:true},
+  {t:['救援支援：幫你解開其中一格密碼。','HQ Support: One code blank has been unlocked for you.'], act:'reveal'}
+ ]
+};
+
+/* 密室 2：閱讀理解與歷史檔案 */
+const S2 = [
+ {id:'t1',q:'What happened after the Thai government banned logging in 1989?',ref:'Timeline (p.188)',
+  opts:['All wild elephants were sent back to national parks.','Kings started using elephants in war again.','Around 70% of Thailand’s elephants ended up in tourism.','Elephant tourism in Thailand quickly came to an end.'],ans:2,
+  fb:{0:['並不是全部回到國家公園，反而有約 70% 轉入觀光業。','Not all went to parks; around 70% ended up in tourism.'],1:['國王在戰爭中使用大象是 15 世紀的事。','Using elephants in war happened in the 15th century.'],3:['相反，觀光業反而成了大部分大象的去處。','The opposite: tourism became where most elephants ended up.']},
+  ok:['密碼破解！1989 年禁止伐木後，約 70% 的大象轉入觀光產業。','Unlocked! After the 1989 logging ban, about 70% of elephants were used for tourism.'],
+  hints:[{t:['打開營區密檔，看「大象年表」裡 1989 年那一行。','Open the Camp Intel file and check the 1989 line in the timeline.']},{t:['讀這段情報：','Read this intel:'],quote:'1989: The Thai government banned logging, leading to around 70% of Thailand’s elephants being used for tourism.'},{t:['刪除兩個干擾選項。','Two wrong options removed.'],act:'elim',keep:[2,0]}]},
+ {id:'t2',q:'Which statement about elephants in Thailand is FALSE?',ref:'P2–3',
+  opts:['Some young wild elephants are illegally captured and sold.','Working elephants are often denied enough food and water.','More than 13 million tourists ride elephants in Thailand every year.','Male elephants are usually shot when they defend the calves.'],ans:3,
+  fb:{0:['這句是真的！第 2 段說 young wild elephants are illegally captured。','This one is true! Paragraph 2 says young wild elephants are illegally captured.'],1:['這句是真的！第 3 段說 they are denied an adequate amount of food and water。','This one is true! Paragraph 3 says they are denied enough food and water.'],2:['這句是真的！第 3 段提到每年超過 1,300 萬名遊客騎象。','This one is true! Paragraph 3 says over 13 million tourists ride elephants each year.']},
+  ok:['抓到錯誤情報！象群由母象帶領，挺身保護小象而被射殺的是母象，不是公象。','Caught the false intel! Herds are led by females, and it is the females who may be shot defending calves.'],
+  hints:[{t:['題目問 FALSE。回第 2 段找「誰帶領象群、誰保護小象」。','The question asks for FALSE. Check Paragraph 2: who leads the herd and protects the calves?']},{t:['讀這兩句：','Read these:'],quote:'Wild elephants live in herds led by females… Any females from the herd that try to defend their calves may be shot by brutal trappers.'},{t:['刪除兩個干擾選項。','Two wrong options removed.'],act:'elim',keep:[3,1]}]},
+ {id:'t3',q:'Why can carrying tourists every day cause permanent back injuries to elephants?',ref:'P3',
+  opts:['Because elephants are too young to carry any weight.','Because an elephant’s spine is easily hurt by pressure from above.','Because tourists often hit the elephants with bullhooks.','Because elephants are forced to walk on hot roads.'],ans:1,
+  fb:{0:['課文沒有說牠們太小；問題出在脊椎的構造。','The text doesn’t say they are too young; the problem is the spine.'],2:['用象鉤打大象的是馴象師，不是遊客，而且這也不是背傷的原因。','Trainers, not tourists, use bullhooks, and that isn’t why the back is injured.'],3:['課文沒有提到炎熱的路面。','The text doesn’t mention hot roads.']},
+  ok:['完全正確！大象的脊椎很怕來自上方的壓力，長期載客會造成永久背傷。','Exactly! An elephant’s spine is vulnerable to pressure from above.'],
+  hints:[{t:['答案在第 3 段，找 spine 這個字。','Look for the word "spine" in Paragraph 3.']},{t:['讀這句：','Read this:'],quote:'Since an elephant’s spine is vulnerable to pressure from above, carrying heavy tourists for hours every day can lead to painful, permanent back injuries.'},{t:['刪除兩個干擾選項。','Two wrong options removed.'],act:'elim',keep:[1,2]}]},
+ {id:'t4',q:'Using the PIE reading strategy, what is the author’s main purpose in Paragraph 2?',ref:'Reading Strategy: PIE',
+  opts:['To entertain readers with a sad but exciting jungle story.','To persuade readers to visit elephant camps in Thailand.','To compare elephant tourism in different Asian countries.','To inform readers about what happens to captured elephants.'],ans:3,
+  fb:{0:['第 2 段是在說明抓象和虐待的過程，不是說故事娛樂讀者。','Paragraph 2 explains how elephants are captured and abused; it isn’t a story for fun.'],1:['相反！作者在第 4 段要讀者「避開」這些業者。','The opposite! In Paragraph 4 the author tells readers to avoid these companies.'],2:['第 2 段只談泰國，沒有比較其他國家。','Paragraph 2 only talks about Thailand.']},
+  ok:['判斷正確！第 2 段一步步說明小象被誘捕、關籠、毒打的過程，屬於 Inform。','Correct! Paragraph 2 explains step by step how calves are trapped, caged and beaten: Inform.'],
+  hints:[{t:['PIE = Persuade（說服）、Inform（告知）、Entertain（娛樂）。第 2 段在做哪一件事？','PIE = Persuade, Inform, Entertain. Which one is Paragraph 2 doing?']},{t:['Inform 類文章常見：說明、數據、過程步驟。','Informing passages often include explanations, data and steps in a process.'],quote:'These young elephants are lured away from their mothers and into traps… Confined in small cages, these poor creatures are beaten mercilessly for days.'},{t:['刪除兩個干擾選項。','Two wrong options removed.'],act:'elim',keep:[3,0]}]}
+];
+
+/* 密室 3：沼澤迷宮分類 (虐待因果鏈 vs 正確保育行動 vs 課文未提) */
+const S3 = {
+ cards:[
+  {id:'b1',t:'High tourist demand drives illegal capture of wild calves',a:'trap'},
+  {id:'b2',t:'Visit national parks where wild elephants roam free',a:'safe'},
+  {id:'b3',t:'Elephants are trained to paint portraits with brushes',a:'none'},
+  {id:'b4',t:'Calves are confined in small cages and beaten to be obedient',a:'trap'},
+  {id:'b5',t:'Avoid companies that profit from elephant rides',a:'safe'},
+  {id:'b6',t:'Poachers sell elephant meat to local restaurants',a:'none'},
+  {id:'b7',t:'Carrying tourists daily leads to permanent spine injuries',a:'trap'},
+  {id:'b8',t:'Deal with the roots of the problem by reducing demand',a:'safe'},
+  {id:'b9',t:'Thailand built 50 new elephant hospitals last year',a:'none'}
+ ],
+ bins:{trap:['虐待因果鏈','Cruelty Chain','alert'],safe:['保育與解方','Ethical Action','heart'],none:['課文沒提到','Not in text','q']},
+ hints:[
+  {t:['「虐待因果鏈」出現在第 2–3 段；「保育與解方」出現在第 4 段。','The "Cruelty Chain" is in Paragraphs 2–3; "Ethical Action" is in Paragraph 4.']},
+  {t:['每一類剛好 3 張。課文裡找不到的事，就算聽起來合理，也要放進「課文沒提到」。','Each bin holds exactly 3 cards. If you can’t find it in the text, it goes in “Not in text,” even if it sounds possible.']},
+  {t:['救援支援：幫你把一張線索卡放到正確分類槽。','HQ Support: One card has been sorted for you.'],act:'reveal'}
+ ]
+};
+
+/* 密室 4：鐵籠禁區營救小象 Koko */
+const S4 = {
+ story:['鐵籠上的電子鎖螢幕顯示：「觀察以下三間象營的運作模式，只有『符合第 4 段保育原則』的營區代碼能解除高壓電網；接著選出 3 張正確的動保宣傳標語，鐵籠門就會徹底開啟！」','The cage keypad reads: "Analyze the 3 elephant camps below. Only the ethical sanctuary code disables the electric grid; then select 3 valid anti-cruelty slogans to open the cage door!"'],
+ people:[
+  {name:'Camp A',hand:'Half-day tour',c:'var(--c4)',txt:'“Short, gentle rides! Each tourist rides for only 20 minutes on a soft cushion seat. Our trainers keep the elephants calm with bullhooks.”'},
+  {name:'Camp B',hand:'Half-day tour',c:'var(--c2)',txt:'“Watch our elephants paint pictures and play football! Between shows, they rest in small cages to save energy.”'},
+  {name:'Camp C',hand:'Half-day tour',c:'var(--c1)',txt:'“Walk quietly with a ranger in a national park and watch wild elephants roam free from a safe distance. No riding, no shows.”'}
+ ],
+ q1:{id:'c1',q:'[LOCK 1] Which camp follows the author’s advice in Paragraph 4?',ref:'P4',opts:['Camp A','Camp B','Camp C'],ans:2,
+  fb:{0:['就算只騎 20 分鐘，還是會壓迫脊椎；遊客付的錢也會讓抓象產業繼續。象鉤更是第 3 段的虐待工具。','Even a 20-minute ride presses on the spine, and the money keeps the trade going. Bullhooks are the abuse tool in Paragraph 3.'],1:['小籠子就是第 2 段的 confined in small cages；表演前都要先用暴力馴服。','Small cages are exactly what Paragraph 2 describes, and shows require violent taming first.']},
+  ok:['第一道電子鎖解除！Camp C 讓大象在國家公園自由漫步、遊客只觀察，完全符合第 4 段。','Lock 1 disarmed! Camp C lets elephants roam free in a national park, just as Paragraph 4 advises.'],
+  hints:[{t:['回第 4 段看作者建議遊客去什麼樣的地方（national parks where wild elephants roam free）。','Check Paragraph 4 for what kind of place the author advises visiting.']},{t:['讀這句：','Read this:'],quote:'As an alternative, visit one of Thailand’s three national parks where wild elephants roam free.'},{t:['刪除一個錯誤營區代碼。','One wrong camp removed.'],act:'elim',keep:[0,2]}]},
+ q2:{id:'c2',q:'[LOCK 2] Choose THREE slogans that best match the author’s advice to end elephant tourism abuse.',ref:'P4 & Reading Comprehension',
+  opts:[
+   {t:'Refuse to Ride: Stop the Demand!',a:true,why:['正確！第 4 段：沒有需求就沒有供給，拒絕騎乘才能從根源解決。','Valid! Paragraph 4: supply never comes without demand, so refusing rides attacks the root.']},
+   {t:'Ride Gently: Just Ten Minutes a Day!',a:false,why:['陷阱！再短的騎乘也會傷脊椎，而且付錢會讓虐待產業繼續。','Trap! Even short rides hurt the spine, and paying keeps the cruel trade going.']},
+   {t:'Avoid Companies That Profit from Elephants!',a:true,why:['正確！第 4 段直接建議 avoid companies profiting from elephant tourism。','Valid! Paragraph 4 says to avoid companies profiting from elephant tourism.']},
+   {t:'Pay Extra for a Baby-Elephant Photo!',a:false,why:['陷阱！小象是從母象身邊被誘捕來的，付錢會讓更多小象被抓。','Trap! Calves are lured from their mothers; paying for photos creates more demand.']},
+   {t:'See Them Roam Free in National Parks!',a:true,why:['正確！第 4 段建議去野生大象自由漫步的國家公園。','Valid! Paragraph 4 suggests national parks where wild elephants roam free.']},
+   {t:'Cheer for Elephant Shows That Look Fun!',a:false,why:['陷阱！表演背後是第 2 段描述的關籠與毒打馴服。','Trap! Behind the shows are the cages and beatings described in Paragraph 2.']}
+  ],
+  hints:[{t:['三個標語都必須符合第 4 段「拒絕騎乘、選擇友善旅遊、支持野生國家公園」的主旨。','All three slogans must reflect Paragraph 4: refuse rides, choose friendly agencies, support national parks.']},{t:['任何會「付錢給利用大象的業者」的標語都是陷阱，就算聽起來很溫和。','Any slogan that pays businesses using elephants is a trap, even if it sounds gentle.']},
+  {t:['救援支援：幫你刪除兩個陷阱標語。','HQ Support: Two trap slogans removed.'],act:'elim2'}]},
+ end:['鐵籠門「喀嚓」一聲打開了！小象 Koko 興奮地甩動長鼻蹭了蹭你的手臂，快帶牠衝向最後的國家公園大門！','CLICK! The heavy iron cage swings open! Baby Koko happily nudges your arm with her trunk. Lead her to the final sanctuary gate!']
+};
+
+/* 密室 5：自由之門（統整與句型） */
+const S5 = [
+ {id:'r1',q:'[GATE LOCK 1] Which sentence uses the lesson pattern ("N, quantifier + of + whom/which") correctly?',ref:'Sentence Pattern (p.201)',
+  opts:['Thailand sees millions of tourists every year, many of them ride elephants.','Thailand sees millions of tourists every year, many of which ride elephants.','Thailand sees millions of tourists every year, many of whom ride elephants.','Thailand sees millions of tourists every year, and many of whom ride elephants.'],ans:2,
+  fb:{0:['兩個子句之間只有逗號，沒有連接詞（逗號拼接錯誤），要用 whom。','Comma splice! You need "whom" to join the two clauses.'],1:['先行詞 tourists 是「人」，要用 whom，不能用 which。','"Tourists" are people, so use "whom," not "which."'],3:['and 和 whom 都在連接子句，重複了，拿掉 and。','"And" and "whom" both join clauses. Drop "and."']},
+  ok:['第一道閘門開啟！先行詞是人（tourists），用 many of whom。','Gate Lock 1 open! For people ("tourists"), use "many of whom."'],
+  hints:[{t:['本課句型：先行詞是「人」用 of whom，是「物」用 of which。','Pattern rule: "of whom" for people, "of which" for things.']},{t:['課文原句：','From the text:'],quote:'Every year, Thailand sees millions of tourists, many of whom have a lot of fun riding elephants.'},{t:['刪除兩個錯誤選項。','Two wrong options removed.'],act:'elim',keep:[2,1]}]},
+ {id:'r2',q:'[GATE LOCK 2] Complete the sentence: "The elephants suffer psychological torture and physical abuse, ______ cause extreme suffering."',ref:'Sentence Pattern (p.201)',
+  opts:['both of which','both of whom','both of them','all of which'],ans:0,
+  fb:{1:['先行詞是 torture and abuse（事物），不能用 whom。','"Torture and abuse" are things, so don’t use "whom."'],2:['them 不能連接兩個子句，要用關係代名詞 which。','"Them" can’t join two clauses; use the relative pronoun "which."'],3:['前面只有兩件事，要用 both，不是 all。','There are only two things, so use "both," not "all."']},
+  ok:['第二道閘門開啟！指「精神折磨與身體虐待」這兩件事，用 both of which。','Gate Lock 2 open! For those two things, use "both of which."'],
+  hints:[{t:['先看先行詞是人還是事，再看是兩者（both）還是全部（all）。','Is the antecedent people or things? Two (both) or more (all)?']},{t:['課文原句：','From the text:'],quote:'Such psychological torture and physical abuse, both of which cause extreme suffering…'},{t:['刪除兩個錯誤選項。','Two wrong options removed.'],act:'elim',keep:[0,1]}]},
+ {id:'r3',q:'[FINAL ESCAPE LOCK] Which sentence best expresses the author’s call to action?',ref:'P4 & Language in Use',
+  opts:['It is high time that we trained more elephants to perform for tourists.','It is high time that we stopped the demand by avoiding elephant rides.','It is high time that tourists rode elephants only in national parks.','It is high time that we built bigger camps so elephants could rest.'],ans:1,
+  fb:{0:['這和作者的保育理念完全相反！','This is the exact opposite of the author’s message!'],2:['作者建議在國家公園「觀察」野生大象，不是在那裡騎象。','The author suggests watching wild elephants in national parks, not riding them there.'],3:['更大的象營還是圈養與利用，沒有解決需求這個根源。','Bigger camps still keep elephants captive; they don’t deal with demand.']},
+  ok:['最終密碼正確！沒有需求就沒有供給，停止騎象才能從根源救大象。自由之門開啟！','Final lock opened! Supply never comes without demand; stopping rides saves elephants at the root.'],
+  hints:[{t:['結合第 4 段的 deal with the roots 和 It is high time that + 過去式。','Combine "deal with the roots" in Paragraph 4 with "It is high time that + past tense."']},{t:['課文原句：','From the text:'],quote:'Supply never comes without demand, so it is high time that we dealt with the roots of this problem.'},{t:['刪除兩個錯誤選項。','Two wrong options removed.'],act:'elim',keep:[1,2]}]}
+];
+
+const QLABEL = {};
+S1.items.forEach((x,i)=>QLABEL[x.id]={st:1,label:'Room 1 · Log Blank '+(i+1)+': '+x.ans,ref:x.ref});
+S2.forEach((x,i)=>QLABEL[x.id]={st:2,label:'Room 2 · Q'+(i+1)+': '+x.q,ref:x.ref});
+S3.cards.forEach(x=>QLABEL[x.id]={st:3,label:'Room 3 · '+x.t,ref:x.a==='trap'?'P2–3':x.a==='safe'?'P4':'P1–4'});
+QLABEL.c1={st:4,label:'Room 4 · Ethical Sanctuary Code',ref:'P4'};
+QLABEL.c2={st:4,label:'Room 4 · Rescue Slogans',ref:'P4'};
+S5.forEach((x,i)=>QLABEL[x.id]={st:5,label:'Room 5 · Q'+(i+1)+': '+x.q,ref:x.ref});
+const ST_ITEMS = {1:S1.items.map(x=>x.id),2:S2.map(x=>x.id),3:S3.cards.map(x=>x.id),4:['c1','c2'],5:S5.map(x=>x.id)};
+
+/* ---------- 狀態 ---------- */
+const fresh = () => ({
+  lang:'bi',big:false,sound:true,page:'home',player:null,start:null,end:null,
+  done:[0,0,0,0,0],score:{},q:{},hl:{},hs:{},w:{},
+  xp:0,combo:0,maxCombo:0,
+  gadgets:{jammer:2,scanner:2},scanOpen:{},jammed:{},
+  outbox:[],sent:0,reflect:''
+});
+let state = load();
+function load(){
+  try{
+    const s=JSON.parse(localStorage.getItem(KEY));
+    if(s&&s.done) return Object.assign(fresh(),s,{gadgets:Object.assign({jammer:2,scanner:2},s.gadgets||{})});
+  }catch(e){}
+  return fresh();
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+
+/* 雙語 */
+function T(zh,en,inline){
+  if(state.lang==='en'&&en) return esc(en);
+  if(state.lang==='zh'||!en) return esc(zh);
+  return esc(zh)+`<span class="en${inline?' in':''}" lang="en">${esc(en)}</span>`;
+}
+const TP = (p,inline)=>T(p[0],p[1],inline);
+function S(zh,en){return state.lang==='en'?(en||zh):state.lang==='zh'?zh:(en?zh+' / '+en:zh);}
+
+/* 紀錄作答 + XP/Combo */
+function attempt(id,correct,evt){
+  const r=state.q[id]||(state.q[id]={t:0,first:null,ok:false});
+  const wasOk = r.ok;
+  r.t++;
+  if(!correct){
+    r.w=(r.w||0)+1;
+    state.combo=0;
+    playSfx('bad');
+  }
+  if(r.first===null) r.first=!!correct;
+  if(correct && !wasOk){
+    r.ok=true;
+    state.combo=(state.combo||0)+1;
+    if(state.combo>(state.maxCombo||0)) state.maxCombo=state.combo;
+    const gain = 50 + Math.min(state.combo-1, 5)*15;
+    state.xp=(state.xp||0)+gain;
+    playSfx('good');
+    if(evt) spawnFloatXP(`+${gain} XP · Combo ×${state.combo}`, evt.clientX, evt.clientY-20);
+  }
+}
+const isOk = id => !!(state.q[id]&&state.q[id].ok);
+function hintLevel(id){return state.hl[id]||0;}
+function useHint(id,st){
+  const lv=hintLevel(id); if(lv>=3) return;
+  state.hl[id]=lv+1; state.hs[st]=(state.hs[st]||0)+1;
+  playSfx('tap');
+}
+const unlocked = n => n===1 || !!state.done[n-2];
+const badges = () => state.done.filter(Boolean).length;
+const totalHints = () => Object.values(state.hs).reduce((a,b)=>a+b,0);
+const totalScore = () => Object.values(state.score).reduce((a,b)=>a+b,0);
+function wrongCount(){let c=0;for(const k in state.q){c+=state.q[k].w||0;}return c;}
+function elapsed(){if(!state.start)return 0;return Math.round(((state.end||Date.now())-state.start)/1000);}
+const fmtTime = s => Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
+function rankOf(sc){return sc>=90?['Guardian Legend','傳奇叢林守護神']:sc>=75?['Elite Ranger','王牌動保救援隊長']:sc>=60?['Jungle Scout','正式叢林救援員']:['Rookie Tracker','見習叢林追蹤員'];}
+function agentLevel(){
+  const xp = state.xp||0;
+  if(xp>=1200) return {lv:4,title:['Lv.4 象群守護神','Lv.4 Elephant Guardian'],next:1500,pct:100};
+  if(xp>=750)  return {lv:3,title:['Lv.3 王牌救援隊長','Lv.3 Elite Ranger'],next:1200,pct:Math.round((xp-750)/450*100)};
+  if(xp>=350)  return {lv:2,title:['Lv.2 叢林突擊員','Lv.2 Jungle Striker'],next:750,pct:Math.round((xp-350)/400*100)};
+  return {lv:1,title:['Lv.1 見習救援隊','Lv.1 Rookie Ranger'],next:350,pct:Math.round(xp/350*100)};
+}
+
+/* ---------- 上傳成績 ---------- */
+function payload(type,st){
+  const p=state.player||{};
+  return {type,game:GAME_ID,cls:p.cls,seat:p.seat,name:p.name,codename:p.code||'',station:st||'',current:typeof state.page==='number'?state.page:(badges()===5?'done':''),
+    stationScore:st?state.score[st]:'',scores:[1,2,3,4,5].map(n=>state.score[n]??''),
+    done:badges(),total:totalScore(),xp:state.xp||0,maxCombo:state.maxCombo||0,
+    hints:totalHints(),wrong:wrongCount(),elapsedSec:elapsed(),
+    rank:badges()===5?rankOf(totalScore())[0]:'',reflect:(type==='final'||type==='reflect')?state.reflect:'',
+    details:st?ST_ITEMS[st].map(id=>({qid:id,label:QLABEL[id].label,station:st,first:state.q[id]?.first?1:0,tries:state.q[id]?.t||0})):[],
+    ts:new Date().toISOString()};
+}
+function queue(type,st){if(!state.player)return;state.outbox.push(payload(type,st));if(state.outbox.length>40)state.outbox=state.outbox.slice(-40);save();flush();}
+let flushing=false;
+async function flush(){
+  if(!SCRIPT_URL||!state.outbox.length||flushing) return;
+  flushing=true;
+  while(state.outbox.length){
+    try{
+      await fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(state.outbox[0])});
+      state.outbox.shift(); state.sent++; save();
+    }catch(e){break;}
+  }
+  flushing=false;
+  if(state.page==='cert') render();
+}
+window.addEventListener('online',flush);
+
+/* ---------- 共用元件 ---------- */
+function highlightClues(text, active){
+  let out = esc(text);
+  if(!active) return out;
+  CLUES.forEach(c=>{
+    const ec = esc(c);
+    if(out.includes(ec)) out = out.replace(ec, `<mark class="clue">${ec}</mark>`);
+  });
+  return out;
+}
+
+function lockStatusBar(stNum){
+  const items = ST_ITEMS[stNum];
+  const digits = items.map((id, idx)=>{
+    const open = isOk(id);
+    return `<div class="digit ${open?'open':''}">${open?ic('unlock'):(idx+1)}</div>`;
+  }).join('');
+  const allOpen = items.every(isOk);
+  return `<div class="lock-box">
+    <div style="font-size:.78rem;font-weight:900;color:var(--accent-ink);letter-spacing:.05em">
+      ${allOpen?T('密室鎖已全面解除！','ESCAPE LOCK UNLOCKED!',true):T('密室電子鎖進度（解開全部密碼即可推進）','ROOM LOCK PROGRESS',true)}
+    </div>
+    <div class="lock-digits">${digits}</div>
+  </div>`;
+}
+
+function stationHead(st){
+  const p=state.player;
+  const code = p?.code ? `Ranger ${p.code.split(' ')[0]}` : 'Rookie';
+  return `<div class="mission">${stationScene(st.n)}<span class="mlabel"><i></i>ROOM 0${st.n}</span></div>
+   <div class="sh"><div class="bignum num" style="background:${st.color}">${st.n}</div>
+   <div><small class="num">Escape Stage ${st.n} / 5 <span class="tag">${TP(st.tag,true)}</span></small>
+   <h2>${TP(st.title)}</h2></div></div>
+   <div class="comms">
+     <div class="comms-av">${ic('radio')}</div>
+     <div>
+       <div class="comms-tag">RESCUE RADIO → ${esc(code)}</div>
+       <div class="comms-msg">${TP(st.comms)}</div>
+     </div>
+   </div>
+   ${lockStatusBar(st.n)}
+   <div class="get">${ic('target')}<div>${TP(st.get)}</div></div>`;
+}
+
+function gadgetBar(stNum){
+  const g = state.gadgets||{jammer:2,scanner:2};
+  const canJam = [2,4,5].includes(stNum);
+  const scanned = !!state.scanOpen[stNum];
+  return `<div class="gadgets">
+    <button class="gadget" data-gadget="scanner" data-st="${stNum}" ${scanned||g.scanner<=0?'disabled':''}>
+      <span class="g-ic">${ic('eye')}</span>
+      <div class="g-t">${T('叢林夜視鏡','Night-Vision Scanner',true)}<small style="display:block;font-weight:600;color:var(--ink-soft)">${T(scanned?'已標出關鍵線索句':'標出課文重點線索',scanned?'Clues highlighted':'Highlight key lines',true)}</small></div>
+      <span class="g-c num">×${g.scanner}</span>
+    </button>
+    ${canJam?`<div class="gadget" style="cursor:default;border-style:dashed;background:var(--card)">
+      <span class="g-ic">${ic('zap')}</span>
+      <div class="g-t">${T('萬能開鎖器 ×'+g.jammer,'Lockpick ×'+g.jammer,true)}<small style="display:block;font-weight:600;color:var(--ink-soft)">${T('在想用的那一題下方按','Use it under the question you choose',true)}</small></div>
+    </div>`:''}
+  </div>`;
+}
+
+const TIMELINE = [['15th century','Kings used elephants in war.','國王把大象用在戰爭中。'],['1989','The Thai government banned logging, leading to around 70% of Thailand’s elephants being used for tourism.','泰國政府禁止伐木，約 70% 的大象轉入觀光業。']];
+function timelineBox(){return `<div style="background:var(--second-tint);border-radius:12px;padding:10px 12px;margin:8px 0"><b style="font-size:.85rem">${T('情報：大象年表（課本 p.188）','Intel: Elephant Timeline (p.188)',true)}</b>${TIMELINE.map(t=>`<div style="margin-top:4px;font-size:.92rem"><b class="num">${t[0]}</b> <span lang="en">${esc(t[1])}</span>${state.lang!=='en'?`<span class="muted" style="display:block;font-size:.82rem">${esc(t[2])}</span>`:''}</div>`).join('')}</div>`;}
+function passage(paras, stNum){
+  const scanned = !!state.scanOpen[stNum];
+  return `<details class="psg" ${scanned?'open':''}><summary>${ic('book')}<span>${T('營區密檔：課文線索段落','Camp Intel: Passage Clues',true)} <span class="muted num">(P${paras.join(', P')})</span></span>${ic('arrow','ar')}</summary>
+  <div class="psg-body">${stNum===2?timelineBox():''}${paras.map(n=>`<p><span class="pn num">P${n}</span>${highlightClues(PASSAGE[n],scanned)}</p>`).join('')}</div></details>`;
+}
+
+function hintUI(id,st,hints,quoteText){
+  const lv=hintLevel(id);
+  if(isOk(id)) return '';
+  let h='';
+  for(let i=0;i<lv;i++){
+    const H=hints[i]; let qt='';
+    if(H.quote){const t=typeof H.quote==='string'?H.quote:quoteText; if(t) qt=`<span class="quote" lang="en">${esc(t)}</span>`;}
+    h+=`<div class="hint"><span class="lv">${T('救援提示 '+(i+1)+'（-1分）','Hint '+(i+1)+' (-1 pt)',true)}</span>${TP(H.t)}${qt}</div>`;
+  }
+  const dots=[0,1,2].map(i=>`<i class="${i<lv?'on':''}"></i>`).join('');
+  return `<div class="hintbar"><button class="hbtn" data-hint="${id}" data-st="${st}" ${lv>=3||isOk(id)?'disabled':''}>${ic('bulb')}${T(lv>=3?'提示已用完':'呼叫總部支援',lv>=3?'No more hints':'Call HQ Hint',true)}</button><span class="hdots" aria-label="${S('已用提示','hints used')} ${lv}/3">${dots}</span></div>${h}`;
+}
+
+function navBtns(n){
+  const prev = n===1?`<button class="btn ghost" data-go="home">${ic('home')}${T('叢林地圖','Map',true)}</button>`:`<button class="btn ghost" data-go="${n-1}">${ic('back')}${T('上一密室','Prev Room',true)}</button>`;
+  const nextLabel = n===5?T('領取救援英雄證書','Claim Hero Certificate',true):T('潛入下一密室','Enter Next Room',true);
+  const next = `<button class="btn" data-go="${n===5?'cert':n+1}" ${state.done[n-1]?'':'disabled'}>${nextLabel}${ic('arrow')}</button>`;
+  return `<div class="nav2">${prev}${next}</div>`;
+}
+
+/* 單選題 */
+function mcq(item,num,st,optsRender){
+  const ok=isOk(item.id);
+  const w=state.w[item.id]||(state.w[item.id]={wrong:[],last:null,shake:false});
+  const lv=hintLevel(item.id);
+  const hintElim=item.hints&&item.hints[2]&&item.hints[2].act==='elim'&&lv>=3?item.hints[2].keep:null;
+  const jamElim=(state.jammed&&state.jammed[item.id])||[];
+  const letters='ABCD';
+  const opts=item.opts.map((o,i)=>{
+    let cls='opt'; let dis=ok;
+    if(ok&&i===item.ans) cls+=' good';
+    if(w.wrong.includes(i)){cls+=' bad';dis=true;}
+    if(((hintElim&&!hintElim.includes(i))||jamElim.includes(i))&&!ok){cls+=' out';dis=true;}
+    return `<button class="${cls}" data-mc="${item.id}" data-i="${i}" data-st="${st}" ${dis?'disabled':''}><span class="k">${letters[i]}</span><span lang="en">${esc(optsRender?optsRender(o):o)}</span></button>`;
+  }).join('');
+  let fb='';
+  if(ok) fb=`<div class="fb good"><b>${ic('check')}${T('密碼鎖解除！','Lock Disarmed!',true)}</b><br>${TP(item.ok)}</div>`;
+  else if(w.last!==null&&item.fb[w.last]) fb=`<div class="fb bad"><b>${ic('x')}${T('警報響起！密碼錯誤','Alarm! Wrong Code',true)}</b><br>${TP(item.fb[w.last])} <span class="muted num">(${esc(item.ref)})</span></div>`;
+  const shakeCls = w.shake?'shake':''; if(w.shake) w.shake=false;
+  return `<div class="q ${ok?'ok':''} ${shakeCls}"><div class="qh"><span class="qn num">Q${num}</span><div class="qt" lang="en">${esc(item.q)}</div></div>
+   <div class="opts">${opts}</div>${fb}${jamBtn(item.id)}${item.hints?hintUI(item.id,st,item.hints):''}</div>`;
+}
+
+/* ---------- 叢林與大象救援 SVG 插畫 ---------- */
+function elephantSVG(x,y,s=1,sad=false){
+  return `<g transform="translate(${x} ${y}) scale(${s})">
+    <!-- 身體與腿 -->
+    <rect x="-24" y="-12" width="44" height="30" rx="14" class="sv-ele"/>
+    <rect x="-20" y="10" width="9" height="16" rx="4" class="sv-ele-dark"/>
+    <rect x="-6" y="10" width="9" height="16" rx="4" class="sv-ele-dark"/>
+    <rect x="8" y="10" width="9" height="16" rx="4" class="sv-ele-dark"/>
+    <!-- 頭與長鼻 -->
+    <circle cx="22" cy="-6" r="14" class="sv-ele"/>
+    <path d="M32 -4 Q44 0 40 16 Q38 22 33 19 Q31 17 34 12 Q36 5 28 3" class="sv-ele"/>
+    <!-- 大耳朵 -->
+    <ellipse cx="14" cy="-6" rx="8" ry="11" class="sv-ele-dark"/>
+    <!-- 象牙 -->
+    <path d="M28 4 Q36 8 40 3" fill="none" style="stroke:#FFFDF5;stroke-width:3;stroke-linecap:round"/>
+    <!-- 眼睛 -->
+    <circle cx="26" cy="-9" r="2" class="sv-ink"/>
+    ${sad?'<path d="M23 -13 L29 -11" class="st-ink" style="stroke-width:1.8"/><circle cx="26" cy="-4" r="1.5" class="sv-d"/>':'<path d="M23 -12 Q26 -14 29 -12" class="st-ink" style="stroke-width:1.5"/>'}
+  </g>`;
+}
+function rangerSVG(x,y,s=1){
+  return `<g transform="translate(${x} ${y}) scale(${s})">
+   <rect x="-12" y="12" width="24" height="28" rx="10" class="sv-a"/>
+   <circle cx="0" cy="0" r="11" class="sv-skin"/>
+   <!-- 探險帽 -->
+   <ellipse cx="0" cy="-8" rx="16" ry="4" class="sv-b"/>
+   <path d="M-10 -8 Q-10 -17 0 -17 Q10 -17 10 -8 Z" class="sv-b"/>
+   <circle cx="-3.5" cy="1" r="1.5" class="sv-ink"/><circle cx="3.5" cy="1" r="1.5" class="sv-ink"/>
+   <path d="M-3 5 Q0 7.5 3 5" class="st-ink" style="stroke-width:1.5"/></g>`;
+}
+const tree = (x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})"><rect x="-3" y="0" width="6" height="16" rx="2" class="sv-b" style="opacity:.8"/><circle cx="0" cy="-9" r="15" class="sv-a" style="opacity:.8"/><circle cx="-8" cy="-2" r="10" class="sv-a"/></g>`;
+const cloud = (x,y,s=1)=>`<g transform="translate(${x} ${y}) scale(${s})" class="sv-card"><ellipse cx="0" cy="0" rx="22" ry="10"/><ellipse cx="-12" cy="2" rx="13" ry="8"/><ellipse cx="13" cy="3" rx="13" ry="7"/></g>`;
+
+function heroScene(){
+  return `<svg class="scene" viewBox="0 0 360 200" role="img" aria-label="${esc(S('泰國叢林大象救援行動','Thailand Jungle Elephant Rescue'))}">
+  <rect width="360" height="200" class="sv-sky"/>
+  <circle cx="295" cy="42" r="22" class="sv-sun"/>
+  ${cloud(72,38,.95)}${cloud(210,28,.75)}
+  <path d="M0 140 Q90 112 180 135 T360 122 V200 H0z" class="sv-sky2"/>
+  <path d="M0 165 Q120 148 240 162 T360 156 V200 H0z" class="sv-ground"/>
+  ${tree(35,148,1.1)}${tree(82,155,.8)}${tree(328,144,1.05)}
+  <!-- 被困在鐵籠裡的小象 -->
+  <g transform="translate(175 118)">
+    ${elephantSVG(-6,6,.85,true)}
+    <rect x="-42" y="-26" width="84" height="58" rx="6" fill="none" style="stroke:var(--ink);stroke-width:3.5"/>
+    ${[-28,-14,0,14,28].map(bx=>`<line x1="${bx}" y1="-26" x2="${bx}" y2="32" style="stroke:var(--ink);stroke-width:2.5"/>`).join('')}
+    <rect x="-12" y="-34" width="24" height="12" rx="4" class="sv-bad"/>
+    <text x="0" y="-25" text-anchor="middle" class="sv-tw" style="font-size:7px">LOCKED</text>
+  </g>
+  <!-- 救援隊員 -->
+  ${rangerSVG(266,136,1.05)}
+  </svg>`;
+}
+
+function stationScene(n){
+  const head = `<svg class="scene" viewBox="0 0 360 150" role="img" aria-label="${esc(STATIONS[n-1].title[1])}">`;
+  let b='';
+  if(n===1){ b=`<rect width="360" height="150" class="sv-sky2"/>
+    ${tree(42,115,1.2)}${tree(315,115,1.2)}
+    <rect x="85" y="20" width="190" height="114" rx="12" class="sv-card" style="stroke:var(--accent);stroke-width:3"/>
+    <rect x="85" y="20" width="190" height="22" rx="10" class="sv-a"/>
+    <text x="180" y="35" text-anchor="middle" class="sv-tw" style="font-size:10px">POACHER'S SECRET LOG</text>
+    ${[56,74,92,110].map(y=>`<rect x="105" y="${y}" width="${y===110?90:150}" height="6" rx="3" class="sv-bg2"/>`).join('')}
+    <path d="M75 18 Q130 45 95 136 M285 20 Q230 50 265 136" fill="none" style="stroke:var(--accent);stroke-width:5;stroke-linecap:round"/>`; }
+  if(n===2){ b=`<rect width="360" height="150" class="sv-sky"/>
+    <rect x="55" y="16" width="250" height="112" rx="10" class="sv-card" style="stroke:var(--second);stroke-width:3.5"/>
+    <text x="180" y="38" text-anchor="middle" class="sv-tx" style="font-size:11px">THAILAND ELEPHANT TIMELINE</text>
+    <line x1="80" y1="78" x2="280" y2="78" style="stroke:var(--second);stroke-width:4"/>
+    ${[[95,'15th C.','War'],[155,'1800s','Logging'],[215,'1989','70% Tourism'],[270,'Now','Rescue!']].map(([x,yr,lb])=>`
+      <circle cx="${x}" cy="78" r="7" class="sv-b"/><text x="${x}" y="64" text-anchor="middle" class="sv-tx" style="font-size:9px">${yr}</text>
+      <text x="${x}" y="98" text-anchor="middle" class="sv-soft" style="font-size:8px;font-weight:800">${lb}</text>`).join('')}`; }
+  if(n===3){ b=`<rect width="360" height="150" class="sv-sky2"/>
+    ${[[65,'sv-badt','sv-bad','CRUELTY'],[180,'sv-ground','sv-a','ETHICAL'],[295,'sv-bg2','sv-soft','NOT IN TEXT']].map(([x,f,s,t])=>`
+     <g transform="translate(${x} 102)"><rect x="-46" y="-20" width="92" height="54" rx="10" class="${f}" style="stroke:var(--card);stroke-width:3"/>
+     <rect x="-48" y="-26" width="96" height="12" rx="6" class="${s}"/>
+     <text x="0" y="14" text-anchor="middle" class="sv-tx" style="font-size:11px">${t}</text></g>`).join('')}
+    ${[[105,30,-10],[180,24,6],[255,32,-8]].map(([x,y,r])=>`<g transform="translate(${x} ${y}) rotate(${r})"><rect x="-22" y="-13" width="44" height="26" rx="5" class="sv-card" style="stroke:var(--line);stroke-width:2"/><rect x="-14" y="-4" width="28" height="3" rx="1.5" class="sv-bg2"/></g>`).join('')}`; }
+  if(n===4){ b=`<rect width="360" height="150" class="sv-ink" style="opacity:.92"/>
+    <g transform="translate(145 84)">
+      ${elephantSVG(-4,4,.95,true)}
+      <rect x="-46" y="-32" width="92" height="66" rx="8" fill="none" style="stroke:var(--sun);stroke-width:4"/>
+      ${[-30,-15,0,15,30].map(bx=>`<line x1="${bx}" y1="-32" x2="${bx}" y2="34" style="stroke:var(--sun);stroke-width:2.5"/>`).join('')}
+    </g>
+    <g transform="translate(268 76)">
+      <rect x="-28" y="-32" width="56" height="64" rx="10" class="sv-card"/>
+      <circle cx="0" cy="-10" r="10" class="sv-bad"/>
+      <text x="0" y="18" text-anchor="middle" class="sv-tbad" style="font-size:10px">KOKO</text>
+    </g>`; }
+  if(n===5){ b=`<rect width="360" height="150" class="sv-sky"/>
+    <path d="M0 112 Q180 95 360 112 V150 H0z" class="sv-ground"/>
+    ${tree(45,105,1.1)}${tree(315,105,1.1)}
+    ${elephantSVG(145,94,1.05,false)}
+    ${elephantSVG(225,100,.75,false)}
+    <rect x="115" y="14" width="130" height="22" rx="11" class="sv-a"/>
+    <text x="180" y="29" text-anchor="middle" class="sv-tw" style="font-size:10px">NATIONAL PARK · FREE</text>`; }
+  return head+b+`</svg>`;
+}
+
+function badgeSVG(n,size=56,off=false){
+  const st=STATIONS[n-1];
+  const col=off?'var(--line)':st.color;
+  return `<svg width="${size}" height="${size*1.15}" viewBox="0 0 64 74" aria-hidden="true">
+   <path d="M18 44 L10 72 L22 66 L28 74 L32 50z" style="fill:${off?'var(--bg-2)':'var(--bad)'};opacity:${off?1:.85}"/>
+   <path d="M46 44 L54 72 L42 66 L36 74 L32 50z" style="fill:${off?'var(--bg-2)':'var(--accent-deep)'}"/>
+   <circle cx="32" cy="30" r="28" style="fill:${off?'var(--bg-2)':'var(--sun)'}"/>
+   <circle cx="32" cy="30" r="22" style="fill:${col}"/>
+   <circle cx="32" cy="30" r="18" fill="none" style="stroke:#fff;stroke-width:1.5;stroke-dasharray:3 3;opacity:.7"/>
+   <g transform="translate(20 18)" fill="none" style="stroke:${off?'var(--ink-soft)':'#fff'};stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round">${ICONS[st.icon]}</g>
+  </svg>`;
+}
+
+const MAP_PTS = [[60,505],[112,420],[255,345],[105,265],[250,185],[115,105],[262,50]];
+function gameMap(){
+  const p=state.player;
+  const cur = state.done.indexOf(0)+1;
+  const d=`M60 505 C60 470 112 460 112 420 S255 380 255 345 S105 300 105 265 S250 220 250 185 S115 140 115 105 S262 85 262 50`;
+  const deco = `${tree(36,360,.9)}${tree(320,430,.8)}${tree(325,280,.9)}${tree(34,200,.8)}${tree(318,120,.85)}${tree(40,52,.7)}
+    ${cloud(300,500,.7)}${cloud(190,250,.55)}
+    <g transform="translate(18 520)"><rect width="58" height="18" rx="5" class="sv-a"/><text x="29" y="13" text-anchor="middle" class="sv-tw" style="font-size:9px">CAMP ENTRY</text></g>`;
+  const svg=`<svg viewBox="0 0 360 540" class="mapsvg" aria-hidden="true">
+    <rect width="360" height="540" rx="18" class="sv-ground" style="opacity:.65"/>
+    <path d="M0 300 Q90 280 180 300 T360 290 V540 H0z" class="sv-sky2" style="opacity:.6"/>
+    ${deco}
+    <path d="${d}" fill="none" style="stroke:var(--d-path,#DFD3B8);stroke-width:30;stroke-linecap:round"/>
+    <path d="${d}" fill="none" style="stroke:var(--card);stroke-width:3;stroke-dasharray:8 10;stroke-linecap:round"/>
+  </svg>`;
+  const nodes = STATIONS.map((st,i)=>{
+    const [x,y]=MAP_PTS[i+1]; const done=state.done[i]; const u=p&&unlocked(st.n); const now=p&&cur===st.n;
+    const stars = done ? `<span class="nstars">${[0,1,2].map(k=>`<svg viewBox="0 0 24 24" class="${k<starCount(state.score[st.n])?'on':''}"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1 6.2L12 17.3 6.5 20.2l1-6.2L3 9.6l6.2-.9z"/></svg>`).join('')}</span>`:'';
+    return `<button class="node ${done?'done':u?'':'lock'} ${now?'now':''}" style="left:${x/3.6}%;top:${y/5.4}%" data-go="${st.n}" ${u?'':'disabled'} aria-label="${esc(S('密室'+st.n+' '+st.title[0],'Room '+st.n))}">
+      ${now?`<span class="pin">${pinSVG()}</span>`:''}
+      <span class="disc" style="background:${st.color}">${done?ic('unlock'):u?st.n:ic('lock')}</span>
+      ${stars}<span class="nl">${esc(state.lang==='en'?st.title[1]:st.title[0])}</span></button>`;
+  }).join('');
+  const [cx,cy]=MAP_PTS[6]; const all=badges()===5;
+  const certNode=`<button class="node cert-node ${all?'done':'lock'}" style="left:${cx/3.6}%;top:${cy/5.4}%" data-go="cert" ${all?'':'disabled'}>
+     <span class="disc trophy">${ic('award')}</span><span class="nl">${esc(S('救援英雄證書','Hero Certificate'))}</span></button>`;
+  return `<div class="gmap">${svg}${nodes}${certNode}</div>`;
+}
+function starCount(sc){return sc>=18?3:sc>=13?2:1;}
+function pinSVG(){return `<svg viewBox="-20 -22 40 70" width="34" height="58">${rangerSVG(0,0,1)}</svg>`;}
+
+function openIntel(){
+  const dr=document.getElementById('drawer'); const pg=state.page; const rel=typeof pg==='number'?STATIONS[pg-1].paras:[]; const scanned=typeof pg==='number'&&!!state.scanOpen[pg];
+  dr.innerHTML=`<div style="display:flex;align-items:center;gap:8px">${ic('book')}<b>${T('營區密檔','Camp Intel',true)}</b><button class="pill icon-only" style="margin-left:auto" data-act="closeIntel" aria-label="close">${ic('x')}</button></div>
+   <p class="muted" style="font-size:.85rem;margin:6px 0 0">${T('綠框 = 本密室相關段落'+(scanned?'；黃色 = 夜視鏡標出的線索':''),'Green frame = paragraphs for this room'+(scanned?'; yellow = clues found by the scanner':''))}</p>
+   ${pg===2?timelineBox():''}${[1,2,3,4].map(n=>`<p class="${rel.includes(n)?'rel':''}"><span class="pn num">P${n}</span>${highlightClues(PASSAGE[n],scanned)}</p>`).join('')}
+   <button class="btn block" data-act="closeIntel">${T('關閉','Close',true)}</button>`;
+  document.getElementById('mask').classList.add('show'); dr.classList.add('show');
+}
+function closeIntel(){document.getElementById('drawer').classList.remove('show');document.getElementById('mask').classList.remove('show');}
+function jamBtn(id){
+  if(isOk(id)) return '';
+  const used=!!(state.jammed[id]&&state.jammed[id].length);
+  return `<button class="qtool" data-jam="${id}" ${used||state.gadgets.jammer<=0?'disabled':''}>${ic('zap')}${T('萬能開鎖器：免扣分刪除陷阱選項','Lockpick: remove trap options (free)',true).replace(/<span class="en in"/,'<span class="en in" style="display:none"')}<span class="ct num">×${state.gadgets.jammer}</span></button>`;
+}
+
+/* ---------- 頁面 ---------- */
+function pageHome(){
+  const p=state.player;
+  const hero=`<div class="card hero-scene">${heroScene()}<div class="hs-body">
+   <span class="kicker">${ic('compass')} ESCAPE ROOM MISSION · LESSON 8</span>
+   <h1 style="font-size:clamp(1.45rem,5.6vw,1.95rem);margin:10px 0 6px">${T('叢林大象救援行動','Jungle Rescue: Save the Elephants')}</h1>
+   <p class="lead">${T('緊急求救訊號！泰國叢林深處的非法象營囚禁了幼象 Koko。你必須連續破解 5 道密室封鎖線、解開鐵籠密碼鎖，護送大象回到野生國家公園！','SOS Signal! Baby elephant Koko is trapped in an illegal Thai jungle camp. Crack 5 escape rooms, unlock her iron cage, and escort her to a national park!')}</p></div></div>`;
+  const how=`<div class="card"><h3>${T('密室逃脫救援指南','Escape Room Briefing')}</h3><div class="steps3">
+   ${[['報到領取救援隊員代號與叢林裝備（夜視鏡×2、開鎖器×2）','Check in for your Ranger codename and rescue gear (2 Scanners, 2 Lockpicks).','var(--c1)'],['解開每間密室的電子密碼鎖！連續答對累積 Combo 與 XP。答錯會告訴你回哪一段找線索','Solve every digital lock! Build Combos and XP. Wrong answers tell you where to look.','var(--c2)'],['救出小象並逃出叢林，領取「叢林守護英雄證書」與戰績單','Free Koko and escape the jungle to claim your Hero Certificate.','var(--c4)']]
+     .map((s,i)=>`<div class="s3"><span class="n num" style="background:${s[2]}">${i+1}</span><div>${T(s[0],s[1])}</div></div>`).join('')}
+   </div><p class="muted" style="font-size:.88rem;margin:10px 0 0">${T('計分規則：每間密室 20 分（依第一次就答對的比例），總部提示每次扣 1 分。叢林裝備（夜視鏡、開鎖器）免費，想清楚用在哪裡；沒用完的裝備通關時換成 XP。','Scoring: 20 pts per room, based on first-try answers. Each HQ hint costs 1 pt. Gear (scanner, lockpick) is free, so choose where to use it; leftover gear turns into XP at the end.')}</p></div>`;
+  let form;
+  if(!p){
+    form=`<form class="card" id="joinForm"><h3>${T('救援隊員報到','Ranger Check-in')}</h3>
+     <div class="grid3"><div class="field"><label for="fCls">${T('班級','Class',true)}</label><input id="fCls" inputmode="numeric" required placeholder="208" autocomplete="off"></div>
+     <div class="field"><label for="fSeat">${T('座號','Seat No.',true)}</label><input id="fSeat" inputmode="numeric" required placeholder="12" autocomplete="off"></div>
+     <div class="field wide"><label for="fName">${T('姓名','Name',true)}</label><input id="fName" required placeholder="${esc(S('王小明','Your name'))}" autocomplete="off"></div></div>
+     <button class="btn block" type="submit">${T('領取裝備並潛入叢林','Get Gear & Enter Jungle',true)}${ic('arrow')}</button></form>`;
+  } else {
+    const nextSt = state.done.indexOf(0)+1;
+    form=`<div class="card">
+     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
+       <h3>${T('救援隊員','Ranger',true)} ${esc(p.name)}</h3>
+       <span class="kicker" style="background:var(--sun-tint)">${ic('zap')} ${esc(p.code||'Jungle Fox')}</span>
+     </div>
+     <p class="muted" style="margin:6px 0 12px">${esc(p.cls)} · ${esc(p.seat)} ${T('號','',true)} ｜ ${T('已解鎖鑰匙','Keys',true)} <b class="num">${badges()}/5</b> · ${T('總分','Score',true)} <b class="num">${totalScore()}</b></p>
+     ${nextSt>0?`<button class="btn block" data-go="${nextSt}">${T(nextSt===1?'進入密室 1：藤蔓入口':'繼續密室 '+nextSt,nextSt===1?'Enter Room 1: Vine Gate':'Resume Room '+nextSt,true)}${ic('arrow')}</button>`
+       :`<button class="btn block" data-go="cert">${ic('award')}${T('檢視救援英雄證書','View Hero Certificate',true)}</button>`}</div>`;
+  }
+  const map=`<div class="card"><h3>${T('叢林密室路線圖','Jungle Escape Map')}</h3><p class="muted" style="margin:2px 0 0;font-size:.88rem">${T('解開當前密室所有電子鎖，才能通往下一區。三星代表零提示完美通關！','Unlock all digital locks in each room to advance. 3 stars = zero hints!')}</p>${gameMap()}</div>`;
+  return hero+form+map+how;
+}
+
+function pageS1(){
+  const st=STATIONS[0]; const w=state.w.s1||(state.w.s1={fill:{},sel:null,checked:false,wrongIds:[],shake:false});
+  if(w.sel===null){const f=S1.items.find(x=>!isOk(x.id)&&!w.fill[x.id]);w.sel=f?f.id:null;}
+  const used=Object.values(w.fill);
+  const sents=S1.items.map((x,i)=>{
+    const ok=isOk(x.id); const val=ok?x.ans:w.fill[x.id];
+    const cls='blank'+(ok?' right':val?' filled':'')+(w.sel===x.id&&!ok?' act':'');
+    return `<p class="sent" lang="en"><span class="sn num">${i+1}.</span>${esc(x.pre)}<button class="${cls}" data-blank="${x.id}" ${ok?'disabled':''} aria-label="${S('密碼格','blank')} ${i+1}">${val?esc(val):'?'}</button>${esc(x.post)}</p>`;
+  }).join('');
+  const done=state.done[0];
+  const fbs=w.wrongIds.filter(id=>!isOk(id)).map(id=>{const x=S1.items.find(y=>y.id===id);const i=S1.items.indexOf(x)+1;return `<div class="fb bad"><b>${ic('x')}${T('第 '+i+' 格密碼錯誤','Code '+i+': mismatch',true)}</b><br>${TP(x.fb)} <span class="muted">(${x.ref})</span></div>`;}).join('');
+  const allFilled=S1.items.every(x=>isOk(x.id)||w.fill[x.id]);
+  const firstOpen=S1.items.find(x=>!isOk(x.id));
+  const chips=S1.bank.map(b=>{const isUsed=used.includes(b)||S1.items.some(x=>isOk(x.id)&&x.ans===b);return `<button class="chip" data-chip="${esc(b)}" ${isUsed||done?'disabled':''} lang="en">${esc(b)}</button>`;}).join('');
+  const shakeCls = w.shake?'shake':''; if(w.shake) w.shake=false;
+  return stationHead(st)+gadgetBar(1)+passage(st.paras,1)+
+   `<div class="tip">${ic('hand')}<div>${T('點一個密碼空格，再點下方單字填入。點已填空格可更換。詞庫裡有 2 個干擾誘餌！','Tap a code blank, then tap a word below. Tap a filled blank to swap. Two words are decoys!')}</div></div>
+   <p class="muted" style="margin:0 0 8px">${TP(S1.intro)}</p>
+   <div class="note ${shakeCls}">${sents}</div>
+   ${done?`<div class="fb good"><b>${ic('check')}${T('藤蔓鐵門已開啟！','Vine Gate Unlocked!',true)}</b></div>`:
+   `<div class="bank"><small>${T('日誌字彙庫','Log Word Bank',true)}</small><div class="chips">${chips}</div>
+    <button class="btn block" style="margin-top:10px" data-check="s1" ${allFilled?'':'disabled'}>${ic('key')}${T('輸入密碼開鎖','Unlock Gate',true)}</button></div>`}
+   ${fbs}
+   ${done?'':hintUI('s1',1,S1.hints,firstOpen?firstOpen.src:'')}`+navBtns(1);
+}
+
+function pageS2(){const st=STATIONS[1];return stationHead(st)+gadgetBar(2)+passage(st.paras,2)+S2.map((x,i)=>mcq(x,i+1,2)).join('')+(state.done[1]?`<div class="fb good"><b>${ic('check')}${T('暗影帳篷情報破解完成！','Shadow Tent Cleared!',true)}</b></div>`:'')+navBtns(2);}
+
+function pageS3(){
+  const st=STATIONS[2]; const w=state.w.s3||(state.w.s3={bins:{},sel:null,res:null,shake:false});
+  const done=state.done[2];
+  const cards=S3.cards.map(c=>{const b=done?c.a:w.bins[c.id];const lab=b?`<span class="lab ${b}">${TP(S3.bins[b],true).replace(/<span class="en in"/,'<span class="en in" style="display:none"')}</span>`:`<span class="lab empty">${T('待分類','Unsorted',true).replace(/<span class="en in"/,'<span class="en in" style="display:none"')}</span>`;
+    return `<button class="bc ${w.sel===c.id&&!done?'sel':''}" data-card="${c.id}" ${done?'disabled':''}><span lang="en">${esc(c.t)}</span>${lab}</button>`;}).join('');
+  const cnt=k=>Object.values(w.bins).filter(v=>v===k).length;
+  const bins=Object.entries(S3.bins).map(([k,v])=>`<button class="bin ${k}" data-bin="${k}" ${w.sel&&!done?'':'disabled'}>${ic(v[2])}<span>${T(v[0],v[1],true).replace(/<span class="en in"/,'<span class="en in" style="display:none"')}</span><span class="cnt num">${cnt(k)}/3</span></button>`).join('');
+  const all=S3.cards.every(c=>w.bins[c.id]);
+  let fb='';
+  if(done) fb=`<div class="fb good"><b>${ic('check')}${T('沼澤陷阱陣解除！','Swamp Maze Cleared!',true)}</b><br>${T('虐待因果看第 2–3 段、保育解方看第 4 段，其他三個課文沒提到。','Cruelty chain = P2–3, Ethical action = P4. The other three are not in the text.')}</div>`;
+  else if(w.res){const parts=Object.entries(w.res).filter(([k,v])=>v>0).map(([k,v])=>S(S3.bins[k][0]+'槽錯 '+v+' 張',v+' wrong in "'+S3.bins[k][1]+'"'));
+    fb=`<div class="fb bad"><b>${ic('x')}${T('機關觸發！還有線索卡放錯位置','Trap triggered! Some cards are misclassified',true)}</b><br>${esc(parts.join('、 '))}<br><span class="muted">${T('嚴格依課文內容判斷喔。','Classify strictly based on the passage.')}</span></div>`;}
+  const shakeCls = w.shake?'shake':''; if(w.shake) w.shake=false;
+  return stationHead(st)+gadgetBar(3)+passage(st.paras,3)+
+   `<div class="tip">${ic('hand')}<div>${T('點一張線索卡，再點下方的機關分類槽。每一類剛好 3 張。','Tap a clue card, then tap a category bin below. Each bin holds 3 cards.')}</div></div>
+   <div class="cards ${shakeCls}">${cards}</div>${fb}
+   ${done?'':`<div class="bins">${bins}</div><button class="btn block" style="margin-top:10px" data-check="s3" ${all?'':'disabled'}>${ic('key')}${T('啟動機關驗證','Verify Sequence',true)}</button>${hintUI('s3',3,S3.hints)}`}`+navBtns(3);
+}
+
+function pageS4(){
+  const st=STATIONS[3];
+  const people=S4.people.map((p,idx)=>`<div class="p"><div class="sus-portrait"><svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true"><rect width="64" height="64" class="sv-sky"/>${elephantSVG(22,34,.8,idx!==2)}${idx!==2?'<path d="M6 6 V58 M18 6 V58 M46 6 V58 M58 6 V58" style="stroke:var(--ink);stroke-width:2.5;opacity:.55"/>':''}</svg></div><div><b>${p.name} <small lang="en">${p.hand}</small></b><p lang="en">${esc(p.txt)}</p></div></div>`).join('');
+  const q1=mcq(S4.q1,1,4);
+  let q2='';
+  if(isOk('c1')){
+    const w=state.w.c2||(state.w.c2={sel:[],res:null,shake:false});
+    const ok=isOk('c2'); const lv=hintLevel('c2');
+    const hintElim = lv>=3 ? [1,5] : [];
+    const jamElim = (state.jammed&&state.jammed.c2)||[];
+    const opts=S4.q2.opts.map((o,i)=>{
+      let cls='opt'; let dis=ok;
+      if(ok&&o.a) cls+=' good';
+      else if(w.sel.includes(i)) cls+=' sel';
+      if(!ok&&(hintElim.includes(i)||jamElim.includes(i))){cls+=' out';dis=true;}
+      return `<button class="${cls}" data-multi="${i}" ${dis?'disabled':''}><span class="k">${ok&&o.a?ic('check'):w.sel.includes(i)?ic('check'):'○'}</span><span lang="en">${esc(o.t)}</span></button>`;}).join('');
+    let fb='';
+    if(ok) fb=`<div class="fb good"><b>${ic('check')}${T('鐵籠鎖已打開，成功救出小象 Koko！','Cage Unlocked! Koko is Free!',true)}</b><br>${TP(S4.end)}</div>`;
+    else if(w.res){const right=w.res.filter(i=>S4.q2.opts[i].a).length;
+      fb=`<div class="fb bad"><b>${ic('x')}${T('選對了 '+right+' 項標語，還有錯誤選項','You got '+right+' valid slogans. Check the traps!',true)}</b>${w.res.filter(i=>!S4.q2.opts[i].a).map(i=>`<br>• <span lang="en">${esc(S4.q2.opts[i].t)}</span>：${TP(S4.q2.opts[i].why)}`).join('')}</div>`;}
+    const shakeCls = w.shake?'shake':''; if(w.shake) w.shake=false;
+    q2=`<div class="q ${ok?'ok':''} ${shakeCls}"><div class="qh"><span class="qn num">LOCK 2</span><div class="qt" lang="en">${esc(S4.q2.q)}</div></div>
+     <div class="opts">${opts}</div>
+     ${ok?'':`<button class="btn block" style="margin-top:10px" data-check="c2" ${w.sel.length===3?'':'disabled'}>${ic('unlock')}${T('輸入 3 項標語開啟鐵籠','Unlock Cage Door',true)} <span class="num">(${w.sel.length}/3)</span></button>`}
+     ${fb}${jamBtn('c2')}${hintUI('c2',4,S4.q2.hints)}</div>`;
+  } else {
+    q2=`<div class="q" style="opacity:.6"><div class="qh"><span class="qn num">LOCK 2</span><div class="qt">${ic('lock')} ${T('先解除 LOCK 1 高壓電網（答對 Q1）才能開啟鐵籠主鎖','Disarm LOCK 1 first to access the main cage lock',true)}</div></div></div>`;
+  }
+  return stationHead(st)+
+   `<div class="boss-bar"><span><i class="pulse-dot"></i>${T('危機密室：鐵籠營救行動','CRISIS ROOM: CAGE RESCUE',true)}</span><span>${T('難度 ★★★','Difficulty ★★★',true)}</span></div>`+
+   gadgetBar(4)+passage(st.paras,4)+
+   `<div class="card"><p style="margin:0 0 10px">${TP(S4.story)}</p><div class="sus">${people}</div></div>`+q1+q2+navBtns(4);
+}
+
+function pageS5(){const st=STATIONS[4];return stationHead(st)+gadgetBar(5)+passage(st.paras,5)+S5.map((x,i)=>mcq(x,i+1,5)).join('')+navBtns(5);}
+
+function pageCert(){
+  if(badges()<5) return `<div class="card"><h2>${T('密室逃脫尚未完成','Escape Incomplete')}</h2><p class="muted">${T('解開全部 5 間密室就能救出小象並領取英雄證書。','Clear all 5 rooms to rescue Koko and claim your certificate.')}</p><button class="btn" data-go="home">${ic('home')}${T('回叢林地圖','Back to map',true)}</button></div>`;
+  const sc=totalScore(); const rk=rankOf(sc); const p=state.player||{};
+  const missed=Object.keys(QLABEL).filter(id=>state.q[id]&&state.q[id].first===false);
+  const unusedGadgets = (state.gadgets?.jammer||0)+(state.gadgets?.scanner||0);
+  let sync;
+  if(!SCRIPT_URL) sync=`<div class="sync off">${ic('cloud')}${T('這個版本沒有設定成績上傳，請截圖給老師。','Score upload is not set up in this version. Please take a screenshot for your teacher.')}</div>`;
+  else if(state.outbox.length) sync=`<div class="sync wait">${ic('cloud')}${T('成績還沒送出（'+state.outbox.length+' 筆）','Not sent yet ('+state.outbox.length+')')}<button class="pill" style="margin-left:auto" data-act="flush">${T('重送','Retry',true)}</button></div>`;
+  else sync=`<div class="sync ok">${ic('check')}${T('救援戰績已傳送給指揮官（老師）','Rescue report synced to HQ')}</div>`;
+  return `<div class="card cert"><span class="kicker">${ic('award')} JUNGLE RESCUE HERO CREDENTIAL</span>
+   <h1>${T('叢林大象救援英雄證書','Elephant Rescue Certificate')}</h1>
+   <div style="margin:8px auto;max-width:260px">${elephantSVG(130,30,.9,false)}</div>
+   <div class="agent-id">
+     <div style="font-size:.72rem;font-weight:900;color:var(--accent-ink);letter-spacing:.06em">RANGER ID // ${esc(p.cls)}-${esc(p.seat)}</div>
+     <div style="font-size:1.15rem;font-weight:900;margin:2px 0">${esc(p.name)}</div>
+     <div style="font-size:.82rem;color:var(--ink-soft);font-weight:700">${T('救援代號','Codename',true)}：${esc(p.code||'Jungle Fox')}</div>
+   </div>
+   <span class="rank">${T(rk[1],rk[0],true)}</span>
+   <div class="badge-row">${STATIONS.map(st=>badgeSVG(st.n,50)).join('')}</div>
+   <div class="stats">
+    <div class="stat-box"><b class="num">${sc} / 100</b><small>${T('救援總分','Rescue Score',true)}</small></div>
+    <div class="stat-box"><b class="num">${(state.xp||0)+unusedGadgets*50} XP</b><small>${T('總經驗值（含裝備結餘）','Total XP (incl. gear bonus)',true)}</small></div>
+    <div class="stat-box"><b class="num">${state.maxCombo||0}x</b><small>${T('最高連擊','Max Combo',true)}</small></div>
+    <div class="stat-box"><b class="num">${fmtTime(elapsed())}</b><small>${T('逃脫總用時','Escape Time',true)}</small></div>
+   </div>${sync}</div>
+   <div class="card"><h3>${T('各密室戰績明細','Room Breakdown')}</h3>
+    ${STATIONS.map(st=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--line)"><span>${st.n}. ${TP(st.title,true)}</span><b class="num">${state.score[st.n]} / 20</b></div>`).join('')}</div>
+   <div class="card"><h3 style="margin-bottom:10px">${T('情報複習清單：首次解鎖失誤題目','Intel Review: First-Try Mistakes')}</h3>
+    ${missed.length?`<ul class="miss">${missed.map(id=>`<li><span lang="en">${esc(QLABEL[id].label)}</span><small>${T('回去查閱','Review',true)} ${esc(QLABEL[id].ref)}</small></li>`).join('')}</ul>`:`<p class="muted" style="margin:0">${T('全部一次就解鎖，零失誤的傳奇救援行動！','Flawless escape! Every single lock opened on the first try!')}</p>`}</div>
+   <div class="card"><h3>${T('SDGs 動保宣言（實地行動日誌）','SDGs Action Pledge')}</h3>
+    <p class="muted" style="margin:4px 0 8px">${T('用 1–2 句英文寫下：除了泰國大象，你還知道哪些動物在觀光業中受苦？我們該怎麼做？（試著用 It is high time that...）','In 1–2 English sentences: What other animals suffer in tourism, and what should we do? (Try using "It is high time that...")')}</p>
+    <textarea id="reflect" rows="3" placeholder="It is high time that we stopped watching animal shows because…" lang="en">${esc(state.reflect)}</textarea>
+    <button class="btn ghost block" style="margin-top:10px" data-act="sendReflect">${ic('cloud')}${T('傳送動保宣言','Send Action Pledge',true)}</button></div>
+   <div class="row"><button class="btn ghost" data-go="home">${ic('home')}${T('回叢林地圖','Map',true)}</button></div>`;
+}
+
+/* ---------- render ---------- */
+function render(){
+  document.documentElement.classList.toggle('big',!!state.big);
+  document.documentElement.lang = state.lang==='en'?'en':'zh-Hant';
+  document.getElementById('logo').innerHTML=ic('compass');
+  const p=state.player;
+  document.getElementById('brandSub').innerHTML=p?`${esc(p.name)} · ${esc(p.code?.split(' ')[0]||'Ranger')}`:T('叢林大象救援行動 · L8','',true);
+
+  const cPill=document.getElementById('comboPill');
+  if((state.combo||0)>=2){cPill.style.display='inline-flex';cPill.innerHTML=ic('zap')+`×${state.combo}`;}
+  else cPill.style.display='none';
+
+  document.getElementById('badgeCount').innerHTML=ic('key')+`<span>${badges()}/5</span>`;
+  document.getElementById('sndBtn').innerHTML=ic(state.sound?'volOn':'volOff');
+  document.getElementById('setBtn').innerHTML=ic('sliders');
+  const fab=document.getElementById('fab'); fab.innerHTML=ic('book')+esc(state.lang==='en'?'Intel':'營區密檔'); fab.classList.toggle('show',typeof state.page==='number'&&!!state.player);
+
+  const lv=agentLevel();
+  document.getElementById('hudBar').innerHTML=`<span class="xp-lv">${T(lv.title[0],lv.title[1],true).replace(/<span class="en in"/,'<span class="en in" style="display:none"')}</span>
+   <div class="xp-track"><div class="xp-fill" style="width:${lv.pct}%"></div></div>
+   <span class="xp-num num">${state.xp||0} XP</span>`;
+
+  let pg=state.page;
+  if(typeof pg==='number'&&(!state.player||!unlocked(pg))) pg=state.page='home';
+  const app=document.getElementById('app');
+  const html = pg==='home'?pageHome():pg==='cert'?pageCert():[null,pageS1,pageS2,pageS3,pageS4,pageS5][pg]();
+  app.innerHTML = html + `<footer><b>Gina教室的AI奇蹟</b><br>鳳新高中英文科李姬慧老師 X AI 彙整製作</footer>`;
+  renderTabs(pg);
+  save();
+}
+function renderTabs(pg){
+  const cells=[{k:'home',n:ic('home'),zh:'地圖',en:'Map'}].concat(STATIONS.map(s=>({k:s.n,n:state.done[s.n-1]?ic('unlock'):(state.player&&unlocked(s.n)?s.n:ic('lock')),zh:'密室'+s.n,en:'R.'+s.n,lock:!state.player||!unlocked(s.n),done:state.done[s.n-1]}))).concat([{k:'cert',n:ic('award'),zh:'證書',en:'Cert.',lock:badges()<5}]);
+  document.getElementById('tabs').innerHTML=cells.map(c=>`<button class="tab ${pg===c.k?'on':''} ${c.done?'done':''}" data-go="${c.k}" ${c.lock?'disabled':''} aria-label="${esc(c.zh)}"><span class="tn num">${c.n}</span><span>${esc(state.lang==='en'?c.en:c.zh)}</span></button>`).join('');
+}
+function go(k){
+  playSfx('tap');
+  state.page = (k==='home'||k==='cert')?k:Number(k);
+  if(typeof state.page==='number') queue('enter');
+  render(); window.scrollTo(0,0);
+}
+
+/* ---------- 完成一站 ---------- */
+function completeStation(n){
+  if(state.done[n-1]) return;
+  const ids=ST_ITEMS[n]; const first=ids.filter(id=>state.q[id]&&state.q[id].first).length;
+  const sc=Math.max(0,Math.round(20*first/ids.length)-(state.hs[n]||0));
+  state.score[n]=sc; state.done[n-1]=1;
+  state.xp=(state.xp||0)+150;
+  if(badges()===5&&!state.end) state.end=Date.now();
+  save();
+  queue(badges()===5?'final':'progress',n);
+  playSfx('win');
+  showBadge(n,sc);
+}
+function showBadge(n,sc){
+  const st=STATIONS[n-1];
+  const m=document.getElementById('modal');
+  m.innerHTML=`<div class="medal2">${badgeSVG(n,96)}</div>
+   <h2>${T('獲得第 '+n+' 把叢林鑰匙！','Jungle Key #'+n+' Earned!')}</h2>
+   <p class="muted" style="margin:6px 0 2px">${TP(st.title,true)}</p>
+   <p style="margin:4px 0 16px">${T('密室得分','Score',true)} <b class="num" style="font-size:1.4rem;color:var(--accent-ink)">${sc}</b> / 20 <span class="kicker" style="margin-left:6px">+150 XP</span></p>
+   <button class="btn block" data-modal-go="${n===5?'cert':n+1}">${n===5?T('護送成功！領取英雄證書','Escaped! Claim Certificate',true):T('潛入密室 '+(n+1),'Enter Room '+(n+1),true)}${ic('arrow')}</button>
+   <button class="btn ghost block" style="margin-top:8px" data-modal-close>${T('留在本室檢視線索','Stay & Review',true)}</button>`;
+  document.getElementById('mask').classList.add('show'); m.classList.add('show');
+  confetti();
+  setTimeout(()=>{const b=m.querySelector('[data-modal-go]');b&&b.focus();},50);
+}
+function closeModal(){document.getElementById('modal').classList.remove('show');document.getElementById('mask').classList.remove('show');}
+function confetti(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const box=document.getElementById('confetti'); const cols=['#2E7D5B','#C87D28','#E8A528','#3D7A8A','#56B88C'];
+  box.innerHTML=Array.from({length:45},(_,i)=>`<i style="left:${Math.random()*100}%;background:${cols[i%5]};animation-delay:${Math.random()*.4}s"></i>`).join('');
+  setTimeout(()=>box.innerHTML='',2200);
+}
+
+/* ---------- 設定 ---------- */
+function openSheet(){
+  const sh=document.getElementById('sheet');
+  const seg=(key,opts)=>`<div class="seg">${opts.map(([v,l])=>`<button data-set="${key}" data-v="${v}" class="${String(state[key])===String(v)?'on':''}">${l}</button>`).join('')}</div>`;
+  sh.innerHTML=`<h3 id="sheetTitle">${T('救援終端設定','Terminal Settings',true)}</h3>
+   <b>${T('顯示語言','Language',true)}</b>${seg('lang',[['zh','中文'],['bi','雙語'],['en','English']])}
+   <b>${T('字體大小','Text size',true)}</b>${seg('big',[[false,S('標準','Normal')],[true,S('放大','Large')]])}
+   <button class="btn ghost block" data-act="resetAsk">${T('重新開始（清除進度）','Start over (clear progress)',true)}</button>
+   <div id="resetBox"></div>
+   <button class="btn block" style="margin-top:10px" data-act="closeSheet">${T('完成','Done',true)}</button>`;
+  document.getElementById('mask').classList.add('show'); sh.classList.add('show');
+}
+function closeSheet(){document.getElementById('sheet').classList.remove('show');document.getElementById('mask').classList.remove('show');}
+
+/* ---------- 事件 ---------- */
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button,[data-go]'); if(!t) return;
+  const d=t.dataset;
+  if(t.id==='setBtn'){playSfx('tap');openSheet();return;}
+  if(t.id==='sndBtn'){state.sound=!state.sound;playSfx('tap');render();return;}
+  if(d.go!==undefined){go(d.go);return;}
+  if(d.modalGo!==undefined){closeModal();go(d.modalGo);return;}
+  if(d.modalClose!==undefined){closeModal();render();return;}
+  if(d.set){state[d.set]=d.v==='true'?true:d.v==='false'?false:d.v;playSfx('tap');render();openSheet();return;}
+  if(d.act==='closeSheet'){closeSheet();return;}
+  if(d.act==='resetAsk'){document.getElementById('resetBox').innerHTML=`<div class="fb bad" style="margin-top:8px">${T('確定要清除所有進度與成績嗎？已送給老師的紀錄不會被刪除。','Clear all progress? Records already sent to your teacher stay.')}<div class="row" style="margin-top:8px"><button class="btn" data-act="reset">${T('確定清除','Clear',true)}</button><button class="btn ghost" data-act="closeSheet">${T('取消','Cancel',true)}</button></div></div>`;return;}
+  if(d.act==='reset'){const keep={lang:state.lang,big:state.big,sound:state.sound};state=Object.assign(fresh(),keep);closeSheet();go('home');return;}
+  if(d.act==='flush'){flush();return;}
+  if(d.act==='intel'){playSfx('tap');openIntel();return;}
+  if(d.act==='closeIntel'){closeIntel();return;}
+  if(d.jam){
+    const id=d.jam; if(state.gadgets.jammer<=0||isOk(id)||(state.jammed[id]&&state.jammed[id].length)) return;
+    if(id==='c2'){state.jammed.c2=[3,5];}
+    else{const item=[...S2,...S5,S4.q1].find(x=>x.id===id); const wrongs=item.opts.map((_,i)=>i).filter(i=>i!==item.ans&&!(state.w[id]?.wrong||[]).includes(i)); state.jammed[id]=wrongs.slice(0,item.opts.length>3?2:1);}
+    state.gadgets.jammer--; playSfx('gadget'); render(); return;}
+  if(d.act==='sendReflect'){state.reflect=document.getElementById('reflect').value.trim();queue('reflect');t.innerHTML=ic('check')+T('已儲存','Saved',true);playSfx('good');save();return;}
+
+  /* 叢林救援裝備觸發 */
+  if(d.gadget){
+    const stNum = Number(d.st);
+    if(d.gadget==='scanner' && state.gadgets.scanner>0 && !state.scanOpen[stNum]){
+      state.gadgets.scanner--;
+      state.scanOpen[stNum]=true;
+      playSfx('gadget');
+      render(); openIntel();
+    } else if(d.gadget==='jammer' && state.gadgets.jammer>0){
+      let applied=false;
+      if(stNum===2 || stNum===5){
+        const list = stNum===2?S2:S5;
+        const target = list.find(q=>!isOk(q.id) && !(state.jammed[q.id]?.length));
+        if(target){
+          const wrongs = [0,1,2,3].filter(idx=>idx!==target.ans && !(state.w[target.id]?.wrong||[]).includes(idx));
+          state.jammed[target.id] = wrongs.slice(0,2);
+          applied=true;
+        }
+      } else if(stNum===4){
+        if(!isOk('c1') && !(state.jammed.c1?.length)){
+          state.jammed.c1 = [0]; applied=true;
+        } else if(isOk('c1') && !isOk('c2') && !(state.jammed.c2?.length)){
+          state.jammed.c2 = [1,4]; applied=true;
+        }
+      }
+      if(applied){
+        state.gadgets.jammer--;
+        playSfx('gadget');
+        render();
+      }
+    }
+    return;
+  }
+
+  if(d.hint){useHint(d.hint,Number(d.st));
+    const lv=hintLevel(d.hint);
+    if(lv===3&&d.hint==='s1'){const w=state.w.s1;const x=S1.items.find(y=>!isOk(y.id));if(x){const r=state.q[x.id]||(state.q[x.id]={t:0,first:null,ok:false});if(r.first===null)r.first=false;r.ok=true;delete w.fill[x.id];Object.keys(w.fill).forEach(k=>{if(w.fill[k]===x.ans)delete w.fill[k];});w.sel=null;}
+      if(S1.items.every(y=>isOk(y.id))){render();completeStation(1);return;}}
+    if(lv===3&&d.hint==='s3'){const w=state.w.s3;const c=S3.cards.find(y=>w.bins[y.id]!==y.a);if(c){w.bins[c.id]=c.a;}}
+    render();return;}
+
+  if(d.blank){playSfx('tap');const w=state.w.s1;if(w.fill[d.blank]){delete w.fill[d.blank];}w.sel=d.blank;render();return;}
+  if(d.chip){playSfx('tap');const w=state.w.s1;if(!w.sel)return;w.fill[w.sel]=d.chip;const nx=S1.items.find(x=>!isOk(x.id)&&!w.fill[x.id]);w.sel=nx?nx.id:null;render();return;}
+  if(d.check==='s1'){const w=state.w.s1;w.wrongIds=[];
+    S1.items.forEach(x=>{if(isOk(x.id))return;const c=w.fill[x.id]===x.ans;attempt(x.id,c,e);if(!c){w.wrongIds.push(x.id);delete w.fill[x.id];}});
+    if(w.wrongIds.length) w.shake=true;
+    w.sel=null; if(S1.items.every(x=>isOk(x.id))){render();completeStation(1);} else render(); return;}
+
+  if(d.mc){const all=[...S2,...S5,S4.q1];const item=all.find(x=>x.id===d.mc);const i=Number(d.i);const c=i===item.ans;attempt(item.id,c,e);
+    const w=state.w[item.id]; if(!c){w.wrong.push(i);w.last=i;w.shake=true;} else w.last=null;
+    const st=Number(d.st); render();
+    if(c&&st!==4&&ST_ITEMS[st].every(isOk)) completeStation(st);
+    return;}
+
+  if(d.card){playSfx('tap');const w=state.w.s3;w.sel=d.card;render();return;}
+  if(d.bin){playSfx('tap');const w=state.w.s3;if(!w.sel)return;w.bins[w.sel]=d.bin;const nx=S3.cards.find(c=>!w.bins[c.id]);w.sel=nx?nx.id:null;w.res=null;render();return;}
+  if(d.check==='s3'){const w=state.w.s3;const res={trap:0,safe:0,none:0};
+    S3.cards.forEach(c=>{const ok=w.bins[c.id]===c.a;attempt(c.id,ok,e);if(ok)state.q[c.id].ok=true;else{state.q[c.id].ok=false;res[w.bins[c.id]]++;}});
+    if(S3.cards.every(c=>w.bins[c.id]===c.a)){w.res=null;render();completeStation(3);}else{w.res=res;w.shake=true;render();}return;}
+
+  if(d.multi!==undefined){playSfx('tap');const w=state.w.c2;const i=Number(d.multi);const k=w.sel.indexOf(i);if(k>=0)w.sel.splice(k,1);else if(w.sel.length<3)w.sel.push(i);w.res=null;render();return;}
+  if(d.check==='c2'){const w=state.w.c2;const c=w.sel.every(i=>S4.q2.opts[i].a);attempt('c2',c,e);
+    if(c){render();completeStation(4);}else{w.res=w.sel.slice();w.sel=w.sel.filter(i=>S4.q2.opts[i].a);w.shake=true;render();}return;}
+});
+document.addEventListener('submit',e=>{
+  if(e.target.id!=='joinForm') return; e.preventDefault();
+  const cls=document.getElementById('fCls').value.trim(), seat=document.getElementById('fSeat').value.trim(), name=document.getElementById('fName').value.trim();
+  if(!cls||!seat||!name) return;
+  const code = CODENAMES[(Number(seat)||Math.floor(Math.random()*8)) % CODENAMES.length];
+  state.player={cls,seat,name,code}; state.start=state.start||Date.now(); save();
+  playSfx('win');
+  queue('join'); go(1);
+});
+document.addEventListener('input',e=>{if(e.target.id==='reflect'){state.reflect=e.target.value;save();}});
+document.getElementById('mask').addEventListener('click',()=>{closeSheet();closeModal();closeIntel();render();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSheet();closeModal();closeIntel();}});
+
+render(); flush();
+</script>
+</body>
+</html>
