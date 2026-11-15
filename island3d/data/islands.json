@@ -1,0 +1,1473 @@
+{
+  "title": "Gina 的教學群島",
+  "subtitle": "Teaching Archipelago",
+  "center": {
+    "id": "plaza",
+    "sea": null,
+    "name": "星港廣場",
+    "en": "Star Harbor Plaza",
+    "img": "img/plaza.webp",
+    "status": "center",
+    "chief": {
+      "name": "露娜",
+      "title": "符文魔女・群島嚮導",
+      "line": "歡迎來到教學群島！點一座島，我陪你讀教材、開資源、做測驗，集滿島章就能領證書。"
+    },
+    "goal": "",
+    "sections": [
+      {
+        "title": "關於 Gina 老師",
+        "body": "鳳新高中英文科李姬慧老師，經營「Gina教室的AI奇蹟」，帶老師做 AI 增能工作坊，也陪學生走升學與學習歷程。這座群島收錄她為學測、英文課、SDGs 選修、學檔輔導與班級經營做的教材和工具。"
+      },
+      {
+        "title": "怎麼玩",
+        "body": "每座開放的島都有三步：讀教材、打開一項資源、做隨堂測驗（答對 2 題以上）。三步都完成就會蓋上島章。建設中的島不用蓋章。"
+      },
+      {
+        "title": "證書",
+        "body": "集滿所有開放島的島章，就能在廣場領取一張印有你名字的結業證書。"
+      },
+      {
+        "title": "你的資料存在哪",
+        "body": "名字和進度只存在這台裝置的瀏覽器，不會傳到任何地方。清除瀏覽資料或換裝置就會重來。"
+      }
+    ],
+    "resources": [
+      {
+        "label": "GSAT-Coach 學測陪跑工具箱",
+        "kind": "web",
+        "url": "https://chginali-gina.github.io/GSAT-Coach/",
+        "desc": "所有工具的總入口。"
+      }
+    ],
+    "quiz": [],
+    "music": "audio/hub.mp3",
+    "x": 0,
+    "z": 0,
+    "color": "#FFD27A",
+    "seaName": "中央廣場"
+  },
+  "islands": [
+    {
+      "id": "vocab",
+      "sea": "gsat",
+      "name": "詞彙島",
+      "en": "Lexicon Isle",
+      "img": "img/vocab.webp",
+      "chief": {
+        "name": "字鈴",
+        "title": "符文貓・詞彙守護者",
+        "line": "每個字都有固定的朋友。先認識它們的搭配，再記住它們。"
+      },
+      "goal": "能用字詞搭配判斷學測詞彙題，並選一種方法把單字記牢。",
+      "sections": [
+        {
+          "title": "搭配詞比單字更重要",
+          "body": "學測詞彙題常考「這個字跟誰一起用」。先認識常考的字詞搭配，再背單字，答題會快很多。"
+        },
+        {
+          "title": "三種練法",
+          "body": "先做詞彙練習卷檢查自己，再用聽英拼寫單字表練拼字。記不住的字，丟進記憶宮殿。"
+        },
+        {
+          "title": "記憶宮殿怎麼用",
+          "body": "把要記的詞放在熟悉地點的「錨點」上，配一個誇張好笑的畫面，逐站回想，再依間隔時間複習。"
+        }
+      ],
+      "resources": [
+        {
+          "label": "智慧記憶宮殿",
+          "kind": "web",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pages/memory-palace.html",
+          "desc": "貼文字或上傳 PDF，抽出關鍵詞，配上宮殿錨點與荒謬劇本來記單字。"
+        },
+        {
+          "label": "詞彙練習 Level 5",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/vocab-level5.pdf",
+          "desc": "文意選填 20 題與詞彙單選，Level 5 全範圍。"
+        },
+        {
+          "label": "詞彙練習（landlady～zoom）",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/vocab-landlady-student.pdf",
+          "desc": "四篇短文文意選填。"
+        },
+        {
+          "label": "聽英拼寫高機率單字表",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/spelling-contest-wordlist.pdf",
+          "desc": "依陷阱類型分 6 類。"
+        },
+        {
+          "label": "單字自學任務 × ChatGPT 學習模式",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/vocab-selfstudy-chatgpt.pdf",
+          "desc": "用 AI 學習模式自學單字的任務單。"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "「做出結論」最自然的英文搭配是？",
+          "options": [
+            "reach a conclusion",
+            "arrive a conclusion",
+            "get a conclusion",
+            "do a conclusion"
+          ],
+          "answer": 0,
+          "explain": "reach a conclusion 是固定搭配；arrive 要用 arrive at a conclusion。"
+        },
+        {
+          "q": "make 最常搭配哪一個？",
+          "options": [
+            "homework",
+            "a decision",
+            "a photo",
+            "exercise"
+          ],
+          "answer": 1,
+          "explain": "make a decision；do homework、take a photo、do exercise。"
+        },
+        {
+          "q": "記憶宮殿用的是哪一種記憶方法？",
+          "options": [
+            "把單字抄十遍",
+            "只背中文意思",
+            "把詞放在熟悉地點的錨點上",
+            "按字母順序背"
+          ],
+          "answer": 2,
+          "explain": "記憶宮殿就是軌跡法：用熟悉的路線和地點幫助回想。"
+        }
+      ],
+      "music": "audio/exam.mp3",
+      "status": "open",
+      "x": 3.25,
+      "z": 10.51,
+      "color": "#3EF0FF",
+      "seaName": "學測英文"
+    },
+    {
+      "id": "mock",
+      "sea": "gsat",
+      "name": "模擬考島",
+      "en": "Mock Exam Isle",
+      "img": "img/mock.webp",
+      "chief": {
+        "name": "鐘衛",
+        "title": "時計騎士・模考教官",
+        "line": "計時開始前，先讀懂題目在考什麼。"
+      },
+      "goal": "能說出學測各題型在考什麼，並用拆解長句的步驟讀懂難句。",
+      "sections": [
+        {
+          "title": "先認識題型",
+          "body": "歷屆題型分析逐題統計 111–115 學測英文：各題型考點、選項設計手法、混合題與非選評分重點。"
+        },
+        {
+          "title": "誘答怎麼設計",
+          "body": "錯誤選項大多和正解屬於同一個語意場，或「部分有文本依據」。作答時要回到原文找證據，不要只憑印象選。"
+        },
+        {
+          "title": "長句拆解",
+          "body": "長句先找主要的主詞和動詞，再把子句和片語一層層剝開。特訓卷有 30 題與 50 題兩個版本。"
+        }
+      ],
+      "resources": [
+        {
+          "label": "學測英文歷屆題型分析（111–115）",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/gsat-question-type-analysis.pdf",
+          "desc": "各題型考點與選項設計手法。"
+        },
+        {
+          "label": "學測長句拆解特訓（30 題）",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/long-sentence-30.pdf",
+          "desc": "分詞構句與複合長句。"
+        },
+        {
+          "label": "學測長句拆解特訓（50 題）",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/long-sentence-50.pdf",
+          "desc": "加入延伸文法句構的完整版。"
+        },
+        {
+          "label": "課文改寫題組綜合練習卷",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/text-rewrite-practice-student.pdf",
+          "desc": "綜合測驗 30 題＋文意選填 60 題。"
+        },
+        {
+          "label": "L4–L6 文法重點與練習",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/l4-l6-grammar-practice.pdf",
+          "desc": "每課 11 個文法重點，共 33 題。"
+        },
+        {
+          "label": "文法強化學習單",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/grammar-boost-student.pdf",
+          "desc": "動詞形式、詞性、不可數名詞、平行結構。"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "拆解一個很長的英文句子，第一步通常是？",
+          "options": [
+            "先查每個生字",
+            "找出主要的主詞和動詞",
+            "從最後一個字往前讀",
+            "先找形容詞"
+          ],
+          "answer": 1,
+          "explain": "抓到句子主幹，其他子句和片語才知道掛在哪裡。"
+        },
+        {
+          "q": "誘答選項「同語意場」的意思是？",
+          "options": [
+            "錯誤選項和正解是同一類主題的字，容易混淆",
+            "錯誤選項都是拼錯的字",
+            "錯誤選項跟題目完全無關",
+            "每個選項都是同一個字"
+          ],
+          "answer": 0,
+          "explain": "同語意場的選項看起來都合理，要靠上下文和搭配才能分辨。"
+        },
+        {
+          "q": "閱讀題遇到「部分有文本依據」的選項時，應該？",
+          "options": [
+            "有提到就選它",
+            "選最長的選項",
+            "跳過不做",
+            "回原文確認每個細節是否都對"
+          ],
+          "answer": 3,
+          "explain": "只對一半的選項就是陷阱，要逐項核對。"
+        }
+      ],
+      "music": "audio/exam.mp3",
+      "status": "open",
+      "x": 10.73,
+      "z": 2.44,
+      "color": "#3EF0FF",
+      "seaName": "學測英文"
+    },
+    {
+      "id": "writing",
+      "sea": "gsat",
+      "name": "作文島",
+      "en": "Quill Isle",
+      "img": "img/writing.webp",
+      "chief": {
+        "name": "墨羽",
+        "title": "墨水渡鴉・寫作導師",
+        "line": "先寫一句清楚的主題句，其他的句子都為它服務。"
+      },
+      "goal": "能寫出有主題句的兩段式作文，並知道五個評分面向。",
+      "sections": [
+        {
+          "title": "兩段式作文",
+          "body": "學測英文作文多半要求寫兩段。每段先寫主題句，後面的句子都要支持它。"
+        },
+        {
+          "title": "五個評分面向",
+          "body": "高分寫作手冊把內容、組織、文法句構、字彙拼字、體例逐一拆解，附範例與自我檢核。"
+        },
+        {
+          "title": "範文是拿來比對的",
+          "body": "範文不是背的。比對看看：它的主題句怎麼寫、用了哪些轉折詞、細節從哪裡來。"
+        }
+      ],
+      "resources": [
+        {
+          "label": "兩段式作文衝刺課",
+          "kind": "web",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pages/two-paragraph-essay.html",
+          "desc": "主題句、支持句、架構、連貫、進階句型的互動課。"
+        },
+        {
+          "label": "兩段式作文衝刺講義",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/two-paragraph-essay-student.pdf",
+          "desc": "12 頁學生版講義。"
+        },
+        {
+          "label": "學測英文作文高分寫作手冊",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/gsat-essay-handbook.pdf",
+          "desc": "五個評分面向逐一拆解。"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "學測英文作文通常要求寫幾段？",
+          "options": [
+            "一段",
+            "兩段",
+            "三段",
+            "五段"
+          ],
+          "answer": 1,
+          "explain": "學測英文作文多為兩段式，每段各有任務。"
+        },
+        {
+          "q": "主題句（topic sentence）的作用是？",
+          "options": [
+            "點出這一段要說的重點",
+            "列出所有生字",
+            "寫在文章最後當結尾",
+            "重複題目的每個字"
+          ],
+          "answer": 0,
+          "explain": "主題句告訴讀者這段要談什麼，其他句子都為它服務。"
+        },
+        {
+          "q": "看範文最好的用法是？",
+          "options": [
+            "整篇背下來",
+            "抄進自己的作文",
+            "比對它的主題句、轉折詞和細節",
+            "只看字數"
+          ],
+          "answer": 2,
+          "explain": "範文是拿來比對寫法，不是拿來背的。"
+        }
+      ],
+      "music": "audio/voice.mp3",
+      "status": "open",
+      "x": 7.48,
+      "z": -8.07,
+      "color": "#3EF0FF",
+      "seaName": "學測英文"
+    },
+    {
+      "id": "coach",
+      "sea": "gsat",
+      "name": "學測陪跑港",
+      "en": "Pacer Harbor",
+      "img": "img/coach.webp",
+      "chief": {
+        "name": "跑跑",
+        "title": "光翼兔・陪跑教練",
+        "line": "一天一點點，陪你跑到考場。"
+      },
+      "goal": "能完成 GSAT-Coach 的設定，開始每日學習紀錄。",
+      "sections": [
+        {
+          "title": "這是什麼",
+          "body": "GSAT-Coach 是學測陪跑工具箱：學測倒數、週課表規劃、各科戰況追蹤，還有每日學習與 AI 覆盤。"
+        },
+        {
+          "title": "第一次使用",
+          "body": "照「如何申請 Gemini API Key」申請自己的金鑰，模型選「自動」就好。AI 功能給成年使用者。"
+        },
+        {
+          "title": "資料存在哪",
+          "body": "每日學習紀錄依日期存在你自己的裝置上。換手機或清除瀏覽資料，紀錄就會不見。"
+        }
+      ],
+      "resources": [
+        {
+          "label": "學測陪跑系統",
+          "kind": "web",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/gina-gsat-coach.html",
+          "desc": "學測倒數、週課表、各科戰況追蹤。"
+        },
+        {
+          "label": "每日學習 × AI 診斷",
+          "kind": "web",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/gina-holistic-time-system.html",
+          "desc": "三色時間軸、番茄鐘、分心計數、AI 覆盤。"
+        },
+        {
+          "label": "如何申請 Gemini API Key",
+          "kind": "web",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/gemini-apikey-guide.html",
+          "desc": "圖文步驟，3 分鐘完成。"
+        },
+        {
+          "label": "多益衝刺十週計畫",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/toeic-10-week-plan.pdf",
+          "desc": "每日 1 小時的十週進度表。"
+        },
+        {
+          "label": "TOEIC 錯題訂正模版",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/toeic-error-log.pdf",
+          "desc": "把錯題變成下一次的得分。"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "GSAT-Coach 的 AI 功能需要準備什麼？",
+          "options": [
+            "老師的帳號密碼",
+            "自己的 Gemini API Key",
+            "學校信箱",
+            "付費會員"
+          ],
+          "answer": 1,
+          "explain": "工具箱有 API Key 教學頁，教你申請自己的金鑰。"
+        },
+        {
+          "q": "模型設定建議選哪一個？",
+          "options": [
+            "自動",
+            "最舊的版本",
+            "隨便一個",
+            "不用選，也不能用"
+          ],
+          "answer": 0,
+          "explain": "選「自動」，工具會用你的金鑰挑可用的模型。"
+        },
+        {
+          "q": "每日學習紀錄存在哪裡？",
+          "options": [
+            "老師的電腦",
+            "公開網站",
+            "學校伺服器",
+            "你自己的裝置"
+          ],
+          "answer": 3,
+          "explain": "紀錄依日期存在本機，清除瀏覽資料會消失。"
+        }
+      ],
+      "music": "audio/exam.mp3",
+      "status": "open",
+      "x": -3.25,
+      "z": -10.51,
+      "color": "#3EF0FF",
+      "seaName": "學測英文"
+    },
+    {
+      "id": "lessons",
+      "sea": "lesson",
+      "name": "課本闖關島",
+      "en": "Textbook Quest Isle",
+      "img": "img/lessons.webp",
+      "chief": {
+        "name": "頁頁",
+        "title": "書頁龍・闖關嚮導",
+        "line": "課文是一座山，我們一關一關爬上去。"
+      },
+      "goal": "能用學習單、拼字遊戲和闖關網頁複習課本每一課。",
+      "sections": [
+        {
+          "title": "一課一關",
+          "body": "課本每一課都有對應的學習單、拼字遊戲或闖關網頁：L2 The Marshmallow Challenge、L3 Prometheus、L4 Day of the Dead、L5 Kyoto、L6 The Country of the Blind。"
+        },
+        {
+          "title": "Story Mountain 3D 闖關",
+          "body": "L6 跟登山家 Nuñez 掉進盲人山谷：3D 過場、找線索、用耳朵辨方向，6 關從開端爬到高潮，再走到結局。"
+        },
+        {
+          "title": "拼字競技場",
+          "body": "L3、L4 各有拼字競技場，課前暖身或段考前複習都適合。"
+        }
+      ],
+      "resources": [
+        {
+          "label": "L6 The Country of the Blind · 3D 闖關",
+          "kind": "web",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/country-of-the-blind.html",
+          "desc": "6 關 3D 闖關。"
+        },
+        {
+          "label": "L6 Story Mountain Quest · v2",
+          "kind": "web",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/country-of-the-blind-v2.html",
+          "desc": "蒐集 24 顆單字水晶、拼句型、找證據。"
+        },
+        {
+          "label": "L2 The Marshmallow Challenge 學習單",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/l2-marshmallow-student.pdf",
+          "desc": ""
+        },
+        {
+          "label": "L2 Crossword 填字遊戲",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/l2-marshmallow-crossword.pdf",
+          "desc": ""
+        },
+        {
+          "label": "L2 Vocabulary Bingo 字卡",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/l2-marshmallow-bingo.pdf",
+          "desc": ""
+        },
+        {
+          "label": "L3 Prometheus 學習單",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/l3-prometheus-student.pdf",
+          "desc": ""
+        },
+        {
+          "label": "L3 Prometheus Crossword",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/l3-prometheus-crossword.pdf",
+          "desc": ""
+        },
+        {
+          "label": "普羅米修斯拼字競技場",
+          "kind": "web",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pages/prometheus-spelling.html",
+          "desc": ""
+        },
+        {
+          "label": "L4 Day of the Dead 學習單",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/l4-day-of-the-dead-student.pdf",
+          "desc": ""
+        },
+        {
+          "label": "亡靈節拼字競技場",
+          "kind": "web",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pages/day-of-the-dead-spelling.html",
+          "desc": ""
+        },
+        {
+          "label": "L5 Kyoto: The Heart of Japan 學習單",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/kyoto-worksheet.pdf",
+          "desc": ""
+        }
+      ],
+      "quiz": [
+        {
+          "q": "〈The Country of the Blind〉的作者是？",
+          "options": [
+            "Mark Twain",
+            "Jane Austen",
+            "H. G. Wells",
+            "O. Henry"
+          ],
+          "answer": 2,
+          "explain": "這篇短篇小說是 H. G. Wells 的作品。"
+        },
+        {
+          "q": "在情節金字塔裡，故事最緊張的轉折點叫做？",
+          "options": [
+            "高潮（Climax）",
+            "開端（Exposition）",
+            "結局（Resolution）",
+            "觸發事件（Inciting Incident）"
+          ],
+          "answer": 0,
+          "explain": "Story Mountain 的山頂就是高潮。"
+        },
+        {
+          "q": "L4 的 Day of the Dead（亡靈節）是哪個國家的傳統節日？",
+          "options": [
+            "日本",
+            "墨西哥",
+            "法國",
+            "印度"
+          ],
+          "answer": 1,
+          "explain": "亡靈節是墨西哥紀念逝去親人的節日。"
+        }
+      ],
+      "music": "audio/story.mp3",
+      "status": "open",
+      "x": -10.73,
+      "z": -2.44,
+      "color": "#B48CFF",
+      "seaName": "英文課程"
+    },
+    {
+      "id": "issues",
+      "sea": "lesson",
+      "name": "議題閱讀島",
+      "en": "Issue Reading Isle",
+      "img": "img/issues.webp",
+      "chief": {
+        "name": "海霖",
+        "title": "潮汐巫女・議題觀測員",
+        "line": "讀議題之前，先問：證據在哪裡？"
+      },
+      "goal": "能讀懂氣候議題的不同立場，並寫出一篇英文氣候演講稿。",
+      "sections": [
+        {
+          "title": "跨科閱讀",
+          "body": "「COP21 到今日」把氣候高峰會和地理結合，有拼圖閱讀卡和模擬談判的代表團卡。"
+        },
+        {
+          "title": "議題要看證據",
+          "body": "「我們需要核能，才能阻止氣候變遷嗎？」讓你讀不同立場的論點，最後用測驗檢查理解。"
+        },
+        {
+          "title": "從讀到寫",
+          "body": "Voices for the Earth 帶你寫一篇 3–5 分鐘的英文氣候演講稿，六個模組都有語言鷹架。"
+        }
+      ],
+      "resources": [
+        {
+          "label": "COP21 到今日：地理 × 英文閱讀",
+          "kind": "web",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pages/cop21-reading.html",
+          "desc": ""
+        },
+        {
+          "label": "COP21 到今日學習單",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/cop21-worksheet.pdf",
+          "desc": ""
+        },
+        {
+          "label": "COP15–29 拼圖閱讀卡",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/cop-jigsaw-cards.pdf",
+          "desc": ""
+        },
+        {
+          "label": "COP 模擬談判國家代表團卡",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/cop-negotiation-cards.pdf",
+          "desc": ""
+        },
+        {
+          "label": "我們需要核能，才能阻止氣候變遷嗎？",
+          "kind": "web",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pages/nuclear-reading.html",
+          "desc": ""
+        },
+        {
+          "label": "Nuclear Energy and Climate Change Quiz",
+          "kind": "web",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pages/nuclear-quiz.html",
+          "desc": ""
+        },
+        {
+          "label": "Voices for the Earth 氣候演講稿",
+          "kind": "web",
+          "url": "https://voices-for-the-earth.vercel.app",
+          "desc": ""
+        },
+        {
+          "label": "氣候演講稿範文（學生版）",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/climate-speech-student.pdf",
+          "desc": ""
+        },
+        {
+          "label": "From Waste to Worth 學習單",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/waste-to-worth-worksheet.pdf",
+          "desc": ""
+        }
+      ],
+      "quiz": [
+        {
+          "q": "《巴黎協定》是在哪一次聯合國氣候大會通過的？",
+          "options": [
+            "COP1",
+            "COP15",
+            "COP21",
+            "COP29"
+          ],
+          "answer": 2,
+          "explain": "2015 年在巴黎舉行的 COP21 通過了《巴黎協定》。"
+        },
+        {
+          "q": "《巴黎協定》的升溫目標是？",
+          "options": [
+            "遠低於 2°C，並努力控制在 1.5°C 內",
+            "完全不再升溫",
+            "控制在 5°C 內",
+            "沒有訂目標"
+          ],
+          "answer": 0,
+          "explain": "協定目標是把升溫控制在遠低於 2°C，並努力限制在 1.5°C。"
+        },
+        {
+          "q": "Voices for the Earth 要寫的演講稿大約多長？",
+          "options": [
+            "30 秒",
+            "3–5 分鐘",
+            "20 分鐘",
+            "一小時"
+          ],
+          "answer": 1,
+          "explain": "網頁設計給高中生寫 3–5 分鐘的英文氣候演講稿。"
+        }
+      ],
+      "music": "audio/story.mp3",
+      "status": "open",
+      "x": -7.48,
+      "z": 8.07,
+      "color": "#B48CFF",
+      "seaName": "英文課程"
+    },
+    {
+      "id": "argument",
+      "sea": "lesson",
+      "name": "口說論述島",
+      "en": "Debate Isle",
+      "img": "img/argument.webp",
+      "chief": {
+        "name": "辯鴞",
+        "title": "霓虹貓頭鷹・論述教頭",
+        "line": "先說結論，再給例證，三分鐘就夠。"
+      },
+      "goal": "能用「主張—理由—例證」完成一段 3 分鐘的英文論述。",
+      "sections": [
+        {
+          "title": "論述練功房 3:00",
+          "body": "八種說服技巧、四種講稿架構，AI 找正反觀點，最後計時講一次。中英雙語。"
+        },
+        {
+          "title": "主張—理由—例證",
+          "body": "先說結論，再說理由，最後用一個具體的例子撐住它。"
+        },
+        {
+          "title": "先講白話",
+          "body": "白話拆解教室把大主題一層一層講白話，適合當開課引子，也能幫你先想清楚再開口。"
+        }
+      ],
+      "resources": [
+        {
+          "label": "論述練功房 3:00",
+          "kind": "web",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/argument-gym.html",
+          "desc": "8 種說服技巧、4 種講稿架構。"
+        },
+        {
+          "label": "白話拆解教室",
+          "kind": "web",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pages/plain-talk-studio.html",
+          "desc": "把大主題一層一層講白話。"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "論述練功房的講稿試講時間是？",
+          "options": [
+            "30 分鐘",
+            "10 秒",
+            "3 分鐘",
+            "沒有限制"
+          ],
+          "answer": 2,
+          "explain": "練功房的名稱就是 3:00。"
+        },
+        {
+          "q": "一段好論述的開頭建議先說什麼？",
+          "options": [
+            "所有背景資料",
+            "結論（主張）",
+            "自我介紹",
+            "笑話"
+          ],
+          "answer": 1,
+          "explain": "先說結論，聽的人才知道你要證明什麼。"
+        },
+        {
+          "q": "說完主張和理由之後，最能說服人的是？",
+          "options": [
+            "一個具體的例證",
+            "重複主張三次",
+            "提高音量",
+            "換個話題"
+          ],
+          "answer": 0,
+          "explain": "具體例子讓抽象的理由變得可信。"
+        }
+      ],
+      "music": "audio/voice.mp3",
+      "status": "open",
+      "x": 0.0,
+      "z": 20.0,
+      "color": "#B48CFF",
+      "seaName": "英文課程"
+    },
+    {
+      "id": "climate",
+      "sea": "sdgs",
+      "name": "氣候行動島",
+      "en": "Climate Action Isle",
+      "img": "img/climate.webp",
+      "chief": {
+        "name": "青嵐",
+        "title": "森林鹿精・減碳指揮官",
+        "line": "減碳要算得出來：活動數據乘上排放係數。"
+      },
+      "goal": "能用排放量公式估算減碳，並在遊戲中做出團隊決策。",
+      "sections": [
+        {
+          "title": "氣候守衛者",
+          "body": "一組一支手機、六個角色投票決策，帶領河灣市在 2050 年前減碳 50%。"
+        },
+        {
+          "title": "算得出來的減碳",
+          "body": "課程核心是 IPCC 的清單方法：排放量＝活動數據 × 排放係數。"
+        },
+        {
+          "title": "SDGs 永續島",
+          "body": "入門版認識 17 項永續發展目標的取捨，議會版四人共決。"
+        }
+      ],
+      "resources": [
+        {
+          "label": "Climate Guardians 氣候守衛者",
+          "kind": "web",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pages/climate-guardians.html",
+          "desc": "6 角色氣候委員會遊戲。"
+        },
+        {
+          "label": "SDGs 永續島（入門版＋議會版）",
+          "kind": "web",
+          "url": "https://sdgs-island.vercel.app",
+          "desc": ""
+        },
+        {
+          "label": "SDGs Around the World 尋寶遊戲",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/sdgs-scavenger-hunt.pdf",
+          "desc": ""
+        },
+        {
+          "label": "SDGs 世界地圖海報",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/sdgs-world-map-poster.pdf",
+          "desc": ""
+        },
+        {
+          "label": "用 AI 查 SDGs 統計數據",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/sdgs-ai-statistics-student.pdf",
+          "desc": ""
+        }
+      ],
+      "quiz": [
+        {
+          "q": "《氣候守衛者》的遊戲目標是？",
+          "options": [
+            "蓋最多的工廠",
+            "帶領河灣市在 2050 年前減碳 50%",
+            "賺最多錢",
+            "種一棵樹就過關"
+          ],
+          "answer": 1,
+          "explain": "六個角色要一起投票，達成 2050 年減碳 50%。"
+        },
+        {
+          "q": "IPCC 清單方法估算排放量的公式是？",
+          "options": [
+            "活動數據 × 排放係數",
+            "人口 ÷ 面積",
+            "氣溫 + 雨量",
+            "樹木數量 × 2"
+          ],
+          "answer": 0,
+          "explain": "這是課程計算減碳的核心公式。"
+        },
+        {
+          "q": "聯合國永續發展目標（SDGs）一共有幾項？",
+          "options": [
+            "7 項",
+            "10 項",
+            "25 項",
+            "17 項"
+          ],
+          "answer": 3,
+          "explain": "SDGs 共有 17 項目標。"
+        }
+      ],
+      "music": "audio/sdgs.mp3",
+      "status": "open",
+      "x": 12.86,
+      "z": 15.32,
+      "color": "#5CFFB0",
+      "seaName": "SDGs 多元選修"
+    },
+    {
+      "id": "games",
+      "sea": "sdgs",
+      "name": "綠色亞運提案島",
+      "en": "Green Games Isle",
+      "img": "img/games.webp",
+      "chief": {
+        "name": "競火",
+        "title": "聖火狐・提案評審",
+        "line": "好提案要說清楚：問題、解方、配套。"
+      },
+      "goal": "能用「問題—解方—配套」整理一份永續提案。",
+      "sections": [
+        {
+          "title": "六大提案",
+          "body": "六組同學針對綠色亞運提出解方與配套措施，整理成中英雙語。"
+        },
+        {
+          "title": "匿名投票",
+          "body": "每組發表後開放 90 秒匿名投票，大螢幕開票，還有匿名理由便利貼牆。"
+        },
+        {
+          "title": "成果展示",
+          "body": "高中生城市提案網站，把提案整理成一眼看懂的成果頁。"
+        }
+      ],
+      "resources": [
+        {
+          "label": "綠色亞運提案匿名投票",
+          "kind": "web",
+          "url": "https://chginali-gina.github.io/SDGs_Green-Asian-Games-Proposal-Votes/",
+          "desc": ""
+        },
+        {
+          "label": "綠色亞運六大提案：解方與配套",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/green-asian-games-six-proposals.pdf",
+          "desc": ""
+        },
+        {
+          "label": "綠色亞運工作坊學習單",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/sdgs-workshop-worksheets.pdf",
+          "desc": ""
+        },
+        {
+          "label": "SDGs 城市提案網站",
+          "kind": "web",
+          "url": "https://sdgs-city-proposal.vercel.app",
+          "desc": ""
+        }
+      ],
+      "quiz": [
+        {
+          "q": "一份完整的提案，除了解方，還要說明什麼？",
+          "options": [
+            "主辦人的星座",
+            "只要解方就夠",
+            "配套措施",
+            "越長越好"
+          ],
+          "answer": 2,
+          "explain": "六大提案都附上配套措施，說明解方怎麼落實。"
+        },
+        {
+          "q": "提案投票為什麼用匿名？",
+          "options": [
+            "讓每個人都能依自己的判斷投票",
+            "讓投票比較慢",
+            "方便老師點名",
+            "因為規定要記名"
+          ],
+          "answer": 0,
+          "explain": "匿名可以減少人情壓力。"
+        },
+        {
+          "q": "處理賽事資材的循環設計想法是？",
+          "options": [
+            "用完就丟",
+            "買之前就想好賽後去處",
+            "全部買新的",
+            "交給別人處理"
+          ],
+          "answer": 1,
+          "explain": "能租就不買，買了就先指定賽後去處。"
+        }
+      ],
+      "music": "audio/sdgs.mp3",
+      "status": "open",
+      "x": 19.7,
+      "z": 3.47,
+      "color": "#5CFFB0",
+      "seaName": "SDGs 多元選修"
+    },
+    {
+      "id": "portfolio",
+      "sea": "path",
+      "name": "課程學習成果島",
+      "en": "Portfolio Isle",
+      "img": "img/portfolio.webp",
+      "chief": {
+        "name": "憶匣",
+        "title": "記憶匣精靈・學檔管家",
+        "line": "成果不只是成品，還有你怎麼想、怎麼改。"
+      },
+      "goal": "能說出課程學習成果該呈現什麼，並完成上傳與認證。",
+      "sections": [
+        {
+          "title": "作伙做學檔",
+          "body": "整理自台大「作伙學」計畫的課程學習成果呈現指南。"
+        },
+        {
+          "title": "呈現過程，不只成品",
+          "body": "寫出你遇到什麼問題、怎麼調整、學到什麼。"
+        },
+        {
+          "title": "記得請老師認證",
+          "body": "課程學習成果上傳後，要由授課老師認證才算數。"
+        }
+      ],
+      "resources": [
+        {
+          "label": "作伙做學檔（學生版）",
+          "kind": "web",
+          "url": "https://chginali-gina.github.io/LearningPortofolio/",
+          "desc": "課程學習成果呈現指南。"
+        },
+        {
+          "label": "學檔鑑賞大會學習單",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/learning-portfolio-worksheet.pdf",
+          "desc": "小組評析優良課程學習成果。"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "「作伙做學檔」整理自哪個計畫？",
+          "options": [
+            "國外大學的考試",
+            "台大「作伙學」計畫",
+            "補習班講義",
+            "社群網站文章"
+          ],
+          "answer": 1,
+          "explain": "指南整理自台大「作伙學」計畫。"
+        },
+        {
+          "q": "好的課程學習成果應該呈現？",
+          "options": [
+            "只有最後的成品照片",
+            "越多頁越好",
+            "同學的作品",
+            "學習過程與反思"
+          ],
+          "answer": 3,
+          "explain": "大學想看你怎麼學、怎麼調整。"
+        },
+        {
+          "q": "課程學習成果上傳後，還需要？",
+          "options": [
+            "授課老師認證",
+            "家長簽名",
+            "同學按讚",
+            "什麼都不用"
+          ],
+          "answer": 0,
+          "explain": "課程學習成果要經授課老師認證。"
+        }
+      ],
+      "music": "audio/compass.mp3",
+      "status": "open",
+      "x": 17.32,
+      "z": -10.0,
+      "color": "#FFD27A",
+      "seaName": "學檔與升學輔導"
+    },
+    {
+      "id": "selfstudy",
+      "sea": "path",
+      "name": "自主學習島",
+      "en": "Self-Directed Isle",
+      "img": "img/selfstudy.webp",
+      "chief": {
+        "name": "探星",
+        "title": "星圖貓・探題嚮導",
+        "line": "好題目藏在生活裡。先觀察，再提問。"
+      },
+      "goal": "能從生活觀察找到題目，並寫出一份自主學習計畫書。",
+      "sections": [
+        {
+          "title": "從生活找題目",
+          "body": "選題羅盤一步步帶你把興趣縮小成可執行的題目。"
+        },
+        {
+          "title": "從選題到動手",
+          "body": "實作發想工坊幫你把興趣變成做得出來的作品；專題研究工具箱有文獻、問卷、訪談、結果解讀、研究倫理五個模組。"
+        },
+        {
+          "title": "計畫書範本",
+          "body": "「城市提案」和「假訊息偵探社」兩份範本，示範動機、目標、方法和時程怎麼寫。"
+        }
+      ],
+      "resources": [
+        {
+          "label": "自主學習選題羅盤",
+          "kind": "web",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pages/topic-compass.html",
+          "desc": ""
+        },
+        {
+          "label": "專題研究工具箱",
+          "kind": "web",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pages/research-toolbox.html",
+          "desc": ""
+        },
+        {
+          "label": "實作發想工坊",
+          "kind": "web",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pages/maker-workshop.html",
+          "desc": ""
+        },
+        {
+          "label": "城市提案｜自主學習計畫書範本",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/city-proposal-plan-template.pdf",
+          "desc": ""
+        },
+        {
+          "label": "假訊息偵探社｜自主學習計畫書範本",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/fake-news-detective-plan-template.pdf",
+          "desc": ""
+        }
+      ],
+      "quiz": [
+        {
+          "q": "找自主學習題目，建議從哪裡開始？",
+          "options": [
+            "隨便挑一個大題目",
+            "抄別人的題目",
+            "生活中的觀察",
+            "老師指定"
+          ],
+          "answer": 2,
+          "explain": "從日常觀察出發，比較容易找到自己真正想做的問題。"
+        },
+        {
+          "q": "一個好的研究問題應該？",
+          "options": [
+            "具體，能在學期內做完",
+            "越大越好",
+            "不需要資料",
+            "沒有答案也沒關係"
+          ],
+          "answer": 0,
+          "explain": "題目要具體、做得完，才能真的動手。"
+        },
+        {
+          "q": "自主學習計畫書通常要寫哪些內容？",
+          "options": [
+            "只寫題目",
+            "動機、目標、方法、時程",
+            "只寫心得",
+            "只放照片"
+          ],
+          "answer": 1,
+          "explain": "兩份範本都示範了這四個部分。"
+        }
+      ],
+      "music": "audio/compass.mp3",
+      "status": "open",
+      "x": 6.84,
+      "z": -18.79,
+      "color": "#FFD27A",
+      "seaName": "學檔與升學輔導"
+    },
+    {
+      "id": "pathways",
+      "sea": "path",
+      "name": "升學導航島",
+      "en": "Pathway Lighthouse",
+      "img": "img/pathways.webp",
+      "chief": {
+        "name": "北辰",
+        "title": "燈塔水獺・航線領航員",
+        "line": "先知道自己想去哪裡，路線就會清楚。"
+      },
+      "goal": "能認識心航小隊的 AI 隊友與使用前提，並找到一個照顧情緒的方法。",
+      "sections": [
+        {
+          "title": "心航小隊",
+          "body": "AI 隊友陪你聊生活、情緒與升學探索，有人陪你聊心情，有人幫你整理升學路線。"
+        },
+        {
+          "title": "使用前提",
+          "body": "要用自己的 API 金鑰，而且要滿 18 歲。未滿 18 歲，歡迎直接找輔導室老師聊。"
+        },
+        {
+          "title": "先照顧心情",
+          "body": "情緒調節工具箱用情緒紅綠燈自我檢測，再挑一個適合自己的調節策略。"
+        }
+      ],
+      "resources": [
+        {
+          "label": "心航小隊 Compass Crew",
+          "kind": "web",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/compass-crew.html",
+          "desc": "需自備 API 金鑰，限滿 18 歲。"
+        },
+        {
+          "label": "心航小隊產品企劃書",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/compass-crew-proposal.pdf",
+          "desc": ""
+        },
+        {
+          "label": "我的情緒調節工具箱",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/sel-emotion-toolbox.pdf",
+          "desc": "情緒紅綠燈與調節策略。"
+        }
+      ],
+      "quiz": [
+        {
+          "q": "使用心航小隊 API 版的條件是？",
+          "options": [
+            "任何人都可以免費用",
+            "要老師幫忙登入",
+            "已滿 18 歲並使用自己的金鑰",
+            "只要有 email"
+          ],
+          "answer": 2,
+          "explain": "API 版限滿 18 歲，未滿 18 歲請找輔導室老師。"
+        },
+        {
+          "q": "未滿 18 歲想聊升學或心情，建議？",
+          "options": [
+            "找輔導室老師",
+            "自己悶著",
+            "上網隨便問",
+            "等考完再說"
+          ],
+          "answer": 0,
+          "explain": "輔導室老師就是最好的隊友。"
+        },
+        {
+          "q": "情緒調節工具箱用什麼來自我檢測？",
+          "options": [
+            "身高體重",
+            "情緒紅綠燈",
+            "成績單",
+            "星座"
+          ],
+          "answer": 1,
+          "explain": "先用紅綠燈看懂自己的狀態，再挑策略。"
+        }
+      ],
+      "music": "audio/heart.mp3",
+      "status": "open",
+      "x": -6.84,
+      "z": -18.79,
+      "color": "#FFD27A",
+      "seaName": "學檔與升學輔導"
+    },
+    {
+      "id": "classlife",
+      "sea": "class",
+      "name": "班級活動島",
+      "en": "Class Festival Isle",
+      "img": "img/classlife.webp",
+      "chief": {
+        "name": "團團",
+        "title": "麻糬狸・活動長",
+        "line": "一起決定、一起動手，班級才是大家的。"
+      },
+      "goal": "能說出班級網站怎麼幫大家記錄好事、解決問題和辦活動。",
+      "sections": [
+        {
+          "title": "好事星探社",
+          "body": "學生自薦或互薦好事，老師審核給點，讓好行為被看見。"
+        },
+        {
+          "title": "班級 Debug 松",
+          "body": "仿市政 Debug 松：大家一起找班級問題、提案、追蹤修正。"
+        },
+        {
+          "title": "園遊會點餐",
+          "body": "菜單展示、試算與出示給櫃檯的點餐單，班級活動也能數位化。"
+        }
+      ],
+      "resources": [
+        {
+          "label": "好事星探社",
+          "kind": "web",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pages/star-points.html",
+          "desc": "公開版為示範資料。"
+        },
+        {
+          "label": "班級 Debug 松",
+          "kind": "web",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pages/class-debugthon.html",
+          "desc": "示範版。"
+        },
+        {
+          "label": "園遊會菜單與點餐",
+          "kind": "web",
+          "url": "https://class208-fair.vercel.app",
+          "desc": ""
+        }
+      ],
+      "quiz": [
+        {
+          "q": "好事星探社的點數怎麼來？",
+          "options": [
+            "自己隨便加",
+            "自薦或互薦好事，老師審核給點",
+            "考試考高分",
+            "抽籤"
+          ],
+          "answer": 1,
+          "explain": "提名後由老師審核，點數才算數。"
+        },
+        {
+          "q": "班級 Debug 松的做法是？",
+          "options": [
+            "老師一個人決定",
+            "只抱怨不提案",
+            "大家一起找問題、提案、追蹤修正",
+            "交給學校處理"
+          ],
+          "answer": 2,
+          "explain": "跟市政 Debug 松一樣，找到問題還要追蹤到修好。"
+        },
+        {
+          "q": "園遊會點餐網站可以做到？",
+          "options": [
+            "菜單試算和出示點餐單",
+            "自動煮飯",
+            "收學費",
+            "替大家寫作業"
+          ],
+          "answer": 0,
+          "explain": "網站有菜單、試算和給櫃檯看的點餐單。"
+        }
+      ],
+      "music": "audio/class.mp3",
+      "status": "open",
+      "x": -19.7,
+      "z": 3.47,
+      "color": "#FF6FCF",
+      "seaName": "班級經營"
+    },
+    {
+      "id": "toolkit",
+      "sea": "tool",
+      "name": "工具港",
+      "en": "Toolkit Forge",
+      "img": "img/toolkit.webp",
+      "chief": {
+        "name": "齒輪",
+        "title": "機械松鼠・港務長",
+        "line": "工具準備好，備課就完成一半。"
+      },
+      "goal": "能把課程計畫做成課程地圖，並用 AI 建立單字題庫。",
+      "sections": [
+        {
+          "title": "課程地圖工作坊",
+          "body": "把課程計畫 PDF 用 AI 做成可點選的課程地圖：流程、提示詞與範例。"
+        },
+        {
+          "title": "2D 與 3D 範本",
+          "body": "課程地圖範本是 2D 成品，課程群島 3D 是立體版範例，可以直接改成自己的課。"
+        },
+        {
+          "title": "AI 單字題庫",
+          "body": "用試算表＋AI 建單字題庫，每次隨機出不同考卷。"
+        }
+      ],
+      "resources": [
+        {
+          "label": "課程地圖工作坊",
+          "kind": "web",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pages/course-map-workshop.html",
+          "desc": ""
+        },
+        {
+          "label": "課程地圖範本",
+          "kind": "web",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pages/course-map-template.html",
+          "desc": ""
+        },
+        {
+          "label": "課程群島 3D",
+          "kind": "web",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pages/course-islands-3d.html",
+          "desc": ""
+        },
+        {
+          "label": "AI 單字題庫與隨機出題操作手冊",
+          "kind": "pdf",
+          "url": "https://chginali-gina.github.io/GSAT-Coach/island/pdf/ai-vocab-bank-manual.pdf",
+          "desc": ""
+        }
+      ],
+      "quiz": [
+        {
+          "q": "GitHub Pages 網站的網址格式是？",
+          "options": [
+            "帳號.github.io/儲存庫名稱",
+            "github.com/設定",
+            "www.帳號.com",
+            "隨機亂碼"
+          ],
+          "answer": 0,
+          "explain": "例如 chginali-gina.github.io/GSAT-Coach。"
+        },
+        {
+          "q": "課程地圖工作坊用 AI 把什麼變成可點選的地圖？",
+          "options": [
+            "學生名單",
+            "課程計畫 PDF",
+            "成績單",
+            "課表照片"
+          ],
+          "answer": 1,
+          "explain": "上傳課程計畫，AI 幫你拆成地圖。"
+        },
+        {
+          "q": "網頁上線前，最重要的最後一步是？",
+          "options": [
+            "刪掉備份",
+            "改成英文",
+            "關掉網路",
+            "用手機實際打開檢查一次"
+          ],
+          "answer": 3,
+          "explain": "學生大多用手機看，上線前一定要用手機測。"
+        }
+      ],
+      "music": "audio/teacher.mp3",
+      "status": "open",
+      "x": -12.86,
+      "z": 15.32,
+      "color": "#FF9F5A",
+      "seaName": "教師工具"
+    },
+    {
+      "id": "nopq",
+      "sea": "path",
+      "name": "學習歷程自述島",
+      "en": "Portfolio Story Isle",
+      "img": "img/nopq.webp",
+      "chief": {
+        "name": "島主招募中",
+        "title": "這座島還在建設",
+        "line": "N、O、P、Q 四棟建築正在施工，完成後會在這裡開放。"
+      },
+      "goal": "（建設中）",
+      "sections": [
+        {
+          "title": "N 多元表現綜整心得",
+          "body": "建設中，之後補上範本與引導頁。"
+        },
+        {
+          "title": "O 學習歷程反思",
+          "body": "建設中。"
+        },
+        {
+          "title": "P 就讀動機",
+          "body": "建設中。"
+        },
+        {
+          "title": "Q 未來學習計畫與生涯規劃",
+          "body": "建設中。"
+        }
+      ],
+      "resources": [],
+      "quiz": [],
+      "music": "audio/compass.mp3",
+      "status": "hold",
+      "x": -17.32,
+      "z": -10.0,
+      "color": "#FFD27A",
+      "seaName": "學檔與升學輔導"
+    }
+  ]
+}

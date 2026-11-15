@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Gina 的教學群島 3D</title>
+  <meta name="description" content="Gina教室的AI奇蹟：動漫奇幻 3D 教學群島，收錄學測、英文課、SDGs、學檔與班級經營教材。">
+  <link rel="stylesheet" href="style.css">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="stage" aria-hidden="true"></div>
+
+  <header id="hud">
+    <div class="brand">Gina 的教學群島<small>Teaching Archipelago</small></div>
+    <div class="hud-btns">
+      <span id="stamps" class="chip">🏅 0 / 0</span>
+      <button id="listBtn" class="chip" type="button">☰ 島嶼</button>
+      <button id="musicBtn" class="chip" type="button" aria-pressed="false">♪ 關</button>
+    </div>
+  </header>
+  <p id="hint">拖曳旋轉・捏合縮放・點一座島登島</p>
+
+  <!-- 開場 -->
+  <section id="intro" class="overlay">
+    <div class="intro-card">
+      <img src="img/witch.webp" alt="符文魔女露娜" class="intro-witch">
+      <div class="intro-text">
+        <p class="eyebrow">Gina教室的AI奇蹟</p>
+        <h1>教學群島</h1>
+        <p>我是符文魔女<b>露娜</b>，這片浮空群島的嚮導。每座島都有一位島主、一份教材和三題隨堂測驗，集滿島章就能領證書。</p>
+        <label for="nameInput">旅人的名字</label>
+        <input id="nameInput" maxlength="12" placeholder="輸入暱稱（只存在這台裝置）" autocomplete="off">
+        <button id="startBtn" type="button">奏起樂章，啟航</button>
+        <p class="small">按下後會播放配樂，可隨時在右上角關閉。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 島嶼面板 -->
+  <section id="panel" hidden aria-live="polite">
+    <button id="closeBtn" type="button" aria-label="關閉">✕</button>
+    <div id="panelBody"></div>
+  </section>
+
+  <!-- 島嶼清單 -->
+  <section id="drawer" hidden>
+    <div class="drawer-head"><h2>島嶼清單</h2><button id="drawerClose" type="button" aria-label="關閉">✕</button></div>
+    <div id="drawerBody"></div>
+  </section>
+
+  <div id="toast" role="status"></div>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
