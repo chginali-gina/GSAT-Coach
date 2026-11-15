@@ -96,7 +96,47 @@ button { font-family: inherit; cursor: pointer; }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 
 @media (max-width: 480px) {
-  .brand { font-size: 14px; }
-  .brand small { display: none; }
+  .brand { display: none; }
   .chip { padding: 6px 10px; font-size: 13px; }
 }
+
+/* 選角色 */
+.select-card { width: min(720px, 100%); background: var(--panel); border: 1px solid var(--line); border-radius: 20px; padding: 22px; box-shadow: 0 0 40px rgba(62, 240, 255, .2); }
+.select-card h1 { margin: 4px 0 6px; font-size: 30px; background: linear-gradient(90deg, var(--cyan), var(--pink)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.lead { margin: 0 0 12px; color: var(--dim); }
+.char-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+.char { position: relative; aspect-ratio: 3 / 4; border-radius: 14px; border: 2px solid rgba(255, 255, 255, .15); background: radial-gradient(circle at 50% 30%, rgba(180, 140, 255, .35), rgba(20, 12, 60, .9)); padding: 0; overflow: hidden; color: #fff; }
+.char img { position: absolute; inset: 6% 4% 18%; width: 92%; height: 76%; object-fit: contain; }
+.char .nm { position: absolute; left: 0; right: 0; bottom: 6px; font-size: 13px; font-weight: 700; text-align: center; }
+.char.on { border-color: var(--cyan); box-shadow: 0 0 18px rgba(62, 240, 255, .6); }
+.char.locked { cursor: not-allowed; }
+.char.locked .sil { position: absolute; inset: 14% 24% 24%; border-radius: 50% 50% 18% 18%; background: rgba(0, 0, 0, .55); box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .12); }
+.char.locked .lock { position: absolute; top: 40%; left: 0; right: 0; text-align: center; font-size: 12px; color: var(--dim); }
+.char-info { min-height: 48px; margin: 12px 0 4px; padding: 10px 12px; border-radius: 12px; background: rgba(255, 255, 255, .05); line-height: 1.6; }
+.char-info b { color: var(--gold); }
+@media (max-width: 560px) { .char-grid { grid-template-columns: repeat(3, 1fr); } .select-card h1 { font-size: 24px; } }
+
+/* 搖桿 */
+#joy { position: fixed; left: 22px; bottom: calc(26px + env(safe-area-inset-bottom)); width: 120px; height: 120px; border-radius: 50%; background: rgba(20, 14, 60, .45); border: 2px solid rgba(62, 240, 255, .5); z-index: 6; display: none; touch-action: none; }
+#joyKnob { position: absolute; left: 35px; top: 35px; width: 50px; height: 50px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fff, var(--cyan)); box-shadow: 0 0 16px rgba(62, 240, 255, .8); }
+@media (pointer: coarse) { #joy { display: block; } #hint { bottom: calc(160px + env(safe-area-inset-bottom)); } }
+body.panel-open #joy { display: none; }
+#flash { position: fixed; inset: 0; background: radial-gradient(circle, rgba(255, 255, 255, .95), rgba(62, 240, 255, .5) 40%, transparent 70%); opacity: 0; pointer-events: none; z-index: 9; transition: opacity .35s; }
+#flash.on { opacity: 1; }
+.isle-hero { position: relative; height: 150px; margin: -4px 44px 4px 0; border-radius: 16px; background: radial-gradient(ellipse at 50% 80%, rgba(62, 240, 255, .25), transparent 70%); }
+.isle-hero .h-isle { position: absolute; left: 50%; top: 0; height: 150px; transform: translateX(-50%); filter: drop-shadow(0 0 12px var(--c, var(--cyan))); }
+.isle-hero .h-char { position: absolute; left: calc(50% + 70px); bottom: 0; height: 96px; filter: drop-shadow(0 4px 6px rgba(0, 0, 0, .5)); }
+
+.quest { position: fixed; top: calc(max(10px, env(safe-area-inset-top)) + 46px); right: 12px; z-index: 5; display: flex; align-items: center; gap: 8px; max-width: min(320px, 70vw); background: rgba(20, 14, 60, .78); border: 1px solid var(--gold); border-radius: 12px; padding: 7px 12px; font-size: 14px; backdrop-filter: blur(6px); }
+.quest b { color: var(--gold); flex: none; }
+#questText { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#questArrow { flex: none; color: var(--cyan); font-size: 18px; transition: transform .15s; display: inline-block; }
+#minimap { position: fixed; left: 12px; top: calc(max(10px, env(safe-area-inset-top)) + 46px); width: 120px; height: 120px; z-index: 5; border-radius: 50%; border: 2px solid var(--line); background: rgba(10, 8, 40, .7); }
+#talk { position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom)); transform: translateX(-50%); width: min(560px, 92vw); z-index: 7; background: var(--panel); border: 2px solid var(--gold); border-radius: 16px; padding: 12px 14px 12px; box-shadow: 0 0 30px rgba(255, 210, 122, .25); }
+#talk[hidden] { display: none; }
+.talk-name { display: inline-block; margin-top: -26px; margin-bottom: 4px; padding: 3px 12px; border-radius: 999px; background: var(--gold); color: #2a1600; font-weight: 800; font-size: 14px; }
+#talkText { line-height: 1.7; min-height: 3.2em; }
+#talkGo { margin-top: 8px; float: right; padding: 8px 16px; border-radius: 999px; border: 0; font-weight: 700; color: #10052a; background: linear-gradient(90deg, var(--cyan), var(--pink)); }
+@media (pointer: coarse) { #talk { bottom: calc(160px + env(safe-area-inset-bottom)); } }
+@media (max-width: 480px) { #minimap { width: 92px; height: 92px; } .quest { font-size: 13px; } }
+body.panel-open #talk, body.panel-open #quest { display: none; }

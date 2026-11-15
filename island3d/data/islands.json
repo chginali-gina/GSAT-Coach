@@ -9,9 +9,9 @@
     "img": "img/plaza.webp",
     "status": "center",
     "chief": {
-      "name": "露娜",
-      "title": "符文魔女・群島嚮導",
-      "line": "歡迎來到教學群島！點一座島，我陪你讀教材、開資源、做測驗，集滿島章就能領證書。"
+      "name": "星語",
+      "title": "星港守護者・群島領航員",
+      "line": "歡迎來到教學群島！走進任何一座島的傳送陣，就能登島讀教材、開資源、做測驗，集滿島章就能領證書。"
     },
     "goal": "",
     "sections": [
@@ -21,7 +21,7 @@
       },
       {
         "title": "怎麼玩",
-        "body": "每座開放的島都有三步：讀教材、打開一項資源、做隨堂測驗（答對 2 題以上）。三步都完成就會蓋上島章。建設中的島不用蓋章。"
+        "body": "選好角色後，用方向鍵、WASD 或左下角搖桿走路，也可以直接點地面或點島，角色會自己走過去。走進島前方發光的傳送陣就會登島。每座島有三步：讀教材、打開一項資源、做隨堂測驗（答對 2 題以上），完成就蓋上島章。建設中的島不用蓋章。"
       },
       {
         "title": "證書",
@@ -143,8 +143,8 @@
       ],
       "music": "audio/exam.mp3",
       "status": "open",
-      "x": 3.25,
-      "z": 10.51,
+      "x": 3.84,
+      "z": 12.42,
       "color": "#3EF0FF",
       "seaName": "學測英文"
     },
@@ -249,8 +249,8 @@
       ],
       "music": "audio/exam.mp3",
       "status": "open",
-      "x": 10.73,
-      "z": 2.44,
+      "x": 12.68,
+      "z": 2.88,
       "color": "#3EF0FF",
       "seaName": "學測英文"
     },
@@ -337,8 +337,8 @@
       ],
       "music": "audio/voice.mp3",
       "status": "open",
-      "x": 7.48,
-      "z": -8.07,
+      "x": 8.83,
+      "z": -9.54,
       "color": "#3EF0FF",
       "seaName": "學測英文"
     },
@@ -437,8 +437,8 @@
       ],
       "music": "audio/exam.mp3",
       "status": "open",
-      "x": -3.25,
-      "z": -10.51,
+      "x": -3.84,
+      "z": -12.42,
       "color": "#3EF0FF",
       "seaName": "學測英文"
     },
@@ -573,8 +573,8 @@
       ],
       "music": "audio/story.mp3",
       "status": "open",
-      "x": -10.73,
-      "z": -2.44,
+      "x": -12.68,
+      "z": -2.88,
       "color": "#B48CFF",
       "seaName": "英文課程"
     },
@@ -697,8 +697,8 @@
       ],
       "music": "audio/story.mp3",
       "status": "open",
-      "x": -7.48,
-      "z": 8.07,
+      "x": -8.83,
+      "z": 9.54,
       "color": "#B48CFF",
       "seaName": "英文課程"
     },
@@ -780,7 +780,7 @@
       "music": "audio/voice.mp3",
       "status": "open",
       "x": 0.0,
-      "z": 20.0,
+      "z": 24.0,
       "color": "#B48CFF",
       "seaName": "英文課程"
     },
@@ -879,8 +879,8 @@
       ],
       "music": "audio/sdgs.mp3",
       "status": "open",
-      "x": 12.86,
-      "z": 15.32,
+      "x": 15.43,
+      "z": 18.39,
       "color": "#5CFFB0",
       "seaName": "SDGs 多元選修"
     },
@@ -973,8 +973,8 @@
       ],
       "music": "audio/sdgs.mp3",
       "status": "open",
-      "x": 19.7,
-      "z": 3.47,
+      "x": 23.64,
+      "z": 4.17,
       "color": "#5CFFB0",
       "seaName": "SDGs 多元選修"
     },
@@ -1055,8 +1055,8 @@
       ],
       "music": "audio/compass.mp3",
       "status": "open",
-      "x": 17.32,
-      "z": -10.0,
+      "x": 20.78,
+      "z": -12.0,
       "color": "#FFD27A",
       "seaName": "學檔與升學輔導"
     },
@@ -1155,8 +1155,8 @@
       ],
       "music": "audio/compass.mp3",
       "status": "open",
-      "x": 6.84,
-      "z": -18.79,
+      "x": 8.21,
+      "z": -22.55,
       "color": "#FFD27A",
       "seaName": "學檔與升學輔導"
     },
@@ -1243,8 +1243,8 @@
       ],
       "music": "audio/heart.mp3",
       "status": "open",
-      "x": -6.84,
-      "z": -18.79,
+      "x": -8.21,
+      "z": -22.55,
       "color": "#FFD27A",
       "seaName": "學檔與升學輔導"
     },
@@ -1331,8 +1331,8 @@
       ],
       "music": "audio/class.mp3",
       "status": "open",
-      "x": -19.7,
-      "z": 3.47,
+      "x": -23.64,
+      "z": 4.17,
       "color": "#FF6FCF",
       "seaName": "班級經營"
     },
@@ -1425,8 +1425,8 @@
       ],
       "music": "audio/teacher.mp3",
       "status": "open",
-      "x": -12.86,
-      "z": 15.32,
+      "x": -15.43,
+      "z": 18.39,
       "color": "#FF9F5A",
       "seaName": "教師工具"
     },
@@ -1464,10 +1464,56 @@
       "quiz": [],
       "music": "audio/compass.mp3",
       "status": "hold",
-      "x": -17.32,
-      "z": -10.0,
+      "x": -20.78,
+      "z": -12.0,
       "color": "#FFD27A",
       "seaName": "學檔與升學輔導"
+    }
+  ],
+  "characters": [
+    {
+      "id": "luna",
+      "name": "露娜",
+      "role": "符文魔女",
+      "line": "每個單字都是一句咒語。",
+      "walk": "img/witch-walk.webp",
+      "badge": "img/witch-badge.webp",
+      "locked": false
+    },
+    {
+      "id": "kai",
+      "name": "凱",
+      "role": "星旅劍士",
+      "line": "先衝再說，劍會幫我找路。",
+      "locked": true
+    },
+    {
+      "id": "nova",
+      "name": "諾瓦",
+      "role": "機甲少女",
+      "line": "系統連線完成，任務開始。",
+      "locked": true
+    },
+    {
+      "id": "ren",
+      "name": "蓮",
+      "role": "森語弓手",
+      "line": "安靜看一下，答案常在細節裡。",
+      "locked": true
+    },
+    {
+      "id": "zed",
+      "name": "澤德",
+      "role": "霓虹駭客",
+      "line": "給我一個問題，我拆給你看。",
+      "locked": true
+    },
+    {
+      "id": "mio",
+      "name": "澪",
+      "role": "月光吟遊",
+      "line": "把學到的事唱成故事，就忘不了。",
+      "locked": true
     }
   ]
 }
