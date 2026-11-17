@@ -264,6 +264,60 @@ table.cmp td:first-child{font-weight:800;color:var(--verm-d)}
 .miss li small{display:block;color:var(--soft);font-weight:700}
 .sync{display:flex;align-items:center;gap:8px;font-size:.86rem;font-weight:700;padding:10px 12px;border-radius:12px;margin-top:10px;text-align:left}
 .sync.ok{background:var(--jade-t);color:var(--jade)} .sync.wait{background:var(--gold-t);color:#78350f} .sync.off{background:#f5f5f4;color:var(--soft)}
+
+/* procession */
+.drawer.wide{width:min(100vw,620px)}
+.pg-wrap{display:grid;gap:12px}
+.pg-stage{position:relative;border-radius:14px;overflow:hidden;border:2px solid var(--gold);background:#1c1917}
+.pg-svg{display:block;width:100%;height:auto}
+.pg-num{position:absolute;right:8px;top:8px;background:rgba(28,25,23,.75);color:var(--gold-t);font-weight:900;font-size:.75rem;border-radius:999px;padding:1px 9px}
+.pg-cap h3{color:var(--verm-d);font-size:1.15rem}
+.pg-cap p{margin:4px 0 0}
+.pg-words{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.pg-dots{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.pg-dots button{width:34px;height:34px;border-radius:50%;border:2px solid var(--gold);background:#fff;font-weight:900;cursor:pointer;color:var(--verm-d)}
+.pg-dots button.seen{background:var(--parch2)}
+.pg-dots button.on{background:var(--verm);color:var(--gold-t);border-color:var(--gold-b)}
+.pg-ctrl{display:grid;grid-template-columns:56px 1fr 56px;gap:8px}
+.pg-ctrl .btn{padding:8px}
+.pgcard{display:flex;gap:12px;align-items:center;width:100%;text-align:left;cursor:pointer;background:linear-gradient(120deg,#7f1d1d,#b45309);color:var(--gold-t);border:2px solid var(--gold-b);border-radius:var(--radius);padding:12px 14px;margin:14px 0;box-shadow:var(--shadow);font:inherit}
+.pgcard b{display:block;font-size:1.02rem}
+.pgcard small{opacity:.85;display:block;line-height:1.5}
+.pgcard .pl{margin-left:auto;width:44px;height:44px;border-radius:50%;background:var(--gold-b);color:#7f1d1d;display:grid;place-items:center;flex:none}
+.pgmini{display:inline-flex;align-items:center;gap:6px;min-height:40px;margin-top:10px;padding:0 14px;border-radius:999px;border:1.5px solid var(--gold-b);background:rgba(251,191,36,.15);color:var(--gold-t);font-weight:800;cursor:pointer;font-size:.86rem}
+@keyframes pgbob{50%{transform:translateY(-3px)}}
+.pg-bob{animation:pgbob .5s ease-in-out infinite}
+@keyframes pgwalkin{from{transform:translate(20px,160px)}to{transform:translate(205px,160px)}}
+.pg-walk-in{animation:pgwalkin 5s ease-out forwards}
+@keyframes pgpass{from{transform:translate(-80px,150px)}to{transform:translate(440px,150px)}}
+.pg-pass{animation:pgpass 7s linear infinite}
+@keyframes pgwander{0%{transform:translate(40px,150px)}25%{transform:translate(140px,140px)}50%{transform:translate(90px,152px)}75%{transform:translate(240px,142px)}100%{transform:translate(320px,150px)}}
+.pg-wander{animation:pgwander 7s ease-in-out infinite alternate}
+@keyframes pghome{from{transform:translate(-60px,150px)}to{transform:translate(150px,150px)}}
+.pg-walk-home{animation:pghome 5s ease-out forwards}
+@keyframes pgwalkslow{from{transform:translateX(120px)}to{transform:translateX(-10px)}}
+.pg-walk-slow{animation:pgwalkslow 6s ease-in-out infinite alternate}
+@keyframes pgburst{0%{transform:scale(0);opacity:0}20%{opacity:1}60%{transform:scale(1.2);opacity:1}100%{transform:scale(1.5);opacity:0}}
+.pg-burst{transform-box:fill-box;transform-origin:center;animation:pgburst 1.5s ease-out infinite}
+@keyframes pgtoss{0%,100%{transform:translateY(0) rotate(0)}40%{transform:translateY(-55px) rotate(200deg)}70%{transform:translateY(38px) rotate(360deg)}85%{transform:translateY(34px) rotate(370deg)}}
+.pg-toss{transform-box:fill-box;transform-origin:center;animation:pgtoss 2.6s ease-in-out infinite}
+@keyframes pgpop{0%,30%{opacity:0;transform:scale(.6)}45%,90%{opacity:1;transform:scale(1)}100%{opacity:0}}
+.pg-pop{transform-box:fill-box;transform-origin:center;animation:pgpop 3s ease-in-out infinite}
+@keyframes pgsway{50%{transform:rotate(6deg)}}
+.pg-sway{transform-box:fill-box;transform-origin:top;animation:pgsway 2.4s ease-in-out infinite}
+@keyframes pgsteam{0%{opacity:0;transform:translateY(4px)}50%{opacity:1}100%{opacity:0;transform:translateY(-6px)}}
+.pg-steam{animation:pgsteam 2s ease-in-out infinite}
+@keyframes pghand{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,-6px)}}
+.pg-hand{animation:pghand 3s ease-in-out infinite}
+@keyframes pgcheer{50%{transform:translateY(-6px)}}
+.pg-cheer{animation:pgcheer .7s ease-in-out infinite}
+@keyframes pgdash{to{stroke-dashoffset:-48}}
+.pg-dash{animation:pgdash 1.2s linear infinite}
+@keyframes pgpulse{50%{opacity:.2}}
+.pg-pulse{animation:pgpulse 1s ease-in-out infinite}
+@keyframes pgspin{to{transform:rotate(360deg)}}
+.pg-spin{transform-box:fill-box;transform-origin:center;animation:pgspin 3s linear infinite}
+@media (prefers-reduced-motion:reduce){.pg-svg *{animation:none!important}.pg-walk-in{transform:translate(205px,160px)}.pg-pass,.pg-wander,.pg-walk-home{transform:translate(150px,150px)}}
 footer{text-align:center;color:rgba(254,243,199,.7);font-size:.78rem;margin:26px 0 0;line-height:1.7}
 footer b{color:var(--gold-b)}
 .muted{color:var(--soft)}
@@ -635,6 +689,98 @@ function amulet(n,size=64,off){const a=ACTS[n-1];return `<svg width="${size}" he
  <svg x="14" y="20" width="36" height="36" ${off?'opacity=".4"':''}><use href="#${a.emb}"/></svg>
  <text x="32" y="70" text-anchor="middle" font-size="10" font-weight="900" fill="${off?'#d6d3d1':'#fde68a'}" font-family="Cinzel">ACT ${n}</text></svg>`;}
 
+/* ---------------- 繞境動畫 Procession Player ---------------- */
+const PG_STAGES=[
+ {k:'oracle',t:['元宵擲筊','Lantern Festival Oracle'],c:['元宵節晚上，廟方在鎮瀾宮擲筊請示媽祖，決定今年出發的確切日期和時辰。','On the night of the Lantern Festival, temple authorities cast moon blocks at Zhenlan Temple to ask Mazu for the exact departure time.'],w:['cast','authorities','lunar calendar']},
+ {k:'depart',t:['起駕出發','Departure'],c:['農曆三月、媽祖生日前後，媽祖神轎從大甲鎮瀾宮出發，鞭炮和鑼鼓聲劃破天空。','Around Mazu’s birthday in the third lunar month, her sedan chair leaves Dajia’s Zhenlan Temple as firecrackers and drums pierce the air.'],w:['emerge','explosive','pierce']},
+ {k:'kneel',t:['跪地祈福','Kneeling for Blessings'],c:['信徒跪在路面上，等神轎從身邊經過，祈求媽祖保佑。','Believers kneel on the pavement as the sedan chair passes, hoping for Mazu’s blessing.'],w:['kneel','pavement','blessing']},
+ {k:'host',t:['沿途款待','Roadside Hospitality'],c:['沿路居民免費提供食物、飲水、盥洗設施和住宿，展現台灣的人情味。','Along the way, locals offer free food, water, washing facilities and places to stay.'],w:['hospitality','facilities','accommodations']},
+ {k:'route',t:['九天八夜','Nine Days, Eight Nights'],c:['隊伍徒步約 300 公里，從台中大甲走到嘉義新港奉天宮，再回到大甲，全程九天八夜。','The procession walks about 300 km from Dajia to Fengtian Temple in Xingang and back, over nine days and eight nights.'],w:['pilgrimage','devotion']},
+ {k:'baishatun',t:['對照：白沙屯','Compare: Baishatun'],c:['白沙屯媽祖坐粉紅色神轎，從苗栗拱天宮到北港朝天宮，路線和天數都不固定，由媽祖決定。','Baishatun Mazu rides a pink sedan chair from Miaoli to Beigang. There is no fixed route or duration: Mazu decides.'],w:['unify']},
+ {k:'return',t:['回鑾與傳承','Return & Heritage'],c:['媽祖回到鎮瀾宮，信眾歡迎。這項儀式已被指定為重要民俗，是台灣活的文化遺產。','Mazu returns to Zhenlan Temple to cheering crowds. The ritual has been designated an important folk custom: living heritage.'],w:['designate','heritage','ritual']},
+ {k:'eco',t:['未來：綠色進香','Future: Eco-Pilgrimage'],c:['怎麼兼顧傳統與環境？例如用電子鞭炮音效、可重複使用的碗筷，同時保留虔誠與熱情。','How can tradition and the environment both win? For example, digital firecracker sounds and reusable bowls, keeping the devotion and hospitality.'],w:['devotion','hospitality']}
+];
+const PG_FOR_ACT={1:0,2:4,3:1,4:6,5:7};
+let pgIdx=0,pgPlay=false,pgTimer=null,pgDay=null;
+
+function pgPerson(x,y,shirt,s=1,extra=''){return `<g transform="translate(${x} ${y}) scale(${s})"><circle cx="0" cy="-22" r="6" fill="#f5c9a8"/><path d="M-6 -27 Q0 -32 6 -27 Q4 -29 0 -29 Q-4 -29 -6 -27z" fill="#2b1d16"/><rect x="-6" y="-15" width="12" height="16" rx="5" fill="${shirt}"/><rect x="-5" y="0" width="4" height="10" rx="2" fill="#44403c"/><rect x="1" y="0" width="4" height="10" rx="2" fill="#44403c"/>${extra}</g>`;}
+function pgKneel(x,y,shirt){return `<g transform="translate(${x} ${y})"><circle cx="4" cy="-12" r="5.5" fill="#f5c9a8"/><path d="M-1 -16 Q4 -21 9 -16 Q5 -18 4 -18 Q1 -18 -1 -16z" fill="#2b1d16"/><path d="M-8 -6 Q0 -10 6 -6 L4 4 L-10 4z" fill="${shirt}"/><rect x="-12" y="2" width="14" height="4" rx="2" fill="#44403c"/><path d="M8 -6 L14 -2" stroke="#f5c9a8" stroke-width="3" stroke-linecap="round"/></g>`;}
+function pgSedan(x,y,pink){const roof=pink?'#f9a8d4':'#f59e0b',body=pink?'#ec4899':'#b91c1c',trim=pink?'#9d174d':'#7f1d1d';
+ return `<g transform="translate(${x} ${y})"><path d="M-30 -40 Q0 -62 30 -40z" fill="${roof}" stroke="${trim}" stroke-width="1.5"/><circle cx="0" cy="-58" r="4" fill="#fde047"/>
+  <rect x="-24" y="-40" width="48" height="34" rx="3" fill="${body}" stroke="${trim}" stroke-width="1.5"/><rect x="-16" y="-34" width="32" height="22" fill="#fef3c7" stroke="#d97706"/>
+  <svg x="-12" y="-34" width="24" height="24"><use href="#icon-mazu"/></svg>
+  <line x1="-30" y1="-40" x2="-30" y2="-26" stroke="#dc2626" stroke-width="2"/><line x1="30" y1="-40" x2="30" y2="-26" stroke="#dc2626" stroke-width="2"/>
+  <rect x="-58" y="-6" width="116" height="4" rx="2" fill="#92400e"/></g>`;}
+function pgBearers(pink){return `<g class="pg-bob">${pgPerson(-46,22,'#7f1d1d',.9)}${pgPerson(-16,22,'#991b1b',.9)}${pgPerson(16,22,'#7f1d1d',.9)}${pgPerson(46,22,'#991b1b',.9)}</g>${pgSedan(0,8,pink)}`;}
+function pgBurst(x,y,d){return `<g transform="translate(${x} ${y})"><g class="pg-burst" style="animation-delay:${d}s">${[0,45,90,135,180,225,270,315].map(a=>`<line x1="0" y1="0" x2="${Math.cos(a*Math.PI/180)*16}" y2="${Math.sin(a*Math.PI/180)*16}" stroke="${a%90?'#fde047':'#f97316'}" stroke-width="3" stroke-linecap="round"/>`).join('')}<circle r="5" fill="#fff7ed"/></g></g>`;}
+function pgSky(night){return `<defs><linearGradient id="pgsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${night?'#1e1b4b':'#fde68a'}"/><stop offset="1" stop-color="${night?'#7f1d1d':'#fca5a5'}"/></linearGradient></defs><rect width="360" height="220" fill="url(#pgsky)"/>`;}
+function pgLanterns(){return [30,100,260,330].map((x,i)=>`<g transform="translate(${x} ${16+(i%2)*6})" class="pg-sway" style="animation-delay:${i*.3}s"><line x1="0" y1="-16" x2="0" y2="0" stroke="#78350f" stroke-width="1.5"/><ellipse cx="0" cy="10" rx="9" ry="11" fill="#dc2626" stroke="#7f1d1d"/><rect x="-5" y="-1" width="10" height="3" fill="#fbbf24"/></g>`).join('');}
+function pgTemple(x,y,s=1,label){return `<g transform="translate(${x} ${y}) scale(${s})"><path d="M-60 -50 Q-30 -46 0 -66 Q30 -46 60 -50 Q44 -38 0 -42 Q-44 -38 -60 -50z" fill="#d97706" stroke="#78350f" stroke-width="1.5"/><circle cx="0" cy="-68" r="4" fill="#fde047"/>
+ <rect x="-48" y="-40" width="96" height="40" fill="#7f1d1d"/><rect x="-14" y="-28" width="28" height="28" rx="12" fill="#fbbf24"/>${[-40,-26,26,40].map(px=>`<rect x="${px-2}" y="-40" width="4" height="40" fill="#dc2626"/>`).join('')}
+ ${label?`<rect x="-34" y="6" width="68" height="16" rx="4" fill="#1c1917" opacity=".75"/><text y="18" text-anchor="middle" font-size="10" font-weight="800" fill="#fef3c7" font-family="Inter">${label}</text>`:''}</g>`;}
+
+function pgScene(i){const k=PG_STAGES[i].k;let b='';
+ if(k==='oracle'){b=pgSky(true)+`<circle cx="300" cy="44" r="18" fill="#fef9c3"/>`+pgLanterns()+`<rect y="176" width="360" height="44" fill="#292524"/>`+pgTemple(110,176,1.05,'ZHENLAN TEMPLE')
+  +pgPerson(230,170,'#b45309',1.1)+`<g transform="translate(262 120)"><g class="pg-toss"><path d="M-12 -8 C-16 4 -10 14 0 16 C-4 8 -4 -2 0 -8z" fill="#dc2626" stroke="#7f1d1d" stroke-width="1.5"/></g></g>
+  <g transform="translate(282 126)"><g class="pg-toss" style="animation-delay:.15s"><path d="M10 -8 C16 2 12 14 2 16 C6 8 6 -2 2 -8z" fill="#b91c1c" stroke="#7f1d1d" stroke-width="1.5"/></g></g>
+  <g class="pg-pop"><rect x="214" y="72" width="128" height="26" rx="13" fill="#fef3c7" stroke="#d97706"/><text x="278" y="89" text-anchor="middle" font-size="11" font-weight="800" fill="#7f1d1d" font-family="Inter">Schedule decided!</text></g>`;}
+ if(k==='depart'){b=pgSky(false)+pgLanterns()+`<rect y="176" width="360" height="44" fill="#a8a29e"/><rect y="196" width="360" height="3" fill="#e7e5e4"/>`+pgTemple(70,176,.95,'DAJIA')
+  +`<g class="pg-walk-in">${pgBearers(false)}</g>`.replace('<g class="pg-walk-in">','<g class="pg-walk-in" transform="translate(0 160)">')
+  +pgBurst(250,70,0)+pgBurst(310,100,.5)+pgBurst(200,40,1)+`<g transform="translate(320 168)"><ellipse rx="16" ry="12" fill="#b91c1c"/><ellipse cy="-6" rx="14" ry="6" fill="#fde68a"/></g>`
+  +`<text x="300" y="150" text-anchor="middle" font-size="13" font-weight="900" fill="#7f1d1d" font-family="Inter" class="pg-pop">BOOM! DONG!</text>`;}
+ if(k==='kneel'){b=pgSky(false)+`<rect y="170" width="360" height="50" fill="#a8a29e"/><rect y="196" width="360" height="3" fill="#e7e5e4"/>`
+  +[70,130,190,250,310].map((x,j)=>pgKneel(x,192,['#0369a1','#047857','#7c3aed','#b45309','#be185d'][j])).join('')
+  +`<g class="pg-pass" transform="translate(0 150)">${pgBearers(false)}</g>`
+  +`<g class="pg-pop"><path d="M180 48 l4 9 10 1 -8 6 3 10 -9 -5 -9 5 3 -10 -8 -6 10 -1z" fill="#fde047"/><text x="180" y="96" text-anchor="middle" font-size="11" font-weight="800" fill="#7f1d1d" font-family="Inter">Blessing</text></g>`;}
+ if(k==='host'){b=pgSky(false)+`<rect y="176" width="360" height="44" fill="#a8a29e"/>`
+  +`<g transform="translate(70 150)"><rect x="-50" y="-8" width="100" height="10" fill="#92400e"/><rect x="-46" y="2" width="6" height="24" fill="#78350f"/><rect x="40" y="2" width="6" height="24" fill="#78350f"/><path d="M-56 -50 L56 -50 L48 -30 L-48 -30z" fill="#dc2626"/><text y="-36" text-anchor="middle" font-size="10" font-weight="900" fill="#fef3c7" font-family="Inter">FREE FOOD</text>
+   ${[-32,-12,8,28].map(x=>`<ellipse cx="${x}" cy="-10" rx="8" ry="4" fill="#fff"/><path d="M${x-4} -14 q2 -6 0 -10 M${x+2} -14 q2 -6 0 -10" stroke="#d6d3d1" stroke-width="1.5" fill="none" class="pg-steam"/>`).join('')}</g>`
+  +pgPerson(70,176,'#047857',1)+`<g transform="translate(250 150)"><rect x="-34" y="-30" width="68" height="44" rx="6" fill="#e0f2fe" stroke="#0369a1"/><text y="-12" text-anchor="middle" font-size="9" font-weight="900" fill="#0369a1" font-family="Inter">REST &amp; WASH</text><text y="4" text-anchor="middle" font-size="9" font-weight="700" fill="#0369a1" font-family="Inter">FREE</text></g>`
+  +`<g class="pg-walk-slow">${pgPerson(150,190,'#7f1d1d',1.05)}${pgPerson(175,192,'#b45309',1)}</g>`
+  +`<g class="pg-hand"><circle cx="112" cy="160" r="5" fill="#93c5fd" stroke="#1d4ed8"/></g>`;}
+ if(k==='route'){b=`<rect width="360" height="220" fill="#e0f2fe"/><path d="M150 0 C120 40 110 80 120 120 C130 160 110 190 90 220 L360 220 L360 0z" fill="#d9f99d" stroke="#65a30d" stroke-width="2"/>
+  <text x="40" y="30" font-size="11" font-weight="800" fill="#0369a1" font-family="Inter">Taiwan Strait</text><text x="300" y="210" font-size="9" fill="#4d7c0f" font-family="Inter">schematic map</text>
+  <path id="pgpath" d="M200 52 C210 90 196 120 214 150 C222 166 220 176 226 184" fill="none" stroke="#b91c1c" stroke-width="4" stroke-dasharray="8 6"/>
+  ${pgTemple(200,52,.32)}<text x="226" y="46" font-size="11" font-weight="900" fill="#7f1d1d" font-family="Inter">Dajia</text>
+  ${pgTemple(226,188,.32)}<text x="252" y="190" font-size="11" font-weight="900" fill="#7f1d1d" font-family="Inter">Xingang</text>
+  <g><circle r="9" fill="#f59e0b" stroke="#7f1d1d" stroke-width="2"><animateMotion dur="7s" repeatCount="indefinite" keyPoints="0;1;0" keyTimes="0;.5;1" calcMode="linear"><mpath href="#pgpath"/></animateMotion></circle></g>
+  <g transform="translate(20 140)"><rect width="110" height="58" rx="10" fill="#fff" stroke="#b91c1c"/><text x="55" y="22" text-anchor="middle" font-size="11" font-weight="800" fill="#57534e" font-family="Inter">DAY</text><text id="pgday" x="55" y="48" text-anchor="middle" font-size="24" font-weight="900" fill="#b91c1c" font-family="Inter">1 / 9</text></g>
+  <text x="300" y="120" text-anchor="middle" font-size="18" font-weight="900" fill="#7f1d1d" font-family="Inter">~300 km</text>`;}
+ if(k==='baishatun'){b=pgSky(false)+`<rect y="176" width="360" height="44" fill="#a8a29e"/>`
+  +`<path d="M20 200 C80 140 60 120 120 150 S200 90 220 160 S300 120 340 180" fill="none" stroke="#db2777" stroke-width="4" stroke-dasharray="6 6" class="pg-dash"/>`
+  +[[90,100],[200,70],[300,110]].map(([x,y],j)=>`<text x="${x}" y="${y}" font-size="26" font-weight="900" fill="#be185d" font-family="Inter" class="pg-pop" style="animation-delay:${j*.4}s">?</text>`).join('')
+  +`<g class="pg-wander" transform="translate(0 150)">${pgBearers(true)}</g>`;}
+ if(k==='return'){b=pgSky(true)+pgLanterns()+`<rect y="176" width="360" height="44" fill="#292524"/>`+pgTemple(250,176,1.05,'ZHENLAN TEMPLE')
+  +`<g class="pg-walk-home" transform="translate(0 150)">${pgBearers(false)}</g>`
+  +[40,70,330].map((x,j)=>`<g class="pg-cheer" style="animation-delay:${j*.2}s">${pgPerson(x,200,['#0369a1','#047857','#be185d'][j],1)}</g>`).join('')
+  +`<g class="pg-pop"><rect x="20" y="40" width="150" height="40" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="2"/><text x="95" y="57" text-anchor="middle" font-size="10" font-weight="900" fill="#7f1d1d" font-family="Inter">IMPORTANT FOLK CUSTOM</text><text x="95" y="72" text-anchor="middle" font-size="9" font-weight="700" fill="#7f1d1d" font-family="Inter">Living Cultural Heritage</text></g>`;}
+ if(k==='eco'){b=`<rect width="360" height="220" fill="#ecfdf5"/><rect y="176" width="360" height="44" fill="#a7f3d0"/>`
+  +`<g transform="translate(80 100)"><rect x="-34" y="-24" width="68" height="48" rx="10" fill="#fff" stroke="#047857" stroke-width="2"/><path d="M-12 -8 v16 h8 l10 8 v-32 l-10 8z" fill="#047857"/><path d="M10 -8 q6 8 0 16 M16 -14 q10 14 0 28" stroke="#047857" stroke-width="2" fill="none" class="pg-pulse"/><text y="40" text-anchor="middle" font-size="10" font-weight="800" fill="#065f46" font-family="Inter">Digital firecrackers</text></g>`
+  +`<g transform="translate(280 100)"><ellipse cy="6" rx="26" ry="10" fill="#fff" stroke="#047857" stroke-width="2"/><path d="M-26 6 Q0 34 26 6" fill="#d1fae5" stroke="#047857" stroke-width="2"/><path d="M-10 -26 L4 2 M-2 -28 L10 0" stroke="#92400e" stroke-width="2.5" stroke-linecap="round"/><text y="44" text-anchor="middle" font-size="10" font-weight="800" fill="#065f46" font-family="Inter">Reusable bowls</text></g>`
+  +`<svg x="148" y="58" width="64" height="64"><use href="#icon-sdgs"/></svg><text x="180" y="36" text-anchor="middle" font-size="13" font-weight="900" fill="#065f46" font-family="Inter">Tradition + Environment</text>`;}
+ return `<svg class="pg-svg" viewBox="0 0 360 220" role="img" aria-label="${esc(PG_STAGES[i].t[1])}">${b}</svg>`;}
+
+function pgPlayer(){const s=PG_STAGES[pgIdx];
+ return `<div class="pg-wrap"><div class="pg-stage" id="pgStage">${pgScene(pgIdx)}<span class="pg-num num">${pgIdx+1} / ${PG_STAGES.length}</span></div>
+  <div class="pg-cap"><h3 class="disp">${TP(s.t)}</h3><p>${TP(s.c)}</p>
+   <div class="pg-words">${s.w.map(w=>VMAP[w]?`<button class="vw" data-pgword="${esc(w)}" lang="en">${esc(w)}</button>`:'').join('')}</div><div id="pgWord"></div></div>
+  <div class="pg-dots">${PG_STAGES.map((x,j)=>`<button class="${j===pgIdx?'on':''} ${j<pgIdx?'seen':''}" data-pgto="${j}" aria-label="${esc(x.t[1])}"><span>${j+1}</span></button>`).join('')}</div>
+  <div class="pg-ctrl"><button class="btn ghost" data-pg="prev" ${pgIdx===0?'disabled':''}>${ic('back')}</button>
+   <button class="btn" data-pg="toggle">${pgPlay?T('暫停','Pause',true):T('自動播放','Play all',true)}</button>
+   <button class="btn ghost" data-pg="next" ${pgIdx===PG_STAGES.length-1?'disabled':''}>${ic('arrow')}</button></div></div>`;}
+
+function pgRender(){const box=document.getElementById('pgBox');if(!box)return;box.innerHTML=pgPlayer();pgStartDay();}
+function pgStartDay(){clearInterval(pgDay);if(PG_STAGES[pgIdx].k!=='route')return;let d=1;const el=()=>document.getElementById('pgday');
+ pgDay=setInterval(()=>{d=d>=9?1:d+1;const e=el();if(e)e.textContent=d+' / 9';else clearInterval(pgDay);},780);}
+function pgSfx(){const k=PG_STAGES[pgIdx].k;if(k==='depart'){tone(110,70,.25,'sine',.25);tone(800,200,.08,'square',.05,.3);tone(900,150,.08,'square',.05,.45);}
+ else if(k==='oracle'){tone(700,300,.06,'triangle',.15,.9);tone(650,260,.06,'triangle',.15,1.0);}else if(k==='return'||k==='eco'){sfx.win();}else tone(196,196,.2,'sine',.12);}
+function pgGo(i){pgIdx=Math.max(0,Math.min(PG_STAGES.length-1,i));pgRender();pgSfx();}
+function pgAuto(on){pgPlay=on;clearInterval(pgTimer);if(on){pgTimer=setInterval(()=>{if(pgIdx>=PG_STAGES.length-1){pgAuto(false);pgRender();return;}pgGo(pgIdx+1);},7500);}pgRender();}
+function openProcession(i){pgIdx=i||0;const d=document.getElementById('drawer');
+ d.innerHTML=`<div class="dhead">${sym('icon-sedan',32,32)}<b>${T('媽祖繞境動畫','Mazu Procession',true).replace(/<span class="en in"/,'<span class="en in" style="display:none"')}</b><button class="x" data-act="closePg" aria-label="close">${ic('x')}</button></div><div class="dbody" id="pgBox"></div>`;
+ d.classList.add('wide');show('drawer');pgRender();pgSfx();}
+function closeProcession(){pgAuto(false);clearInterval(pgDay);document.getElementById('drawer').classList.remove('wide');hideAll();render();}
+
 /* ---------------- 共用 UI ---------------- */
 function guideBox(n){const g=state.guide&&state.guide.n===n?state.guide:{k:'intro',m:(n==='home'?['歡迎，文化特使！我是廟方導覽林師父。沿著進香路線完成五幕任務，把媽祖文化用英文記錄下來。','Welcome, Cultural Envoy! I’m Master Lin, your temple guide. Follow the route through five Acts and record Mazu culture in English.']:ACTS[n-1].guide)};
  return `<div class="dark guide ${g.k==='wrong'?'warn':g.k==='right'?'cheer':''}" role="status" aria-live="polite"><svg class="av" aria-hidden="true"><use href="#icon-temple"/></svg><div><span class="who">${esc(S('林師父','MASTER LIN'))} · TEMPLE GUIDE</span><div class="msg">${TP(g.m)}</div></div></div>`;}
@@ -650,7 +796,8 @@ function scrollBox(a){const parts=a.scroll.map(seg=>{if(typeof seg==='string')re
   ${v?`<div class="tipbox"><div><b lang="en">${esc(v[0])}</b><i>${esc(v[1])}</i><div lang="en">${esc(v[2])}</div><div class="muted">${esc(v[3])}</div></div><button class="x" data-act="closeVocab" aria-label="close">✕</button></div>`:''}</div>`;}
 function actHead(a){return `<div class="banner">${actScene(a)}<span class="tag">ACT ${a.n} / 5</span>${state.done[a.n-1]?'<span class="stamp">RECORDED</span>':''}</div>
  <div class="dark"><div class="ah"><svg class="ae" aria-hidden="true"><use href="#${a.emb}"/></svg><div><small>${TP(a.skill,true)}</small><h2>${TP(a.title)}</h2></div></div>
- <div class="goal">${ic('target')}<div>${TP(a.goal)}</div></div></div>${guideBox(a.n)}`;}
+ <div class="goal">${ic('target')}<div>${TP(a.goal)}</div></div>
+ <button class="pgmini" data-act="openPg" data-pgat="${PG_FOR_ACT[a.n]}">${sym('icon-sedan',22,22)}${T('看這一幕的繞境動畫','Watch this part of the procession',true).replace(/<span class="en in"/,'<span class="en in" style="display:none"')}</button></div>${guideBox(a.n)}`;}
 
 /* 提示 */
 function hintUI(it){const id=it.id;if(isItemOk(it))return '';const a=ACTS[it.act-1];const lv=hlv(id);const cost=it.act>=3;
@@ -727,7 +874,8 @@ function pageHome(){const p=state.player;
    <div style="font-size:1.15rem;font-weight:900">${esc(p.name)} <span style="opacity:.75;font-weight:600;font-size:.9rem">· ${esc(p.cls)} · No. ${esc(p.seat)}</span></div>
    <div style="opacity:.85;font-size:.88rem;margin:2px 0 12px">${esc(S('平安符','Amulets'))} ${doneCount()}/5 · Merit ${totalScore()}/100</div>
    ${nx>0?`<button class="btn block" data-go="${nx}">${T(nx===1?'開始第 1 幕':'繼續第 '+nx+' 幕',nx===1?'Start Act 1':'Continue Act '+nx,true)}${ic('arrow')}</button>`:`<button class="btn block" data-go="cert">${ic('award')}${T('查看證書','View certificate',true)}</button>`}</div>`;}
- h+=`<div class="scroll"><h3 class="disp" style="color:var(--verm-d)">${T('進香路線','Pilgrimage route')}</h3><p class="muted" style="margin:2px 0 6px;font-size:.88rem">${T('完成一幕才會解鎖下一幕。','Each Act unlocks the next one.')}</p>${routeMap()}</div>
+ h+=`<button class="pgcard" data-act="openPg" data-pgat="0">${sym('icon-sedan',52,52)}<span><b>${T('先看媽祖繞境動畫','Watch the Mazu procession first')}</b><small>${T('8 個場景：擲筊、起駕、跪拜、款待、九天八夜、白沙屯、回鑾、綠色進香','8 scenes: oracle, departure, kneeling, hospitality, the route, Baishatun, return, eco-pilgrimage')}</small></span><span class="pl">${ic('arrow')}</span></button>
+  <div class="scroll"><h3 class="disp" style="color:var(--verm-d)">${T('進香路線','Pilgrimage route')}</h3><p class="muted" style="margin:2px 0 6px;font-size:.88rem">${T('完成一幕才會解鎖下一幕。','Each Act unlocks the next one.')}</p>${routeMap()}</div>
   <div class="scroll"><h3 class="disp" style="color:var(--verm-d)">${T('怎麼玩','How to play')}</h3><ul style="margin:8px 0 0;padding-left:1.2em">
   <li>${T('每幕有 3–4 題，題型會輪替：填空、選擇、排序、分類、句型鎖、寫作。','Each Act has 3–4 tasks: fill-in, multiple choice, ordering, sorting, syntax locks and writing.')}</li>
   <li>${T('答錯會告訴你錯在哪裡，可以重答。分數看「第一次就答對」的比例，每幕 20 分。','Wrong answers explain why, and you can try again. Each Act is worth 20 points, based on first-try answers.')}</li>
@@ -788,7 +936,7 @@ function hideAll(){['modal','sheet','drawer','mask'].forEach(id=>document.getEle
 
 /* Codex */
 let codexTab='vocab',codexQ='';
-function openCodex(){const d=document.getElementById('drawer');
+function openCodex(){const d=document.getElementById('drawer');d.classList.remove('wide');pgPlay=false;clearInterval(pgTimer);clearInterval(pgDay);
  const vocab=VOCAB.filter(v=>!codexQ||v[0].includes(codexQ.toLowerCase())||v[3].includes(codexQ)).map(v=>`<div class="vcard"><b lang="en">${esc(v[0])}</b><i>${esc(v[1])}</i><div lang="en">${esc(v[2])}</div><div class="muted">${esc(v[3])}</div></div>`).join('');
  const body=codexTab==='vocab'?`<input id="vq" class="field" style="width:100%;font:inherit;padding:10px 12px;border:1.5px solid var(--gold);border-radius:12px" placeholder="${esc(S('搜尋單字…','Search words…'))}" value="${esc(codexQ)}"><div class="vgrid">${vocab||esc(S('找不到','No match'))}</div>`
   :codexTab==='routes'?`<table class="cmp"><tr><th></th><th>Dajia</th><th>Baishatun</th></tr><tr><td>Route</td><td>Zhenlan Temple (Dajia, Taichung) → Fengtian Temple (Xingang, Chiayi)</td><td>Gongtian Temple (Baishatun, Miaoli) → Chaotian Temple (Beigang, Yunlin)</td></tr>
@@ -809,6 +957,11 @@ document.addEventListener('click',e=>{const t=e.target.closest('button');if(!t)r
  if(d.go!==undefined){sfx.clack();go(d.go);return;}
  if(d.modalgo!==undefined){hideAll();go(d.modalgo);return;}
  if(d.act==='codex'){sfx.clack();openCodex();return;}
+ if(d.act==='openPg'){openProcession(Number(d.pgat)||0);return;}
+ if(d.act==='closePg'){closeProcession();return;}
+ if(d.pg==='prev'){pgGo(pgIdx-1);return;} if(d.pg==='next'){pgGo(pgIdx+1);return;} if(d.pg==='toggle'){pgAuto(!pgPlay);return;}
+ if(d.pgto!==undefined){pgGo(Number(d.pgto));return;}
+ if(d.pgword){const v=VMAP[d.pgword];const box=document.getElementById('pgWord');if(v&&box)box.innerHTML=`<div class="tipbox"><div><b lang="en">${esc(v[0])}</b><i>${esc(v[1])}</i><div lang="en">${esc(v[2])}</div><div class="muted">${esc(v[3])}</div></div></div>`;sfx.clack();return;}
  if(d.ctab){codexTab=d.ctab;openCodex();return;}
  if(d.act==='mute'){state.mute=!state.mute;render();sfx.clack();return;}
  if(d.act==='settings'){openSettings();return;}
@@ -860,8 +1013,8 @@ document.addEventListener('click',e=>{const t=e.target.closest('button');if(!t)r
 document.addEventListener('submit',e=>{if(e.target.id!=='joinForm')return;e.preventDefault();const c=document.getElementById('fCls').value.trim(),s=document.getElementById('fSeat').value.trim(),n=document.getElementById('fName').value.trim();
  if(!c||!s||!n){document.getElementById('regErr').hidden=false;sfx.wrong();return;}state.player={cls:c,seat:s,name:n};state.start=state.start||Date.now();save();queue('join');sfx.win();go(1);});
 document.addEventListener('input',e=>{if(e.target.id==='wtxt'){const it=ITEM.a5w;(state.w[it.id]||(state.w[it.id]={txt:'',last:null})).txt=e.target.value;save();}});
-document.getElementById('mask').addEventListener('click',()=>{hideAll();render();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){hideAll();}});
+document.getElementById('mask').addEventListener('click',()=>{if(document.getElementById('pgBox'))closeProcession();else{hideAll();render();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(document.getElementById('pgBox'))closeProcession();else hideAll();}});
 render();flush();
 </script>
 </body>
